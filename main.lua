@@ -1,3 +1,4 @@
+
 native.setProperty("windowMode", "maximized")
 
 display.setStatusBar(display.HiddenStatusBar)
