@@ -3,7 +3,7 @@ settings =
 	orientation =
 	{
 		default = "portrait",
-		supported = { "portrait", },
+		supported = { "portrait" },
 	},
 
 	android =
@@ -19,7 +19,7 @@ settings =
 	window = {
 		defaultViewWidth = 360,
 		defaultViewHeight = 640,
-		resizable=true,
+		resizable=true
 	},
 
 	splashScreen = {
@@ -28,36 +28,47 @@ settings =
 
 	plugins =
 	{
-        	["plugin.utf8"] = {
+        ["plugin.utf8"] = {
 			publisherId = "com.coronalabs",
-    		},
-    		["plugin.pasteboard"]= {
-    			publisherId = "com.coronalabs"
-    		},
+    	},
+
+    	["plugin.pasteboard"]= {
+    		publisherId = "com.coronalabs"
+    	},
+
 		["plugin.androidFilePicker"] = {
-			publisherId="tech.scotth",marketplaceId = "zag4fj",
+			publisherId="tech.scotth",
+			marketplaceId = "zag4fj",
 		},
+
 		["plugin.tinyfiledialogs"] = { 
 			publisherId = "com.xibalbastudios",
 			supportedPlatforms = { android = false }
 		},
+
 		['plugin.exportFile'] = {
 			publisherId = 'com.solar2d'
 		},
+
 		['plugin.zip'] = {
 			publisherId = 'com.coronalabs' ,
 			supportedPlatforms = { android = false }
 		},
+		
 		['plugin.orientation'] = {
 			publisherId = "tech.scotth",
 			marketplaceId="zag4fj",
 		},
+
+		['plugin.memoryBitmap'] = {
+			publisherId = 'com.coronalabs'
+		}
 	},
 
 	excludeFiles =
 	{
 		-- Exclude unnecessary files for each platform
 		all = { "Icon.png", "Icon-*dpi.png" },
-		android = {  },
-	},
+		android = {  }
+	}
 }
