@@ -1,0 +1,93 @@
+--
+-- For more information on build.settings, see the Project Build Settings guide at:
+-- https://docs.coronalabs.com/guide/distribution/buildSettings
+--
+
+settings =
+{
+	orientation =
+	{
+		-- Supported values for orientation:
+		-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
+		default = "portrait",
+		supported = { "portrait", },
+	},
+
+	--
+	-- Android section
+	--
+	android =
+	{
+		usesPermissions =
+		{
+			"android.permission.INTERNET",
+			"android.permission.ACCESS_NETWORK_STATE",
+			"android.permission.VIBRATE",
+		},
+	},
+
+	window = {
+		defaultViewWidth = 360,
+		defaultViewHeight = 640,
+		resizable=true,
+	},
+
+	splashScreen = {
+	    enable = false
+	},
+
+
+	--
+	-- iOS section
+	--
+	iphone =
+	{
+		xcassets = "Images.xcassets",
+		plist =
+		{
+			UIStatusBarHidden = false,
+			UILaunchStoryboardName = "LaunchScreen",
+		},
+	},
+
+	--
+	-- Plugins section
+	--
+	plugins =
+	{
+        ["plugin.utf8"] = {
+            publisherId = "com.coronalabs",
+    	},
+    	["plugin.pasteboard"]= {
+    		publisherId = "com.coronalabs"
+    	},
+		["plugin.androidFilePicker"] = {
+			publisherId="tech.scotth",marketplaceId = "zag4fj",
+		},
+		["plugin.tinyfiledialogs"] = { 
+			publisherId = "com.xibalbastudios",
+			supportedPlatforms = { android = false }
+		},
+		['plugin.exportFile'] = {
+			publisherId = 'com.solar2d'
+		},
+		['plugin.zip'] = {
+			publisherId = 'com.coronalabs' ,
+			supportedPlatforms = { android = false }
+		},
+		['plugin.orientation'] = {
+			publisherId = "tech.scotth",
+			marketplaceId="zag4fj",
+		},
+	},
+
+	--
+	-- Project section
+	--
+	excludeFiles =
+	{
+		-- Exclude unnecessary files for each platform
+		all = { "Icon.png", "Icon-*dpi.png", "Images.xcassets", },
+		android = { "LaunchScreen.storyboardc", },
+	},
+}
