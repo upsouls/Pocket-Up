@@ -955,7 +955,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
 ]]
     lua = lua.."\nfunction exitGame()\nsystem.deactivate('multitouch')\nphysics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\n"..(options.orientation=="horizontal" and "orientation.lock('portrait')" or "").."\nshowOldScene()\nend"
     lua = lua.."\nfunction deleteScene()\nnoremoveAllObjects()\ntimer.cancelAll()\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nend"
-    lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\ndeleteScene()\nexitGame()\nend\nend\nRuntime:addEventListener('key', funBackListener)"
+    lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\nend\nend\nRuntime:addEventListener('key', funBackListener)"
     --lua = lua.."\nphysics.setDrawMode('hybrid')\n"
     print(lua)
     noremoveAllObjects()
