@@ -12,46 +12,19 @@ local function touchBg(event)
     end
 end
 
---[[ local function keysListener(event)
-    if event == 'systemBack' then
-        funBack = cache['oldfunback']
-        topBar(cache['par'], cache.obj_name, nil, nil, funBack)
-        display.setDefault("background", 4/255, 34/255, 44/255)
-        isBackScene = 'back'
-        cache['this']:removeSelf()
-        cache['par'].isVisible = true
-        cache = nil
-    end
-end
- ]]
 
-function scene_viewsprite(idImage, nameImage)
+function scene_viewsprite(pathImage, nameImage)
 
     local groupScene = display.newGroup()
     local funBackObjects = {}
     local oldFunBack = funBack
-    funBackObjects[1] = function()
-        display.remove(groupScene)
-        funBack = oldFunBack
-        SCENES["scripts"][1].alpha = 1
-        display.setDefault("background", 4/255, 34/255, 44/255)
-    end
     local topBarArray = topBar(groupScene, nameImage, nil, nil, funBackObjects)
     topBarArray[4].alpha = 0
 
 
     display.setDefault('background', 0, 0, 0)
     cache['col'] = 'black'
-    isBackScene = 'block'
-    --cache['oldfunback'] = funBack
-    newBack = {}
-    cache.obj_id = IDOBJECT:split('_')
-    cache.obj_name = json.decode(funsP['получить сохранение'](IDSCENE..'/objects'))[tonumber(cache.obj_id[#cache.obj_id])][1]
-    print(cache.obj_name)
-    newBack[1] = keysListener
-    --funBack[1] = keysListener
-    local sprites = json.decode(funsP['получить сохранение'](IDOBJECT..'/images'))
-    local image = display.newImage(IDOBJECT..'/image_'..sprites[idImage][2]..'.png', system.DocumentsDirectory)
+    local image = display.newImage(pathImage, system.DocumentsDirectory)
     image.x = CENTER_X
     image.y = CENTER_Y
     if image.width > display.actualContentWidth or image.height > display.actualContentHeight then
@@ -61,5 +34,11 @@ function scene_viewsprite(idImage, nameImage)
     Runtime:addEventListener('touch', touchBg)
     -- Реализуй кнопку назад
 
-
+    funBackObjects[1] = function()
+        Runtime:removeEventListener('touch', touchBg)
+        display.remove(groupScene)
+        funBack = oldFunBack
+        SCENES["scripts"][1].alpha = 1
+        display.setDefault("background", 4/255, 34/255, 44/255)
+    end
 end

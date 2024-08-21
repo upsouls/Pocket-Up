@@ -2122,7 +2122,7 @@ local function compartmentImages()
                 isTimerMoveSlot = false
                 timer.cancel(timerMoveSlot)
             groupScene.alpha = 0
-            scene_viewsprite(event.target.idSlot, event.target.nameProject.text)
+            scene_viewsprite(event.target.pathImage, event.target.nameProject.text)
 -- на объект нажали
 end
 if (isMoveSlot) then
@@ -2154,7 +2154,8 @@ for i=1, #images do
     local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
     group:insert(containerIcon)
     containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
-    local imageIcon = display.newImage(IDOBJECT.."/image_"..images[i][2]..".png", system.DocumentsDirectory)
+    buttonRect.pathImage = IDOBJECT.."/image_"..images[i][2]..".png"
+    local imageIcon = display.newImage(buttonRect.pathImage, system.DocumentsDirectory)
     containerIcon:insert(imageIcon)
     strokeIcon:toFront()
 
