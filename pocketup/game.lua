@@ -484,7 +484,7 @@ make_block = function(infoBlock, object, images, sounds)
         add_pcall()
         lua = lua..'if not playSounds['..infoBlock[2][1][2]..'] then\n'
         lua = lua..'playSounds['..infoBlock[2][1][2]..'] = audio.loadStream(\''..obj_path..'/sound_'..infoBlock[2][1][2]..'.mp3\', system.DocumentsDirectory)\n'
-        lua = lua..'end\n'
+        lua = lua..'end\naudio.stop(playingSounds['..infoBlock[2][1][2]..'])\n'
         lua = lua..'playingSounds['..infoBlock[2][1][2]..'] = audio.play(playSounds[listSounds['.. infoBlock[2][1][2]..']])'
         end_pcall() -- проверен
     elseif nameBlock == 'stopSound' then
@@ -546,12 +546,12 @@ make_block = function(infoBlock, object, images, sounds)
     elseif nameBlock == 'setElasticity' then
         local bounce = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target.physicsTable.bounce = '..bounce..'\ntarget:physicsReload()'
+        lua = lua..'target.physicsTable.bounce = '..bounce..'/100\ntarget:physicsReload()'
         end_pcall()
     elseif nameBlock == 'setFriction' then
         local friction = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target.physicsTable.friction = '..friction..'\ntarget:physicsReload()'
+        lua = lua..'target.physicsTable.friction = '..friction..'/100\ntarget:physicsReload()'
         end_pcall()
     elseif nameBlock == 'setTypeRotate' then -- ["setTypeRotate",[["typeRotate","true"]],"on"]
         add_pcall()
