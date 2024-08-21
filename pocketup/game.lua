@@ -917,6 +917,15 @@ end'
         lua = lua..'local _hex_rgb = hexToRgb('..arg1..')\ndisplay.setDefault("background", _hex_rgb[1], _hex_rgb[2], _hex_rgb[3])\n_hex_rgb = nil\n'
         --native.showAlert('Monsler', arg1, {'OK'})
         end_pcall()
+    elseif nameBlock == 'cancelAllTimers' then
+        add_pcall()
+        lua = lua..'timer.cancelAll()'
+        end_pcall()
+    elseif nameBlock == 'showToast' then
+        add_pcall()
+        local arg1 = make_all_formulas(infoBlock[2][1], object)
+        lua = lua..'if not isSim and not isWin then require \'plugin.toaster\'.shortToast('..arg1..') end\n'
+        end_pcall()
     end
 
 --"local function broadcastFunction(nameFunction)\nlocal key = 'object_"..(infoBlock[2][1][2]==nil and obj_id or infoBlock[2][1][2]).."'\nlocal value = objects[key]\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"

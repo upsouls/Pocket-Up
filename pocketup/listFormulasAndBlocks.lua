@@ -173,4 +173,6 @@ allBlocks = {
 	["broadcastFun>nameClone"]={"block","blocks/block_orange_3.png",{ {{"text",words[445]}},{{"text",words[430]},{"cell", nil, 5}},{{"function",nil}} }, 109,188, false},
 	["setBackgroundColor"]={"block", "blocks/block_green_3.png",  { {{"text", words[447]}}, {{"text", words[448]..':'}, {"cell", nil, 1}, {"text", words[450]..':'}, {"cell", nil, 1 }}, { {"text", words[449]..':'}, {"cell", nil, 1}}}, 109, 188, false},
 	["setBackgroundColorHex"]={"block", "blocks/block_green_2.png", { {{"text", words[447]}}, {{"text", words[451]..':'}, {"cell", nil, 4.5} } }, 109, 142, false},
+	["cancelAllTimers"]={"block", "blocks/block_orange_1.png", { {{"text", words[452]}} }, 109,88,false},
+	["showToast"]={"block", "blocks/block_green_2.png", { {{"text", words[453]}}, {{"text", words[454]}, {"cell", nil, 5}} }, 109, 142, false}
 }

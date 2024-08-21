@@ -118,7 +118,8 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"exitGame"},
 			--{"stopScripts",{ {"scripts", "thisScript"} }},
 			--{"waitStopScripts"},
-			{"lua", {{{"text", "native.showAlert(\""..words[388].."\", \""..words[389].."\", {\"OK\"})"}}}}
+			{"lua", {{{"text", "native.showAlert(\""..words[388].."\", \""..words[389].."\", {\"OK\"})"}}}},
+			{"cancelAllTimers"},
 		},
 		["physic"]={
 			{"setPosition",{ {{"number", 1},{"number", 0},{"number", 0}}, {{"number", 2},{"number", 0},{"number", 0}} }},
@@ -165,6 +166,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"show"},
 			{"setBackgroundColor", {{{"number", 0}}, {{"number", 0}}, {{"number", 0}}}},
 			{"setBackgroundColorHex", {{{"text", "#FFFFFF"}}}},
+			{"showToast", {{{"text", words[164]}}}},
 			--{"ask",{{{"text",words[161]}}, {localityVariable, nameVariable} }},
 			--{"say",{{{"text",words[164]}} }},
 			--{"sayTime",{{{"text",words[164]}}, {{"number",1}} }},
