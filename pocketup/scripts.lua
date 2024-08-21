@@ -933,7 +933,7 @@ touchBlock = function(event)
                     end
 
                     local xS, yS = scrollProjects:getContentPosition()
-                    if (event.autoMove~=nil) then
+                    if (event.autoMove~=nil and event.target.id~=1) then
                         event.target.y = blocksObjects[event.target.id-1].yGoalPos+blocksObjects[event.target.id-1].height/2+event.target.height/2
                     end
                     scrollProjects:scrollToPosition({
@@ -2121,9 +2121,8 @@ local function compartmentImages()
             if (isTimerMoveSlot) then
                 isTimerMoveSlot = false
                 timer.cancel(timerMoveSlot)
-            groupScene.isVisible = false
-            isBackScene = 'block'
-            scene_viewsprite(event.target.idSlot, groupScene)
+            groupScene.alpha = 0
+            scene_viewsprite(event.target.idSlot, event.target.nameProject.text)
 -- на объект нажали
 end
 if (isMoveSlot) then

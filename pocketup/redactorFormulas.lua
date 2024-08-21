@@ -101,7 +101,7 @@ local function isCorrectFormulas()
 	end
 	local corrValue = funsP["корректность формулы"]('('..myCode..')')
 	if (corrValue~=false) then
-		return(type(corrValue)~="function" and corrValue or nil)
+		return(type(corrValue)=="table" and encodeList(corrValue) or type(corrValue)~="function" and corrValue or nil)
 	else
 		return(false)
 	end
