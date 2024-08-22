@@ -1,5 +1,5 @@
 local cls = require 'core.class'
-local uuid_gen = require 'core.util.uuid'
+local uuid_gen = require('core.util.uuid')()
 
 local scene = cls.class()
 
@@ -9,6 +9,7 @@ function scene:constructor(context)
 	self.context = context
 	self.isinflated = true
 	self.group = display.newGroup()
+	self:hide()
 	self.layout = {}
 	self:create()
 end
@@ -49,6 +50,7 @@ function scene:removeview(object)
 	end
 	self.layout[object.uuid] = nil
 	self.group:remove(object)
+
 end
 
 return scene

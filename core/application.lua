@@ -1,19 +1,25 @@
 --[[
-	По идее это  
+	
 ]]
 
+--TODO: Сделать _getScreenArea()
+
 local cls = require 'core.class'
+local prefrences = require 'core.preferences'
 
 local application = cls.class()
 
 -- Конструктор
 function application:constructor()
 	self.context = {}
+	self.context.scenes = {}
 	self.context.scene_manager = require('core.scene_manager')()
+	self.context.preferences = prefrences()
 	self:_getSystemInfo()
 end
 
 function application:_getSystemInfo()
+	self.context.buildcode = 1
 	self.context.lang = system.getPreference('locale', 'language'):lower()
 	self.context.deviceId = system.getInfo('deviceID')
 	self.context.isAndroid = system.getInfo('platform') == 'android'

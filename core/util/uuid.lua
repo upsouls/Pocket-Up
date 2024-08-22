@@ -1,7 +1,9 @@
-local M = {}
+local cls = require 'core.class'
 
-M.uuid = function()
-	return ({('xxx-xxx-xxx-xxx'):gsub('[xy]', function(c)
+local M = cls.class()
+
+function M:uuid()
+	return ({('xxxx-xxxx-xxxx-xxxx'):gsub('[xy]', function(c)
         local v = c == 'x' and math.random(0, 0xf) or math.random(8, 0xb)
         return ('%x'):format(v)
     end)})[1]
