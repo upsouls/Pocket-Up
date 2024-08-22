@@ -1,22 +1,30 @@
 
 
-local cls = require 'core.class'
-
-local menu = cls.class(require 'core.scene')
+local menu = class(require 'core.scene')
 
 function menu:constructor(context)
 	self.baseclass.constructor(self, context)
 end
 
 function menu:create()
-	local text = display.newText("Text", 100, 100, nil, 30)
-	text:addEventListener('touch', function(e)
-		if e.phase == 'began' then
-			self.context.scenes.projects = require('app.ui.projects')(self.context)
-			self.context.scene_manager:open(self.context.scenes.projects)
-		end
-	end)
-	self:addview(text)
+	local background = display.newRect(
+			self.context.x,
+			self.context.y,
+			self.context.width,
+			self.context.height
+		)
+	background:setFillColor(hex("#00475D"))
+	local toolbar_height = not self.context.isSim and display.statusBarHeight * 1.55 or 50 * 1.55
+	local toolbar = display.newRect(
+			self.context.x,
+			self.context.top + toolbar_height / 2,
+			self.context.width,
+			toolbar_height
+		)
+	toolbar:setFillColor(hex("#002B3B"))
+
+	self:addview(background)
+	self:addview(toolbar)
 end
 
 return menu

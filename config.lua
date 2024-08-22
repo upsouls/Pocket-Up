@@ -3,8 +3,8 @@ application =
 	content =
 	{
 		width = 720,
-		height = 1280, 
-		scale = "adaptive",
+		height = 720 * display.pixelHeight / display.pixelWidth, 
+		scale = "letterbox",
 		fps = 60
 	},
 }

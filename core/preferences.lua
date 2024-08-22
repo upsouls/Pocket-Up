@@ -1,7 +1,7 @@
-local cls = require 'core.class'
+
 local json = require 'core.util.json'
 
-local M = cls.class()
+local M = class()
 
 function M:constructor(filename)
 	self.prefrences_data = {}
@@ -21,6 +21,10 @@ function M:save()
 	local file = io.open(self.prefrences_path, 'w')
 	file:write(json.encode(self.prefrences_data))
 	file:close()
+end
+
+function M:clear()
+	self.prefrences_data = {}
 end
 
 function M:load()

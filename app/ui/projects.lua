@@ -1,8 +1,6 @@
 
 
-local cls = require 'core.class'
-
-local projects = cls.class(require 'core.scene')
+local projects = class(require 'core.scene')
 
 function projects:constructor(context)
 	self.baseclass.constructor(self, context)

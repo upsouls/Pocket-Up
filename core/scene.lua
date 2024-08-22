@@ -1,7 +1,7 @@
-local cls = require 'core.class'
+
 local uuid_gen = require('core.util.uuid')()
 
-local scene = cls.class()
+local scene = class()
 
 scene.isinflated = false
 
@@ -35,8 +35,11 @@ function scene:isactive()
 	return self.group.isVisible
 end
 
-function scene:addview(object)
-	object.uuid = uuid_gen.uuid()
+function scene:addview(object, listener, name)
+	if listener and type(listener) == "function" then
+		object:addEventListener('touch', listener)
+	end
+	object.uuid = name or uuid_gen.uuid()
 	self.layout[object.uuid] = object
 	self.group:insert(object)
 end

@@ -1,6 +1,5 @@
-local cls = require 'core.class'
 
-local M = cls.class()
+local M = class()
 
 function M:uuid()
 	return ({('xxxx-xxxx-xxxx-xxxx'):gsub('[xy]', function(c)

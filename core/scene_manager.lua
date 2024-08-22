@@ -1,7 +1,5 @@
 
-local cls = require 'core.class'
-
-local scene_manager = cls.class()
+local scene_manager = class()
 
 function scene_manager:constructor()
 	self.current_scene = nil
@@ -11,7 +9,7 @@ function scene_manager:open(scene, notcache)
 	notcache = notcache or false
 	assert(scene.isinflated, "The scene was not created")
 	if self.current_scene then
-		if cache then
+		if not cache then
 			self.current_scene:destroy()
 		else
 			self.current_scene:hide()
