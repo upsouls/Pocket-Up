@@ -928,11 +928,11 @@ end'
         end_pcall()
     elseif nameBlock == 'showHitboxes' then
         add_pcall()
-        lua = lua..'physics.setDrawMode("debug")'
+        lua = lua..'physics.setDrawMode("debug")\n'
         end_pcall()
     elseif nameBlock == 'hideHitboxes' then
         add_pcall()
-        lua = lua..'physics.setDrawMode("normal")'
+        lua = lua..'physics.setDrawMode("normal")\n'
         end_pcall()
     end
 
