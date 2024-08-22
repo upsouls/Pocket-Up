@@ -174,5 +174,7 @@ allBlocks = {
 	["setBackgroundColor"]={"block", "blocks/block_green_3.png",  { {{"text", words[447]}}, {{"text", words[448]..':'}, {"cell", nil, 1}, {"text", words[450]..':'}, {"cell", nil, 1 }}, { {"text", words[449]..':'}, {"cell", nil, 1}}}, 109, 188, false},
 	["setBackgroundColorHex"]={"block", "blocks/block_green_2.png", { {{"text", words[447]}}, {{"text", words[451]..':'}, {"cell", nil, 4.5} } }, 109, 142, false},
 	["cancelAllTimers"]={"block", "blocks/block_orange_1.png", { {{"text", words[452]}} }, 109,88,false},
-	["showToast"]={"block", "blocks/block_green_2.png", { {{"text", words[453]}}, {{"text", words[454]}, {"cell", nil, 5}} }, 109, 142, false}
+	["showToast"]={"block", "blocks/block_green_2.png", { {{"text", words[453]}}, {{"text", words[454]}, {"cell", nil, 5}} }, 109, 142, false},
+	["showHitboxes"]={"block", "blocks/block_blue_1.png", { {{"text",words[455]}} }, 109, 88, false},
+	["hideHitboxes"]={"block", "blocks/block_blue_1.png", { {{"text",words[456]}} }, 109, 88, false},
 }

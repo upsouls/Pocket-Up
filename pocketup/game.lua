@@ -124,7 +124,7 @@ local max_fors = 0
 
 function scene_run_game(shsc)
     local options = json.decode(funsP['получить сохранение'](IDPROJECT..'/options'))
-
+    physics.setDrawMode( 'debug' )
     showOldScene = shsc
     max_fors = 0
     lua = ''
@@ -926,6 +926,14 @@ end'
         local arg1 = make_all_formulas(infoBlock[2][1], object)
         lua = lua..'if not isSim and not isWin then require \'plugin.toaster\'.shortToast('..arg1..') end\n'
         end_pcall()
+    elseif nameBlock == 'showHitboxes' then
+        add_pcall()
+        lua = lua..'physics.setDrawMode("debug")'
+        end_pcall()
+    elseif nameBlock == 'hideHitboxes' then
+        add_pcall()
+        lua = lua..'physics.setDrawMode("normal")'
+        end_pcall()
     end
 
 --"local function broadcastFunction(nameFunction)\nlocal key = 'object_"..(infoBlock[2][1][2]==nil and obj_id or infoBlock[2][1][2]).."'\nlocal value = objects[key]\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
@@ -964,7 +972,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
 ]]
     lua = lua.."\nfunction exitGame()\nsystem.deactivate('multitouch')\nphysics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\n"..(options.orientation=="horizontal" and "orientation.lock('portrait')" or "").."\nshowOldScene()\nend"
     lua = lua.."\nfunction deleteScene()\nremoveAllObjects()\ntimer.cancelAll()\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nend"
-    lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\nend\nend\nRuntime:addEventListener('key', funBackListener)"
+    lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\nphysics.setDrawMode( \"normal\" )\ndeleteScene()\nexitGame()\nend\nend\nRuntime:addEventListener('key', funBackListener)"
     --lua = lua.."\nphysics.setDrawMode('hybrid')\n"
     print(lua)
     noremoveAllObjects()
