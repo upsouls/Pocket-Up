@@ -8,7 +8,7 @@ application =
 	content =
 	{
 		width = 720,
-		height = 1280, 
+		height = 720*display.pixelWidth/display.pixelHeight, 
 		scale = "adaptive",
 		fps = 60,
 		
