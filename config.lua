@@ -9,7 +9,7 @@ application =
 	{
 		width = 720,
 		height = 720*display.pixelWidth/display.pixelHeight, 
-		scale = "adaptive",
+		scale = "letterbox",
 		fps = 60,
 		
 		--[[
