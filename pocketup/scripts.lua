@@ -2121,10 +2121,8 @@ local function compartmentImages()
             if (isTimerMoveSlot) then
                 isTimerMoveSlot = false
                 timer.cancel(timerMoveSlot)
-            if event.target.pathImage ~= nil then
-                groupScene.alpha = 0
-                scene_viewsprite(event.target.pathImage, event.target.nameProject.text)
-            end
+            groupScene.alpha = 0
+            scene_viewsprite(event.target.pathImage, event.target.nameProject.text)
 -- на объект нажали
 end
 if (isMoveSlot) then

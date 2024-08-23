@@ -24,17 +24,13 @@ function scene_viewsprite(pathImage, nameImage)
 
     display.setDefault('background', 0, 0, 0)
     cache['col'] = 'black'
-    pcall(function()
-        print(pathImage)
-        local image = display.newImage(pathImage, system.DocumentsDirectory)
-        image.x = CENTER_X
-        image.y = CENTER_Y
-        if image.width > display.actualContentWidth or image.height > display.actualContentHeight then
-            image.width = image.width/(display.actualContentWidth/35)
-            image.height = image.height/(display.actualContentHeight/65)
-        end
-        groupScene:insert(image)
-    end)
+    local image = display.newImage(pathImage, system.DocumentsDirectory)
+    image.x = CENTER_X
+    image.y = CENTER_Y
+    if image.width > display.actualContentWidth or image.height > display.actualContentHeight then
+        image:scale((image.width/4500), (image.width/4500))
+    end
+    groupScene:insert(image)
     Runtime:addEventListener('touch', touchBg)
     -- Реализуй кнопку назад
 
