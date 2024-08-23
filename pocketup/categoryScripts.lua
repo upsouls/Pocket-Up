@@ -118,7 +118,6 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"exitGame"},
 			--{"stopScripts",{ {"scripts", "thisScript"} }},
 			--{"waitStopScripts"},
-			{"lua", {{{"text", "native.showAlert(\""..words[388].."\", \""..words[389].."\", {\"OK\"})"}}}},
 			{"cancelAllTimers"},
 		},
 		["physic"]={
@@ -146,8 +145,6 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"setWeight",{{{"number",1}} }},
 			{"setElasticity",{{{"number",2},{"number",0}} }},
 			{"setFriction",{{{"number",8},{"number",0}} }},
-			{"showHitboxes"},
-			{"hideHitboxes"},
 		},
 		["sounds"]={
 			{"playSound", {{"sounds",nameSound}}},
@@ -168,7 +165,6 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"show"},
 			{"setBackgroundColor", {{{"number", 0}}, {{"number", 0}}, {{"number", 0}}}},
 			{"setBackgroundColorHex", {{{"text", "#FFFFFF"}}}},
-			{"showToast", {{{"text", words[164]}}}},
 			--{"ask",{{{"text",words[161]}}, {localityVariable, nameVariable} }},
 			--{"say",{{{"text",words[164]}} }},
 			--{"sayTime",{{{"text",words[164]}}, {{"number",1}} }},
@@ -241,6 +237,10 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"blockTouch"},
 			{"blockTouchScreen"},
 			--{"touchAndSwipe",{{{"function","-"},{"number",1},{"number",0},{"number",0}},{{"function","-"},{"number",2},{"number",0},{"number",0}},{{"number",1},{"number",0},{"number",0}},{{"number",2},{"number",0},{"number",0}}, {{"number",0},{"number","."},{"number",3}}}},
+			{"showHitboxes"},
+			{"hideHitboxes"},
+			{"showToast", {{{"text", words[164]}}}},
+			{"lua", {{{"text", "native.showAlert(\""..words[388].."\", \""..words[389].."\", {\"OK\"})"}}}},
 		},
 	}
 	local blocksCategory = allBlocksCategories[category]

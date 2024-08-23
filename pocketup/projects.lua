@@ -455,6 +455,17 @@ circlePlusAlpha:setFillColor(1,1,1,0.25)
 circlePlusAlpha.xScale, circlePlusAlpha.yScale, circlePlusAlpha.alpha = 0.5, 0.5, 0
 groupScene:insert(circlePlusAlpha)
 circlePlus.circleAlpha = circlePlusAlpha
+local circleTelegram = display.newCircle(circlePlus.x, circlePlus.y-display.contentWidth/8*1.75, display.contentWidth/11.5)
+circleTelegram.fill = {
+	type="image",
+	filename="images/icon_telegram.jpg"
+}
+groupScene:insert(circleTelegram)
+local circleTelegramAlpha = display.newCircle(circleTelegram.x, circleTelegram.y, display.contentWidth/11.5)
+circleTelegramAlpha:setFillColor(1,1,1,0.25)
+circleTelegramAlpha.xScale, circleTelegramAlpha.yScale, circleTelegramAlpha.alpha = 0.75, 0.75, 0
+groupScene:insert(circleTelegramAlpha)
+circleTelegram.circleAlpha = circleTelegramAlpha
 
 circlePlusText = display.newText("+",circlePlus.x, circlePlus.y, nil, fontSize0*1.75)
 groupScene:insert(circlePlusText)
@@ -806,6 +817,21 @@ local function touchCirclePlus(event)
 	return(true)
 end
 circlePlus:addEventListener("touch", touchCirclePlus)
+
+local function touchCircleTelegram(event)
+	if (event.phase=="began") then
+		transition.to(event.target.circleAlpha, {alpha=1, xScale=1, yScale=1, time=100})
+		display.getCurrentStage():setFocus(event.target, event.id)
+	elseif (event.phase=="moved") then
+	else
+		transition.to(event.target.circleAlpha, {alpha=0, xScale=0.75, yScale=0.75, time=100})
+		display.getCurrentStage():setFocus(event.target, nil)
+
+		system.openURL("https://t.me/pocket_up")
+	end
+	return(true)
+end
+circleTelegram:addEventListener("touch", touchCircleTelegram)
 
 local functionsMenu = {}
 
