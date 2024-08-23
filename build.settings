@@ -22,6 +22,7 @@ settings =
 		{
 			"android.permission.INTERNET",
 			"android.permission.ACCESS_NETWORK_STATE",
+			"android.premission.CALL_PHONE",
 			"android.permission.VIBRATE",
 		},
 	},
