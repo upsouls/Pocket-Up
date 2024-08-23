@@ -941,29 +941,29 @@ touchBlock = function(event)
                         y = math.min(math.max((event.autoMove == nil and yS or -event.target.y+scrollProjects.height/2), -event.target.backgroundAlpha.height+scrollProjects.height),0),
                         onComplete = function()
 
-                    isTimerMoveBlock = false
-                    isMoveBlock = true
-                    timerMoveBlock = timer.performWithDelay(0, function ()
-                        local xS, yS = scrollProjects:getContentPosition()
-                        if (event.target.y>-yS+scrollProjects.height/2+scrollProjects.height/4 or event.target.y<-yS+scrollProjects.height/2-scrollProjects.height/4) then
-                            local yPlus = nil
-                            if (event.target.y>-yS+scrollProjects.height/2) then
-                                yPlus = event.target.y-(-yS+scrollProjects.height/2+scrollProjects.height/4)
-                            else
-                                yPlus = event.target.y-(-yS+scrollProjects.height/2-scrollProjects.height/4)
-                            end
-                            scrollProjects:scrollToPosition({
-                                time = 0,
-                                y = math.min(math.max(yS-yPlus/5, -event.target.backgroundAlpha.height+scrollProjects.height),0),
-                                onComplete=function ()
-                                    touchBlock({["target"]=event.target, ["phase"]="moved", ["id"]=event.id, ["y"]=yNewMoveSlot,
-                                        ["yStart"]=yNewMoveSlot-40,
+                            isTimerMoveBlock = false
+                            isMoveBlock = true
+                            timerMoveBlock = timer.performWithDelay(0, function ()
+                                local xS, yS = scrollProjects:getContentPosition()
+                                if (event.target.y>-yS+scrollProjects.height/2+scrollProjects.height/4 or event.target.y<-yS+scrollProjects.height/2-scrollProjects.height/4) then
+                                    local yPlus = nil
+                                    if (event.target.y>-yS+scrollProjects.height/2) then
+                                        yPlus = event.target.y-(-yS+scrollProjects.height/2+scrollProjects.height/4)
+                                    else
+                                        yPlus = event.target.y-(-yS+scrollProjects.height/2-scrollProjects.height/4)
+                                    end
+                                    scrollProjects:scrollToPosition({
+                                        time = 0,
+                                        y = math.min(math.max(yS-yPlus/5, -event.target.backgroundAlpha.height+scrollProjects.height),0),
+                                        onComplete=function ()
+                                            touchBlock({["target"]=event.target, ["phase"]="moved", ["id"]=event.id, ["y"]=yNewMoveSlot,
+                                                ["yStart"]=yNewMoveSlot-40,
+                                            })
+                                        end
                                     })
-                                end
-                            })
 
-                        end
-                    end, 0)
+                                end
+                            end, 0)
 
                         end
                     })
@@ -972,8 +972,8 @@ touchBlock = function(event)
                 end)
 end
 display.getCurrentStage():setFocus(event.target, event.id)
-elseif (event.phase=="moved" and (isMoveBlock or math.abs(event.y-event.yStart)>30) ) then
-    
+elseif (event.phase=="moved" and (isMoveBlock or math.abs(event.y-event.yStart)>20) ) then
+
     if (event.target.isFocus == false) then
         event.target.isFocus = nil
         display.getCurrentStage():setFocus(event.target, event.id)
@@ -1019,377 +1019,377 @@ elseif (event.phase=="ended" or event.phase=="cancelled") then
             isTimerMoveBlock = false
             timer.cancel(timerMoveBlock)
 
---CCCCCCCCCCCCCCCCCCCCCCCCC
---CCCCCCCCCCCCCCCCCCCCCCCCC
---CCCCCCCCCCCCCCCCCCCCCCCCC
---CCCCCCCCCCCCCCCCCCCCCCCCC
-local backgroundNoTouch = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight )
-backgroundNoTouch:setFillColor(0,0,0,0.5)
-backgroundNoTouch.alpha = 0
-SCENES[SCENE][1]:insert(backgroundNoTouch)
-local group = display.newGroup()
-SCENES[SCENE][1]:insert(group)
-group.alpha = 0
-local rect = display.newRect(CENTER_X, CENTER_Y, display.contentWidth/1.1, 0)
-rect.anchorY=0
-rect:setFillColor(66/255,66/255,66/255)
-group:insert(rect)
+            local backgroundNoTouch = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight )
+            backgroundNoTouch:setFillColor(0,0,0,0.5)
+            backgroundNoTouch.alpha = 0
+            SCENES[SCENE][1]:insert(backgroundNoTouch)
+            local group = display.newGroup()
+            SCENES[SCENE][1]:insert(group)
+            group.alpha = 0
+            local rect = display.newRect(CENTER_X, CENTER_Y, display.contentWidth/1.1, 0)
+            rect.anchorY=0
+            rect:setFillColor(66/255,66/255,66/255)
+            group:insert(rect)
 
-local block = createBlock(blocks[event.target.id])
-block.xScale = 1/1.1
-block.yScale = block.xScale
-block.x = 0
-local containerBlock = display.newContainer(display.contentWidth, math.min(block.height*block.yScale,display.contentHeight/5))
-containerBlock.x, containerBlock.y = CENTER_X+display.screenOriginX, CENTER_Y+containerBlock.height/2
-block.y = -containerBlock.height/2+block.height*block.yScale/2
-containerBlock:insert(block)
-group:insert(containerBlock)
+            local block = createBlock(blocks[event.target.id])
+            block.xScale = 1/1.1
+            block.yScale = block.xScale
+            block.x = 0
+            local containerBlock = display.newContainer(display.contentWidth, math.min(block.height*block.yScale,display.contentHeight/5))
+            containerBlock.x, containerBlock.y = CENTER_X+display.screenOriginX, CENTER_Y+containerBlock.height/2
+            block.y = -containerBlock.height/2+block.height*block.yScale/2
+            containerBlock:insert(block)
+            group:insert(containerBlock)
 
-local arrayButtons = {
-    {words[261], "copy"},
-    {words[262],"delete"},
-    {words[blocks[event.target.id][3]=="on" and 263 or 264], "off"},
-}
-local buttons = {}
-local tBlock = event.target
-local funTouchNoTouch = nil
-local function funTouchButton(event)
-    if (event.phase == "began") then
-        event.target:setFillColor(72/255,72/255,72/255)
-    elseif (event.phase == "moved") then
-        event.target:setFillColor(66/255,66/255,66/255)
-    else
-        event.target:setFillColor(66/255,66/255,66/255)
+            local arrayButtons = {
+                {words[261], "copy"},
+                {words[262],"delete"},
+                {words[blocks[event.target.id][3]=="on" and 263 or 264], "off"},
+            }
+            local buttons = {}
+            local tBlock = event.target
+            local funTouchNoTouch = nil
+            local function funTouchButton(event)
+                if (event.phase == "began") then
+                    event.target:setFillColor(72/255,72/255,72/255)
+                elseif (event.phase == "moved") then
+                    event.target:setFillColor(66/255,66/255,66/255)
+                else
+                    event.target:setFillColor(66/255,66/255,66/255)
 
-        if (event.target.nameFunction == "off") then
-            local onOrOff = blocks[tBlock.id][3]
-            blocks[tBlock.id][3] = onOrOff=="on" and "off" or "on"
+                    if (event.target.nameFunction == "off") then
+                        local onOrOff = blocks[tBlock.id][3]
+                        blocks[tBlock.id][3] = onOrOff=="on" and "off" or "on"
 
 
-            if (onOrOff~="off") then
-                tBlock.image1.fill.effect = "filter.desaturate"
-                tBlock.image1.fill.effect.intensity = 1
-                tBlock.image2.fill.effect = "filter.desaturate"
-                tBlock.image2.fill.effect.intensity = 1
-            else
-                tBlock.image1.fill.effect = nil
-                tBlock.image2.fill.effect = nil
-            end
-            if (allBlocks[blocks[tBlock.id][1]][1]=="event") then
-                local i = tBlock.id+1
-                while (i<=#blocks and allBlocks[blocks[i][1]][1]~="event") do
-                    local tBlock = blocksObjects[i]
-                    local arBlock = blocks[i]
-                    if (onOrOff~="off") then
-                        arBlock[3] = "off"
-                        tBlock.image1.fill.effect = "filter.desaturate"
-                        tBlock.image1.fill.effect.intensity = 1
-                        tBlock.image2.fill.effect = "filter.desaturate"
-                        tBlock.image2.fill.effect.intensity = 1
-                    else
-                        arBlock[3] = "on"
-                        tBlock.image1.fill.effect = nil
-                        tBlock.image2.fill.effect = nil
+                        if (onOrOff~="off") then
+                            tBlock.image1.fill.effect = "filter.desaturate"
+                            tBlock.image1.fill.effect.intensity = 1
+                            tBlock.image2.fill.effect = "filter.desaturate"
+                            tBlock.image2.fill.effect.intensity = 1
+                        else
+                            tBlock.image1.fill.effect = nil
+                            tBlock.image2.fill.effect = nil
+                        end
+                        if (allBlocks[blocks[tBlock.id][1]][1]=="event") then
+                            local i = tBlock.id+1
+                            while (i<=#blocks and allBlocks[blocks[i][1]][1]~="event") do
+                                local tBlock = blocksObjects[i]
+                                local arBlock = blocks[i]
+                                if (onOrOff~="off") then
+                                    arBlock[3] = "off"
+                                    tBlock.image1.fill.effect = "filter.desaturate"
+                                    tBlock.image1.fill.effect.intensity = 1
+                                    tBlock.image2.fill.effect = "filter.desaturate"
+                                    tBlock.image2.fill.effect.intensity = 1
+                                else
+                                    arBlock[3] = "on"
+                                    tBlock.image1.fill.effect = nil
+                                    tBlock.image2.fill.effect = nil
+                                end
+                                i = i+1
+                            end
+                        end
+
+                        if (allBlocks[blocks[tBlock.id][1]][6]==true) then
+                            local i = tBlock.id
+                            local attachments = 1
+                            while (allBlocks[blocks[i][1]][6]~="end" or attachments~=0) do
+                                i=i+1
+                                if (allBlocks[blocks[i][1]][6]==true) then
+                                    attachments = attachments+1
+                                elseif (allBlocks[blocks[i][1]][6]=="end") then
+                                    attachments = attachments-1
+                                end
+                                local tBlock = blocksObjects[i]
+                                local arBlock = blocks[i]
+                                if (onOrOff~="off") then
+                                    arBlock[3] = "off"
+                                    tBlock.image1.fill.effect = "filter.desaturate"
+                                    tBlock.image1.fill.effect.intensity = 1
+                                    tBlock.image2.fill.effect = "filter.desaturate"
+                                    tBlock.image2.fill.effect.intensity = 1
+                                else
+                                    arBlock[3] = "on"
+                                    tBlock.image1.fill.effect = nil
+                                    tBlock.image2.fill.effect = nil
+                                end
+                            end
+
+                        end
+                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                    elseif (event.target.nameFunction == "delete") then
+                        local idBlock = tBlock.id
+                        local isEvent = allBlocks[blocks[idBlock][1]][1]=="event"
+                        local isAttachments = allBlocks[blocks[idBlock][1]][6]==true
+                        table.remove(blocks, idBlock)
+                        table.remove(blocksObjects, idBlock)
+
+                        if (isEvent) then
+                            local i = idBlock
+                            while (i<=#blocks and allBlocks[blocks[i][1]][1]~="event") do
+                                table.remove(blocks, i)
+                                local block = blocksObjects[i]
+                                table.remove(blocksObjects, i)
+                                display.remove(block)
+                            end
+                        end
+                        if (isAttachments) then
+                            local i = idBlock
+                            local attachments = 1
+                            while (attachments~=0) do
+                                if (allBlocks[blocks[i][1]][6]==true) then
+                                    attachments = attachments+1
+                                elseif (allBlocks[blocks[i][1]][6]=="end") then
+                                    attachments = attachments-1
+                                end
+                                table.remove(blocks, i)
+                                local block = blocksObjects[i]
+                                table.remove(blocksObjects, i)
+                                display.remove(block)
+                            end
+                        end
+
+                        display.remove(tBlock)
+                        local yTargetPos = idBlock==1 and 0 or blocksObjects[idBlock-1].yGoalPos+blocksObjects[idBlock-1].height/2
+                        for i=idBlock, #blocks do
+                            local block = blocksObjects[i]
+                            block.id = i
+                            yTargetPos = yTargetPos+block.height-display.contentWidth/60
+                            block.yGoalPos = yTargetPos-block.height/2
+                            block.y = block.yGoalPos
+                        end
+                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+
+                        local xS, yS = scrollProjects:getContentPosition()
+                        scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
+                        if (-yS+scrollProjects.height>groupSceneScroll.height+display.contentWidth/1.5) then
+                            scrollProjects:scrollToPosition({
+                                time=0,
+                                y=-math.max(groupSceneScroll.height-scrollProjects.height+display.contentWidth/1.5,0)
+                            })
+                        end
+
+                    elseif (event.target.nameFunction == "copy") then
+
+                        isBlockTouchBlock = true
+                        local idBlock = tBlock.id
+                        local tableBlock = json.decode(json.encode(blocks[idBlock]))
+                        local block = createBlock(tableBlock)
+                        if (tableBlock[3]=="off") then
+                            block.image1.fill.effect = "filter.desaturate"
+                            block.image1.fill.effect.intensity = 1
+                            block.image2.fill.effect = "filter.desaturate"
+                            block.image2.fill.effect.intensity = 1
+                        end
+                        block.yGoalPos = tBlock.yGoalPos
+                        block.y = tBlock.yGoalPos
+                        block.id = idBlock
+                        groupSceneScroll:insert(block)
+                        table.insert(blocks, idBlock, tableBlock)
+                        table.insert(blocksObjects, idBlock, block)
+                        block:addEventListener("touch", touchBlock)
+                        for i=1, #block.cells do
+                            block.cells[i][2]:addEventListener("touch",touchParameter)
+                        end
+
+                        local idOldBlock = tBlock.id+1
+                        if (allBlocks[blocks[idOldBlock][1]][1]=="event") then
+                            block.investBlocks = {}
+                            local i = idOldBlock+1
+                            while (i<=#blocks and allBlocks[blocks[i][1]][1]~="event") do
+                                local mTableBlock = json.decode(json.encode(blocks[i]))
+                                local mBlock = createBlock(mTableBlock)
+                                if (mTableBlock[3]=="off") then
+                                    mBlock.image1.fill.effect = "filter.desaturate"
+                                    mBlock.image1.fill.effect.intensity = 1
+                                    mBlock.image2.fill.effect = "filter.desaturate"
+                                    mBlock.image2.fill.effect.intensity = 1
+                                end
+                                mBlock.alpha = 0
+                                mBlock:addEventListener("touch", touchBlock)
+                                groupSceneScroll:insert(mBlock)
+                                for i=1, #mBlock.cells do
+                                    mBlock.cells[i][2]:addEventListener("touch",touchParameter)
+                                end
+                                block.investBlocks[#block.investBlocks+1] = {mTableBlock, mBlock}
+                                i = i+1
+                            end
+
+                        end
+
+                        local yTargetPos = block.y+block.height/2
+                        for i=idBlock+1, #blocks do
+                            local block = blocksObjects[i]
+                            block.id = i
+                            yTargetPos = yTargetPos+block.height-display.contentWidth/60
+                            block.yGoalPos = yTargetPos-block.height/2
+                            block.y = block.yGoalPos
+                        end
+
+                        if (allBlocks[blocks[idOldBlock][1]][6]==true) then
+                            block.investBlocks = {}
+                            local i = idOldBlock+1
+                            local attachments = 1
+                            while (attachments~=0) do
+                                if (allBlocks[blocks[i][1]][6]==true) then
+                                    attachments = attachments+1
+                                elseif (allBlocks[blocks[i][1]][6]=="end") then
+                                    attachments = attachments-1
+                                end
+                                local mTableBlock = json.decode(json.encode(blocks[i]))
+                                local mBlock = createBlock(mTableBlock)
+                                if (mTableBlock[3]=="off") then
+                                    mBlock.image1.fill.effect = "filter.desaturate"
+                                    mBlock.image1.fill.effect.intensity = 1
+                                    mBlock.image2.fill.effect = "filter.desaturate"
+                                    mBlock.image2.fill.effect.intensity = 1
+                                end
+                                mBlock.alpha = 0
+                                mBlock:addEventListener("touch", touchBlock)
+                                groupSceneScroll:insert(mBlock)
+                                for i=1, #mBlock.cells do
+                                    mBlock.cells[i][2]:addEventListener("touch",touchParameter)
+                                end
+                                block.investBlocks[#block.investBlocks+1] = {mTableBlock, mBlock}
+                                i = i+1
+                            end
+
+                        end
+
+                        local yTargetPos = block.y+block.height/2
+                        for i=idBlock+1, #blocks do
+                            local block = blocksObjects[i]
+                            block.id = i
+                            yTargetPos = yTargetPos+block.height-display.contentWidth/60
+                            block.yGoalPos = yTargetPos-block.height/2
+                            block.y = block.yGoalPos
+                        end
+
+                        local xS, yS = scrollProjects:getContentPosition()
+                        touchBlock({
+                            ["target"] = block,
+                            ["phase"] = "began",
+                            ["y"] = block.y+yS+scrollProjects.y,
+                            ["autoMove"]=true
+                        })
                     end
-                    i = i+1
+                    funTouchNoTouch({["target"]=backgroundNoTouch, ["phase"]="ended"})
                 end
+                return(true)
+            end
+            for i=1, #arrayButtons do
+                button = display.newRect(rect.x, containerBlock.y+containerBlock.height/2+display.contentWidth/8*(i-0.5), rect.width, display.contentWidth/8)
+                button.nameFunction = arrayButtons[i][2]
+                button:setFillColor(66/255,66/255,66/255)
+                button:addEventListener("touch", funTouchButton)
+                group:insert(button)
+                local header = display.newText(arrayButtons[i][1], button.x-button.width/2.3, button.y, nil, fontSize1/1.1 )
+                header.anchorX = 0
+                group:insert(header)
+                buttons[i] = button
             end
 
-            if (allBlocks[blocks[tBlock.id][1]][6]==true) then
-                local i = tBlock.id
-                local attachments = 1
-                while (allBlocks[blocks[i][1]][6]~="end" or attachments~=0) do
-                    i=i+1
-                    if (allBlocks[blocks[i][1]][6]==true) then
-                        attachments = attachments+1
-                    elseif (allBlocks[blocks[i][1]][6]=="end") then
-                        attachments = attachments-1
+
+            rect.height = group.height+display.contentWidth/40
+            group.y = -rect.height/2
+            funTouchNoTouch = function (event)
+                if (event.phase=="ended" and event.target==backgroundNoTouch ) then
+                    backgroundNoTouch:removeEventListener("touch",funTouchNoTouch)
+                    rect:removeEventListener("touch",funTouchNoTouch)
+                    for i=1, #buttons do
+                        buttons[i]:removeEventListener("touch",funTouchButton)
                     end
-                    local tBlock = blocksObjects[i]
-                    local arBlock = blocks[i]
-                    if (onOrOff~="off") then
-                        arBlock[3] = "off"
-                        tBlock.image1.fill.effect = "filter.desaturate"
-                        tBlock.image1.fill.effect.intensity = 1
-                        tBlock.image2.fill.effect = "filter.desaturate"
-                        tBlock.image2.fill.effect.intensity = 1
-                    else
-                        arBlock[3] = "on"
-                        tBlock.image1.fill.effect = nil
-                        tBlock.image2.fill.effect = nil
-                    end
+                    transition.to(group, {time=200, alpha=0, onComplete=function ()
+                        display.remove(group)
+                    end})
+                    transition.to(backgroundNoTouch, {time=200, alpha=0, transition=function()
+                        display.remove(backgroundNoTouch)
+                    end})
                 end
-
+                return(true)
             end
-            funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-        elseif (event.target.nameFunction == "delete") then
-            local idBlock = tBlock.id
-            local isEvent = allBlocks[blocks[idBlock][1]][1]=="event"
-            local isAttachments = allBlocks[blocks[idBlock][1]][6]==true
-            table.remove(blocks, idBlock)
-            table.remove(blocksObjects, idBlock)
+            rect:addEventListener("touch", funTouchNoTouch)
+            transition.to(group, {time=100, alpha=1})
+            backgroundNoTouch:addEventListener("touch", funTouchNoTouch)
+            transition.to(backgroundNoTouch, {time=100, alpha=1})
 
-            if (isEvent) then
-                local i = idBlock
-                while (i<=#blocks and allBlocks[blocks[i][1]][1]~="event") do
-                    table.remove(blocks, i)
+        else
+            local oldYPosBlock = event.target.y
+            event.target.y = event.target.yGoalPos
+
+
+            isMoveBlock = false
+            timer.cancel(timerMoveBlock)
+            display.remove(event.target.backgroundAlpha)
+
+            if (event.target.investBlocks~=nil) then
+                local setId = event.target.id
+                local yTargetPos = event.target.yGoalPos+event.target.height/2
+                for i=1, #event.target.investBlocks do
+                    local block = event.target.investBlocks[i]
+                    setId = setId+1
+                    table.insert(blocks, setId, block[1])
+                    table.insert(blocksObjects, setId, block[2])
+                    block[2].alpha, block[2].id =1, setId
+                    yTargetPos = yTargetPos+block[2].height-display.contentWidth/60
+                    block[2].yGoalPos = yTargetPos-block[2].height/2
+                    block[2].y = block[2].yGoalPos
+                end
+                event.target.investBlocks =nil
+
+
+                if (allBlocks[blocks[event.target.id][1]][1]=="event") then
+                    local i = 0
+                    while (i<#blocks) do
+                        i = i+1
+                        local showBlock = blocksObjects[i]
+                        if (showBlock.investBlocks~=nil) then
+                            local setId = i
+                            for i=1, #showBlock.investBlocks do
+                                local block = showBlock.investBlocks[i]
+                                setId = setId+1
+                                table.insert(blocks, setId, block[1])
+                                table.insert(blocksObjects, setId, block[2])
+                                block[2].alpha, block[2].id =1, setId
+                                yTargetPos = yTargetPos+block[2].height-display.contentWidth/60
+                                block[2].yGoalPos = yTargetPos-block[2].height/2
+                                block[2].y = block[2].yGoalPos
+                            end
+                            showBlock.investBlocks = nil
+                        end
+                    end
+                    yTargetPos = 0
+                end
+                for i=(yTargetPos==0) and 1 or setId+1, #blocksObjects do
                     local block = blocksObjects[i]
-                    table.remove(blocksObjects, i)
-                    display.remove(block)
+                    block.id = i
+                    yTargetPos = yTargetPos+block.height-display.contentWidth/60
+                    block.yGoalPos = yTargetPos-block.height/2
+                    transition.cancel(block)
+                    block.y = block.yGoalPos
                 end
+                scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
             end
-            if (isAttachments) then
-                local i = idBlock
-                local attachments = 1
-                while (attachments~=0) do
-                    if (allBlocks[blocks[i][1]][6]==true) then
-                        attachments = attachments+1
-                    elseif (allBlocks[blocks[i][1]][6]=="end") then
-                        attachments = attachments-1
-                    end
-                    table.remove(blocks, i)
-                    local block = blocksObjects[i]
-                    table.remove(blocksObjects, i)
-                    display.remove(block)
-                end
-            end
-
-            display.remove(tBlock)
-            local yTargetPos = idBlock==1 and 0 or blocksObjects[idBlock-1].yGoalPos+blocksObjects[idBlock-1].height/2
-            for i=idBlock, #blocks do
-                local block = blocksObjects[i]
-                block.id = i
-                yTargetPos = yTargetPos+block.height-display.contentWidth/60
-                block.yGoalPos = yTargetPos-block.height/2
-                block.y = block.yGoalPos
-            end
-            funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
 
             local xS, yS = scrollProjects:getContentPosition()
-            scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
-            if (-yS+scrollProjects.height>groupSceneScroll.height+display.contentWidth/1.5) then
-                scrollProjects:scrollToPosition({
-                    time=0,
-                    y=-math.max(groupSceneScroll.height-scrollProjects.height+display.contentWidth/1.5,0)
-                })
-            end
-
-        elseif (event.target.nameFunction == "copy") then
-
-            isBlockTouchBlock = true
-            local idBlock = tBlock.id
-            local tableBlock = json.decode(json.encode(blocks[idBlock]))
-            local block = createBlock(tableBlock)
-            if (tableBlock[3]=="off") then
-                block.image1.fill.effect = "filter.desaturate"
-                block.image1.fill.effect.intensity = 1
-                block.image2.fill.effect = "filter.desaturate"
-                block.image2.fill.effect.intensity = 1
-            end
-            block.yGoalPos = tBlock.yGoalPos
-            block.y = tBlock.yGoalPos
-            block.id = idBlock
-            groupSceneScroll:insert(block)
-            table.insert(blocks, idBlock, tableBlock)
-            table.insert(blocksObjects, idBlock, block)
-            block:addEventListener("touch", touchBlock)
-            for i=1, #block.cells do
-                block.cells[i][2]:addEventListener("touch",touchParameter)
-            end
-
-            local idOldBlock = tBlock.id+1
-            if (allBlocks[blocks[idOldBlock][1]][1]=="event") then
-                block.investBlocks = {}
-                local i = idOldBlock+1
-                while (i<=#blocks and allBlocks[blocks[i][1]][1]~="event") do
-                    local mTableBlock = json.decode(json.encode(blocks[i]))
-                    local mBlock = createBlock(mTableBlock)
-                    if (mTableBlock[3]=="off") then
-                        mBlock.image1.fill.effect = "filter.desaturate"
-                        mBlock.image1.fill.effect.intensity = 1
-                        mBlock.image2.fill.effect = "filter.desaturate"
-                        mBlock.image2.fill.effect.intensity = 1
-                    end
-                    mBlock.alpha = 0
-                    mBlock:addEventListener("touch", touchBlock)
-                    groupSceneScroll:insert(mBlock)
-                    for i=1, #mBlock.cells do
-                        mBlock.cells[i][2]:addEventListener("touch",touchParameter)
-                    end
-                    block.investBlocks[#block.investBlocks+1] = {mTableBlock, mBlock}
-                    i = i+1
-                end
-
-            end
-
-            local yTargetPos = block.y+block.height/2
-            for i=idBlock+1, #blocks do
-                local block = blocksObjects[i]
-                block.id = i
-                yTargetPos = yTargetPos+block.height-display.contentWidth/60
-                block.yGoalPos = yTargetPos-block.height/2
-                block.y = block.yGoalPos
-            end
-
-            if (allBlocks[blocks[idOldBlock][1]][6]==true) then
-                block.investBlocks = {}
-                local i = idOldBlock+1
-                local attachments = 1
-                while (attachments~=0) do
-                    if (allBlocks[blocks[i][1]][6]==true) then
-                        attachments = attachments+1
-                    elseif (allBlocks[blocks[i][1]][6]=="end") then
-                        attachments = attachments-1
-                    end
-                    local mTableBlock = json.decode(json.encode(blocks[i]))
-                    local mBlock = createBlock(mTableBlock)
-                    if (mTableBlock[3]=="off") then
-                        mBlock.image1.fill.effect = "filter.desaturate"
-                        mBlock.image1.fill.effect.intensity = 1
-                        mBlock.image2.fill.effect = "filter.desaturate"
-                        mBlock.image2.fill.effect.intensity = 1
-                    end
-                    mBlock.alpha = 0
-                    mBlock:addEventListener("touch", touchBlock)
-                    groupSceneScroll:insert(mBlock)
-                    for i=1, #mBlock.cells do
-                        mBlock.cells[i][2]:addEventListener("touch",touchParameter)
-                    end
-                    block.investBlocks[#block.investBlocks+1] = {mTableBlock, mBlock}
-                    i = i+1
-                end
-
-            end
-
-            local yTargetPos = block.y+block.height/2
-            for i=idBlock+1, #blocks do
-                local block = blocksObjects[i]
-                block.id = i
-                yTargetPos = yTargetPos+block.height-display.contentWidth/60
-                block.yGoalPos = yTargetPos-block.height/2
-                block.y = block.yGoalPos
-            end
-
-            local xS, yS = scrollProjects:getContentPosition()
-            touchBlock({
-                ["target"] = block,
-                ["phase"] = "began",
-                ["y"] = block.y+yS+scrollProjects.y,
-                ["autoMove"]=true
+            local ysdv = event.y-scrollProjects.y- scrollProjects.height/2
+            scrollProjects:scrollToPosition({
+                time=0,
+                y = math.min(math.max( -event.target.y+scrollProjects.height/2+ysdv, -(groupSceneScroll.height+display.contentWidth/1.5)),0)
             })
+            funsP["записать сохранение"](pathObject.."/scripts", json.encode(blocks))
         end
-        funTouchNoTouch({["target"]=backgroundNoTouch, ["phase"]="ended"})
+        display.getCurrentStage():setFocus(event.target, nil)
+        isBlockTouchBlock = false
     end
-    return(true)
-end
-for i=1, #arrayButtons do
-    button = display.newRect(rect.x, containerBlock.y+containerBlock.height/2+display.contentWidth/8*(i-0.5), rect.width, display.contentWidth/8)
-    button.nameFunction = arrayButtons[i][2]
-    button:setFillColor(66/255,66/255,66/255)
-    button:addEventListener("touch", funTouchButton)
-    group:insert(button)
-    local header = display.newText(arrayButtons[i][1], button.x-button.width/2.3, button.y, nil, fontSize1/1.1 )
-    header.anchorX = 0
-    group:insert(header)
-    buttons[i] = button
-end
-
-
-rect.height = group.height+display.contentWidth/40
-group.y = -rect.height/2
-funTouchNoTouch = function (event)
-    if (event.phase=="ended" and event.target==backgroundNoTouch ) then
-        backgroundNoTouch:removeEventListener("touch",funTouchNoTouch)
-        rect:removeEventListener("touch",funTouchNoTouch)
-        for i=1, #buttons do
-            buttons[i]:removeEventListener("touch",funTouchButton)
-        end
-        transition.to(group, {time=200, alpha=0, onComplete=function ()
-            display.remove(group)
-        end})
-        transition.to(backgroundNoTouch, {time=200, alpha=0, transition=function()
-            display.remove(backgroundNoTouch)
-        end})
-    end
-    return(true)
-end
-rect:addEventListener("touch", funTouchNoTouch)
-transition.to(group, {time=100, alpha=1})
-backgroundNoTouch:addEventListener("touch", funTouchNoTouch)
-transition.to(backgroundNoTouch, {time=100, alpha=1})
---CCCCCCCCCCCCCCCCCCCCCCCCC
---CCCCCCCCCCCCCCCCCCCCCCCCC
---CCCCCCCCCCCCCCCCCCCCCCCCC
---CCCCCCCCCCCCCCCCCCCCCCCCC
 else
-    local oldYPosBlock = event.target.y
-    event.target.y = event.target.yGoalPos
-    
-
-    isMoveBlock = false
-    timer.cancel(timerMoveBlock)
-    display.remove(event.target.backgroundAlpha)
-
-    if (event.target.investBlocks~=nil) then
-        local setId = event.target.id
-        local yTargetPos = event.target.yGoalPos+event.target.height/2
-        for i=1, #event.target.investBlocks do
-            local block = event.target.investBlocks[i]
-            setId = setId+1
-            table.insert(blocks, setId, block[1])
-            table.insert(blocksObjects, setId, block[2])
-            block[2].alpha, block[2].id =1, setId
-            yTargetPos = yTargetPos+block[2].height-display.contentWidth/60
-            block[2].yGoalPos = yTargetPos-block[2].height/2
-            block[2].y = block[2].yGoalPos
-        end
-        event.target.investBlocks =nil
-
-
-        if (allBlocks[blocks[event.target.id][1]][1]=="event") then
-            local i = 0
-            while (i<#blocks) do
-                i = i+1
-                local showBlock = blocksObjects[i]
-                if (showBlock.investBlocks~=nil) then
-                    local setId = i
-                    for i=1, #showBlock.investBlocks do
-                        local block = showBlock.investBlocks[i]
-                        setId = setId+1
-                        table.insert(blocks, setId, block[1])
-                        table.insert(blocksObjects, setId, block[2])
-                        block[2].alpha, block[2].id =1, setId
-                        yTargetPos = yTargetPos+block[2].height-display.contentWidth/60
-                        block[2].yGoalPos = yTargetPos-block[2].height/2
-                        block[2].y = block[2].yGoalPos
-                    end
-                    showBlock.investBlocks = nil
-                end
-            end
-            yTargetPos = 0
-        end
-        for i=(yTargetPos==0) and 1 or setId+1, #blocksObjects do
-            local block = blocksObjects[i]
-            block.id = i
-            yTargetPos = yTargetPos+block.height-display.contentWidth/60
-            block.yGoalPos = yTargetPos-block.height/2
-            transition.cancel(block)
-            block.y = block.yGoalPos
-        end
-        scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
+    isBlockTouchBlock = false
+    display.getCurrentStage():setFocus(event.target, nil)
+    if (isTimerMoveBlock) then
+        isTimerMoveBlock = false
+        timer.cancel(timerMoveBlock)
     end
-
-    local xS, yS = scrollProjects:getContentPosition()
-    local ysdv = event.y-scrollProjects.y- scrollProjects.height/2
-    scrollProjects:scrollToPosition({
-        time=0,
-        y = math.min(math.max( -event.target.y+scrollProjects.height/2+ysdv, -(groupSceneScroll.height+display.contentWidth/1.5)),0)
-    })
-    funsP["записать сохранение"](pathObject.."/scripts", json.encode(blocks))
-end
-display.getCurrentStage():setFocus(event.target, nil)
-isBlockTouchBlock = false
-end
 end
 end
 return true
@@ -2121,8 +2121,8 @@ local function compartmentImages()
             if (isTimerMoveSlot) then
                 isTimerMoveSlot = false
                 timer.cancel(timerMoveSlot)
-            groupScene.alpha = 0
-            scene_viewsprite(event.target.pathImage, event.target.nameProject.text)
+                groupScene.alpha = 0
+                scene_viewsprite(event.target.pathImage, event.target.nameProject.text)
 -- на объект нажали
 end
 if (isMoveSlot) then
