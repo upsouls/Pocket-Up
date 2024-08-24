@@ -179,4 +179,10 @@ allBlocks = {
 	["hideHitboxes"]={"block", "blocks/block_blue_1.png", { {{"text",words[456]}} }, 109, 88, false},
 	["setHorizontalOrientation"]={"block", "blocks/block_gold_1.png", { {{"text",words[457]}} }, 109, 88, false},
 	["setVerticalOrientation"]={"block", "blocks/block_gold_1.png", { {{"text",words[458]}} }, 109, 88, false},
+	["onTouchObject"]={"event","blocks/event_brown_1.png",{ {{"text",words[459]}} }, 412,154, false},
+	["movedObject"]={"event","blocks/event_brown_1.png",{ {{"text",words[460]}} }, 412,154, false},
+	["movedScreen"]={"event","blocks/event_brown_1.png",{ {{"text",words[461]}} }, 412,154, false},
+	["onTouchScreen"]={"event","blocks/event_brown_1.png",{ {{"text",words[462]}} }, 412,154, false},
+	["touchBack"]={"event","blocks/event_brown_1.png",{ {{"text",words[463]}} }, 412,154, false},
+	["endedCollision"]={"event","blocks/event_blue_2.png",{ {{"text",words[464]}}, {{"objects",nil}} }, 411, 206, false},
 }

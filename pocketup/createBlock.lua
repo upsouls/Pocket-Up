@@ -159,7 +159,7 @@ function createBlock(block)
 						end
 					end
 				elseif (formula[1]=="objects") then
-					nameFunction = words[(block[1]=="collision") and 85 or (block[1]=="clone" or block[1]~=block[1]:gsub("broadcastFun>","")) and 90 or 87]
+					nameFunction = words[(block[1]=="collision" or block[1]=="endedCollision") and 85 or (block[1]=="clone" or block[1]~=block[1]:gsub("broadcastFun>","")) and 90 or 87]
 					local namesObjects = json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))
 					for i=1, #namesObjects do
 						if (namesObjects[i][2]==formula[2][2]) then

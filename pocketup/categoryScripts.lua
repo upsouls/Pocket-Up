@@ -82,8 +82,13 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 	local allBlocksCategories = {
 		["event"]={
 			{"start"},
+			{"touchBack"},
 			{"touchObject"},
+			{"movedObject"},
+			{"onTouchObject"},
 			{"touchScreen"},
+			{"movedScreen"},
+			{"onTouchScreen"},
 			{"function",{{"function",nameFunction}}},
 			{"broadcastFunction",{{"function",nameFunction}}},
 			{"broadcastFunctionAndWait",{{"function",nameFunction}}},
@@ -96,6 +101,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"broadcastFun>nameClone",{{{"text",words[444]}},{"function",nameFunction}}},
 			--{"whenTheTruth",{ {{"number", 1},{"function", "<"},{"number", 2}},  }},
 			{"collision",{ {{"objects", nil}} }},
+			{"endedCollision", { {{"objects", nil}} }},
 			{"changeBackground",{ {"backgrounds", nameBackground} }},
 			{"startClone"},
 			{"clone",{{"objects",nil}}},
@@ -119,6 +125,9 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			--{"stopScripts",{ {"scripts", "thisScript"} }},
 			--{"waitStopScripts"},
 			{"cancelAllTimers"},
+			{"startClone"},
+			{"clone",{{"objects",nil}}},
+			{"deleteClone"},
 		},
 		["physic"]={
 			{"setPosition",{ {{"number", 1},{"number", 0},{"number", 0}}, {{"number", 2},{"number", 0},{"number", 0}} }},

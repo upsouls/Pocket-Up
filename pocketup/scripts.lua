@@ -1744,8 +1744,8 @@ funAddBlock = function (blockTable)
     end
 
     local tableReplacementBlocks = {
-        ["ifElse (2)"]={"if", { {{"number",1},{"function","<"},{"number",2}} }},
-        ["if (2)"]={"if", { {{"number",1},{"function","<"},{"number",2}} }},
+        ["ifElse (2)"]={"if", { {{"number",1},{"function","<"},{"number",2}} }, "on"},
+        ["if (2)"]={"if", { {{"number",1},{"function","<"},{"number",2}} }, "on"},
     }
     local originalName = blockTable[1]
     if (tableReplacementBlocks[blockTable[1]] ~= nil) then
@@ -2249,7 +2249,8 @@ funAddImage = function (event)
         local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
         group:insert(containerIcon)
         containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
-        local imageIcon = display.newImage(IDOBJECT.."/image_"..images[i][2]..".png", system.DocumentsDirectory)
+        buttonRect.pathImage = IDOBJECT.."/image_"..images[i][2]..".png"
+        local imageIcon = display.newImage(buttonRect.pathImage, system.DocumentsDirectory)
         containerIcon:insert(imageIcon)
         strokeIcon:toFront()
 
