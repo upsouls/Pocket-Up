@@ -6,6 +6,11 @@ local pocketup  = class(require 'core.application')
 function pocketup:constructor()
 	self.baseclass.constructor(self)
 	self.context.assets = require 'resources.assets'
+	self:_loadstrings()
+end
+
+function pocketup:_loadstrings()
+	self.context.str = require('app.data.strings.' .. self.context.lang)
 end
 
 function pocketup:create()
