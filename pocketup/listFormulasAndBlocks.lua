@@ -185,4 +185,5 @@ allBlocks = {
 	["onTouchScreen"]={"event","blocks/event_brown_1.png",{ {{"text",words[462]}} }, 412,154, false},
 	["touchBack"]={"event","blocks/event_brown_1.png",{ {{"text",words[463]}} }, 412,154, false},
 	["endedCollision"]={"event","blocks/event_blue_2.png",{ {{"text",words[464]}}, {{"objects",nil}} }, 411, 206, false},
+	["setTextelCoarseness"]={"block", "blocks/block_blue_1.png", { {{"text",words[465]}, {"cell", nil, 1.5}} }, 109, 88, false},
 }

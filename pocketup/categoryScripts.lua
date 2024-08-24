@@ -156,6 +156,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"setFriction",{{{"number",8},{"number",0}} }},
 			{"showHitboxes"},
 			{"hideHitboxes"},
+			{"setTextelCoarseness",{{{"number", 1}}}}
 		},
 		["sounds"]={
 			{"playSound", {{"sounds",nameSound}}},
