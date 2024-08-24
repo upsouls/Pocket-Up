@@ -948,6 +948,18 @@ end'
         add_pcall()
         lua = lua.."orientation.lock('portrait')\nmainGroup.xScale, mainGroup.yScale = "..tostring(xScaleMainGroup)..", "..tostring(not options.aspectRatio and yScaleMainGroup or xScaleMainGroup).."\nmainGroup.x, mainGroup.y = CENTER_X, CENTER_Y\nblackRectTop.width, blackRectTop.height = display.contentWidth, display.contentHeight\nblackRectTop.x, blackRectTop.y = "..("0,-"..tostring(options.displayHeight/2)).."\nblackRectTop.anchorY, blackRectTop.anchorX = 1, 0.5\nblackRectBottom.x, blackRectBottom.y = "..("0,"..tostring(options.displayHeight/2)).."\nblackRectBottom.anchorY, blackRectBottom.anchorX = 0, 0.5"
         end_pcall()
+    elseif nameBlock == 'thinkTime' then
+        add_pcall()
+        local arg1 = make_all_formulas(infoBlock[2][1], object)
+        local arg2 = make_all_formulas(infoBlock[2][2], object)
+        lua = lua..'target.think = display.newImage("sprites/thinks.png")\ntarget.think:scale(0.3, 0.3)\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text = display.newText('..arg1..', 0, 0, 150, 100, native.systemFont, 25)\ntarget.think.text:setFillColor(0)\nlocal _mover = timer.performWithDelay(0, function()\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text.x = target.think.x\ntarget.think.text.y = target.think.y\ntarget.think:toFront()\ntarget.think.text:toFront()\nend, -1)\ntimer.performWithDelay('..arg2..' * 1000, function()\ntimer.cancel(_mover)\ntarget.think.text:removeSelf()\ntarget.think:removeSelf()\nend)'
+        end_pcall()
+    elseif nameBlock == 'sayTime' then
+        add_pcall()
+        local arg1 = make_all_formulas(infoBlock[2][1], object)
+        local arg2 = make_all_formulas(infoBlock[2][2], object)
+        lua = lua..'target.think = display.newImage("sprites/says.png")\ntarget.think:scale(0.3, 0.3)\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text = display.newText('..arg1..', 0, 0, 150, 100, native.systemFont, 25)\ntarget.think.text:setFillColor(0)\nlocal _mover = timer.performWithDelay(0, function()\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text.x = target.think.x\ntarget.think.text.y = target.think.y\ntarget.think:toFront()\ntarget.think.text:toFront()\nend, -1)\ntimer.performWithDelay('..arg2..' * 1000, function()\ntimer.cancel(_mover)\ntarget.think.text:removeSelf()\ntarget.think:removeSelf()\nend)'
+        end_pcall()
     end
 --"blackRectTop.x, blackRectTop.y = "..(options.orientation=="vertical" and ("0,-"..tostring(options.displayHeight/2)) or ("-"..tostring(options.displayHeight/2)..",0" ))..")\nblackRectTop.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 1\nblackRectBottom.x, blackRectBottom.y = "..(options.orientation=="vertical" and ("0,"..tostring(options.displayHeight/2)) or (tostring(options.displayHeight/2)..",0" ))..")\nblackRectBottom.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 0"
 
