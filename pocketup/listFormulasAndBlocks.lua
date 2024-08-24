@@ -177,4 +177,6 @@ allBlocks = {
 	["showToast"]={"block", "blocks/block_gold_2.png", { {{"text", words[453]}}, {{"text", words[454]}, {"cell", nil, 5}} }, 109, 142, false},
 	["showHitboxes"]={"block", "blocks/block_gold_1.png", { {{"text",words[455]}} }, 109, 88, false},
 	["hideHitboxes"]={"block", "blocks/block_gold_1.png", { {{"text",words[456]}} }, 109, 88, false},
+	["setHorizontalOrientation"]={"block", "blocks/block_gold_1.png", { {{"text",words[457]}} }, 109, 88, false},
+	["setVerticalOrientation"]={"block", "blocks/block_gold_1.png", { {{"text",words[458]}} }, 109, 88, false},
 }

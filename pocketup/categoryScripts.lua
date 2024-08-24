@@ -241,6 +241,8 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"hideHitboxes"},
 			{"showToast", {{{"text", words[164]}}}},
 			{"lua", {{{"text", "native.showAlert(\""..words[388].."\", \""..words[389].."\", {\"OK\"})"}}}},
+			{"setHorizontalOrientation"},
+			{"setVerticalOrientation"},
 		},
 	}
 	local blocksCategory = allBlocksCategories[category]

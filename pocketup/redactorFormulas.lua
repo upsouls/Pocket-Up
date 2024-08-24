@@ -71,7 +71,7 @@ local function isCorrectFormulas()
 		maximum="math.max",minimum="math.min",ternaryExpression="allFunsRedRorms.ternaryExpression"
 		,characterFromText="allFunsRedRorms.characterFromText",length="utf8.len",
 		connect="allFunsRedRorms.connect",connect2="allFunsRedRorms.connect",regularExpression="allFunsRedRorms.regularExpression",
-		lengthArray="#",elementArray="allFunsRedRorms.getNil",containsArray="allFunsRedRorms.getFalse",
+		lengthArray="#",elementArray="allFunsRedRorms.get0",containsArray="allFunsRedRorms.getFalse",
 		indexArray="allFunsRedRorms.get0",levelingArray="allFunsRedRorms.getNil",transparency='(0)',brightness='(100)',
 		numberImage='(1)',size='(100)',direction='(90)',directionView='(90)',
 		touchesObject="false",touchesEdge="false",touchesFinger="false",
