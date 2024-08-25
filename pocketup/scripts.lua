@@ -68,12 +68,12 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                             objectsParameter[3].yScale = 2
                         end
                         display.getCurrentStage():setFocus(event.target, event.id)
-                    elseif (event.phase=="moved") then
+                    elseif (event.phase=="moved" and math.abs(event.y-event.yStart)>20) then
                         if (objectsParameter[1]=="cell") then
                             objectsParameter[3].yScale = 1
                         end
                         scrollProjects:takeFocus(event)
-                    else
+                    elseif (event.phase~="moved") then
                         local idParameter = event.target.typeParameter
                         if (idParameter=="cell") then
                             objectsParameter[3].yScale = 1
@@ -832,7 +832,7 @@ local timerMoveBlock = nil
 local yNewMoveSlot = nil
 local isTouchBlock = false
 touchBlock = function(event)
-    if ((event.phase~="began" or not isMoveBlock) and isBackScene=="back") then
+    if ((event.phase~="began" or not isMoveBlock) and isBackScene=="back") and (event.phase~="moved" or math.abs(event.y-event.yStart)>20) then
         if (event.phase=="began") then
             yNewMoveSlot = event.y
             isTouchBlock = true

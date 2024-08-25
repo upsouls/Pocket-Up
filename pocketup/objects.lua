@@ -55,7 +55,7 @@ function scene_objects(pathScene, NAMEPROJECT, infoScene)
 			end
 
 			display.getCurrentStage():setFocus(event.target, event.id)
-		elseif (event.phase=="moved") then
+		elseif (event.phase=="moved" and math.abs(event.y-event.yStart)>20) then
 
 			if isTimerMoveSlot then
 				timer.cancel(timerMoveSlot)
@@ -112,7 +112,7 @@ function scene_objects(pathScene, NAMEPROJECT, infoScene)
 
 			end
 
-		else
+		elseif (event.phase~="moved") then
 			event.target:setFillColor(0, 71/255, 93/255)
 			display.getCurrentStage():setFocus(event.target, nil)
 

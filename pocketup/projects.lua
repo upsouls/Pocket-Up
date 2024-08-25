@@ -35,10 +35,10 @@ local function touchOpenProject(event)
 	if (event.phase=="began") then
 		event.target:setFillColor(23/255,91/255,114/255)
 --display.getCurrentStage():setFocus(event.target)
-elseif (event.phase=="moved") then
+elseif (event.phase=="moved" and math.abs(event.y-event.yStart)>20) then
 	event.target:setFillColor(0, 71/255, 93/255)
 	scrollProjects:takeFocus(event)
-else
+elseif (event.phase~="moved") then
 	event.target:setFillColor(0, 71/255, 93/255)
 --display.getCurrentStage():setFocus(nil)
 
