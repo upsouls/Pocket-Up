@@ -64,7 +64,7 @@ local function isCorrectFormulas()
 		["and"]="and",["or"]="or",sinus="allFunsRedRorms.sin",cosine="allFunsRedRorms.cos",
 		tangent="allFunsRedRorms.tan",naturalLogarithm="math.log",
 		decimalLogarithm="math.log10",pi="math.pi",root="math.sqrt",
-		random="math.random",absoluteValue="math.abs",round="math.round",
+		random="allFunsRedRorms.random",absoluteValue="math.abs",round="math.round",
 		modulo="math.fmod",arcsine="allFunsRedRorms.asin",arccosine="allFunsRedRorms.acos",
 		arctangent="allFunsRedRorms.atan", arctangent2="allFunsRedRorms.atan2",exponent="math.exp",
 		degree="math.pow",roundDown="math.floor",roundUp="allFunsRedRorms.roundUp",

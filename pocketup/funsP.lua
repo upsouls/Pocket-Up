@@ -460,6 +460,7 @@ end
 
 funsP["корректность формулы"] = function(code)
 allFunsRedRorms = {}
+allFunsRedRorms.random = function(v, v2) if (type(v)=="number" and type(v2)=="number") then if (v<v2) then return(math.random(v, v2)) else return(v) end end end
 allFunsRedRorms.utf8 = utf8
 allFunsRedRorms.math2 = math
 allFunsRedRorms.sin = function(value) return(math.sin(math.rad(value))) end
