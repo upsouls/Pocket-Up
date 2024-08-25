@@ -182,6 +182,9 @@ function scene_run_game(shsc)
 
         for o=1, #objects do
             if (type(objects[o][2])~="string") then
+
+            lua = lua.."\npcall(function()\n"
+
             local obj_id = objects[o][2]
             local obj_path = scene_path.."/object_"..obj_id
             local obj_images = json.decode(funsP['получить сохранение'](obj_path.."/images"))
@@ -1002,6 +1005,7 @@ lua = lua.."\n"..make_block(block, 'target', obj_images, obj_sounds)
                 end
             end
             lua = lua.."\nfor i=1, #events_start do\n    events_start[i](object_"..obj_id..")\nend\n"
+                lua = lua.."\nend)\n"
             end
         end
         lua = lua.."\nend"
