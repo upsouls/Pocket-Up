@@ -186,4 +186,9 @@ allBlocks = {
 	["touchBack"]={"event","blocks/event_brown_1.png",{ {{"text",words[463]}} }, 412,154, false},
 	["endedCollision"]={"event","blocks/event_blue_2.png",{ {{"text",words[464]}}, {{"objects",nil}} }, 411, 206, false},
 	["setTextelCoarseness"]={"block", "blocks/block_blue_1.png", { {{"text",words[465]}, {"cell", nil, 1.5}} }, 109, 88, false},
+	["jump"]={"block", "blocks/block_blue_1.png", { {{"text",words[467]..":"},{"cell", nil, 1.3}, {"text", words[420]..":"}, {"cell",nil,1.3}} }, 109, 88, false},
+	["jumpX"]={"block", "blocks/block_blue_1.png", { {{"text",words[467]},{"cell", nil, 1.5}} }, 109, 88, false},
+	["jumpY"]={"block", "blocks/block_blue_1.png", { {{"text",words[468]},{"cell", nil, 1.5}} }, 109, 88, false},
+	["jumpYIf"]={"block", "blocks/block_blue_2.png", { {{"text",words[466]},{"cell", nil, 1.5},{"text",words[469]}},{{"text",words[470]}} }, 109, 142, false},
+	["setGravityScale"]={"block", "blocks/block_blue_1.png", { {{"text",words[471]}},{{"text", words[472]},{"cell", nil, 3}} }, 109, 88, false},
 }

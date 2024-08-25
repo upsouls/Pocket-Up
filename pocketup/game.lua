@@ -53,10 +53,11 @@ local function make_all_formulas(formulas, object)
     print(json.encode(formulas))
 
     local tableInfoObject = {
-        {'size',"("..object..".property_size)"},{'direction',"("..object..".rotation/2)"},{'directionView',"("..object..".rotation/2)"},{'positionX',object..".x"},
+        {'size',"("..object..".property_size)"},{'direction',"("..object..".rotation)"},{'directionView',"("..object..".rotation/2)"},{'positionX',object..".x"},
         {'positionY',"(-("..object..".y))"},{'speedX', 'pocketupFuns.getLinearVelocity('..object..',"x")'},{'speedY', 'pocketupFuns.getLinearVelocity('..object..',"y")'},
-        {'angularVelocity', object..'.angularVelocity'},{'transparency', "((1-"..object..".alpha)*100)"},{"numberImage", object..".numberImage"},{"brightness",object..".property_brightness"},
+        {'angularVelocity', object..'.angularVelocity'},{'transparency', "math.round((1-"..object..".alpha)*100)"},{"numberImage", object..".numberImage"},{"brightness",object..".property_brightness"},
         {'color', object..".property_color"},{"nameImage", "listNamesImages["..object..".numberImage]"},{"touchesFinger","("..object..".isTouch==true)"},{"touchesObject","("..object..".isTouchObject==true)"},
+        {'countImages', "#listNamesImages"}
     }
     for i=1, #tableInfoObject do
         renameFormulas[tableInfoObject[i][1]] = tableInfoObject[i][2]
@@ -454,7 +455,9 @@ make_block = function(infoBlock, object, images, sounds)
         end
         lua = lua.."\ncameraGroup:insert(myClone)"
         lua = lua.."\nmyClone:addEventListener('touch', function(event)\nif (event.phase=='began') then\nlocal newIdTouch=globalConstants.touchId+1\nglobalConstants.touchId = newIdTouch\nglobalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true\nglobalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\ndisplay.getCurrentStage():setFocus(event.target, event.id)\nevent.target.isTouch = true\nfor key, value in pairs(objects) do\nfor i=1, #events_touchScreen[key] do\nevents_touchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_touchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #events_touchObject do\nevents_touchObject[i](event.target)\nend\nelseif (event.phase=='moved') then\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_movedScreen[key] do\nevents_movedScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_movedScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #events_movedObject do\nevents_movedObject[i](event.target)\nend\nelse\ndisplay.getCurrentStage():setFocus(event.target, nil)\nevent.target.isTouch = nil\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (pocketupFuns.getCountTouch(globalConstants.isTouchsId)==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch = false\nend\nfor key, value in pairs(objects) do\nfor i=1, #events_onTouchScreen[key] do\nevents_onTouchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_onTouchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #events_onTouchObject do\nevents_onTouchObject[i](event.target)\nend\nend\nreturn(true)\nend)"
-        lua = lua.."\nmyClone.xScale, myClone.yScale, myClone.alpha, myClone.rotation, myClone.numberImage, myClone.parent_obj = target.xScale, target.yScale, target.alpha, target.rotation, target.numberImage, target.parent_obj\ntarget.clones[#target.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
+        lua = lua.."\nmyClone.xScale, myClone.yScale, myClone.alpha, myClone.rotation, myClone.numberImage, myClone.parent_obj = target.xScale, target.yScale, target.alpha, target.rotation, target.numberImage, target.parent_obj"
+
+        lua = lua.."\ntarget.parent_obj.clones[#target.parent_obj.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
         lua = lua.."\nmyClone.isVisible = target.isVisible\nmyClone.physicsReload, myClone.physicsType , myClone.physicsTable = target.physicsReload or function(ob) end, target.physicsType or 'static' , json.decode(json.encode(target.physicsTable)) or {}\nmyClone:physicsReload()"
         lua = lua.."\nfor i=1, #events_startClone do\nevents_startClone[i](myClone)\nend\n"
         end_pcall()
@@ -589,12 +592,12 @@ make_block = function(infoBlock, object, images, sounds)
         elseif infoBlock[2][1][2] == 'random' then
             lua = lua..'target.x, target.y = math.random(-'..tostring(options.displayWidth/2)..','..tostring(options.displayWidth/2)..'), math.random(-'..tostring(options.displayHeight/2)..','..tostring(options.displayHeight/2)..')'
         else
-            lua = lua..'local object = object_'..infoBlock[2][1][2]..'\ntarget.x, target.y = object.x, object.y'
+            lua = lua..'local object = objects[\'object_'..infoBlock[2][1][2]..'\']\ntarget.x, target.y = object.x, object.y'
         end
         end_pcall()
-    elseif nameBlock == 'setRotateToObject' then -- ["setRotateToObject",[["objects",7]],"on"]
+    elseif nameBlock == 'setRotateToObject' and infoBlock[2][1][2]~=nil then -- ["setRotateToObject",[["objects",7]],"on"]
         add_pcall()
-        lua = lua..'target.rotation = pocketupFuns.atan2(objects[\'object_'..infoBlock[2][1][2]..'\'].x - target.x, target.y - objects[\'object_'..infoBlock[2][1][2]..'\'].y)'
+        lua = lua..'if ( objects[\'object_'..infoBlock[2][1][2]..'\']~=nil) then\ntarget.rotation = pocketupFuns.atan2(objects[\'object_'..infoBlock[2][1][2]..'\'].x - target.x, target.y - objects[\'object_'..infoBlock[2][1][2]..'\'].y)\nend'
         end_pcall()
     elseif nameBlock == 'toFrontLayer' then
         add_pcall()
@@ -798,11 +801,11 @@ end'
         end_pcall()
     elseif nameBlock=="removeVariableCamera" and infoBlock[2][1][2]~=nil then
         add_pcall()
-        lua = lua.."notCameraGroup:insert("..(infoBlock[2][1][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][1][2]..")"
+        lua = lua.."if ("..(infoBlock[2][1][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][1][2].."~=nil and "..(infoBlock[2][1][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][1][2]..".text ~= nil) then\nnotCameraGroup:insert("..(infoBlock[2][1][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][1][2]..")\nend"
         end_pcall()
      elseif nameBlock=="insertVariableCamera" and infoBlock[2][1][2]~=nil then
         add_pcall()
-        lua = lua.."cameraGroup:insert("..(infoBlock[2][1][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][1][2]..")"
+        lua = lua.."if ("..(infoBlock[2][1][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][1][2].."~=nil and "..(infoBlock[2][1][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][1][2]..".text ~= nil) then\ncameraGroup:insert("..(infoBlock[2][1][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][1][2]..")\nend"
         end_pcall()
     elseif nameBlock=="removeFocusCameraToObject" then
         add_pcall()
@@ -817,6 +820,7 @@ end'
         add_pcall()
         lua = lua..'local arrayVariables = json.decode(funsP["получить сохранение"]("'..(infoBlock[2][1][1]=="globalVariable" and IDPROJECT or obj_path)..'/variables"))'
         lua = lua..'\nfor i=1, #arrayVariables do\nif (arrayVariables[i][1]=='..infoBlock[2][1][2]..') then\n'..(infoBlock[2][1][1]=="globalVariable" and '' or 'target.')..'var_'..infoBlock[2][1][2]..'= arrayVariables[i][3]~=nil and arrayVariables[i][3] or 0\nbreak\nend\nend'
+        lua = lua..'\nif '..(infoBlock[2][1][1]=="globalVariable" and '' or 'target.')..'varText_'..infoBlock[2][1][2]..' then\n '..(infoBlock[2][1][1]=="globalVariable" and '' or 'target.')..'varText_'..infoBlock[2][1][2]..'.text = type('..(infoBlock[2][1][1]=="globalVariable" and '' or 'target.')..'var_'..infoBlock[2][1][2]..')=="boolean" and ('..(infoBlock[2][1][1]=="globalVariable" and '' or 'target.')..'var_'..infoBlock[2][1][2]..' and words[373] or words[374]) or type('..(infoBlock[2][1][1]=="globalVariable" and '' or 'target.')..'var_'..infoBlock[2][1][2]..')=="table" and encodeList('..(infoBlock[2][1][1]=="globalVariable" and '' or 'target.')..'var_'..infoBlock[2][1][2]..') or '..(infoBlock[2][1][1]=="globalVariable" and '' or 'target.')..'var_'..infoBlock[2][1][2]..'\nend'
         end_pcall()
     elseif nameBlock=="addElementArray" and infoBlock[2][2][2]~=nil then
         add_pcall()
@@ -860,7 +864,7 @@ end'
         end_pcall()
     elseif nameBlock=="exitGame" then
         add_pcall()
-        lua = lua.."timer.new(0, function()\nfunBackListener({keyName='deleteBack', phase='up'})\nend)"
+        lua = lua.."timer.new(0, function()\nfunBackListener2({keyName='deleteBack', phase='up'})\nend)"
         end_pcall()
     elseif nameBlock=="runScene" and infoBlock[2][1][2]~=nil then
         add_pcall()
@@ -967,24 +971,36 @@ end'
         add_pcall()
         local arg1 = make_all_formulas(infoBlock[2][1], object)
         local arg2 = make_all_formulas(infoBlock[2][2], object)
-        lua = lua..'target.think = display.newImage("sprites/thinks.png")\ntarget.think:scale(0.3, 0.3)\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text = display.newText('..arg1..', 0, 0, 150, 100, native.systemFont, 25)\ntarget.think.text:setFillColor(0)\nlocal _mover = timer.performWithDelay(0, function()\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text.x = target.think.x\ntarget.think.text.y = target.think.y\ntarget.think:toFront()\ntarget.think.text:toFront()\nend, -1)\ntimer.performWithDelay('..arg2..' * 1000, function()\ntimer.cancel(_mover)\ntarget.think.text:removeSelf()\ntarget.think:removeSelf()\nend)'
+        lua = lua..'if target.think ~= nil then\ndisplay.remove(target.think.text)\ndisplay.remove(target.think)\nend\ntarget.think = display.newImage("sprites/thinks.png")\ntarget.think:scale(0.3, 0.3)\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text = display.newText('..arg1..', 0, 0, 150, 100, native.systemFont, 25)\ntarget.think.text:setFillColor(0)\nlocal _mover = timer.performWithDelay(0, function()\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text.x = target.think.x\ntarget.think.text.y = target.think.y\ntarget.think:toFront()\ntarget.think.text:toFront()\nend, -1)\ntimer.performWithDelay('..arg2..' * 1000, function()\ntimer.cancel(_mover)\ntarget.think.text:removeSelf()\ntarget.think:removeSelf()\nend)'
         end_pcall()
     elseif nameBlock == 'sayTime' then
         add_pcall()
         local arg1 = make_all_formulas(infoBlock[2][1], object)
         local arg2 = make_all_formulas(infoBlock[2][2], object)
-        lua = lua..'target.think = display.newImage("sprites/says.png")\ntarget.think:scale(0.3, 0.3)\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text = display.newText('..arg1..', 0, 0, 150, 100, native.systemFont, 25)\ntarget.think.text:setFillColor(0)\nlocal _mover = timer.performWithDelay(0, function()\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text.x = target.think.x\ntarget.think.text.y = target.think.y\ntarget.think:toFront()\ntarget.think.text:toFront()\nend, -1)\ntimer.performWithDelay('..arg2..' * 1000, function()\ntimer.cancel(_mover)\ntarget.think.text:removeSelf()\ntarget.think:removeSelf()\nend)'
+        lua = lua..'if (target.think ~= nil) then\ndisplay.remove(target.think.text)\ndisplay.remove(target.think)\nend\ntarget.think = display.newImage("sprites/says.png")\ntarget.think:scale(0.3, 0.3)\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text = display.newText('..arg1..', 0, 0, 150, 100, native.systemFont, 25)\ntarget.think.text:setFillColor(0)\nlocal _mover = timer.performWithDelay(0, function()\ntarget.think.x=CENTER_X+target.x+target.width/2+40\ntarget.think.y=CENTER_Y+target.y-target.height/2-80\ntarget.think.text.x = target.think.x\ntarget.think.text.y = target.think.y\ntarget.think:toFront()\ntarget.think.text:toFront()\nend, -1)\ntimer.performWithDelay('..arg2..' * 1000, function()\ntimer.cancel(_mover)\ntarget.think.text:removeSelf()\ntarget.think:removeSelf()\nend)'
         end_pcall()
     elseif nameBlock == 'setTextelCoarseness' then
         add_pcall()
         local arg1 = make_all_formulas(infoBlock[2][1], object)
         lua = lua.."target.physicsTable.outline = graphics.newOutline("..arg1..", target.image_path, system.DocumentsDirectory)\ntarget:physicsReload()\n"
         end_pcall()
+    elseif nameBlock == 'jump' then
+        add_pcall()
+        lua = lua.."target:setLinearVelocity("..make_all_formulas(infoBlock[2][1], object)..", -"..make_all_formulas(infoBlock[2][2], object)..")"
+        end_pcall()
+    elseif nameBlock == 'jumpX' then
+        add_pcall()
+        lua = lua.."local vX, vY = target:getLinearVelocity()\ntarget:setLinearVelocity("..make_all_formulas(infoBlock[2][1], object)..", vY)"
+        end_pcall()
+    elseif nameBlock == 'jumpY' then
+        add_pcall()
+        lua = lua.."local vX, vY = target:getLinearVelocity()\ntarget:setLinearVelocity( vX, -"..make_all_formulas(infoBlock[2][1], object)..")"
+        end_pcall()
+    elseif nameBlock == 'jumpYIf' then
+        add_pcall()
+        lua = lua.."local vX, vY = target:getLinearVelocity()\nif (math.floor(vY)==0) then\ntarget:setLinearVelocity( vX, -"..make_all_formulas(infoBlock[2][1], object)..")\nend"
+        end_pcall()
     end
---"blackRectTop.x, blackRectTop.y = "..(options.orientation=="vertical" and ("0,-"..tostring(options.displayHeight/2)) or ("-"..tostring(options.displayHeight/2)..",0" ))..")\nblackRectTop.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 1\nblackRectBottom.x, blackRectBottom.y = "..(options.orientation=="vertical" and ("0,"..tostring(options.displayHeight/2)) or (tostring(options.displayHeight/2)..",0" ))..")\nblackRectBottom.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 0"
-
-
---"local function broadcastFunction(nameFunction)\nlocal key = 'object_"..(infoBlock[2][1][2]==nil and obj_id or infoBlock[2][1][2]).."'\nlocal value = objects[key]\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
     return lua
 end
 end)
@@ -1027,6 +1043,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
     else
         lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\nend\nend\nRuntime:addEventListener('key', funBackListener)"
     end
+        lua = lua.."\nfunction funBackListener2(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\nend\nend"
 
     --lua = lua.."\nphysics.setDrawMode('hybrid')\n"
     print(lua)

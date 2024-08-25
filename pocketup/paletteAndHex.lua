@@ -1,4 +1,4 @@
-local function isCorrectHex(value)
+function isCorrectHex(value)
 	if(string.len(value)==7) then
 	value = string.gsub(value, "#","")
 		if (string.len(value)==6) then
