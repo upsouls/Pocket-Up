@@ -69,21 +69,3 @@ local listFiles = {
 for i=1, #listFiles do
     require("pocketup."..listFiles[i])
 end
-
-pcall(function()
-local waitIfTrue
-waitIfTrue = timer.GameNew(0, 0, function()
-if not (0  ==  0) then
-timer.cancel(waitIfTrue)
-return true
-end
-
-pcall(function()
-target:translate(0,-((10)))
-
-end)
-
-end)
-
-end)
-    
