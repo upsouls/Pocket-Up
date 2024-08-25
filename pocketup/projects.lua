@@ -467,6 +467,18 @@ circleTelegramAlpha.xScale, circleTelegramAlpha.yScale, circleTelegramAlpha.alph
 groupScene:insert(circleTelegramAlpha)
 circleTelegram.circleAlpha = circleTelegramAlpha
 
+local circleDiscord = display.newCircle(circlePlus.x, circleTelegram.y-display.contentWidth/8*1.75, display.contentWidth/11.5)
+circleDiscord.fill = {
+	type="image",
+	filename="images/icon_discord.png",
+}
+groupScene:insert(circleDiscord)
+local circleDiscordAlpha = display.newCircle(circleDiscord.x, circleDiscord.y, display.contentWidth/11.5)
+circleDiscordAlpha:setFillColor(1,1,1,0.25)
+circleDiscordAlpha.xScale, circleDiscordAlpha.yScale, circleDiscordAlpha.alpha = 0.75, 0.75, 0
+groupScene:insert(circleDiscordAlpha)
+circleDiscord.circleAlpha = circleDiscordAlpha
+
 circlePlusText = display.newText("+",circlePlus.x, circlePlus.y, nil, fontSize0*1.75)
 groupScene:insert(circlePlusText)
 local function touchCirclePlus(event)
@@ -827,11 +839,12 @@ local function touchCircleTelegram(event)
 		transition.to(event.target.circleAlpha, {alpha=0, xScale=0.75, yScale=0.75, time=100})
 		display.getCurrentStage():setFocus(event.target, nil)
 
-		system.openURL("https://t.me/pocket_up")
+		system.openURL(event.target == circleTelegram and "https://t.me/pocket_up" or "https://discord.com/invite/Bd6RVj96a3")
 	end
 	return(true)
 end
 circleTelegram:addEventListener("touch", touchCircleTelegram)
+circleDiscord:addEventListener("touch", touchCircleTelegram)
 
 local functionsMenu = {}
 

@@ -340,7 +340,7 @@ make_block = function(infoBlock, object, images, sounds)
     elseif nameBlock == 'editRotateLeft' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:rotate('..rotate..')\n'
+        lua = lua..'target:rotate(-'..rotate..')\n'
         end_pcall()
     elseif nameBlock == 'editRotateRight' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
@@ -999,6 +999,10 @@ end'
     elseif nameBlock == 'jumpYIf' then
         add_pcall()
         lua = lua.."local vX, vY = target:getLinearVelocity()\nif (math.floor(vY)==0) then\ntarget:setLinearVelocity( vX, -"..make_all_formulas(infoBlock[2][1], object)..")\nend"
+        end_pcall()
+    elseif nameBlock == 'setGravityScale' then
+        add_pcall()
+        lua = lua.."local v = "..make_all_formulas(infoBlock[2][1], object).."\ntarget.gravityScale = type(v)=='nuumber' and v or 0"
         end_pcall()
     end
     return lua
