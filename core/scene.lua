@@ -3,13 +3,8 @@ local uuid_gen = require('core.util.uuid')()
 
 local scene = class()
 
-scene.isinflated = false
-
-function scene:constructor(context)
-	self.context = context
-	self.isinflated = true
+function scene:_init()
 	self.group = display.newGroup()
-	self:hide()
 	self.layout = {}
 	self:create()
 end
@@ -31,20 +26,34 @@ function scene:destroy()
 	self.group = nil
 end
 
-function scene:isactive()
+function scene:isActive()
 	return self.group.isVisible
 end
 
-function scene:addview(object, listener, name)
-	if listener and type(listener) == "function" then
-		object:addEventListener('touch', listener)
-	end
-	object.uuid = name or uuid_gen.uuid()
-	self.layout[object.uuid] = object
-	self.group:insert(object)
+function scene:get(name)
+	return self.layout[name]
 end
 
-function scene:removeview(object)
+function scene:addView(object, name, listener)
+	object.uuid = name or uuid_gen.uuid()
+
+	self.layout[object.uuid] = object
+	self.group:insert(object)
+
+	self:addTouchCallback(object, listener)
+end
+
+function scene:addTouchCallback(object, listener)
+	if listener and self.handler then
+		object:addEventListener('touch', function (e)
+				listener(self.handler, e)
+			end)
+	elseif listener then
+		object:addEventListener('touch', listener)
+	end
+end
+
+function scene:removeView(object)
 	if type(object) == "string" then
 		local obj = self.layout[object]
 		self.layout[object] = nil

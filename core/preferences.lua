@@ -3,34 +3,33 @@ local json = require 'core.util.json'
 
 local M = class()
 
-function M:constructor(filename)
-	self.prefrences_data = {}
-	self.prefrences_path = system.pathForFile(filename or 'prefrences.data', system.DocumentsDirectory)
+function M:_init(filename)
+	self.prefrencesData = {}
+	self.prefrencesPath = system.pathForFile(filename or 'prefrences.data', system.DocumentsDirectory)
 end
 
--- TODO: сделать assert на тип userdata
 function M:put(key, value)
-	self.prefrences_data[key] = value
+	self.prefrencesData[key] = value
 end
 
 function M:get(key)
-	return self.prefrences_data[key]
+	return self.prefrencesData[key]
 end
 
 function M:save()
-	local file = io.open(self.prefrences_path, 'w')
-	file:write(json.encode(self.prefrences_data))
+	local file = io.open(self.prefrencesPath, 'w')
+	file:write(json.encode(self.prefrencesData))
 	file:close()
 end
 
 function M:clear()
-	self.prefrences_data = {}
+	self.prefrencesData = {}
 end
 
 function M:load()
-	local file = io.open(self.prefrences_path, 'r')
+	local file = io.open(self.prefrencesPath, 'r')
 	if file then
-		self.prefrences_data = json.decode(file:read('*a'))
+		self.prefrencesData = json.decode(file:read('*a'))
 		file:close()
 	end
 end

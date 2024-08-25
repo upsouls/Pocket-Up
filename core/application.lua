@@ -2,52 +2,47 @@
 	
 ]]
 
---TODO: Сделать _getScreenArea()
-
-local prefrences = require 'core.preferences'
-
 local application = class()
 
 -- Конструктор
-function application:constructor()
-	self.context = {}
-	self.context.scenes = {}
-	self.context.scene_manager = require('core.scene_manager')()
-	self.context.preferences = prefrences()
+function application:_init()
+	ctx = {}
+	ctx.app = {}
+
 	self:_getSystemInfo()
 	self:_getScreenSafeArea()
+
+	ctx.preferences = require('core.preferences')()
 end
 
 function application:_getScreenSafeArea()
 	-- Размеры экрана
-	self.context.x = display.contentCenterX
-	self.context.y = display.contentCenterY
-	self.context.height = 720 * display.pixelHeight / display.pixelWidth
-	self.context.width = 720
+	ctx.app.x = display.contentCenterX
+	ctx.app.y = display.contentCenterY
+	ctx.app.height = 720 * display.pixelHeight / display.pixelWidth
+	ctx.app.width = 720
 
 	local topInset, leftInset, bottomInset, rightInset = display.getSafeAreaInsets()
-	self.context.topInset = topInset
-	self.context.leftInset = leftInset
-	self.context.rightInset = rightInset
-	self.context.bottomInset = bottomInset
-	--[[
-		left, top, right, bottom координаты одноименных сторон экрана
-	]]
-	self.context.left = self.context.x - self.context.width / 2 + leftInset
-	self.context.top = self.context.y - self.context.height / 2 + topInset
-	self.context.right = self.context.x + self.context.width / 2 - rightInset
-	self.context.bottom = self.context.y + self.context.height / 2 - bottomInset
-
+	ctx.app.topInset = topInset
+	ctx.app.leftInset = leftInset
+	ctx.app.rightInset = rightInset
+	ctx.app.bottomInset = bottomInset
+	
+	ctx.app.left = ctx.app.x - ctx.app.width / 2 + leftInset
+	ctx.app.top = ctx.app.y - ctx.app.height / 2 + topInset
+	ctx.app.right = ctx.app.x + ctx.app.width / 2 - rightInset
+	ctx.app.bottom = ctx.app.y + ctx.app.height / 2 - bottomInset
+	ctx.app.actionBarSize = not ctx.app.isSim and display.statusBarHeight * 1.55 or 50 * 1.55
 end
 
 function application:_getSystemInfo()
-	self.context.buildcode = 2
-	self.context.lang = system.getPreference('locale', 'language'):lower()
-	self.context.deviceId = system.getInfo('deviceID')
-	self.context.isAndroid = system.getInfo('platform') == 'android'
-	self.context.isSim = system.getInfo('environment') == 'simulator'
-	self.context.isWin = system.getInfo('platform') == "win32"
-	self.context.docDir = system.pathForFile('', system.DocumentsDirectory) .. '/'
+	ctx.app.buildcode = 4
+	ctx.app.lang = system.getPreference('locale', 'language'):lower()
+	ctx.app.deviceId = system.getInfo('deviceID')
+	ctx.app.isAndroid = system.getInfo('platform') == 'android'
+	ctx.app.isSim = system.getInfo('environment') == 'simulator'
+	ctx.app.isWin = system.getInfo('platform') == "win32"
+	ctx.app.docDir = system.pathForFile('', system.DocumentsDirectory) .. '/'
 end
 
 -- При создании
@@ -56,11 +51,8 @@ function application:create()
 	
 end
 
-function application:getcontext()
-	return self.context
-end
-
 function application:launch()
+	ctx.sceneManager = require('core.sceneManager')()
 	self:create()
 end
 

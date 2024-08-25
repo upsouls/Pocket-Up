@@ -2,23 +2,20 @@
 	
 ]]
 local pocketup  = class(require 'core.application')
+local language = require('app.data.language')()
 
-function pocketup:constructor()
-	self.baseclass.constructor(self)
-	self.context.assets = require 'resources.assets'
-	self:_loadstrings()
-end
+function pocketup:_init()
+	self.super._init(self)
 
-function pocketup:_loadstrings()
-	self.context.str = require('app.data.strings.' .. self.context.lang)
+	ctx.assets = require 'resources.assets'
+	ctx.color = require 'app.data.colors'
+	ctx.str = language:getTranslation(ctx.app.lang)
 end
 
 function pocketup:create()
-	self.baseclass.create(self)
+	self.super.create(self)
 
-	self.context.scenes.menu = require('app.ui.menu')(self.context)
-
-	self.context.scene_manager:open(self.context.scenes.menu)
+	--ctx.sceneManager:goto("projects", {cache=true})
 end
 
 return pocketup

@@ -13,12 +13,12 @@ function M.class(base)
     cls.is_a[c] = true
   end
   cls.is_a[base] = true
-  cls.baseclass = base
+  cls.super = base
 
   setmetatable(cls, {__call = function (c, ...)
     local instance = setmetatable({}, c)
 
-    local init = instance.constructor
+    local init = instance._init
     if init then init(instance, ...) end
     return instance
   end})

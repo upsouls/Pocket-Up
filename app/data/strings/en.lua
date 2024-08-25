@@ -1,5 +1,9 @@
 return {
-	app_name = "Pocket Up",
-	projects = "Projects",
-	community = "Community Upsouls"
+	-- Menu
+	app_name = "Pocket UP",
+	projects = "My Projects",
+	community = "Upsouls Community",
+
+	-- Objects
+	project = " - Objects"
 }
