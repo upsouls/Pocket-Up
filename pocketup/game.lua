@@ -430,7 +430,7 @@ make_block = function(infoBlock, object, images, sounds)
     elseif nameBlock == 'repeatIsTrue' then
         local condition = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'local repeatIsTrue\nrepeatIsTrue = timer.GameNew(0,0, function()\nif not ('..condition..') then\ntimer.cancel(repeatIsTrue)\nend\n'
+        lua = lua..'local repeatIsTrue\nrepeatIsTrue = timer.GameNew(0,0, function()\nif not ('..condition..') then\ntimer.cancel(repeatIsTrue)\nreturn true\nend'
     elseif nameBlock == 'setImageToId' and #images>0 then
         local image = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
@@ -924,8 +924,8 @@ end'
     elseif nameBlock == 'waitIfTrue' then
         local arg1 = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'timer.GameNew(0, 0, function()\n'
-        lua = lua..'if not '..arg1..' then\nreturn true\nend'
+        lua = lua..'local waitIfTrue\nwaitIfTrue = timer.GameNew(0, 0, function()\n'
+        lua = lua..'if '..arg1..' then\ntimer.cancel(waitIfTrue)\nend\nif not '..arg1..' then return true end'
     elseif nameBlock == 'endWait' then
         lua = lua..'end)'
         end_pcall()
@@ -1066,4 +1066,3 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
         error("Ошибка:".. error_msg .. " строка:" .. line_number)
       end
 end
-
