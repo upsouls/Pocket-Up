@@ -26,9 +26,9 @@ local renameFormulas = {
         touchDisplayId="pocketupFuns.getIsTouchId",countTouchDisplay="globalConstants.touchId",countTouch="pocketupFuns.getCountTouch()",
         --[[
         ,="(0)",]]
-        timer="os.time()",year="os.date('%Y', os.time())",month="os.date('%m', os.time())",
-        dayWeek="os.date('%w', os.time())",day="os.date('%d', os.time())",hour="os.date('%H', os.time())",
-        minute="os.date('%M', os.time())",second="os.date('%S', os.time())"
+        timer="os.time()",year="tonumber(os.date('%Y', os.time()))",month="tonumber(os.date('%m', os.time()))",
+        dayWeek="tonumber(os.date('%w', os.time()))",day="tonumber(os.date('%d', os.time()))",hour="tonumber(os.date('%H', os.time()))",
+        minute="tonumber(os.date('%M', os.time()))",second="tonumber(os.date('%S', os.time()))"
 }
 
 print(os.date('%x', os.time()))
