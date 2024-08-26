@@ -319,7 +319,7 @@ make_block = function(infoBlock, object, images, sounds)
         add_pcall()
         lua = lua..'timer.GameNew(('..time..')*1000, '..rep..', function()\n'
     elseif nameBlock == 'endTimer' then
-        lua = lua..'end)\n'
+        lua = lua..'end)\nend'
         end_pcall()
     elseif nameBlock == 'editRotateLeft' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
