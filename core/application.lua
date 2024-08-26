@@ -32,11 +32,11 @@ function application:_getScreenSafeArea()
 	ctx.app.top = ctx.app.y - ctx.app.height / 2 + topInset
 	ctx.app.right = ctx.app.x + ctx.app.width / 2 - rightInset
 	ctx.app.bottom = ctx.app.y + ctx.app.height / 2 - bottomInset
-	ctx.app.actionBarSize = not ctx.app.isSim and display.statusBarHeight * 1.55 or 50 * 1.55
+	ctx.app.actionBarSize = ctx.app.height * 0.06 -- not ctx.app.isSim and display.statusBarHeight * 1.55 or 55 * 1.55
 end
 
 function application:_getSystemInfo()
-	ctx.app.buildcode = 4
+	ctx.app.buildcode = 5
 	ctx.app.lang = system.getPreference('locale', 'language'):lower()
 	ctx.app.deviceId = system.getInfo('deviceID')
 	ctx.app.isAndroid = system.getInfo('platform') == 'android'

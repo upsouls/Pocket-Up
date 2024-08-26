@@ -32,7 +32,7 @@ function projects:create()
 			actionBarIcon.y = actionBarBackground.y
 
 		local actionBarTitle = display.newText({
-				text = ctx.str.projects, align = "left",
+				text = ctx.str.projectsTitle, align = "left",
 				fontSize = 30, font = native.systemFont,
 				width = (actionBarMenu.x - actionBarMenu.width/2) - (actionBarIcon.x + actionBarIcon.width/2), height = 0,
 				x = ctx.app.left + 30 + actionBarIcon.x + actionBarIcon.width/2, y = actionBarBackground.y })
@@ -52,15 +52,15 @@ function projects:create()
 
 	local createButton = display.newGroup()
 		local createBackground = display.newCircle(
-				ctx.app.right - 50 - 20,
-				ctx.app.bottom - 50 - 20, 50 )
+				ctx.app.right - 60 - 20,
+				ctx.app.bottom - 60 - 20, 60 )
 			createBackground:setFillColor(hex(ctx.color.projects.orangeBtn))
 		
 		local createForeground = display.newImage(ctx.assets.ic_plus)
-			createForeground.x = ctx.app.right - 50 - 20
-			createForeground.y = ctx.app.bottom - 50 - 20
-			createForeground.width = 50
-			createForeground.height = 50
+			createForeground.x = ctx.app.right - 60 - 20
+			createForeground.y = ctx.app.bottom - 60 - 20
+			createForeground.width = 40
+			createForeground.height = 40
 
 		createButton:insert(createBackground)
 		createButton:insert(createForeground)

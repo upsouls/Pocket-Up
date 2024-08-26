@@ -4,6 +4,9 @@ return {
 	projects = "My Projects",
 	community = "Upsouls Community",
 
+	-- Projects
+	projectsTitle = "Projects",
+
 	-- Objects
 	project = " - Objects"
 }

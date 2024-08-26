@@ -5,6 +5,7 @@ function sceneManager:_init()
 	self.scenes = {
 		menu = require('app.ui.menu'),
 		projects = require('app.ui.projects'),
+		scenes = require('app.ui.scenes'),
 		objects = require('app.ui.objects')
 	}
 	self.cached = {
@@ -16,11 +17,10 @@ function sceneManager:_init()
 end
 
 function sceneManager:goto(scene, options)
-	print(options.cache)
 	if options.cache then
-		self.currentScene:hide()
+		self.currentScene:hide(options)
 	else
-		self.currentScene:destroy()
+		self.currentScene:destroy(options)
 		table.removeByValue(self.cached, self.currentScene)
 	end
 
@@ -30,12 +30,12 @@ function sceneManager:goto(scene, options)
 		end
 
 		self.currentScene = self.cached[scene]
-		self.currentScene:show()
+		self.currentScene:show(options)
 		return
 	end
 
 	self.currentScene = scene
-	self.currentScene:show()
+	self.currentScene:show(options)
 end
 
 return sceneManager

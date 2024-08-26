@@ -44,30 +44,30 @@ function objects:create()
 
 	local createButton = display.newGroup()
 		local createBackground = display.newCircle(
-				ctx.app.right - 50 - 20,
-				ctx.app.bottom - 50 - 20, 50 )
+				ctx.app.right - 60 - 20,
+				ctx.app.bottom - 60 - 20, 60 )
 			createBackground:setFillColor(hex(ctx.color.objects.orangeBtn))
 		
 		local createForeground = display.newImage(ctx.assets.ic_plus)
-			createForeground.x = ctx.app.right - 50 - 20
-			createForeground.y = ctx.app.bottom - 50 - 20
-			createForeground.width = 50
-			createForeground.height = 50
+			createForeground.x = ctx.app.right - 60 - 20
+			createForeground.y = ctx.app.bottom - 60 - 20
+			createForeground.width = 40
+			createForeground.height = 40
 
 		createButton:insert(createBackground)
 		createButton:insert(createForeground)
 
 	local playButton = display.newGroup()
 		local playBackground = display.newCircle(
-				ctx.app.right - 50 - 20,
-				createBackground.y - 100 - 20, 50 )
+				ctx.app.right - 60 - 20,
+				createBackground.y - 120 - 20, 60 )
 			playBackground:setFillColor(hex(ctx.color.objects.orangeBtn))
 		
 		local playForeground = display.newImage(ctx.assets.ic_play)
 			playForeground.x = playBackground.x
 			playForeground.y = playBackground.y
-			playForeground.width = 50
-			playForeground.height = 50
+			playForeground.width = 40
+			playForeground.height = 40
 
 		playButton:insert(playBackground)
 		playButton:insert(playForeground)
