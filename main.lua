@@ -10,7 +10,7 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
     display.setStatusBar(display.HiddenStatusBar)
 
     local file = io.open(system.pathForFile("acces.txt", system.DocumentsDirectory), "r")
-    if (file ~= nil or isSim) then
+    if (file ~= nil or isSim) then 
         if (file ~= nil) then
             io.close(file)
         end
