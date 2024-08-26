@@ -841,7 +841,7 @@ touchBlock = function(event)
                 isTimerMoveBlock = true
                 timerMoveBlock = timer.performWithDelay(event.autoMove==nil and 200 or 0, function ()
 
-                    local backgroundAlpha = display.newRect(CENTER_X-display.screenOriginX, 0, display.contentWidth,  math.max(groupSceneScroll.height+display.contentWidth/1.5, scrollProjects.height))
+                    local backgroundAlpha = display.newRect(CENTER_X-display.screenOriginX, 0, display.contentWidth,  math.max(groupSceneScroll.height+display.contentWidth/1.5, (scrollProjects~=nil and scrollProjects.height~=nil and scrollProjects.height or display.contentHeight)))
                     backgroundAlpha:setFillColor(0, 0,0, 0.5)
                     backgroundAlpha.anchorY = 0
                     groupSceneScroll:insert(backgroundAlpha)
@@ -1872,7 +1872,7 @@ funAddBlock = function (blockTable)
         blocksObjects[2] = block
         blocks[2] = blockTable
         block:addEventListener("touch", touchBlock)
-        funsP["записать сохранение"](pathObject.."/scripts", json.encode(blocks))
+        
         if (block.investBlocks~=nil) then
             for i=1, #block.investBlocks do
                 local blockTable = block.investBlocks[i][1]
@@ -1887,6 +1887,7 @@ funAddBlock = function (blockTable)
             end
         end
         block.investBlocks = nil
+        funsP["записать сохранение"](pathObject.."/scripts", json.encode(blocks))
     elseif (#blocksObjects==0 and allBlocks[blockTable[1]][1]=="event") then
         block.y = block.height/2-display.contentWidth/60
         block.yGoalPos = block.y
@@ -1894,6 +1895,7 @@ funAddBlock = function (blockTable)
         blocks[1] = blockTable
         blocksObjects[1] = block
         block:addEventListener("touch", touchBlock)
+        funsP["записать сохранение"](pathObject.."/scripts", json.encode(blocks))
     else
 -- разместить блок (старт)
 local xS, yS = scrollProjects:getContentPosition()
@@ -2737,7 +2739,9 @@ switchBar:addEventListener("touch", function (event)
                 switchBarRect.xGoalPos = CENTER_X+((idCategory-1)*display.contentWidth/3)
                 transition.to(switchBarRect, {x=switchBarRect.xGoalPos, time=200, transition=easing.outQuad})
                 display.remove(SCENES[SCENE][2])
-                tableFunctionsCompartments[idCategory+1]()
+                if (tableFunctionsCompartments[idCategory+1]~=nil) then
+                    tableFunctionsCompartments[idCategory+1]()
+                end
                 scrollProjects:scrollToPosition({y=0, time=0})
             end
             display.getCurrentStage():setFocus(event.target, nil)
