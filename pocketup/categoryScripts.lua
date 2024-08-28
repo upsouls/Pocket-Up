@@ -109,6 +109,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 		},
 		["control"]={
 			{"timer", {{{"number", 5}}, {{"number", 1}}}},
+			{"wait", {{{"number", 1}}}},
 			--{"wait",{ {{"number", 1}} }},
 			{"commentary",{ {{"text", words[95]}} }},
 			{"cycleForever"},
