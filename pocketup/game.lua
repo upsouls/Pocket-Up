@@ -1296,7 +1296,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
         lua = lua.."\nfunction funBackListener2(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\norientation.lock('portrait')\nend\nend"
 
     --lua = lua.."\nphysics.setDrawMode('hybrid')\n"
-    --print(lua)
+    print(lua)
     noremoveAllObjects()
     local f, error_msg = loadstring(lua)
     if f then
