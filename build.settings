@@ -80,6 +80,9 @@ settings =
 			publisherId = "tech.scotth",
 			marketplaceId="zag4fj",
 		},
+		["plugin.firebaseDatabase"] = {
+            publisherId = "tech.scotth",
+        },
 	},
 
 	--
