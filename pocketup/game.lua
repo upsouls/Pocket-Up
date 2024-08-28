@@ -1243,27 +1243,18 @@ lua = lua.."\n"..make_block(block, 'target', obj_images, obj_sounds, b, blocks)
             
             if (#blocks~=0) then
                 if (oldEventName=="start") then
-                    if wait_end then
-                        for i = 1, wait_table.event, 1 do
-                            lua = lua .. 'end)\nend\n'
-                        end
-                        wait_end = false
+                    for i = 1, wait_table.event, 1 do
+                        lua = lua .. 'end)\nend\n'
                     end
                     lua = lua..'\nend)\nend\n\n'
                 elseif (oldEventName=="changeBackground" or oldEventName=="collision" or oldEventName=="endedCollision") then
-                    if wait_end then
-                        for i = 1, wait_table.event, 1 do
-                            lua = lua .. 'end)\nend\n'
-                        end
-                        wait_end = false
+                    for i = 1, wait_table.event, 1 do
+                        lua = lua .. 'end)\nend\n'
                     end
                     lua = lua..'\nend\nend\n\n'
                 else
-                    if wait_end then
-                        for i = 1, wait_table.event, 1 do
-                            lua = lua .. 'end)\nend\n'
-                        end
-                        wait_end = false
+                    for i = 1, wait_table.event, 1 do
+                        lua = lua .. 'end)\nend\n'
                     end
                     lua = lua..'\nend\n\n'
                 end
@@ -1294,7 +1285,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
         lua = lua.."\nfunction funBackListener2(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\norientation.lock('portrait')\nend\nend"
 
     --lua = lua.."\nphysics.setDrawMode('hybrid')\n"
-    print(lua)
+    --print(lua)
     noremoveAllObjects()
     local f, error_msg = loadstring(lua)
     if f then
