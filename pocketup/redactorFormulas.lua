@@ -81,7 +81,8 @@ local function isCorrectFormulas()
 		positionY="(0)",layer="(0)",speedX="(0)",speedY="(0)",touchDisplayX="(0)",
 		timer="(0)",year="(0)",month="(0)",dayWeek="(0)",day="(0)",hour="(0)",minute="(0)",second="(0)",
 		displayWidth="(720)",displayHeight="(1280)",displayActualWidth="("..tostring(display.actualContentWidth)..")",
-		displayActualHeight="("..tostring(display.actualContentHeight)..")",array2json="allFunsRedRorms.getJson",json2array="allFunsRedRorms.getNil"
+		displayActualHeight="("..tostring(display.actualContentHeight)..")",array2json="allFunsRedRorms.getJson",json2array="allFunsRedRorms.getNil",
+		positionCameraX="(0)",positionCameraY="(0)",
 	}
 	local imagesObject = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
 	tableAnswers.countImages = #imagesObject

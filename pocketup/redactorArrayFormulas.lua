@@ -115,6 +115,7 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 				{{"function","touchDisplayYId"},{"function","("},{"number",1},{"function",")"}},
 				{{"function","touchDisplayId"},{"function","("},{"number",1},{"function",")"}},
 				{{"function","countTouchDisplay"}},{{"function","countTouch"}},
+				{{"positionCameraX"}},{{"positionCameraY"}},
 				--[[{{"function","indexThisTouch"},{"function","("},{"number",1},{"function",")"}}]] }},
 				{words[360], { {{"function","timer"}},{{"function","year"}},
 				{{"function","month"}},{{"function","day"}},{{"function","dayWeek"}},

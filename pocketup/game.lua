@@ -24,12 +24,11 @@ local renameFormulas = {
         displayPositionColor="pocketupFuns.displayPositionColor",touchDisplayX="globalConstants.touchX",touchDisplayY="globalConstants.touchY",
         touchDisplay="globalConstants.isTouch",touchDisplayXId="globalConstants.getTouchXId",touchDisplayYId="globalConstants.getTouchYId",
         touchDisplayId="pocketupFuns.getIsTouchId",countTouchDisplay="globalConstants.touchId",countTouch="pocketupFuns.getCountTouch()",
-        --[[
-        ,="(0)",]]
         timer="os.time()",year="tonumber(os.date('%Y', os.time()))",month="tonumber(os.date('%m', os.time()))",
         dayWeek="tonumber(os.date('%w', os.time()))",day="tonumber(os.date('%d', os.time()))",hour="tonumber(os.date('%H', os.time()))",
         minute="tonumber(os.date('%M', os.time()))",second="tonumber(os.date('%S', os.time()))",
-        json2array="pocketupFuns.jsonEncode", array2json="json.encode"
+        json2array="pocketupFuns.jsonEncode", array2json="json.encode",positionCameraX="(cameraGroup.x)",
+        positionCameraY="(-cameraGroup.x)"
 }
 
 print(os.date('%x', os.time()))

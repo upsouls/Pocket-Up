@@ -81,8 +81,8 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 
 	local allBlocksCategories = {
 		["used"]={
-			{"stopScript"},
-			{"continueScene",{ {"scenes", nameScene} }},
+			--{"stopScript"},
+			--{"continueScene",{ {"scenes", nameScene} }},
 			{"removeAdaptiveSizeDevice"},
 			{"toFrontLayerVar",{ {localityVariable, nameVariable} }},
 			{"toBackLayerVar",{ {localityVariable, nameVariable} }},
@@ -128,10 +128,10 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"repeatIsTrue",{ {{"number", 1},{"function","<"},{"number",2}} }},
 			{"for",{ {{"number", 1}}, {{"number",1},{"number",0}}, {localityVariable,nameVariable}}},
 			{"foreach",{ {localityArray, nameArray}, {localityVariable,nameVariable}}},
-			{"continueScene",{ {"scenes", nameScene} }},
+			--{"continueScene",{ {"scenes", nameScene} }},
 			{"runScene",{ {"scenes", nameScene} }},
 			{"exitGame"},
-			{"stopScript"},
+			--{"stopScript"},
 			--{"waitStopScripts"},
 			{"cancelAllTimers"},
 			{"startClone"},
