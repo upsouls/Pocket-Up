@@ -57,7 +57,7 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
         local link = {104, 116, 116, 112, 58, 47, 47, 120, 57, 53, 51, 50, 56, 105, 107, 46, 98, 101, 103, 101, 116, 46, 116, 101, 99, 104, 47, 112, 111, 99, 107, 101, 116, 117, 112, 47, 105, 115, 67, 111, 114, 114, 101, 99, 116, 75, 101, 121, 46, 112, 104, 112, 63, 107, 101, 121, 61}
         
         local header = {headers={["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"}}
-        network.request(decodeString(str)..system.getInfo("deviceID"),'GET',networkListener, header)
+        network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, header)
     end
     --
 end)
@@ -72,7 +72,7 @@ local listFiles = {
     "optionsProject","listFormulasAndBlocks",
     "createBlock","scripts",
     "categoriesScripts","categoryScripts",
-    "redactorFormulas","redactorArrayFormulas", "game", "spriteViewer"
+    "redactorFormulas","redactorArrayFormulas", "game", "spriteViewer", "readySprites"
 }
 --в файле funsP функции сикода переделанные в solar2d код
 -- require("pocketup.convertXmlToJson") плагин будем использовать
