@@ -22,14 +22,14 @@ function scene_readySprites()
     local topBarArray = topBar(sceneGroup, words[486], nil, nil, funBackObjects)
     topBarArray[4].alpha = 0
     local scroll = require('widget').newScrollView( {
-        top=display.screenOriginY+topBarArray[1].height,
-        left=display.screenOriginX,
         width=display.contentWidth,
-        height=display.actualContentHeight-topBarArray[1].height,
+        height=display.contentHeight-topBarArray[1].height,
         hideBackground=true,
         horizontalScrollDisabled=true,
         isBounceEnabled=false,
     } )
+    scroll.anchorY = 0
+    scroll.y = topBarArray[1].y+topBarArray[1].height
 
     objs.scroll = scroll
 
@@ -50,25 +50,29 @@ function scene_readySprites()
                         local bg = display.newRect(CENTER_X, y, display.contentWidth, display.contentWidth/1.9)
                         bg:setFillColor(0, 71/255, 93/255)
                         scroll:insert(bg)
+                        bg.container = display.newContainer( display.contentWidth/2, display.contentWidth/2.35 )
                         local obj = display.newImage(v['name']..'.png', system.TemporaryDirectory)
                         obj.link = v['link']
-                        
-                        obj.width = display.contentWidth/2
-                        obj.height = display.contentWidth/2
-                        local obj_bg = display.newRect(CENTER_X, y, obj.width+10, obj.height+5)
+                        local obj_bg = display.newRect(CENTER_X, y-25, bg.container.width+10, bg.container.height+5)
                         scroll:insert(obj_bg)
                         obj:toFront()
+                        if obj.width > bg.container.width then
+                            obj.width = obj.width/3
+                            obj.height = obj.height/3
+                        end
                         obj_bg.strokeWidth = 5
                         obj_bg:setFillColor(0, 71/255, 93/255)
                         obj_bg:setStrokeColor(171/255, 219/255, 1)
 
-                        obj.x = bg.x
+                        bg.container.x = bg.x
                         bg.name = v['name']
                         bg.ref = obj
                         bg.link = v['link']
-                        obj.y = bg.y-25
-                        scroll:insert(obj)
-                        local name = display.newText(v['name'], CENTER_X, y+obj.height/2-25, native.systemFont, 35)
+                        bg.container.y = bg.y-25
+                        bg.container:insert(obj)
+                        scroll:insert(bg.container)
+                        local name = display.newText(v['name'], CENTER_X, y+bg.container.height/2+7, "fonts/font_1.ttf", 30)
+                        name:setFillColor(170/255,218/255,240/255)
 
                         scroll:insert(name)
                         bg:addEventListener('touch', function(event)
