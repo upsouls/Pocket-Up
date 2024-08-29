@@ -818,10 +818,10 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                 end
                 return (true)
             end
-            elseif (event.phase=="moved") then
-                scrollProjects:takeFocus(event)
-            end
+        elseif (event.phase=="moved") then
+            scrollProjects:takeFocus(event)
         end
+    end
 --AAAAAAAAAAAAAAAAAAAAA
 --AAAAAAAAAAAAAAAAAAAAA
 --AAAAAAAAAAAAAAAAAAAAA
@@ -2130,101 +2130,101 @@ local function compartmentImages()
                 timer.cancel(timerMoveSlot)
                 groupScene.alpha = 0
                 scene_viewsprite(event.target.pathImage, event.target.nameProject.text)
--- на объект нажали
-end
-if (isMoveSlot) then
-    isMoveSlot=false
-    event.target.myGroup.y = event.target.yGoalPos
-    funsP["записать сохранение"](IDOBJECT.."/images", json.encode(images))
-end
-end
-return(true)
-end
-
-for i=1, #images do
-    local group = display.newGroup()
-    group.y = display.contentWidth/3.75*(i-0.5)
-    groupSceneScroll:insert(group)
-    local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
-    arraySlots[i] = buttonRect
-    buttonRect.idProject= images[i][2]
-    buttonRect.idSlot = i
-    buttonRect.yGoalPos = group.y
-    buttonRect.anchorX = 0
-    buttonRect:setFillColor(0, 71/255, 93/255)
-    group:insert(buttonRect)
-    local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.55, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
-    strokeIcon.strokeWidth = 3
-    strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
-    strokeIcon:setFillColor(0,0,0,0)
-    group:insert(strokeIcon)
-    local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
-    group:insert(containerIcon)
-    containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
-    buttonRect.pathImage = IDOBJECT.."/image_"..images[i][2]..".png"
-    local imageIcon = display.newImage(buttonRect.pathImage, system.DocumentsDirectory)
-    containerIcon:insert(imageIcon)
-    strokeIcon:toFront()
-
-    local sizeIconProject = containerIcon.height/imageIcon.height
-    if (imageIcon.width*sizeIconProject<containerIcon.width) then
-        sizeIconProject = containerIcon.width/imageIcon.width
+                -- на объект нажали
+            end
+            if (isMoveSlot) then
+                isMoveSlot=false
+                event.target.myGroup.y = event.target.yGoalPos
+                funsP["записать сохранение"](IDOBJECT.."/images", json.encode(images))
+            end
+        end
+        return(true)
     end
-    imageIcon.xScale, imageIcon.yScale = sizeIconProject, sizeIconProject
 
-    local nameProject = display.newText({
-        text = images[i][1],
-        x = strokeIcon.x+strokeIcon.width/1.5,
-        y = strokeIcon.y,
-        width = display.contentWidth/1.75,
-        height = fontSize0*1.15,
-        fontSize = fontSize0
-    })
-    nameProject.anchorX = 0
-    nameProject:setFillColor(171/255, 219/255, 241/255)
-    group:insert(nameProject)
+    for i=1, #images do
+        local group = display.newGroup()
+        group.y = display.contentWidth/3.75*(i-0.5)
+        groupSceneScroll:insert(group)
+        local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
+        arraySlots[i] = buttonRect
+        buttonRect.idProject= images[i][2]
+        buttonRect.idSlot = i
+        buttonRect.yGoalPos = group.y
+        buttonRect.anchorX = 0
+        buttonRect:setFillColor(0, 71/255, 93/255)
+        group:insert(buttonRect)
+        local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.55, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
+        strokeIcon.strokeWidth = 3
+        strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
+        strokeIcon:setFillColor(0,0,0,0)
+        group:insert(strokeIcon)
+        local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
+        group:insert(containerIcon)
+        containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
+        buttonRect.pathImage = IDOBJECT.."/image_"..images[i][2]..".png"
+        local imageIcon = display.newImage(buttonRect.pathImage, system.DocumentsDirectory)
+        containerIcon:insert(imageIcon)
+        strokeIcon:toFront()
 
-    local menuProject = display.newImage("images/menu.png")
-    menuProject:addEventListener("touch", touchMenuSlot)
-    menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
-    menuProject:setFillColor(171/255, 219/255, 241/255)
-    group:insert(menuProject)
-    buttonRect.myGroup = group
-    menuProject.slot = buttonRect
-    buttonRect.nameProject = nameProject
+        local sizeIconProject = containerIcon.height/imageIcon.height
+        if (imageIcon.width*sizeIconProject<containerIcon.width) then
+            sizeIconProject = containerIcon.width/imageIcon.width
+        end
+        imageIcon.xScale, imageIcon.yScale = sizeIconProject, sizeIconProject
+
+        local nameProject = display.newText({
+            text = images[i][1],
+            x = strokeIcon.x+strokeIcon.width/1.5,
+            y = strokeIcon.y,
+            width = display.contentWidth/1.75,
+            height = fontSize0*1.15,
+            fontSize = fontSize0
+        })
+        nameProject.anchorX = 0
+        nameProject:setFillColor(171/255, 219/255, 241/255)
+        group:insert(nameProject)
+
+        local menuProject = display.newImage("images/menu.png")
+        menuProject:addEventListener("touch", touchMenuSlot)
+        menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
+        menuProject:setFillColor(171/255, 219/255, 241/255)
+        group:insert(menuProject)
+        buttonRect.myGroup = group
+        menuProject.slot = buttonRect
+        buttonRect.nameProject = nameProject
 
 
-    buttonRect:addEventListener("touch", touchOpenImage)
-end
-scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
+        buttonRect:addEventListener("touch", touchOpenImage)
+    end
+    scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
 
-funAddImage = function (event)
-    if (event.done=="ok") then
+    funAddImage = function (event)
+        if (event.done=="ok") then
 
-        local function isCorrectName(value)
-            local isCorrect = true
-            for i=1, #images do
-                if (value==images[i][1]) then
-                    isCorrect = false
-                    break
+            local function isCorrectName(value)
+                local isCorrect = true
+                for i=1, #images do
+                    if (value==images[i][1]) then
+                        isCorrect = false
+                        break
+                    end
+                end
+                return(isCorrect)
+            end
+            local function correctName(value)
+                if (isCorrectName(value)) then
+                    return (value)
+                else
+                    local i = 1
+                    while (not isCorrectName(value.." ("..i..")")) do
+                        i = i+1
+                    end
+                    return(value.." ("..i..")")
                 end
             end
-            return(isCorrect)
-        end
-        local function correctName(value)
-            if (isCorrectName(value)) then
-                return (value)
-            else
-                local i = 1
-                while (not isCorrectName(value.." ("..i..")")) do
-                    i = i+1
-                end
-                return(value.." ("..i..")")
-            end
-        end
 
-        local imageName = event.origFileName:match("(.+)%.") or event.origFileName
-        if isSim then
+            local imageName = event.origFileName:match("(.+)%.") or event.origFileName
+            if isSim then
             -- Фикс имён на винде
             local elems = imageName:split('\\')
             imageName = elems[#elems]
@@ -2291,6 +2291,100 @@ funAddImage = function (event)
         buttonRect:addEventListener("touch", touchOpenImage)
         scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
 
+    end
+end
+
+local functionsMenu = {}
+
+local arrayAllButtonsFunctions = {
+    ["back"]={"back","startmenu",{{486,"readySprites"}}},
+}
+arrayAllButtonsFunctions["startmenu"] = arrayAllButtonsFunctions["back"]
+
+
+
+functionsMenu["startreadySprites"] = function()
+    isBackScene="back"
+    groupScene.alpha = 0
+    scene_readySprites()
+end
+
+
+functionsMenu["back"] = function()
+isBackScene = arrayAllButtonsFunctions[isBackScene][2]
+local notVisibleRect = display.newImage("images/notVisible.png")
+notVisibleRect.x, notVisibleRect.y, notVisibleRect.width, notVisibleRect.height = CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight
+
+local groupMenu = display.newGroup()
+groupMenu.x, groupMenu.y = display.contentWidth/1.02, CENTER_Y-display.contentHeight/2+(display.contentWidth-display.contentWidth/1.02)
+
+groupMenu.xScale, groupMenu.yScale, groupMenu.alpha = 0.3, 0.3, 0
+
+local arrayButtonsFunctions = arrayAllButtonsFunctions[isBackScene][3]
+local buttons = {}
+local buttonContainer = display.newContainer(display.contentWidth/1.8, display.contentWidth/7)
+buttonContainer.anchorX, buttonContainer.anchorY = 1, 0
+SCENES[SCENE][1]:insert(buttonContainer)
+local buttonCircle = display.newCircle(0,0,buttonContainer.width/2)
+buttonCircle:setFillColor(1,1,1,0.25)
+buttonCircle.xScale, buttonCircle.yScale, buttonCircle.alpha = 0.25, 0.25, 0
+buttonContainer:insert(buttonCircle)
+
+local function touchTypeFunction(event)
+    if (event.phase=="began") then
+        buttonContainer:toFront()
+        buttonContainer.y = event.target.y
+        transition.to(buttonCircle, {time=150, xScale=1.1, yScale=1.1, alpha=1})
+    elseif (event.phase=="moved") then
+        transition.to(buttonCircle, {time=150, xScale=0.25, yScale=0.25, alpha=0})
+    else
+        isBackScene = event.target.typeFunction
+        functionsMenu["start"..isBackScene]()
+        for i=1, #buttons do
+            buttons[i]:removeEventListener("touch", touchTypeFunction)
+        end
+        display.remove(notVisibleRect)
+        transition.to(groupMenu, {time=200, alpha=0, onComolete=function ()
+            display.remove(groupMenu)
+        end})
+    end
+    return(true)
+end
+
+for i=1, #arrayButtonsFunctions do
+    buttons[i] = display.newRect(0, display.contentWidth/7*(i-1), display.contentWidth/1.5, display.contentWidth/7)
+    buttons[i].anchorX, buttons[i].anchorY = 1, 0
+    buttons[i]:setFillColor(48/255, 48/255, 48/255)
+    groupMenu:insert(buttons[i])
+    buttons[i].typeFunction = arrayButtonsFunctions[i][2]
+    buttons[i]:addEventListener("touch",touchTypeFunction)
+
+    buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+    buttons[i].header.anchorX=0
+    groupMenu:insert(buttons[i].header)
+
+end
+
+transition.to(groupMenu, {time=150, xScale=1, yScale=1, alpha=1, transition=easing.outQuad})
+
+notVisibleRect:addEventListener("touch", function (event)
+    if (event.phase=="ended") then
+        isBackScene = arrayAllButtonsFunctions[isBackScene][1]
+        display.remove(notVisibleRect)
+        for i=1, #buttons do
+            buttons[i]:removeEventListener("touch", touchTypeFunction)
+        end
+        transition.to(groupMenu, {time=200, alpha=0, onComolete=function ()
+            display.remove(groupMenu)
+        end})
+    end
+    return(true)
+end)
+end
+
+funMenuObjects[1] = function()
+    if (functionsMenu[isBackScene]~=nil) then
+        functionsMenu[isBackScene]()
     end
 end
 
@@ -2727,7 +2821,7 @@ switchBar:addEventListener("touch", function (event)
             local idCategory = math.round((event.x-CENTER_X)/(display.contentWidth/3))+1
             typeFunctionCompartment = idCategory
             if (oldIdCategory~=idCategory) then
-                if (idCategory==0) then
+                if (idCategory~=2) then
                     topBarArray[4].alpha = 1
                 else
                     topBarArray[4].alpha = 0
@@ -2811,7 +2905,7 @@ local function touchCirclePlay(event)
                 SCENES[SCENE][2].alpha = 0
                 SCENES[SCENE][1].alpha = 0
                 isBackScene = 'block'
-                 if (objectPlay~=nil) then
+                if (objectPlay~=nil) then
                     audio.stop(playSound)
                     objectPlay.fill = {
                         type="image",

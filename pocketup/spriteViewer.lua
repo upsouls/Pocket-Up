@@ -37,8 +37,8 @@ function scene_viewsprite(pathImage, nameImage)
     funBackObjects[1] = function()
         Runtime:removeEventListener('touch', touchBg)
         display.remove(groupScene)
-        funBack = oldFunBack
         SCENES["scripts"][1].alpha = 1
         display.setDefault("background", 4/255, 34/255, 44/255)
+        funBack = oldFunBack
     end
 end

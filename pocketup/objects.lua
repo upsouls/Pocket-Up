@@ -1530,7 +1530,6 @@ for i=2, #arraySlots do
 	end
 end
 end
-
 functionsMenu["startdeleteAll"] = functionsMenu["startcopyAll"]
 
 functionsMenu["copy"] =function ()
