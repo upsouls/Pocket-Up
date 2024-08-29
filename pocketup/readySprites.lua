@@ -56,10 +56,11 @@ function scene_readySprites()
                         local obj_bg = display.newRect(CENTER_X, y-25, bg.container.width+10, bg.container.height+5)
                         scroll:insert(obj_bg)
                         obj:toFront()
-                        if obj.width > bg.container.width then
-                            obj.width = obj.width/3
-                            obj.height = obj.height/3
+                        local sizeIconProject = bg.container.height/obj.height
+                        if (obj.width*sizeIconProject<bg.container.width) then
+                            sizeIconProject = bg.container.width/obj.width
                         end
+                        obj.xScale, obj.yScale = sizeIconProject, sizeIconProject
                         obj_bg.strokeWidth = 5
                         obj_bg:setFillColor(0, 71/255, 93/255)
                         obj_bg:setStrokeColor(171/255, 219/255, 1)
