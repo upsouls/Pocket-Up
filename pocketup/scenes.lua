@@ -49,7 +49,7 @@ function scene_scenes(idProject, nameProjectScenes)
 			end
 
 			display.getCurrentStage():setFocus(event.target, nil)
-		elseif (event.phase=="moved" and math.abs(event.y-event.yStart)>20) then
+		elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
 
 			if isTimerMoveSlot then
 				timer.cancel(timerMoveSlot)

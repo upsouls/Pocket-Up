@@ -106,7 +106,9 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 				{{"function","angularVelocity"}} }}
 			},
 			device={
-				{words[347],{ {{"function","displayPositionColor"},{"function","("},{"number",1},{"number",0},{"number",0},{"function",","},{"number",2},{"number",0},{"number",0},{"function",")"}}, 
+				{words[347],{
+					{{"function","displayWidth"}},{{"function","displayHeight"}},{{"function","displayActualWidth"}},{{"function","displayActualHeight"}},
+				{{"function","displayPositionColor"},{"function","("},{"number",1},{"number",0},{"number",0},{"function",","},{"number",2},{"number",0},{"number",0},{"function",")"}}, 
 				{{"function","language"}} }},
 				{words[350],{ {{"function","touchDisplayX"}},{{"function","touchDisplayY"}},
 				{{"function","touchDisplay"}},{{"function","touchDisplayXId"},{"function","("},{"number",1},{"function",")"}},
@@ -116,7 +118,8 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 				--[[{{"function","indexThisTouch"},{"function","("},{"number",1},{"function",")"}}]] }},
 				{words[360], { {{"function","timer"}},{{"function","year"}},
 				{{"function","month"}},{{"function","day"}},{{"function","dayWeek"}},
-				{{"function","hour"}},{{"function","minute"}},{{"function","second"}} }}
+				{{"function","hour"}},{{"function","minute"}},{{"function","second"}},
+				 }},
 			},
 			logics={
 				{words[369],{ {{"function","and"}},{{"function","or"}},
@@ -129,7 +132,7 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 		if (typeFormulas=="functions") then
 			if (nameArray~=nil) then
 				arrayAllFunctions.functions[3] = {words[321],{
-					{{"function","lengthArray"},{"function","("},{localityArray,nameArray},{"function",")"}}, {{"function","elementArray"},{"function","("},{"number",1},{"function",","},{localityArray,nameArray},{"function",")"}}, {{"function","containsArray"},{"function","("},{localityArray,nameArray},{"function",","},{"number",1},{"function",")"}},  {{"function","indexArray"},{"function","("},{"number",1},{"function",","},{localityArray,nameArray},{"function",")"}},{{"function","levelingArray"},{"function","("},{localityArray,nameArray},{"function",")"}},
+					{{"function","lengthArray"},{"function","("},{localityArray,nameArray},{"function",")"}}, {{"function","elementArray"},{"function","("},{"number",1},{"function",","},{localityArray,nameArray},{"function",")"}}, {{"function","containsArray"},{"function","("},{localityArray,nameArray},{"function",","},{"number",1},{"function",")"}},  {{"function","indexArray"},{"function","("},{"number",1},{"function",","},{localityArray,nameArray},{"function",")"}},{{"function","levelingArray"},{"function","("},{localityArray,nameArray},{"function",")"}},--{{"function","array2json"},{"function","("},{localityArray,nameArray},{"function",")"}},{{"function","json2array"},{"function","("},{localityArray,nameArray},{"function",")"}},
 				}}
 			else
 				arrayAllFunctions.functions[3] = {words[326],{}}

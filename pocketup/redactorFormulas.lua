@@ -79,7 +79,9 @@ local function isCorrectFormulas()
 		touchDisplay="false",touchDisplayXId="allFunsRedRorms.get0",touchDisplayYId="allFunsRedRorms.get0",
 		touchDisplayId="allFunsRedRorms.getFalse",indexThisTouch="(0)",color="(0)",positionX="(0)",
 		positionY="(0)",layer="(0)",speedX="(0)",speedY="(0)",touchDisplayX="(0)",
-		timer="(0)",year="(0)",month="(0)",dayWeek="(0)",day="(0)",hour="(0)",minute="(0)",second="(0)"
+		timer="(0)",year="(0)",month="(0)",dayWeek="(0)",day="(0)",hour="(0)",minute="(0)",second="(0)",
+		displayWidth="(720)",displayHeight="(1280)",displayActualWidth="("..tostring(display.actualContentWidth)..")",
+		displayActualHeight="("..tostring(display.actualContentHeight)..")",array2json="allFunsRedRorms.getJson",json2array="allFunsRedRorms.getNil"
 	}
 	local imagesObject = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
 	tableAnswers.countImages = #imagesObject
@@ -493,7 +495,7 @@ local function touchButtonColor()
 			if (event.phase=="editing") then
 				if (isCorrectHex(textFieldHEX.text)) then
 					textFieldHEX:setTextColor(0,0,0)
-					local color = hexToRgb(textFieldHEX.text)
+					color = hexToRgb(textFieldHEX.text)
 					rectColorNew:setFillColor(color[1], color[2], color[3])
 					for i=1, #colorsObjects do
 						local rectLine = colorsObjects[i]

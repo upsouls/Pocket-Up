@@ -32,39 +32,38 @@ local idsProjects = projectsAndIds.ids
 local arraySlots = {}
 
 local function touchOpenProject(event)
-	if (event.phase=="began") then
-		event.target:setFillColor(23/255,91/255,114/255)
---display.getCurrentStage():setFocus(event.target)
-elseif (event.phase=="moved" and math.abs(event.y-event.yStart)>20) then
-	event.target:setFillColor(0, 71/255, 93/255)
-	scrollProjects:takeFocus(event)
-elseif (event.phase~="moved") then
-	event.target:setFillColor(0, 71/255, 93/255)
---display.getCurrentStage():setFocus(nil)
+	if (event.xStart < CENTER_X+display.contentWidth/2-20) then
+		if (event.phase=="began") then
+			event.target:setFillColor(23/255,91/255,114/255)
+		elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
+			event.target:setFillColor(0, 71/255, 93/255)
+			scrollProjects:takeFocus(event)
+		elseif (event.phase~="moved") then
+			event.target:setFillColor(0, 71/255, 93/255)
 
-if (isBackScene=="back") then
-	local infoProject = idsProjects[event.target.idSlot]
-	table.remove(idsProjects, event.target.idSlot)
-	table.insert(idsProjects, 1, infoProject)
-	print(json.encode(idsProjects))
+			if (isBackScene=="back") then
+				local infoProject = idsProjects[event.target.idSlot]
+				table.remove(idsProjects, event.target.idSlot)
+				table.insert(idsProjects, 1, infoProject)
+				print(json.encode(idsProjects))
 
-	funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(idsProjects))
+				funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(idsProjects))
 
-	display.remove(SCENES[SCENE][1])
-	display.remove(SCENES[SCENE][2])
-	local scenesToProject = json.decode(funsP["получить сохранение"](event.target.idProject.."/scenes"))
-	if (#scenesToProject==1) then
-		IDPROJECT = event.target.idProject
-		NMPROJECT = event.target.nameProject
---funsP["загрузить спрайты"](event.target.idProject)
-scene_objects(event.target.idProject.."/scene_"..scenesToProject[1][2].."/objects", event.target.nameProject, scenesToProject[1])
-else
-	scene_scenes(event.target.idProject, event.target.nameProject)
-end
-end
+				display.remove(SCENES[SCENE][1])
+				display.remove(SCENES[SCENE][2])
+				local scenesToProject = json.decode(funsP["получить сохранение"](event.target.idProject.."/scenes"))
+				if (#scenesToProject==1) then
+					IDPROJECT = event.target.idProject
+					NMPROJECT = event.target.nameProject
+					scene_objects(event.target.idProject.."/scene_"..scenesToProject[1][2].."/objects", event.target.nameProject, scenesToProject[1])
+				else
+					scene_scenes(event.target.idProject, event.target.nameProject)
+				end
+			end
 
-end
-return true
+		end
+	end
+	return true
 end
 
 

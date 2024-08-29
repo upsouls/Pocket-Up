@@ -472,6 +472,7 @@ allFunsRedRorms.atan = function(value) return(math.deg(math.atan(value))) end
 allFunsRedRorms.atan2 = function(value, value2) return(math.deg(math.atan2(value, value2))) end
 
 allFunsRedRorms.getHEX = function() return("#FFFFFF") end
+allFunsRedRorms.getJson = function() return("{}") end
 allFunsRedRorms.getNil = function() return("") end
 allFunsRedRorms.getFalse = function() return(false) end 
 allFunsRedRorms.get0 = function() return(0) end

@@ -20,7 +20,9 @@ nameFormulas = {
 	touchDisplay=words[353],touchDisplayXId=words[354],touchDisplayYId=words[355],
 	touchDisplayId=words[356],countTouchDisplay=words[357],countTouch=words[358],
 	indexThisTouch=words[359],timer=words[361],year=words[362],month=words[363],
-	day=words[364],dayWeek=words[365],hour=words[366],minute=words[367],second=words[368]
+	day=words[364],dayWeek=words[365],hour=words[366],minute=words[367],second=words[368],
+	displayWidth=words[477],displayHeight=words[478],displayActualWidth=words[479],displayActualHeight=words[480],
+	array2json=words[482],json2array=words[483]
 }
 
 allBlocks = {
@@ -54,9 +56,9 @@ allBlocks = {
 	["endFor"]={"block", "blocks/block_orange_1.png", { {{"text",words[108]}} }, 109, 88, "end"},
 	["foreach"]={"block", "blocks/block_orange_3.png", { {{"text",words[109]}}, {{"arrays",nil}}, {{"text",words[110]}}, {{"variables",nil}} }, 109, 188, true},
 	["endForeach"]={"block", "blocks/block_orange_1.png", { {{"text",words[108]}} }, 109, 88, "end"},
-	--["continueScene"]={"block", "blocks/block_orange_2.png", { {{"text",words[111]}}, {{"scenes",nil}} }, 109, 142, false},
+	["continueScene"]={"block", "blocks/block_orange_2.png", { {{"text",words[111]}}, {{"scenes",nil}} }, 109, 142, false},
 	["runScene"]={"block", "blocks/block_orange_2.png", { {{"text",words[112]}}, {{"scenes",nil}} }, 109, 142, false},
-	--["stopScripts"]={"block", "blocks/block_orange_2.png", { {{"text",words[113]}}, {{"scripts",nil}} }, 109, 142, false},
+	["stopScript"]={"block", "blocks/block_orange_1.png", { {{"text",words[113]}} }, 109, 88, false},
 	--["waitStopScripts"]={"block", "blocks/block_orange_1.png", {{{"text", words[117]}}}, 109, 88, false},
 	["setPosition"]={"block", "blocks/block_blue_2.png", { {{"text",words[58]}}, {{"text",words[59]..":"}, {"cell",nil, 1.5}, {"text",words[60]..":"}, {"cell",nil , 1.5}} }, 109, 142, false},
 	["setPositionX"]={"block", "blocks/block_blue_1.png", { {{"text",words[118]}, {"cell",nil, 1.5}} }, 109, 88, false},
@@ -191,4 +193,8 @@ allBlocks = {
 	["jumpY"]={"block", "blocks/block_blue_1.png", { {{"text",words[468]},{"cell", nil, 1.5}} }, 109, 88, false},
 	["jumpYIf"]={"block", "blocks/block_blue_2.png", { {{"text",words[466]},{"cell", nil, 1.5},{"text",words[469]}},{{"text",words[470]}} }, 109, 142, false},
 	["setGravityScale"]={"block", "blocks/block_blue_2.png", { {{"text",words[471]}},{{"text", words[472]},{"cell", nil, 3}} }, 109, 142, false},
+	["setAnchorVariable"]={"block", "blocks/block_red_2.png", { {{"text",words[473]}},{{"variables"}},{{"text", words[65]},{"cell", nil, 1.5},{"text", words[420]},{"cell", nil, 1.5}} }, 109, 142, false},
+	["toFrontLayerVar"]={"block", "blocks/block_blue_2.png", { {{"text",words[474]}},{{"variables"}},{{"text",words[475]}} }, 109, 142, false},
+	["toBackLayerVar"]={"block", "blocks/block_blue_2.png", { {{"text",words[474]}},{{"variables"}},{{"text",words[476]}} }, 109, 142, false},
+	["removeAdaptiveSizeDevice"]={"block", "blocks/block_gold_1.png", { {{"text",words[481]}} }, 109, 88, false},
 }

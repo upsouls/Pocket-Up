@@ -80,6 +80,14 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 	scrollProjects.y = topBarArray[1].y+topBarArray[1].height
 
 	local allBlocksCategories = {
+		["used"]={
+			{"stopScript"},
+			{"continueScene",{ {"scenes", nameScene} }},
+			{"removeAdaptiveSizeDevice"},
+			{"toFrontLayerVar",{ {localityVariable, nameVariable} }},
+			{"toBackLayerVar",{ {localityVariable, nameVariable} }},
+			{"wait", {{{"number", 1}}}},
+		},
 		["event"]={
 			{"start"},
 			{"touchBack"},
@@ -120,10 +128,10 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"repeatIsTrue",{ {{"number", 1},{"function","<"},{"number",2}} }},
 			{"for",{ {{"number", 1}}, {{"number",1},{"number",0}}, {localityVariable,nameVariable}}},
 			{"foreach",{ {localityArray, nameArray}, {localityVariable,nameVariable}}},
-			--{"continueScene",{ {"scenes", nameScene} }},
+			{"continueScene",{ {"scenes", nameScene} }},
 			{"runScene",{ {"scenes", nameScene} }},
 			{"exitGame"},
-			--{"stopScripts",{ {"scripts", "thisScript"} }},
+			{"stopScript"},
 			--{"waitStopScripts"},
 			{"cancelAllTimers"},
 			{"startClone"},
@@ -232,6 +240,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"editVariable", {{localityVariable, nameVariable}, {{"number",1}}}},
 			{"showVariable", {{localityVariable, nameVariable}, {{"number",100}}, {{"number",200}}}},
 			{"showVariable2", {{localityVariable, nameVariable},{{"number",100}}, {{"number",200}},{{"number",120}},{{"text","#FF0000"}},{"alignText","center"}}},
+			{"setAnchorVariable", {{localityVariable, nameVariable},{{"number", 0}}, {{"number",100}}}},
 			{"hideVariable",{{localityVariable, nameVariable}}},
 			{"insertVariableCamera", {{localityVariable, nameVariable}}},
 			{"removeVariableCamera", {{localityVariable, nameVariable}}},
@@ -248,6 +257,8 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"readArray",{{localityArray, nameArray}}},
 			{"columnStorageToArray",{{{"number",1}},{{"text",words[238]}},{localityArray, nameArray}}},
 			{"getRequest",{{{"text","https://catrob.at/joke"}}, {localityVariable, nameVariable}}},
+			{"toFrontLayerVar",{ {localityVariable, nameVariable} }},
+			{"toBackLayerVar",{ {localityVariable, nameVariable} }},
 		},
 		["device"]={
 			--{"resetTimer"},
@@ -259,6 +270,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			{"lua", {{{"text", "native.showAlert(\""..words[388].."\", \""..words[389].."\", {\"OK\"})"}}}},
 			{"setHorizontalOrientation"},
 			{"setVerticalOrientation"},
+			{"removeAdaptiveSizeDevice"},
 		},
 	}
 	local blocksCategory = allBlocksCategories[category]
@@ -273,7 +285,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			block:addEventListener("touch", function (event)
 				if (event.phase=="began") then
 					display.getCurrentStage():setFocus(event.target, event.id)
-				elseif (event.phase=="moved" and math.abs(event.y-event.yStart)>20) then
+				elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
 					scrollProjects:takeFocus(event)
 				elseif (event.phase~="moved") then
 					display.getCurrentStage():setFocus(event.target, nil)

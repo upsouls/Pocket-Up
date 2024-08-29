@@ -68,7 +68,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                             objectsParameter[3].yScale = 2
                         end
                         display.getCurrentStage():setFocus(event.target, event.id)
-                    elseif (event.phase=="moved" and math.abs(event.y-event.yStart)>20) then
+                    elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
                         if (objectsParameter[1]=="cell") then
                             objectsParameter[3].yScale = 1
                         end
@@ -832,7 +832,7 @@ local timerMoveBlock = nil
 local yNewMoveSlot = nil
 local isTouchBlock = false
 touchBlock = function(event)
-    if ((event.phase~="began" or not isMoveBlock) and isBackScene=="back") and (event.phase~="moved" or math.abs(event.y-event.yStart)>20) then
+    if ((event.phase~="began" or not isMoveBlock) and isBackScene=="back") and (event.phase~="moved" or (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
         if (event.phase=="began") then
             yNewMoveSlot = event.y
             isTouchBlock = true
@@ -2811,6 +2811,14 @@ local function touchCirclePlay(event)
                 SCENES[SCENE][2].alpha = 0
                 SCENES[SCENE][1].alpha = 0
                 isBackScene = 'block'
+                 if (objectPlay~=nil) then
+                    audio.stop(playSound)
+                    objectPlay.fill = {
+                        type="image",
+                        filename="images/play.png"
+                    }
+                    objectPlay = nil
+                end
                 scene_run_game(function()
                     display.setDefault("background", 4/255, 34/255, 44/255)
                     SCENES[SCENE][2].alpha = 1

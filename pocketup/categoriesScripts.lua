@@ -70,7 +70,7 @@ function scene_categoriesScripts(funAddBlock)
 		sprite:addEventListener("touch", function (event)
 			if (event.phase=="began") then
 				display.getCurrentStage():setFocus(event.target, event.id)
-			elseif (event.phase=="moved" and math.abs(event.y-event.yStart)>20) then
+			elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
 				scrollProjects:takeFocus(event)
 			elseif (event.phase~="moved") then
 				display.getCurrentStage():setFocus(event.target, nil)
