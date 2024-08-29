@@ -22,7 +22,7 @@ nameFormulas = {
 	indexThisTouch=words[359],timer=words[361],year=words[362],month=words[363],
 	day=words[364],dayWeek=words[365],hour=words[366],minute=words[367],second=words[368],
 	displayWidth=words[477],displayHeight=words[478],displayActualWidth=words[479],displayActualHeight=words[480],
-	array2json=words[482],json2array=words[483]
+	array2json=words[482],json2array=words[483],positionCameraX=words[484],positionCameraY=words[485]
 }
 
 allBlocks = {
