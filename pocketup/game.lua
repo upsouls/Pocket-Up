@@ -1184,7 +1184,7 @@ else
         return lua
     end
     end)
-lua = lua.."\n"..make_block(block, 'target', obj_images, obj_sounds, b, blocks)
+lua = lua.."\n"..make_block(block, 'target', obj_images, obj_sounds, b, blocks)..'\n'
                     -- конец
                 end
 
