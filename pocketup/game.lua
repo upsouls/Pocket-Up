@@ -117,9 +117,7 @@ function removeAllObjects()
         end
     end
 end
-local wait_end = false
 local wait_type = 'wait'
-local wait_name = 'event'
 local wait_table = {_ends = 0, event = 0}
 timer.new = timer.performWithDelay
 timer.GameNew = function (time, rep, listener)
@@ -128,9 +126,7 @@ end
 local max_fors = 0
 
 function scene_run_game(shsc)
-    wait_end = false
     wait_type = 'wait'
-    wait_name = 'event'
     wait_table = {_ends = 0, event = 0}
     local options = json.decode(funsP['получить сохранение'](IDPROJECT..'/options'))
 
@@ -257,12 +253,42 @@ function scene_run_game(shsc)
 
 
             local blocks = json.decode(funsP['получить сохранение'](obj_path.."/scripts"))
+
+            local level_blocks = {}
+            if true then
+                local level = 1
+                for i, value in ipairs(blocks) do
+                    local block = blocks[i]
+                    local nameBlock = block[1]
+                    local table = {'if','timer','repeat','ifElse (2)','waitIfTrue',
+                    'foreach','cycleForever','for','repeatIsTrue'}
+
+                    local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
+                    'endFor','endForeach','endCycleForever'}
+                    for _, value in ipairs(table) do
+                        if nameBlock == value then
+                            level = level+1
+                        end
+                    end
+                    level_blocks[i] = level
+                    for _, value in ipairs(table_end) do
+                        if nameBlock == value then
+                            level = level-1
+                        end
+                    end
+                end    
+            end
+
             local oldEventName = nil
             for b=1, #blocks do
                 local block = blocks[b]
 
                 if (isEvent[block[1]]) then
                     if (b>1) then
+                        for i = 1, wait_table.event, 1 do
+                            lua = lua .. 'end)\nend\n'
+                        end
+                        wait_table.event = 0
                         if (oldEventName=="start") then
                             lua = lua.."\nend)"
                         elseif (oldEventName=="changeBackground" or oldEventName=="collision" or oldEventName=="endedCollision") then
@@ -321,141 +347,45 @@ else
     lua = lua ..
     'local name = \'Timer'..index..'\'\
     if not Timers[name] then\
-    timer.pause(_repeat)\
+    pcall(function()timer.pause(_repeat)end)\
     timer.new('..time..'*1000, function()\
     Timers[name] = nil\
-    timer.resume(_repeat)\
+    pcall(function()timer.resume(_repeat)end)\
     end)\
     Timers[name] = timer.new('..
     time..'*1000, function()\n'
     wait_type = 'wait'
     end
-    local _end = 0
     local numbers = wait_table['block:'..index] or 1
     wait_end = true
-    if wait_name == 'event' then
+    if level_blocks[index] == 1 then
         wait_table.event = wait_table.event + 1
-    end
-    for i = index+1, #blocks, 1 do
-        local block = blocks[i]
-        local nameBlock = block[1]
-        if block[3] == 'off' then
-            nameBlock = ''
-        end
-        if nameBlock == wait_name then
-            _end = _end + 1
-        elseif nameBlock == 'endIf' and (wait_name == 'if' or nameBlock == 'ifElse (2)') then
-            if _end > 0 then
-                _end = _end - 1
-            else
-                wait_table['block:'..i] = numbers
-                wait_end = false
-                wait_table['_ends'] = wait_table['_ends'] + 1
-                break
+    else
+        for i = index+1, #blocks, 1 do
+            local block = blocks[i]
+            local nameBlock = block[1]
+            if block[3] == 'off' then
+                nameBlock = ''
             end
-        elseif nameBlock == 'endTimer' and wait_name == 'timer' then
-            if _end > 0 then
-                _end = _end - 1
-            else
+            if nameBlock == 'wait' and
+            level_blocks[index] == level_blocks[i] then
+                numbers = numbers + 1
                 wait_table['block:'..i] = numbers
-                wait_end = false
-                wait_table['_ends'] = wait_table['_ends'] + 1
-                break
             end
-        elseif nameBlock == 'endRepeat' and wait_name == 'repeat' then
-            if _end > 0 then
-                _end = _end - 1
-            else
-                wait_table['block:'..i] = numbers
-                wait_end = false
-                wait_table['_ends'] = wait_table['_ends'] + 1
-                break
-            end
-        elseif nameBlock == 'endRepeat' and wait_name == 'repeatIsTrue' then
-            if _end > 0 then
-                _end = _end - 1
-            else
-                wait_table['block:'..i] = numbers
-                wait_end = false
-                wait_table['_ends'] = wait_table['_ends'] + 1
-                break
-            end
-        elseif nameBlock == 'endFor' and wait_name == 'for' then
-            if _end > 0 then
-                _end = _end - 1
-            else
-                wait_table['block:'..i] = numbers
-                wait_end = false
-                break
-            end
-        elseif nameBlock == 'endCycleForever' and wait_name == 'cycleForever' then
-            if _end > 0 then
-                _end = _end - 1
-            else
-                wait_table['block:'..i] = numbers
-                wait_end = false
-                wait_table['_ends'] = wait_table['_ends'] + 1
-                break
-            end
-        elseif nameBlock == 'endForeach' and wait_name == 'foreach' then
-            if _end > 0 then
-                _end = _end - 1
-            else
-                wait_table['block:'..i] = numbers
-                wait_end = false
-                wait_table['_ends'] = wait_table['_ends'] + 1
-                break
-            end
-        elseif nameBlock == 'endWait' and wait_name == 'waitIfTrue' then
-            if _end > 0 then
-                _end = _end - 1
-            else
-                wait_table['block:'..i] = numbers
-                wait_end = false
-                wait_table['_ends'] = wait_table['_ends'] + 1
-                break
-            end
-        elseif nameBlock == 'wait' then
-            if wait_name ~= 'event' then
-                local _end = 1
-                local search = false
-                for i2 = index+1, #blocks, 1 do
-                    local block = blocks[i2]
-                    local nameBlock = block[1]
-                    if block[3] == 'off' then
-                        nameBlock = ''
-                    end
-                    if nameBlock == 'if' or nameBlock == 'timer' or
-                    nameBlock == 'repeat' or nameBlock == 'ifElse (2)' or
-                    nameBlock == 'waitIfTrue' or nameBlock == 'foreach' or
-                    nameBlock == 'cycleForever' or nameBlock == 'for' or nameBlock == 'repeatIsTrue' then
-                        _end = _end + 1
-                        local __end = #blocks
-                        for i3 = 1, #block, 1 do
-                            local block = blocks[i3]
-                            local nameBlock = block[1]
-                            if nameBlock == 'endIf' or nameBlock == 'endTimer' or nameBlock == 'endRepeat' or
-                        nameBlock == 'ifElse (2)' or nameBlock == 'endFor' or nameBlock == 'endForeach' or
-                        nameBlock == 'endCycleForever' then
-                            __end = i3
-                        end
-                        end
-                        if i2 < i and i < __end then
-                            _end = -1
-                        end
-                    else
-                        if nameBlock == 'endIf' or nameBlock == 'endTimer' or nameBlock == 'endRepeat' or
-                        nameBlock == 'ifElse (2)' or nameBlock == 'endFor' or nameBlock == 'endForeach' or
-                        nameBlock == 'endCycleForever' then
-                            _end = _end - 1
-                            if _end == 0  then
-                                numbers = numbers + 1
-                                wait_table['block:'..i] = numbers
-                                break
-                            end
-                        end
-                    end
+            local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
+            'endFor','endForeach','endCycleForever'}
+            local _break = false
+            for i2, value in ipairs(table_end) do
+                if nameBlock == value and level_blocks[index] == level_blocks[i] then
+                    wait_table['block:'..i] = numbers
+                    wait_end = false
+                    wait_table['_ends'] = wait_table['_ends'] + 1
+                    _break = true
+                    break
                 end
+            end
+            if _break then
+                break
             end
         end
     end
@@ -495,9 +425,9 @@ else
             lua = lua..'loadstring('..code..')()'..'\n'
             end_pcall()
         elseif nameBlock == 'timer' then
-            wait_name = nameBlock
             local rep = make_all_formulas(infoBlock[2][1], object)
             local time = make_all_formulas(infoBlock[2][2], object)
+            lua = lua .. 'local _repeat\n'
             add_pcall()
             lua = lua .. 
     'local name = \'Timer'..index..'\'\
@@ -511,9 +441,8 @@ else
                 for i = 1, wait_table['block:'..index], 1 do
                     lua = lua .. 'end)\nend\n'
                 end
-                wait_end = false
             end
-            lua = lua..'end)\nend'
+            lua = lua..'end)_repeat = Timers[name]\nend'
             end_pcall()
         elseif nameBlock == 'editRotateLeft' then
             local rotate = make_all_formulas(infoBlock[2][1], object)
@@ -557,7 +486,6 @@ else
             local comment = make_all_formulas(infoBlock[2][1], object)
             lua = lua..'-- '..comment..'\n'
         elseif nameBlock == 'if' or nameBlock == 'ifElse (2)' then
-            wait_name = nameBlock
             local condition = make_all_formulas(infoBlock[2][1], object)
             add_pcall()
             lua = lua..'if ('..condition..') then\n'
@@ -569,15 +497,11 @@ else
                     wait_table['_ends'] = wait_table['_ends'] - 1
                     lua = lua .. 'end)\nend\n'
                 end
-                if wait_table['_ends'] == 0 then
-                    wait_name = 'event'
-                end
             end
             lua = lua..'end\n'
             end_pcall()
         elseif nameBlock == 'repeat' then
             wait_type = 'repeat'
-            wait_name = nameBlock
             local rep = make_all_formulas(infoBlock[2][1], object)
             lua = lua .. 'local _repeat\n'
             add_pcall()
@@ -587,7 +511,6 @@ else
                 for i = 1, wait_table['block:'..index], 1 do
                     lua = lua .. 'end)\nend\n'
                 end
-                wait_end = false
             end
             lua = lua..'end)\n'
             end_pcall()
@@ -619,20 +542,20 @@ else
             lua = lua..'system.openURL('..link..')\n'
             end_pcall()
         elseif nameBlock == 'cycleForever' then
-            wait_name = nameBlock
+            lua = lua .. 'local _repeat\n'
+            wait_type = 'repeat'
+            
             add_pcall()
-            lua = lua..'timer.new(0, function()\n'
+            lua = lua..'_repeat = timer.new(0, function()\n'
         elseif nameBlock == 'endCycleForever' then
             if wait_table['block:'..index] then
                 for i = 1, wait_table['block:'..index], 1 do
                     lua = lua .. 'end)\nend\n'
                 end
-                wait_end = false
             end
             lua = lua..'end, 0)\n'
             end_pcall()
         elseif nameBlock == 'repeatIsTrue' then
-            wait_name = nameBlock
             wait_type = 'repeat'
             local condition = make_all_formulas(infoBlock[2][1], object)
             lua = lua .. 'local _repeat\n'
@@ -740,7 +663,6 @@ else
             lua = lua..'audio.setVolume(audio.getVolume() + ('..volume..')/100 )'
             end_pcall()
         elseif nameBlock == 'for' then
-            wait_name = nameBlock
             local one = make_all_formulas(infoBlock[2][1], object)
             local _end = make_all_formulas(infoBlock[2][2], object)
             max_fors = max_fors+1
@@ -757,7 +679,6 @@ else
                     for i = 1, wait_table['block:'..index], 1 do
                         lua = lua .. 'end)\nend\n'
                     end
-                    wait_end = false
                 end
             end
             lua = lua..'end'
@@ -1095,7 +1016,6 @@ else
             lua = lua.."deleteScene()\nscene_"..infoBlock[2][1][2].."()"
             end_pcall()
         elseif nameBlock == 'foreach' and infoBlock[2][1][2]~=nil and infoBlock[2][2][2]~=nil then
-            wait_name = nameBlock
             add_pcall()
             max_fors = max_fors+1
             lua = lua..'for key'..max_fors..', value'..max_fors..' in pairs('
@@ -1107,7 +1027,6 @@ else
                 for i = 1, wait_table['block:'..index], 1 do
                     lua = lua .. 'end)\nend\n'
                 end
-                wait_end = false
             end
             lua = lua..'end'
             end_pcall()
@@ -1153,7 +1072,6 @@ else
             lua = lua.."local function broadcastFunction(nameFunction)\nlocal value = tableNamesClones["..make_all_formulas(infoBlock[2][1], object).."]\nlocal key = value.nameObject\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
             end_pcall()
         elseif nameBlock == 'waitIfTrue' then
-            wait_name = nameBlock
             local arg1 = make_all_formulas(infoBlock[2][1], object)
             add_pcall()
             lua = lua..'local waitIfTrue\nwaitIfTrue = timer.GameNew(0, 0, function()\n'
@@ -1163,7 +1081,6 @@ else
                 for i = 1, wait_table['block:'..index], 1 do
                     lua = lua .. 'end)\nend\n'
                 end
-                wait_end = false
             end
             lua = lua..'end)'
             end_pcall()
@@ -1261,6 +1178,8 @@ else
             add_pcall()
             lua = lua.."mainGroup.xScale, mainGroup.yScale = 1, 1"
             end_pcall()
+        elseif nameBlock == 'stopScript' then
+            lua = lua..'if true then pcall(function() timer.cancel(_repeat) end) return true end'
         end
         return lua
     end
@@ -1276,16 +1195,19 @@ lua = lua.."\n"..make_block(block, 'target', obj_images, obj_sounds, b, blocks)
                     for i = 1, wait_table.event, 1 do
                         lua = lua .. 'end)\nend\n'
                     end
+                    wait_table.event = 0
                     lua = lua..'\nend)\nend\n\n'
                 elseif (oldEventName=="changeBackground" or oldEventName=="collision" or oldEventName=="endedCollision") then
                     for i = 1, wait_table.event, 1 do
                         lua = lua .. 'end)\nend\n'
                     end
+                    wait_table.event = 0
                     lua = lua..'\nend\nend\n\n'
                 else
                     for i = 1, wait_table.event, 1 do
                         lua = lua .. 'end)\nend\n'
                     end
+                    wait_table.event = 0
                     lua = lua..'\nend\n\n'
                 end
             end
@@ -1315,7 +1237,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
         lua = lua.."\nfunction funBackListener2(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\norientation.lock('portrait')\nend\nend"
 
     --lua = lua.."\nphysics.setDrawMode('hybrid')\n"
-    print(lua)
+    --print(lua)
     noremoveAllObjects()
     local f, error_msg = loadstring(lua)
     if f then

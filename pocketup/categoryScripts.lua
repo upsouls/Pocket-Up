@@ -81,7 +81,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 
 	local allBlocksCategories = {
 		["used"]={
-			--{"stopScript"},
+			{"stopScript"},
 			--{"continueScene",{ {"scenes", nameScene} }},
 			{"removeAdaptiveSizeDevice"},
 			{"toFrontLayerVar",{ {localityVariable, nameVariable} }},
@@ -131,7 +131,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			--{"continueScene",{ {"scenes", nameScene} }},
 			{"runScene",{ {"scenes", nameScene} }},
 			{"exitGame"},
-			--{"stopScript"},
+			{"stopScript"},
 			--{"waitStopScripts"},
 			{"cancelAllTimers"},
 			{"startClone"},
