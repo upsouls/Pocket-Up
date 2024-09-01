@@ -373,7 +373,7 @@ else
                 wait_table['block:'..i] = numbers
             end
             local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
-            'endFor','endForeach','endCycleForever'}
+            'endFor','endForeach','endCycleForever','else'}
             local _break = false
             for i2, value in ipairs(table_end) do
                 if nameBlock == value and level_blocks[index] == level_blocks[i] then
@@ -490,6 +490,12 @@ else
             add_pcall()
             lua = lua..'if ('..condition..') then\n'
         elseif nameBlock == 'else' then
+            if wait_table['block:'..index] then
+                for i = 1, wait_table['block:'..index], 1 do
+                    wait_table['_ends'] = wait_table['_ends'] - 1
+                    lua = lua .. 'end)\nend\n'
+                end
+            end
             lua = lua..'else\n'
         elseif nameBlock == 'endIf' then
             if wait_table['block:'..index] then
