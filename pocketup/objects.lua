@@ -55,7 +55,7 @@ function scene_objects(pathScene, NAMEPROJECT, infoScene)
 			end
 
 			display.getCurrentStage():setFocus(event.target, event.id)
-		elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20) or math.abs(event.x-event.xStart)>20) then
+		elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
 
 			if isTimerMoveSlot then
 				timer.cancel(timerMoveSlot)
@@ -127,97 +127,97 @@ function scene_objects(pathScene, NAMEPROJECT, infoScene)
 				display.remove(SCENES[SCENE][2])
 				scene_scripts( event.target.infoScene[1], pathObject.."_"..event.target.infoScene[2], {pathScene, NAMEPROJECT, infoScene})
 
--- открыть объект
+				-- открыть объект
 
-else
+			else
 
-	if (type(event.target.infoScene[2]) == "number" and isBackScene=="back") then
+				if (type(event.target.infoScene[2]) == "number" and isBackScene=="back") then
 
-	elseif (isBackScene=="back") then
--- открыть/закрыть группу
-local isOpenGroup = event.target.infoScene[2]=="open"
-event.target.infoScene[2] = isOpenGroup and "closed" or "open"
+				elseif (isBackScene=="back") then
+				-- открыть/закрыть группу
+				local isOpenGroup = event.target.infoScene[2]=="open"
+				event.target.infoScene[2] = isOpenGroup and "closed" or "open"
 
-event.target.triangle.rotation = isOpenGroup and 90 or 180
-local i = event.target.idSlot
-if (not isOpenGroup) then
-	local ySlotGroup = event.target.myGroup.y+event.target.height/2
-	local isOpenSlot = true
-	while (i<#arraySlots) do
-		i = i+1
-		local isString = arraySlots[i].infoScene[2]
-		if (isOpenSlot or type(isString)=="string") then
-			local slot = arraySlots[i]
-			ySlotGroup = ySlotGroup+slot.height
-			slot.myGroup.y, slot.myGroup.alpha = ySlotGroup-slot.height/2, 1
-			slot.aimPosY = slot.myGroup.y
-			if (type(isString)=="string") then
-				isOpenSlot = isString=="open"
+				event.target.triangle.rotation = isOpenGroup and 90 or 180
+				local i = event.target.idSlot
+				if (not isOpenGroup) then
+					local ySlotGroup = event.target.myGroup.y+event.target.height/2
+					local isOpenSlot = true
+					while (i<#arraySlots) do
+						i = i+1
+						local isString = arraySlots[i].infoScene[2]
+						if (isOpenSlot or type(isString)=="string") then
+							local slot = arraySlots[i]
+							ySlotGroup = ySlotGroup+slot.height
+							slot.myGroup.y, slot.myGroup.alpha = ySlotGroup-slot.height/2, 1
+							slot.aimPosY = slot.myGroup.y
+							if (type(isString)=="string") then
+								isOpenSlot = isString=="open"
+							end
+						end
+					end
+				else
+
+					local ySlotGroup = event.target.myGroup.y+event.target.height/2
+					local isOpenSlot = false
+					while (i<#arraySlots) do
+						i=i+1
+						local isString = arraySlots[i].infoScene[2]
+						local slot = arraySlots[i]
+						if (isOpenSlot or type(isString)=="string") then
+							ySlotGroup = ySlotGroup+slot.height
+							slot.myGroup.y = ySlotGroup-slot.height/2
+							slot.aimPosY = slot.myGroup.y
+							if (type(isString)=="string") then
+								isOpenSlot = isString=="open"
+							end
+						else
+							slot.myGroup.alpha = 0
+						end
+					end
+
+				end
+				funsP["записать сохранение"](pathScene, json.encode(scenes))
+
 			end
-		end
-	end
-else
-
-	local ySlotGroup = event.target.myGroup.y+event.target.height/2
-	local isOpenSlot = false
-	while (i<#arraySlots) do
-		i=i+1
-		local isString = arraySlots[i].infoScene[2]
-		local slot = arraySlots[i]
-		if (isOpenSlot or type(isString)=="string") then
-			ySlotGroup = ySlotGroup+slot.height
-			slot.myGroup.y = ySlotGroup-slot.height/2
-			slot.aimPosY = slot.myGroup.y
-			if (type(isString)=="string") then
-				isOpenSlot = isString=="open"
+			local iEndSlot = #arraySlots
+			while (arraySlots[iEndSlot].myGroup.alpha<0.5) do
+				iEndSlot = iEndSlot-1
 			end
-		else
-			slot.myGroup.alpha = 0
+			local xScroll, yScroll = scrollProjects:getContentPosition()
+			local arSlEnd = arraySlots[iEndSlot].myGroup
+			local newScrollHeight = arSlEnd.y+arSlEnd.height/2+display.contentWidth/1.5
+			scrollProjects:setScrollHeight(newScrollHeight)
+			scrollProjects:scrollToPosition({
+				time=0, 
+				y=math.min(math.max(yScroll, -newScrollHeight+scrollProjects.height), 0)
+			})
+
 		end
-	end
-
-end
-funsP["записать сохранение"](pathScene, json.encode(scenes))
-
-end
-local iEndSlot = #arraySlots
-while (arraySlots[iEndSlot].myGroup.alpha<0.5) do
-	iEndSlot = iEndSlot-1
-end
-local xScroll, yScroll = scrollProjects:getContentPosition()
-local arSlEnd = arraySlots[iEndSlot].myGroup
-local newScrollHeight = arSlEnd.y+arSlEnd.height/2+display.contentWidth/1.5
-scrollProjects:setScrollHeight(newScrollHeight)
-scrollProjects:scrollToPosition({
-	time=0, 
-	y=math.min(math.max(yScroll, -newScrollHeight+scrollProjects.height), 0)
-})
-
-end
-if (isMoveSlot) then
-	isMoveSlot = false
-	event.target.myGroup.y = event.target.aimPosY
-	if (event.target.idSlot>2 and (arraySlots[event.target.idSlot-1].myGroup.alpha<0.5 or arraySlots[event.target.idSlot-1].infoScene[2]=="closed")) then
-		event.target.myGroup.alpha = 0
-		local yPosSlot = event.target.myGroup.y-event.target.height/2
-		local isOpenSlot = false
-		for i=event.target.idSlot+1, #scenes do
-			local slot = arraySlots[i]
-			if (isOpenSlot or type(slot.infoScene[2])=="string") then
-				yPosSlot = yPosSlot+slot.height
-				slot.myGroup.y = yPosSlot-slot.height/2
-				slot.aimPosY = slot.myGroup.y
-				if (type(slot.infoScene[2])=="string") then
-					isOpenSlot = slot.infoScene[2]=="open"
+		if (isMoveSlot) then
+			isMoveSlot = false
+			event.target.myGroup.y = event.target.aimPosY
+			if (event.target.idSlot>2 and (arraySlots[event.target.idSlot-1].myGroup.alpha<0.5 or arraySlots[event.target.idSlot-1].infoScene[2]=="closed")) then
+				event.target.myGroup.alpha = 0
+				local yPosSlot = event.target.myGroup.y-event.target.height/2
+				local isOpenSlot = false
+				for i=event.target.idSlot+1, #scenes do
+					local slot = arraySlots[i]
+					if (isOpenSlot or type(slot.infoScene[2])=="string") then
+						yPosSlot = yPosSlot+slot.height
+						slot.myGroup.y = yPosSlot-slot.height/2
+						slot.aimPosY = slot.myGroup.y
+						if (type(slot.infoScene[2])=="string") then
+							isOpenSlot = slot.infoScene[2]=="open"
+						end
+					end
 				end
 			end
+
 		end
+
 	end
-
-end
-
-end
-return true
+	return true
 end
 
 
@@ -736,16 +736,13 @@ local function touchCirclePlus(event)
 				funsP['импортировать изображение'](myFunImport)
 			else
 				if isBackScene == 'back' then
-	                SCENES[SCENE][2].alpha = 0
-	                SCENES[SCENE][1].alpha = 0
-	                isBackScene = 'block'
-	                scene_run_game(function()
-	                    display.setDefault("background", 4/255, 34/255, 44/255)
-	                    SCENES[SCENE][2].alpha = 1
-	                    SCENES[SCENE][1].alpha = 1
-	                    isBackScene = "back"
-	                end)
-	            end
+					SCENES[SCENE][2].alpha = 0
+					SCENES[SCENE][1].alpha = 0
+					isBackScene = 'block'
+					display.remove(SCENES[SCENE][2])
+					display.remove(SCENES[SCENE][1])
+					scene_run_game("objects", {pathScene, NAMEPROJECT, infoScene})
+				end
 			end
 			--DDDDDDDDDDDDDDDDDDDD
 			--DDDDDDDDDDDDDDDDDDDD

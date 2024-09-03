@@ -125,7 +125,7 @@ timer.GameNew = function (time, rep, listener)
 end
 local max_fors = 0
 
-function scene_run_game(shsc)
+function scene_run_game(typeBack, paramsBack)
     wait_type = 'wait'
     wait_table = {_ends = 0, event = 0}
     local options = json.decode(funsP['получить сохранение'](IDPROJECT..'/options'))
@@ -134,7 +134,18 @@ function scene_run_game(shsc)
 
     local isScriptsBack = false
 
-    showOldScene = shsc
+    function showOldScene()
+        display.setDefault("background", 4/255, 34/255, 44/255)
+        timer.performWithDelay(0, function()
+            if (typeBack=="scripts") then
+                scene_scripts(paramsBack[1], paramsBack[2], paramsBack[3])
+            elseif (typeBack=="objects") then
+                scene_objects(paramsBack[1], paramsBack[2], paramsBack[3])
+            elseif (typeBack=="scenes") then
+                scene_scenes(paramsBack[1], paramsBack[2])
+            end
+        end)
+    end
     max_fors = 0
     lua = ''
     lua = lua..(options.orientation=="horizontal" and "\norientation.lock('landscape')" or "").."\nsystem.activate('multitouch')\nphysics.start(true)\nlocal function getImageProperties(path, dir)\nlocal image = display.newImage(path, dir)\nimage.alpha=0\nlocal width = image.width\nlocal height = image.height\ndisplay.remove(image)\nreturn width, height\nend"
@@ -237,11 +248,13 @@ function scene_run_game(shsc)
             lua = lua.."object_"..obj_id..".namesVars = {}\n"
             for i=1, #localVariables do
                 lua = lua.."object_"..obj_id..".var_"..localVariables[i][1].." = 0\n"
-                lua = lua.."object_"..obj_id..".namesVars["..i.."] = 'var_"..localVariables[i][1].."'"
+                lua = lua.."object_"..obj_id..".namesVars["..i.."] = 'var_"..localVariables[i][1].."'\n"
             end
             local localArrays = json.decode(funsP['получить сохранение'](obj_path.."/arrays"))
+            lua = lua.."object_"..obj_id..".namesLists = {}\n"
             for i=1, #localArrays do
                 lua = lua.."object_"..obj_id..".list_"..localArrays[i][1].." = {}\n"
+                lua = lua.."object_"..obj_id..".namesLists["..i.."] = 'list_"..localArrays[i][1].."'\n"
             end
 
             lua = lua.."\n\nlocal events_start = {}\nlocal events_touchObject = {}\nlocal events_movedObject = {}\nlocal events_onTouchObject = {}\nlocal events_collision = {}\nlocal events_endedCollision = {}\nlocal events_startClone = {}\n"
@@ -576,6 +589,7 @@ else
             lua = lua..'target.fill = {type = \'image\', filename = \''..IDPROJECT..'/scene_'..scene_id..'/object_'..obj_id..'/image_\'..listImages[numberImage]..\'.png\', baseDir = system.DocumentsDirectory}\n'
             lua = lua.."target.origWidth, target.origHeight = getImageProperties(target.image_path, system.DocumentsDirectory)\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)\n"
             lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\ntarget:setFillColor(r,g,b)\n"
+            lua = lua.."if (target.property_color~=100) then\ntarget.fill.effect = 'filter.brightness'\ntarget.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
             if (o==1) then
                 lua = lua.."broadcastChangeBackground(listImages[numberImage])\n"
             end
@@ -587,7 +601,7 @@ else
             end
             if (#images>0) then
                 lua = lua.."\nlocal myClone = display.newImage(target.image_path, system.DocumentsDirectory, target.x, target.y)"
-                lua = lua.."\nmyClone.image_path = target.image_path\nfor k, v in pairs(target.parent_obj.namesVars) do\nmyClone[v] = 0\nprint(v)\nend"
+                lua = lua.."\nmyClone.image_path = target.image_path\nfor k, v in pairs(target.parent_obj.namesVars) do\nmyClone[v] = 0\nend\nfor k, v in pairs(target.parent_obj.namesLists) do\nmyClone[v] = {}\nend"
             else
                 lua = lua.."\nlocal myClone = display.newImage('images/notVisible.png', target.x, target.y)"
             end
@@ -599,6 +613,7 @@ else
 
             lua = lua.."\ntarget.parent_obj.clones[#target.parent_obj.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
             lua = lua.."\nmyClone.isVisible = target.isVisible\nmyClone.physicsReload, myClone.physicsType , myClone.physicsTable = target.physicsReload or function(ob) end, target.physicsType or 'static' , json.decode(json.encode(target.physicsTable)) or {}\nmyClone:physicsReload()"
+            lua = lua.."\nmyClone.property_color = target.property_color\nlocal r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\nmyClone:setFillColor(r,g,b)"
             lua = lua.."\nfor i=1, #events_startClone do\nevents_startClone[i](myClone)\nend\n"
             end_pcall()
         elseif nameBlock == 'deleteClone' then
@@ -649,7 +664,7 @@ else
             lua = lua..'if not playSounds['..infoBlock[2][1][2]..'] then\n'
             lua = lua..'playSounds['..infoBlock[2][1][2]..'] = audio.loadSound(\''..obj_path..'/sound_'..infoBlock[2][1][2]..'.mp3\', system.DocumentsDirectory)\n'
             lua = lua..'end\naudio.stop(playingSounds['..infoBlock[2][1][2]..'])\n'
-            lua = lua..'playingSounds['..infoBlock[2][1][2]..'] = audio.play(playSounds[listSounds['.. infoBlock[2][1][2]..']])'
+            lua = lua..'playingSounds['..infoBlock[2][1][2]..'] = audio.play(playSounds['.. infoBlock[2][1][2]..'])'
             end_pcall() -- проверен
         elseif nameBlock == 'stopSound' and infoBlock[2][1][2]~=nil then
             add_pcall()
@@ -766,6 +781,7 @@ else
                 lua = lua..'target.fill = {type = \'image\', filename = \''..IDPROJECT..'/scene_'..scene_id..'/object_'..obj_id..'/image_'..image..'.png\', baseDir = system.DocumentsDirectory}\n'
                 lua = lua.."target.origWidth, target.origHeight = getImageProperties(target.image_path, system.DocumentsDirectory)\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)\n"
                 lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\ntarget:setFillColor(r,g,b)\n"
+                lua = lua.."if (target.property_color~=100) then\ntarget.fill.effect = 'filter.brightness'\ntarget.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
                 if (o==1) then
                     lua = lua.."broadcastChangeBackground(listImages[numberImage])\n"
                 end
@@ -778,6 +794,7 @@ else
             lua = lua..'target.fill = {type = \'image\', filename = \''..IDPROJECT..'/scene_'..scene_id..'/object_'..obj_id..'/image_\'..listImages[target.numberImage]..\'.png\', baseDir = system.DocumentsDirectory}\n'
             lua = lua.."target.origWidth, target.origHeight = getImageProperties(target.image_path, system.DocumentsDirectory)\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)\n"
             lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\ntarget:setFillColor(r,g,b)\n"
+            lua = lua.."if (target.property_color~=100) then\ntarget.fill.effect = 'filter.brightness'\ntarget.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
             end_pcall()
         elseif nameBlock == "previousImage" and #images>1 then
             add_pcall()
@@ -785,6 +802,7 @@ else
             lua = lua..'target.fill = {type = \'image\', filename = \''..IDPROJECT..'/scene_'..scene_id..'/object_'..obj_id..'/image_\'..listImages[target.numberImage]..\'.png\', baseDir = system.DocumentsDirectory}\n'
             lua = lua.."target.origWidth, target.origHeight = getImageProperties(target.image_path, system.DocumentsDirectory)\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)\n"
             lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\ntarget:setFillColor(r,g,b)\n"
+            lua = lua.."if (target.property_color~=100) then\ntarget.fill.effect = 'filter.brightness'\ntarget.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
             end_pcall()
         elseif nameBlock == "editAlpha" then
             add_pcall()
@@ -812,7 +830,7 @@ else
             end_pcall()
         elseif nameBlock=="setPositionParticle" then
             add_pcall()
-            lua = lua.."local particle = objectsParticles["..make_all_formulas(infoBlock[2][1], object).."]\nif (particle~=nil) then\nparticle.x, particle.y = "..make_all_formulas(infoBlock[2][2], object)..", "..make_all_formulas(infoBlock[2][3], object).."\nend"
+            lua = lua.."local particle = objectsParticles["..make_all_formulas(infoBlock[2][1], object).."]\nif (particle~=nil) then\nparticle.x, particle.y = "..make_all_formulas(infoBlock[2][2], object)..", -"..make_all_formulas(infoBlock[2][3], object).."\nend"
             end_pcall()
         elseif nameBlock=="deleteParticle" then
             add_pcall()
@@ -840,6 +858,7 @@ else
                 lua = lua..'background.fill = {type = \'image\', filename = background.image_path, baseDir = system.DocumentsDirectory}\n'
                 lua = lua.."background.origWidth, background.origHeight = getImageProperties(background.image_path, system.DocumentsDirectory)\nbackground.width, background.height = background.origWidth*(background.property_size/100), background.origHeight*(background.property_size/100)\n"
                 lua = lua.."local r = pocketupFuns.sin(background.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(background.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(background.property_color+22+56)/2+0.724\nbackground:setFillColor(r,g,b)\n"
+                lua = lua.."if (background.property_color~=100) then\nbackground.fill.effect = 'filter.brightness'\nbackground.fill.effect.intensity = (background.property_brightness)/100-1\nend\n"
                 if (o==1) then
                     lua = lua.."broadcastChangeBackground(listImages[numberImage])\n"
                 end
@@ -854,6 +873,7 @@ else
             lua = lua..'background.fill = {type = \'image\', filename = background.image_path, baseDir = system.DocumentsDirectory}\n'
             lua = lua.."background.origWidth, background.origHeight = getImageProperties(background.image_path, system.DocumentsDirectory)\nbackground.width, background.height = background.origWidth*(background.property_size/100), background.origHeight*(background.property_size/100)\n"
             lua = lua.."local r = pocketupFuns.sin(background.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(background.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(background.property_color+22+56)/2+0.724\nbackground:setFillColor(r,g,b)\n"
+            lua = lua.."if (background.property_color~=100) then\nbackground.fill.effect = 'filter.brightness'\nbackground.fill.effect.intensity = (background.property_brightness)/100-1\nend\n"
             if (o==1) then
                 lua = lua.."broadcastChangeBackground(listImages[numberImage])\n"
             end
@@ -1244,7 +1264,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
         lua = lua.."\nfunction funBackListener2(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\norientation.lock('portrait')\nend\nend"
 
     --lua = lua.."\nphysics.setDrawMode('hybrid')\n"
-    --print(lua)
+    print(lua)
     noremoveAllObjects()
     local f, error_msg = loadstring(lua)
     if f then

@@ -48,7 +48,7 @@ function scene_scenes(idProject, nameProjectScenes)
 				end)
 			end
 
-			display.getCurrentStage():setFocus(event.target, nil)
+			display.getCurrentStage():setFocus(event.target, event.id)
 		elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
 
 			if isTimerMoveSlot then
@@ -582,12 +582,9 @@ local function touchCirclePlus(event)
 	                SCENES[SCENE][2].alpha = 0
 	                SCENES[SCENE][1].alpha = 0
 	                isBackScene = 'block'
-	                scene_run_game(function()
-	                    display.setDefault("background", 4/255, 34/255, 44/255)
-	                    SCENES[SCENE][2].alpha = 1
-	                    SCENES[SCENE][1].alpha = 1
-	                    isBackScene = "back"
-	                end)
+	                display.remove(SCENES[SCENE][1])
+	                display.remove(SCENES[SCENE[2]])
+	                scene_run_game('scenes', {idProject, nameProjectScenes})
 	            end
 			end
 --DDDDDDDDDDDDDDDDDDDD

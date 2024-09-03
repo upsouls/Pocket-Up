@@ -72,17 +72,14 @@ local function isCorrectFormulas()
 		,characterFromText="allFunsRedRorms.characterFromText",length="utf8.len",
 		connect="allFunsRedRorms.connect",connect2="allFunsRedRorms.connect",regularExpression="allFunsRedRorms.regularExpression",
 		lengthArray="#",elementArray="allFunsRedRorms.get0",containsArray="allFunsRedRorms.getFalse",
-		indexArray="allFunsRedRorms.get0",levelingArray="allFunsRedRorms.getNil",transparency='(0)',brightness='(100)',
+		indexArray="allFunsRedRorms.get0",levelingArray="allFunsRedRorms.getNil",brightness='(100)',
 		numberImage='(1)',size='(100)',direction='(90)',directionView='(90)',
 		touchesObject="false",touchesEdge="false",touchesFinger="false",
 		displayPositionColor="allFunsRedRorms.getHEX",language=" '"..lang.."-"..string.upper(lang).."' ",
 		touchDisplay="false",touchDisplayXId="allFunsRedRorms.get0",touchDisplayYId="allFunsRedRorms.get0",
-		touchDisplayId="allFunsRedRorms.getFalse",indexThisTouch="(0)",color="(0)",positionX="(0)",
-		positionY="(0)",layer="(0)",speedX="(0)",speedY="(0)",touchDisplayX="(0)",
-		timer="(0)",year="(0)",month="(0)",dayWeek="(0)",day="(0)",hour="(0)",minute="(0)",second="(0)",
+		touchDisplayId="allFunsRedRorms.getFalse",
 		displayWidth="(720)",displayHeight="(1280)",displayActualWidth="("..tostring(display.actualContentWidth)..")",
 		displayActualHeight="("..tostring(display.actualContentHeight)..")",array2json="allFunsRedRorms.getJson",json2array="allFunsRedRorms.getNil",
-		positionCameraX="(0)",positionCameraY="(0)",
 	}
 	local imagesObject = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
 	tableAnswers.countImages = #imagesObject
@@ -97,7 +94,7 @@ local function isCorrectFormulas()
 		elseif (typeFormulaI=="text") then
 			myCode = myCode.." '"..formulas[i][2]:gsub("'","\\'"):gsub(( isWin and "\r\n" or "\n"),"\\n").."' "
 		elseif (tableAnswers[formulas[i][2]]==nil) then
-			myCode = myCode..0
+			myCode = myCode.."(0)"
 		else
 			myCode = myCode.." "..tableAnswers[formulas[i][2]].." "
 		end

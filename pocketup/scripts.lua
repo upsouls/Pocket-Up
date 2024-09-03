@@ -514,6 +514,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                             x=CENTER_X*1.1,
                                             y=rectButtonCancel.y,
                                             width=display.contentWidth/1.4,
+                                            fontSize=fontSize1,
                                         })
                                         textCheckboxGlobal.anchorY=0
                                         miniGroupBottom:insert(textCheckboxGlobal)
@@ -528,6 +529,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                             x=CENTER_X*1.1,
                                             y = textCheckboxGlobal.y+textCheckboxGlobal.height,
                                             width=display.contentWidth/1.4,
+                                            fontSize=fontSize1,
                                         })
                                         textCheckboxLocal.anchorY=0
                                         miniGroupBottom:insert(textCheckboxLocal)
@@ -536,7 +538,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                         checkboxLocal.x, checkboxLocal.y = CENTER_X-display.contentWidth/2.75, textCheckboxLocal.y+textCheckboxLocal.height/2
                                         miniGroupBottom:insert(checkboxLocal)
 
-                                        rectButtonCancel.y = rectButtonCancel.y+checkboxLocal.height+checkboxGlobal.height+rectButtonCancel.height*2
+                                        rectButtonCancel.y = textCheckboxLocal.y+textCheckboxLocal.height+display.contentWidth/10
                                         textButtonCancel.y = rectButtonCancel.y+rectButtonCancel.height/2
                                         rectButtonOk.y = rectButtonCancel.y
                                         textButtonOk.y = textButtonCancel.y
@@ -832,7 +834,7 @@ local timerMoveBlock = nil
 local yNewMoveSlot = nil
 local isTouchBlock = false
 touchBlock = function(event)
-    if ((event.phase~="began" or not isMoveBlock) and isBackScene=="back") and (event.phase~="moved" or (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
+    if ((event.phase~="began" or not isMoveBlock) and isBackScene=="back") and (event.phase~="moved" or (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) or event.phase=="ended" then
         if (event.phase=="began") then
             yNewMoveSlot = event.y
             isTouchBlock = true
@@ -977,10 +979,10 @@ end
 display.getCurrentStage():setFocus(event.target, event.id)
 elseif (event.phase=="moved") then
 
-    if (event.target.isFocus == false) then
-        event.target.isFocus = nil
+    --if (event.target.isFocus == false) then
+    --    event.target.isFocus = nil
         display.getCurrentStage():setFocus(event.target, event.id)
-    end
+    --end
 
 
     if (isTimerMoveBlock) then
@@ -2913,12 +2915,9 @@ local function touchCirclePlay(event)
                     }
                     objectPlay = nil
                 end
-                scene_run_game(function()
-                    display.setDefault("background", 4/255, 34/255, 44/255)
-                    SCENES[SCENE][2].alpha = 1
-                    SCENES[SCENE][1].alpha = 1
-                    isBackScene = "back"
-                end)
+                display.remove(SCENES[SCENE][2])
+                display.remove(SCENES[SCENE[1]])
+                scene_run_game('scripts', {headerBar, pathObject, infoSceneObjects})
             end
         end
     end
