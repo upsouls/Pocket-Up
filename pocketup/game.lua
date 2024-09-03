@@ -221,6 +221,7 @@ function scene_run_game(shsc)
             if (#obj_images>0) then
                 lua = lua.."\n\nlocal object_"..obj_id.." = display.newImage('"..obj_path.."/image_"..obj_images[1][2]..".png', system.DocumentsDirectory)"
                 lua = lua.."\nobject_"..obj_id..".image_path = '"..obj_path.."/image_"..obj_images[1][2]..".png'"
+                lua = lua.."\nobject_"..obj_id..".timers = {}"
             else
                 lua = lua.."\n\nlocal object_"..obj_id.." = display.newImage('images/notVisible.png')"
             end
@@ -342,7 +343,7 @@ else
         timer.new('..time..'*1000, function()\
         Timers[name] = nil\
         end)\
-        Timers[name] = timer.new('..time..'*1000, function()\n'
+        Timers[name] = timer.new('..time..'*1000, function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
         elseif wait_type == 'repeat' then
     lua = lua ..
     'local name = \'Timer'..index..'\'\
@@ -353,7 +354,7 @@ else
     pcall(function()timer.resume(_repeat)end)\
     end)\
     Timers[name] = timer.new('..
-    time..'*1000, function()\n'
+    time..'*1000, function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
     wait_type = 'wait'
     end
     local numbers = wait_table['block:'..index] or 1
@@ -435,7 +436,7 @@ else
     timer.new(('..time..'*1000)*'..rep..', function()\
     Timers[name] = nil\
     end)\
-    Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\n'
+    Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
         elseif nameBlock == 'endTimer' then
                     if wait_table['block:'..index] then
                 for i = 1, wait_table['block:'..index], 1 do
@@ -511,7 +512,7 @@ else
             local rep = make_all_formulas(infoBlock[2][1], object)
             lua = lua .. 'local _repeat\n'
             add_pcall()
-            lua = lua..'_repeat = timer.GameNew(0,'..rep..', function()\n'
+            lua = lua..'_repeat = timer.GameNew(0,'..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend\n'
         elseif nameBlock == 'endRepeat' then
                     if wait_table['block:'..index] then
                 for i = 1, wait_table['block:'..index], 1 do
@@ -552,7 +553,7 @@ else
             wait_type = 'repeat'
             
             add_pcall()
-            lua = lua..'_repeat = timer.new(0, function()\n'
+            lua = lua..'_repeat = timer.new(0, function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend\n'
         elseif nameBlock == 'endCycleForever' then
             if wait_table['block:'..index] then
                 for i = 1, wait_table['block:'..index], 1 do
@@ -566,7 +567,7 @@ else
             local condition = make_all_formulas(infoBlock[2][1], object)
             lua = lua .. 'local _repeat\n'
             add_pcall()
-            lua = lua..'local repeatIsTrue\n_repeat = repeatIsTrue\nrepeatIsTrue = timer.GameNew(0,0, function()\nif not ('..condition..') then\ntimer.cancel(repeatIsTrue)\nreturn true\nend'
+            lua = lua..'local repeatIsTrue\n_repeat = repeatIsTrue\nrepeatIsTrue = timer.GameNew(0,0, function()\nif not ('..condition..') then\ntimer.cancel(repeatIsTrue)\nreturn true\n\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend\nend'
         elseif nameBlock == 'setImageToId' and #images>0 then
             local image = make_all_formulas(infoBlock[2][1], object)
             add_pcall()
@@ -602,7 +603,7 @@ else
             end_pcall()
         elseif nameBlock == 'deleteClone' then
             add_pcall()
-            lua = lua.."if (target) then\ntable.remove(target.parent_obj.clones, target.idClone)\nfor i=1, #target.parent_obj.clones do\ntarget.parent_obj.clones[i].idClone = i\nend\ndisplay.remove(target)\n\nend"
+            lua = lua.."if (target) then\ntable.remove(target.parent_obj.clones, target.idClone)\nfor i=1, #target.parent_obj.clones do\ntarget.parent_obj.clones[i].idClone = i\nend\ndisplay.remove(target)\n\nend\n"
             end_pcall()
         elseif (nameBlock == 'broadcastFunction' and infoBlock[2][1][2]~=nil) then
             add_pcall()
@@ -1080,8 +1081,8 @@ else
         elseif nameBlock == 'waitIfTrue' then
             local arg1 = make_all_formulas(infoBlock[2][1], object)
             add_pcall()
-            lua = lua..'local waitIfTrue\nwaitIfTrue = timer.GameNew(0, 0, function()\n'
-            lua = lua..'if '..arg1..' then\ntimer.cancel(waitIfTrue)\nend\nif not '..arg1..' then return true end'
+            lua = lua..'local _repeat\n_repeat = timer.GameNew(0, 0, function()\n'
+            lua = lua..'if '..arg1..' then\ntimer.cancel(_repeat)\nend\nif not '..arg1..' then return true end\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend'
         elseif nameBlock == 'endWait' then
             if wait_table['block:'..index] then
                 for i = 1, wait_table['block:'..index], 1 do
