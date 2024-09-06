@@ -80,14 +80,14 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                         if (idParameter=="cell") then
                             objectsParameter[3].yScale = 1
                             scene_formula_editor(objectsParameter, event.target.block.id, event.target.idParameter,blocks)
-                        elseif (idParameter=="variables" or idParameter=="arrays" or idParameter=="function" or idParameter=="objects" or idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds" or idParameter=="scenes" or idParameter=="scripts" or idParameter == "goTo" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL") then
+                        elseif (idParameter=="variables" or idParameter=="arrays" or idParameter=="function" or idParameter=="objects" or idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds" or idParameter=="scenes" or idParameter=="scripts" or idParameter == "goTo" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL" or idParameter=="inputType") then
 
                             local tableAnswers = {}
                         -- {вызуальный ответ, {тип функции, значение}}
                         local functionOnComplete = nil
                         -- в функции вызывается таблица {тип функции, значение}
 
-                        if (idParameter=="scripts" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL") then
+                        if (idParameter=="scripts" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL" or idParameter=="inputType") then
                             local allAnswers = {
                                 scripts = {{words[114], {"scripts","thisScript"}},{words[115], {"scripts","allScripts"}},{words[116], {"scripts","otherScripts"}}},
                                 typeRotate = {{words[134],{"typeRotate","true"}},{words[135],{"typeRotate","false"}}},
@@ -97,6 +97,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                 isDeleteFile={{words[222],{"isDeleteFile", "save"}},{words[223],{"isDeleteFile","delete"}}},
                                 typeBody={{words[393],{"typeBody","dynamic"}}, {words[394],{"typeBody","static"}}, {words[395],{"typeBody","noPhysic"}}},
                                 GL={{"GL_ONE",{"GL","GL_ONE"}},{"GL_ZERO",{"GL","GL_DST_COLOR"}},{"GL_ONE_MINUS_DST_COLOR",{"GL","GL_ONE_MINUS_DST_COLOR"}},{"GL_SRC_ALPHA",{"GL","GL_SRC_ALPHA"}},{"GL_ONE_MINUS_SRC_ALPHA",{"GL","GL_ONE_MINUS_SRC_ALPHA"}},{"GL_DST_ALPHA",{"GL","GL_DST_ALPHA"}},{"GL_ONE_MINUS_DST_ALPHA",{"GL","GL_ONE_MINUS_DST_ALPHA"}},{"GL_SRC_ALPHA_SATURATE",{"GL","GL_SRC_ALPHA_SATURATE"}},{"GL_SRC_COLOR",{"GL","SRC_COLOR"}},{"GL_ONE_MINUS_SRC_COLOR",{"GL","GL_ONE_MINUS_SRC_COLOR"}}},
+                                inputType={{words[498], {"inputType", "default"}}, {words[499], {"inputType", "number"}}, {words[500], {"inputType", "decimal"}}, {words[501], {"inputType", "phone"}}, {words[502], "url"}, {words[503], {"inputType", "email"}}, {words[504], {"inputType", "no-emoji"}}},
                             }
                             tableAnswers = allAnswers[idParameter]
                             functionOnComplete = function (answer)

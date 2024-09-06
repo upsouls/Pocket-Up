@@ -71,7 +71,7 @@ require("pocketup.settings")
 
 -- модули, отвечающие за создание конкретных элементов интерфейса
 local listFiles = {
-    "paletteAndHex","createTopBar",
+    "createTopBar","paletteAndHex",
     "createTextField","createBannerQuestion",
     "loadFormulas","createBlock",
 }
@@ -91,6 +91,13 @@ for i=1, #listFiles do
 end
 
 
+-- блоки и формулы покет апа и запуск игр
+listFiles = {
+    "blocks.structuresBlocks","formulas.allFormulas","game"
+}
+for i=1, #listFiles do
+    require("pocketup.gameAndBlocks."..listFiles[i])
+end
 
 -- интерфейс покет апа
 listFiles = {
@@ -100,14 +107,4 @@ listFiles = {
 }
 for i=1, #listFiles do
     require("pocketup.ui."..listFiles[i])
-end
-
-
-
--- блоки и формулы покет апа и запуск игр
-listFiles = {
-    "blocks.structuresBlocks","formulas.allFormulas","game"
-}
-for i=1, #listFiles do
-    require("pocketup.gameAndBlocks."..listFiles[i])
 end

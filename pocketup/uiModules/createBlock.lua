@@ -89,7 +89,7 @@ function createBlock(block)
 				button.block = group
 				button.typeParameter = "cell"
 				xF = button.x+button.width+display.contentWidth/30
-			elseif (formula[1]=="function" or formula[1]=="objects" or formula[1]=="backgrounds" or formula[1]=="variables" or formula[1]=="arrays" or formula[1]=="scenes" or formula[1]=="scripts" or formula[1]=="goTo" or formula[1]=="typeRotate" or formula[1]=="sounds" or formula[1]=="images" or formula[1]=="effectParticle" or formula[1]=="onOrOff" or formula[1]=="alignText" or formula[1]=="isDeleteFile" or formula[1]=="typeBody" or formula[1]=="GL") then
+			elseif (formula[1]=="function" or formula[1]=="objects" or formula[1]=="backgrounds" or formula[1]=="variables" or formula[1]=="arrays" or formula[1]=="scenes" or formula[1]=="scripts" or formula[1]=="goTo" or formula[1]=="typeRotate" or formula[1]=="sounds" or formula[1]=="images" or formula[1]=="effectParticle" or formula[1]=="onOrOff" or formula[1]=="alignText" or formula[1]=="isDeleteFile" or formula[1]=="typeBody" or formula[1]=="GL" or formula[1]=="inputType") then
 				yF = yF-display.contentWidth/40
 				local button = display.newImage("images/notVisible.png")
 				button.x, button.y, button.width, button.height = -display.screenOriginX+display.contentWidth/25, yF, display.contentWidth/2.625*2, display.contentWidth/15
@@ -233,6 +233,17 @@ function createBlock(block)
 					nameFunction = typesParticles[formula[2][2]]
 				elseif (formula[1]=="GL") then
 					nameFunction = formula[2][2]
+				elseif (formula[1]=="inputType") then
+					local types = {
+						["default"] = words[498],
+						["number"] = words[499],
+						["decimal"] = words[500],
+						["phone"] = words[501],
+						["url"] = words[502],
+						["email"] = words[503],
+						["no-emoji"] = words[504],
+					}
+					nameFunction = types[formula[2][2]]
 				end
 
 				local header = display.newText(nameFunction, button.x-button.width/2, yF, nil, fontSize1)

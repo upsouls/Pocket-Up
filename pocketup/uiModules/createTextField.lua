@@ -10,6 +10,14 @@ funEditingEnd - функция, вызывающаяся когда пользо
 
 
 cerberus.newInputLine = function (header, placeholder, isCorrectValue, value, funEditingEnd)
+
+local CENTER_X = CENTER_X
+local CENTER_Y = CENTER_Y
+if (SCENE=="game") then
+    CENTER_X = 0
+    CENTER_Y = 0
+end
+
 if (isCorrectValue==nil) then
     isCorrectValue = function()
         return("")
@@ -61,7 +69,7 @@ local textPlaceholder = display.newText({
     fontSize=fontSize2,
 })
 miniGroupTop:insert(textPlaceholder)
-local input = native.newTextBox(CENTER_X, textPlaceholder.y+textPlaceholder.height, textHeader.width, textHeader.width/10)
+local input = native.newTextBox(-display.contentWidth, textPlaceholder.y+textPlaceholder.height, textHeader.width, textHeader.width/10)
 input.isEditable = true
 input.hasBackground = false
 if isSim or isWin then
@@ -72,6 +80,8 @@ else
 end
 input.anchorY=0
 miniGroupTop:insert(input)
+input.x = CENTER_X
+
 
 input.text = value
 native.setKeyboardFocus(input)
