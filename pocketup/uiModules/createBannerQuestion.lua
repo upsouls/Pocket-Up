@@ -15,9 +15,9 @@ cerberus.newBannerQuestion = function(header, funEditingEnd, no, yes)
 
 	local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight)
 	backgroundBlackAlpha:setFillColor(0,0,0,0.6)
-	SCENES[SCENE][#SCENES[SCENE]]:insert(backgroundBlackAlpha)
+	SCENES[SCENE][(SCENE=="scripts" and 1 or #SCENES[SCENE])]:insert(backgroundBlackAlpha)
 	local group = display.newGroup()
-	SCENES[SCENE][#SCENES[SCENE]]:insert(group)
+	SCENES[SCENE][(SCENE=="scripts" and 1 or #SCENES[SCENE])]:insert(group)
 	local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.16, 0, roundedRect)
 	rect.anchorY=0,
 	rect:setFillColor(66/255, 66/255, 66/255)
@@ -93,7 +93,6 @@ cerberus.newBannerQuestion = function(header, funEditingEnd, no, yes)
 	touchNoTouch = function(event)
 		return(true)
 	end
-	backgroundBlackAlpha: addEventListener("touch",touchNoTouch)
+	backgroundBlackAlpha:addEventListener("touch",touchNoTouch)
 	rect:addEventListener("touch",touchNoTouch)
-
 end

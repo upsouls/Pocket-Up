@@ -3,6 +3,12 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
+			{"setQuareHitbox"},
+			{"setQuareWHHitbox", {{{"number", 100}}, {{"number", 200}}}},
+			{"setCircleHitbox", {{{"number", 200}}}},
+			{"setShapeHitbox", { {"shapeHitbox", "[-50, -100, -100, 100, 150, 125, 100, -100]"} }},
+
+
 			{"ask",{{{"text",words[161]}}, {localityVariable, nameVariable}, {"function",nameFunction} }},
 			{"createTextField", { {{"text", words[493]}}, {"onOrOff","on"}, {{"number",300}}, {{"number", 100}}, {localityVariable, nameVariable} }},
 			{"removeCameraTextField", {{{"text", words[493]}}}},

@@ -66,12 +66,12 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                     local block = event.target.block
                     local objectsParameter = block.cells[event.target.idParameter]
                     if (event.phase=="began") then
-                        if (objectsParameter[1]=="cell") then
+                        if (objectsParameter[1]=="cell" or objectsParameter[1]=="shapeHitbox") then
                             objectsParameter[3].yScale = 2
                         end
                         display.getCurrentStage():setFocus(event.target, event.id)
                     elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
-                        if (objectsParameter[1]=="cell") then
+                        if (objectsParameter[1]=="cell" or objectsParameter[1]=="shapeHitbox") then
                             objectsParameter[3].yScale = 1
                         end
                         scrollProjects:takeFocus(event)
@@ -83,75 +83,221 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                         elseif (idParameter=="variables" or idParameter=="arrays" or idParameter=="function" or idParameter=="objects" or idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds" or idParameter=="scenes" or idParameter=="scripts" or idParameter == "goTo" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL" or idParameter=="inputType") then
 
                             local tableAnswers = {}
-                        -- {вызуальный ответ, {тип функции, значение}}
-                        local functionOnComplete = nil
-                        -- в функции вызывается таблица {тип функции, значение}
+                            -- {вызуальный ответ, {тип функции, значение}}
+                            local functionOnComplete = nil
+                            -- в функции вызывается таблица {тип функции, значение}
 
-                        if (idParameter=="scripts" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL" or idParameter=="inputType") then
-                            local allAnswers = {
-                                scripts = {{words[114], {"scripts","thisScript"}},{words[115], {"scripts","allScripts"}},{words[116], {"scripts","otherScripts"}}},
-                                typeRotate = {{words[134],{"typeRotate","true"}},{words[135],{"typeRotate","false"}}},
-                                effectParticle = {{words[178],{"effectParticle","in"}},{words[179],{"effectParticle","out"}}},
-                                onOrOff = {{words[183],{"onOrOff","on"}},{words[184],{"onOrOff","off"}}},
-                                alignText = {{words[210], {"alignText","center"}},{words[211], {"alignText","left"}},{words[212], {"alignText","right"}}},
-                                isDeleteFile={{words[222],{"isDeleteFile", "save"}},{words[223],{"isDeleteFile","delete"}}},
-                                typeBody={{words[393],{"typeBody","dynamic"}}, {words[394],{"typeBody","static"}}, {words[395],{"typeBody","noPhysic"}}},
-                                GL={{"GL_ONE",{"GL","GL_ONE"}},{"GL_ZERO",{"GL","GL_DST_COLOR"}},{"GL_ONE_MINUS_DST_COLOR",{"GL","GL_ONE_MINUS_DST_COLOR"}},{"GL_SRC_ALPHA",{"GL","GL_SRC_ALPHA"}},{"GL_ONE_MINUS_SRC_ALPHA",{"GL","GL_ONE_MINUS_SRC_ALPHA"}},{"GL_DST_ALPHA",{"GL","GL_DST_ALPHA"}},{"GL_ONE_MINUS_DST_ALPHA",{"GL","GL_ONE_MINUS_DST_ALPHA"}},{"GL_SRC_ALPHA_SATURATE",{"GL","GL_SRC_ALPHA_SATURATE"}},{"GL_SRC_COLOR",{"GL","SRC_COLOR"}},{"GL_ONE_MINUS_SRC_COLOR",{"GL","GL_ONE_MINUS_SRC_COLOR"}}},
-                                inputType={{words[498], {"inputType", "default"}}, {words[499], {"inputType", "number"}}, {words[500], {"inputType", "decimal"}}, {words[501], {"inputType", "phone"}}, {words[502], "url"}, {words[503], {"inputType", "email"}}, {words[504], {"inputType", "no-emoji"}}},
-                            }
-                            tableAnswers = allAnswers[idParameter]
-                            functionOnComplete = function (answer)
-                                for i=1, #tableAnswers do
-                                    if (tableAnswers[i][2][2]==answer[2]) then
-                                        objectsParameter[3].text = tableAnswers[i][1]
-                                        break
+                            if (idParameter=="scripts" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL" or idParameter=="inputType") then
+                                local allAnswers = {
+                                    scripts = {{words[114], {"scripts","thisScript"}},{words[115], {"scripts","allScripts"}},{words[116], {"scripts","otherScripts"}}},
+                                    typeRotate = {{words[134],{"typeRotate","true"}},{words[135],{"typeRotate","false"}}},
+                                    effectParticle = {{words[178],{"effectParticle","in"}},{words[179],{"effectParticle","out"}}},
+                                    onOrOff = {{words[183],{"onOrOff","on"}},{words[184],{"onOrOff","off"}}},
+                                    alignText = {{words[210], {"alignText","center"}},{words[211], {"alignText","left"}},{words[212], {"alignText","right"}}},
+                                    isDeleteFile={{words[222],{"isDeleteFile", "save"}},{words[223],{"isDeleteFile","delete"}}},
+                                    typeBody={{words[393],{"typeBody","dynamic"}}, {words[394],{"typeBody","static"}}, {words[395],{"typeBody","noPhysic"}}},
+                                    GL={{"GL_ONE",{"GL","GL_ONE"}},{"GL_ZERO",{"GL","GL_DST_COLOR"}},{"GL_ONE_MINUS_DST_COLOR",{"GL","GL_ONE_MINUS_DST_COLOR"}},{"GL_SRC_ALPHA",{"GL","GL_SRC_ALPHA"}},{"GL_ONE_MINUS_SRC_ALPHA",{"GL","GL_ONE_MINUS_SRC_ALPHA"}},{"GL_DST_ALPHA",{"GL","GL_DST_ALPHA"}},{"GL_ONE_MINUS_DST_ALPHA",{"GL","GL_ONE_MINUS_DST_ALPHA"}},{"GL_SRC_ALPHA_SATURATE",{"GL","GL_SRC_ALPHA_SATURATE"}},{"GL_SRC_COLOR",{"GL","SRC_COLOR"}},{"GL_ONE_MINUS_SRC_COLOR",{"GL","GL_ONE_MINUS_SRC_COLOR"}}},
+                                    inputType={{words[498], {"inputType", "default"}}, {words[499], {"inputType", "number"}}, {words[500], {"inputType", "decimal"}}, {words[501], {"inputType", "phone"}}, {words[502], "url"}, {words[503], {"inputType", "email"}}, {words[504], {"inputType", "no-emoji"}}},
+                                }
+                                tableAnswers = allAnswers[idParameter]
+                                functionOnComplete = function (answer)
+                                    for i=1, #tableAnswers do
+                                        if (tableAnswers[i][2][2]==answer[2]) then
+                                            objectsParameter[3].text = tableAnswers[i][1]
+                                            break
+                                        end
+                                    end
+                                    blocks[block.id][2][event.target.idParameter] = answer
+                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                end
+                            elseif (idParameter == "goTo") then
+                                tableAnswers[1] = {words[123], {"goTo", "touch"}}
+                                tableAnswers[2] = {words[124], {"goTo", "random"}}
+                                local arrayObjects = json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))
+                                for i=2, #arrayObjects do
+                                    if (IDSCENE.."/object_"..arrayObjects[i][2]~=IDOBJECT) then
+                                        tableAnswers[#tableAnswers+1] = {arrayObjects[i][1], {"goTo", arrayObjects[i][2]}}
                                     end
                                 end
-                                blocks[block.id][2][event.target.idParameter] = answer
-                                funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-                            end
-                        elseif (idParameter == "goTo") then
-                            tableAnswers[1] = {words[123], {"goTo", "touch"}}
-                            tableAnswers[2] = {words[124], {"goTo", "random"}}
-                            local arrayObjects = json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))
-                            for i=2, #arrayObjects do
-                                if (IDSCENE.."/object_"..arrayObjects[i][2]~=IDOBJECT) then
-                                    tableAnswers[#tableAnswers+1] = {arrayObjects[i][1], {"goTo", arrayObjects[i][2]}}
+                                functionOnComplete = function (answer)
+                                    for i=1, #tableAnswers do
+                                        if (tableAnswers[i][2][2]==answer[2]) then
+                                            objectsParameter[3].text = tableAnswers[i][1]
+                                            break
+                                        end
+                                    end
+                                    blocks[block.id][2][event.target.idParameter] = answer
+                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
                                 end
-                            end
-                            functionOnComplete = function (answer)
-                                for i=1, #tableAnswers do
-                                    if (tableAnswers[i][2][2]==answer[2]) then
-                                        objectsParameter[3].text = tableAnswers[i][1]
-                                        break
+                            elseif (idParameter=="scenes") then
+                                tableAnswers[1] = {words[87], {"scenes", nil}}
+                                local arrayScenes = json.decode(funsP["получить сохранение"](IDPROJECT.."/scenes"))
+                                for i=1, #arrayScenes do
+                                    if (IDSCENE~=IDPROJECT.."/scene_"..arrayScenes[i][2]) then
+                                        tableAnswers[#tableAnswers+1] = {arrayScenes[i][1], {"scenes",arrayScenes[i][2]}}
                                     end
                                 end
-                                blocks[block.id][2][event.target.idParameter] = answer
-                                funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-                            end
-                        elseif (idParameter=="scenes") then
-                            tableAnswers[1] = {words[87], {"scenes", nil}}
-                            local arrayScenes = json.decode(funsP["получить сохранение"](IDPROJECT.."/scenes"))
-                            for i=1, #arrayScenes do
-                                if (IDSCENE~=IDPROJECT.."/scene_"..arrayScenes[i][2]) then
-                                    tableAnswers[#tableAnswers+1] = {arrayScenes[i][1], {"scenes",arrayScenes[i][2]}}
-                                end
-                            end
 
-                            functionOnComplete = function (answer)
-                                if (answer[2]==nil) then
+                                functionOnComplete = function (answer)
+                                    if (answer[2]==nil) then
+                                        local function isCorrectValue(value)
+                                            if (string.len(value)==0) then
+                                                return(words[18])
+                                            else
+                                                local isCorrect = true
+                                                for i=1, #arrayScenes do
+                                                    if (arrayScenes[i][1]==value) then 
+                                                        isCorrect = false
+                                                        break
+                                                    end
+                                                end
+                                                return(isCorrect and "" or words[15])
+                                            end
+                                        end
+                                        local function correctValue(value)
+                                            if (isCorrectValue(value)=="") then
+                                                return(value)
+                                            else
+                                                local i=1
+                                                while (isCorrectValue(value.." ("..i..")")~="") do
+                                                    i = i+1
+                                                end
+                                                return(value.." ("..i..")")
+                                            end
+                                        end
+                                        cerberus.newInputLine(words[26], words[27], isCorrectValue, correctValue(words[28]), function (answer)
+                                            if (answer.isOk) then
+                                                answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
+                                                local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
+                                                counter[1] = counter[1]+1
+                                                funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
+
+                                                funsP["создать сцену"](IDPROJECT, IDPROJECT.."/scene_"..counter[1])
+                                                table.insert(arrayScenes, #arrayScenes+1, {answer.value, counter[1]})
+                                                funsP["записать сохранение"](IDPROJECT.."/scenes", json.encode(arrayScenes))
+
+                                                blocks[block.id][2][event.target.idParameter][2] = counter[1]
+                                                funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                                objectsParameter[3].text = answer.value
+
+                                            end
+                                        end)
+                                    else
+                                        blocks[block.id][2][event.target.idParameter] = answer
+                                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                        for i=1, #arrayScenes do
+                                            if (arrayScenes[i][2]==answer[2]) then
+                                                objectsParameter[3].text = arrayScenes[i][1]
+                                                break
+                                            end
+                                        end
+                                    end
+                                end
+
+                            elseif (idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds") then
+                                tableAnswers[1] = {words[87], {idParameter, nil}}
+                                local idBackground = idParameter=="backgrounds" and (IDSCENE.."/object_"..json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))[1][2]) or IDOBJECT
+                                local arrayBackgrounds = json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
+                                for i=1, #arrayBackgrounds do
+                                    tableAnswers[#tableAnswers+1] = {arrayBackgrounds[i][1], {idParameter, arrayBackgrounds[i][2]}}
+                                end
+                                functionOnComplete = function(answer)
+                                    if (answer[2]==nil) then
+                                        funsP[(idParameter=="sounds" and "импортировать звук" or "импортировать изображение")](function (answer)
+                                            if (answer.done=="ok") then
+                                                local fileName = answer.origFileName:match("(.+)%.") or answer.origFileName
+                                                local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
+                                                local idCounter = idParameter=="sounds" and 4 or 3
+                                                counter[idCounter] = counter[idCounter]+1
+                                                funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
+                                                funsP[(idParameter=="sounds" and "добавить звук в объект" or "добавить изображение в объект")](idBackground.."/image_"..counter[idCounter].."."..(idParameter=="sounds" and "mp3" or "png") )
+                                                local arrayImages = json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
+                                                local function correctValue(value)
+                                                    local function isCorrect(value)
+                                                        local isCorrect = true
+                                                        for i=1, #arrayImages do
+                                                            if (arrayImages[i][1]==value) then
+                                                                isCorrect = false
+                                                                break
+                                                            end
+                                                        end
+                                                        return(isCorrect)
+                                                    end
+
+                                                    if (isCorrect(value)) then
+                                                        return(value)
+                                                    else
+                                                        local i = 1
+                                                        while (not isCorrect(value.." ("..i..")")) do
+                                                            i = i+1
+                                                        end
+                                                        return(value.." ("..i..")")
+                                                    end
+                                                end
+                                                objectsParameter[3].text = correctValue(fileName)
+                                                arrayImages[#arrayImages+1] = {correctValue(fileName), counter[idCounter]}
+                                                funsP["записать сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images"), json.encode(arrayImages))
+
+                                                blocks[block.id][2][event.target.idParameter][2] = counter[idCounter]
+                                                funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+
+                                            end
+                                        end)
+                                    else
+                                        blocks[block.id][2][event.target.idParameter] = answer
+                                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                        for i=1, #tableAnswers do
+                                            if (tableAnswers[i][2] == answer) then
+                                                objectsParameter[3].text = tableAnswers[i][1]
+                                                break
+                                            end
+                                        end
+                                    end
+                                end
+
+                            elseif (idParameter=="objects") then
+                                local collOrClone = blocks[block.id][1] == "collision"
+                                tableAnswers[1] = {words[collOrClone and 85 or 90], {"objects", nil}}
+                                local arrayObjects = json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))
+                                for i=(collOrClone and 1 or 2), #arrayObjects do
+                                    if (collOrClone or IDSCENE.."/object_"..arrayObjects[i][2]~=IDOBJECT) then
+                                        tableAnswers[#tableAnswers+1] = {arrayObjects[i][1],{"objects", arrayObjects[i][2]}}
+                                    end
+                                end
+                                functionOnComplete = function (answer)
+                                    blocks[block.id][2][event.target.idParameter] = answer
+                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+
+                                    for i=1, #tableAnswers do
+                                        if (tableAnswers[i][2] == answer) then
+                                            objectsParameter[3].text = tableAnswers[i][1]
+                                            break
+                                        end
+                                    end
+
+                                end
+
+                            elseif (idParameter=="function") then
+                                tableAnswers[1] = {words[87],{"functions","new"}}
+                                tableAnswers[2] = {words[256],{"functions","edit"}}
+                                local arrayFunctions = json.decode(funsP["получить сохранение"](IDSCENE.."/functions"))
+                                for i=1, #arrayFunctions do
+                                    tableAnswers[#tableAnswers+1] = {arrayFunctions[i][2], {"function",arrayFunctions[i][1]}}
+                                end
+
+                                functionOnComplete = function(answer)
                                     local function isCorrectValue(value)
                                         if (string.len(value)==0) then
                                             return(words[18])
                                         else
-                                            local isCorrect = true
-                                            for i=1, #arrayScenes do
-                                                if (arrayScenes[i][1]==value) then 
-                                                    isCorrect = false
+                                            local isCorrectValue = true
+                                            for i=3, #tableAnswers do
+                                                if (tableAnswers[i][1]==value) then
+                                                    isCorrectValue = false
                                                     break
                                                 end
                                             end
-                                            return(isCorrect and "" or words[15])
+                                            return(isCorrectValue and "" or words[15])
                                         end
                                     end
                                     local function correctValue(value)
@@ -160,432 +306,311 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                         else
                                             local i=1
                                             while (isCorrectValue(value.." ("..i..")")~="") do
-                                                i = i+1
+                                                i=i+1
                                             end
                                             return(value.." ("..i..")")
                                         end
                                     end
-                                    cerberus.newInputLine(words[26], words[27], isCorrectValue, correctValue(words[28]), function (answer)
-                                        if (answer.isOk) then
-                                            answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
-                                            local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
-                                            counter[1] = counter[1]+1
-                                            funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
+                                    if (answer[2]=="new") then
+                                        cerberus.newInputLine(words[257], words[258], isCorrectValue, correctValue(words[259]), function(answer)
+                                            if (answer.isOk) then
+                                                answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
+                                                local oldIdFunction = blocks[block.id][2][event.target.idParameter][2]
+                                                local newIdFunction = arrayFunctions[1][1]+1
+                                                table.insert(arrayFunctions, 1, {newIdFunction, answer.value,1})
 
-                                            funsP["создать сцену"](IDPROJECT, IDPROJECT.."/scene_"..counter[1])
-                                            table.insert(arrayScenes, #arrayScenes+1, {answer.value, counter[1]})
-                                            funsP["записать сохранение"](IDPROJECT.."/scenes", json.encode(arrayScenes))
+                                                blocks[block.id][2][event.target.idParameter][2] = newIdFunction
+                                                
+                                                funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                                funsP["записать сохранение"](IDSCENE.."/functions", json.encode(arrayFunctions))
+                                                block.cells[1][3].text = answer.value
+                                            end
+                                        end)
+                                    elseif (answer[2]=="edit") then
+                                        cerberus.newInputLine(words[260], "", isCorrectValue, objectsParameter[3].text, function(answer)
+                                            if (answer.isOk) then
+                                                answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
+                                                local myIdFunction = blocks[block.id][2][event.target.idParameter][2]
+                                                for i=1, #arrayFunctions do
+                                                    if (arrayFunctions[i][1]==myIdFunction) then
 
-                                            blocks[block.id][2][event.target.idParameter][2] = counter[1]
-                                            funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-                                            objectsParameter[3].text = answer.value
-
-                                        end
-                                    end)
-                                else
-                                    blocks[block.id][2][event.target.idParameter] = answer
-                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-                                    for i=1, #arrayScenes do
-                                        if (arrayScenes[i][2]==answer[2]) then
-                                            objectsParameter[3].text = arrayScenes[i][1]
-                                            break
-                                        end
-                                    end
-                                end
-                            end
-
-                        elseif (idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds") then
-                            tableAnswers[1] = {words[87], {idParameter, nil}}
-                            local idBackground = idParameter=="backgrounds" and (IDSCENE.."/object_"..json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))[1][2]) or IDOBJECT
-                            local arrayBackgrounds = json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
-                            for i=1, #arrayBackgrounds do
-                                tableAnswers[#tableAnswers+1] = {arrayBackgrounds[i][1], {idParameter, arrayBackgrounds[i][2]}}
-                            end
-                            functionOnComplete = function(answer)
-                                if (answer[2]==nil) then
-                                    funsP[(idParameter=="sounds" and "импортировать звук" or "импортировать изображение")](function (answer)
-                                        if (answer.done=="ok") then
-                                            local fileName = answer.origFileName:match("(.+)%.") or answer.origFileName
-                                            local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
-                                            local idCounter = idParameter=="sounds" and 4 or 3
-                                            counter[idCounter] = counter[idCounter]+1
-                                            funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
-                                            funsP[(idParameter=="sounds" and "добавить звук в объект" or "добавить изображение в объект")](idBackground.."/image_"..counter[idCounter].."."..(idParameter=="sounds" and "mp3" or "png") )
-                                            local arrayImages = json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
-                                            local function correctValue(value)
-                                                local function isCorrect(value)
-                                                    local isCorrect = true
-                                                    for i=1, #arrayImages do
-                                                        if (arrayImages[i][1]==value) then
-                                                            isCorrect = false
-                                                            break
+                                                        arrayFunctions[i][2] = answer.value
+                                                        break
+                                                    end
+                                                end
+                                                for i=1, #blocks do
+                                                    local tableBlock = blocks[i][2]
+                                                    for i2=1, #tableBlock do
+                                                        if (tableBlock[i2][2]==myIdFunction and tableBlock[i2][1]=="function") then
+                                                            blocksObjects[i].cells[i2][3].text = answer.value
                                                         end
-                                                    end
-                                                    return(isCorrect)
+                                                    end 
                                                 end
+                                                funsP["записать сохранение"](IDSCENE.."/functions", json.encode(arrayFunctions))
 
-                                                if (isCorrect(value)) then
-                                                    return(value)
-                                                else
-                                                    local i = 1
-                                                    while (not isCorrect(value.." ("..i..")")) do
-                                                        i = i+1
-                                                    end
-                                                    return(value.." ("..i..")")
-                                                end
                                             end
-                                            objectsParameter[3].text = correctValue(fileName)
-                                            arrayImages[#arrayImages+1] = {correctValue(fileName), counter[idCounter]}
-                                            funsP["записать сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images"), json.encode(arrayImages))
-
-                                            blocks[block.id][2][event.target.idParameter][2] = counter[idCounter]
-                                            funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-
-                                        end
-                                    end)
-                                else
-                                    blocks[block.id][2][event.target.idParameter] = answer
-                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-                                    for i=1, #tableAnswers do
-                                        if (tableAnswers[i][2] == answer) then
-                                            objectsParameter[3].text = tableAnswers[i][1]
-                                            break
-                                        end
-                                    end
-                                end
-                            end
-
-                        elseif (idParameter=="objects") then
-                            local collOrClone = blocks[block.id][1] == "collision"
-                            tableAnswers[1] = {words[collOrClone and 85 or 90], {"objects", nil}}
-                            local arrayObjects = json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))
-                            for i=(collOrClone and 1 or 2), #arrayObjects do
-                                if (collOrClone or IDSCENE.."/object_"..arrayObjects[i][2]~=IDOBJECT) then
-                                    tableAnswers[#tableAnswers+1] = {arrayObjects[i][1],{"objects", arrayObjects[i][2]}}
-                                end
-                            end
-                            functionOnComplete = function (answer)
-                                blocks[block.id][2][event.target.idParameter] = answer
-                                funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-
-                                for i=1, #tableAnswers do
-                                    if (tableAnswers[i][2] == answer) then
-                                        objectsParameter[3].text = tableAnswers[i][1]
-                                        break
-                                    end
-                                end
-
-                            end
-
-                        elseif (idParameter=="function") then
-                            tableAnswers[1] = {words[87],{"functions","new"}}
-                            tableAnswers[2] = {words[256],{"functions","edit"}}
-                            local arrayFunctions = json.decode(funsP["получить сохранение"](IDSCENE.."/functions"))
-                            for i=1, #arrayFunctions do
-                                tableAnswers[#tableAnswers+1] = {arrayFunctions[i][2], {"function",arrayFunctions[i][1]}}
-                            end
-
-                            functionOnComplete = function(answer)
-                                local function isCorrectValue(value)
-                                    if (string.len(value)==0) then
-                                        return(words[18])
+                                        end)
                                     else
-                                        local isCorrectValue = true
-                                        for i=3, #tableAnswers do
-                                            if (tableAnswers[i][1]==value) then
-                                                isCorrectValue = false
-                                                break
-                                            end
-                                        end
-                                        return(isCorrectValue and "" or words[15])
-                                    end
-                                end
-                                local function correctValue(value)
-                                    if (isCorrectValue(value)=="") then
-                                        return(value)
-                                    else
-                                        local i=1
-                                        while (isCorrectValue(value.." ("..i..")")~="") do
-                                            i=i+1
-                                        end
-                                        return(value.." ("..i..")")
-                                    end
-                                end
-                                if (answer[2]=="new") then
-                                    cerberus.newInputLine(words[257], words[258], isCorrectValue, correctValue(words[259]), function(answer)
-                                        if (answer.isOk) then
-                                            answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
-                                            local oldIdFunction = blocks[block.id][2][event.target.idParameter][2]
-                                            local newIdFunction = arrayFunctions[1][1]+1
-                                            table.insert(arrayFunctions, 1, {newIdFunction, answer.value,1})
+                                        local oldIdFunction = blocks[block.id][2][event.target.idParameter][2]
+                                        if (answer[2]~=oldIdFunction) then
+                                            blocks[block.id][2][event.target.idParameter] = answer
 
-                                            blocks[block.id][2][event.target.idParameter][2] = newIdFunction
-                    --[[for i=1, #arrayFunctions do
-                        if (arrayFunctions[i][1]==oldIdFunction) then
-                            arrayFunctions[i][3] = arrayFunctions[i][3]-1
-                            if (arrayFunctions[i][3]<1) then
-                                table.remove(arrayFunctions, i)
-                            end
-                            break
-                        end
-                    end]]
 
-                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-                    funsP["записать сохранение"](IDSCENE.."/functions", json.encode(arrayFunctions))
-                    block.cells[1][3].text = answer.value
-                end
-            end)
-                                elseif (answer[2]=="edit") then
-                                    cerberus.newInputLine(words[260], "", isCorrectValue, objectsParameter[3].text, function(answer)
-                                        if (answer.isOk) then
-                                            answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
-                                            local myIdFunction = blocks[block.id][2][event.target.idParameter][2]
                                             for i=1, #arrayFunctions do
-                                                if (arrayFunctions[i][1]==myIdFunction) then
-
-                                                    arrayFunctions[i][2] = answer.value
+                                                if (arrayFunctions[i][1]==answer[2]) then
+                                                    arrayFunctions[i][3] = arrayFunctions[i][3]+1
                                                     break
                                                 end
                                             end
-                                            for i=1, #blocks do
-                                                local tableBlock = blocks[i][2]
-                                                for i2=1, #tableBlock do
-                                                    if (tableBlock[i2][2]==myIdFunction and tableBlock[i2][1]=="function") then
-                                                        blocksObjects[i].cells[i2][3].text = answer.value
+
+                                            for i=1, #arrayFunctions do
+                                                if (arrayFunctions[i][1]==oldIdFunction) then
+                                                    arrayFunctions[i][3] = arrayFunctions[i][3]-1
+                                                    if (arrayFunctions[i][3]<1) then
+                                                        table.remove(arrayFunctions, i)
                                                     end
-                                                end 
+                                                    break
+                                                end
                                             end
+
+
+                                            funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
                                             funsP["записать сохранение"](IDSCENE.."/functions", json.encode(arrayFunctions))
 
-                                        end
-                                    end)
-                                else
-                                    local oldIdFunction = blocks[block.id][2][event.target.idParameter][2]
-                                    if (answer[2]~=oldIdFunction) then
-                                        blocks[block.id][2][event.target.idParameter] = answer
-
-
-                                        for i=1, #arrayFunctions do
-                                            if (arrayFunctions[i][1]==answer[2]) then
-                                                arrayFunctions[i][3] = arrayFunctions[i][3]+1
-                                                break
-                                            end
-                                        end
-
-                                        for i=1, #arrayFunctions do
-                                            if (arrayFunctions[i][1]==oldIdFunction) then
-                                                arrayFunctions[i][3] = arrayFunctions[i][3]-1
-                                                if (arrayFunctions[i][3]<1) then
-                                                    table.remove(arrayFunctions, i)
+                                            for i=3, #tableAnswers do
+                                                if (tableAnswers[i][2]==answer) then
+                                                    objectsParameter[3].text = tableAnswers[i][1]
+                                                    break
                                                 end
-                                                break
                                             end
-                                        end
 
-
-                                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-                                        funsP["записать сохранение"](IDSCENE.."/functions", json.encode(arrayFunctions))
-
-                                        for i=3, #tableAnswers do
-                                            if (tableAnswers[i][2]==answer) then
-                                                objectsParameter[3].text = tableAnswers[i][1]
-                                                break
-                                            end
                                         end
 
                                     end
-
                                 end
-                            end
 
-                        elseif (idParameter=="variables" or idParameter=="arrays") then
-                            local varOrArr = idParameter=="variables" and "Variable" or "Array"
-                            local localVariables = json.decode(funsP["получить сохранение"](IDOBJECT.."/"..idParameter))
-                            local globalVariables = json.decode(funsP["получить сохранение"](IDPROJECT.."/"..idParameter))
+                            elseif (idParameter=="variables" or idParameter=="arrays") then
+                                local varOrArr = idParameter=="variables" and "Variable" or "Array"
+                                local localVariables = json.decode(funsP["получить сохранение"](IDOBJECT.."/"..idParameter))
+                                local globalVariables = json.decode(funsP["получить сохранение"](IDPROJECT.."/"..idParameter))
 
-                            tableAnswers[1] = {words[87], "global"..varOrArr, nil}
-                            for i=1, #localVariables do
-                                tableAnswers[#tableAnswers+1] = {localVariables[i][2], {"local"..varOrArr, localVariables[i][1]}}
-                            end
-                            for i=1, #globalVariables do
-                                tableAnswers[#tableAnswers+1] = {globalVariables[i][2], {"global"..varOrArr, globalVariables[i][1]}}
-                            end
-                            functionOnComplete = function(answer)
-                                if (answer[2]==nil) then
+                                tableAnswers[1] = {words[87], "global"..varOrArr, nil}
+                                for i=1, #localVariables do
+                                    tableAnswers[#tableAnswers+1] = {localVariables[i][2], {"local"..varOrArr, localVariables[i][1]}}
+                                end
+                                for i=1, #globalVariables do
+                                    tableAnswers[#tableAnswers+1] = {globalVariables[i][2], {"global"..varOrArr, globalVariables[i][1]}}
+                                end
+                                functionOnComplete = function(answer)
+                                    if (answer[2]==nil) then
 
-                                    local function createVariableTextInput(header, placeholder, isCorrectValue, value, funEditingEnd)
-                                        if (isCorrectValue==nil) then
-                                            isCorrectValue = function()
-                                                return("")
+                                        local function createVariableTextInput(header, placeholder, isCorrectValue, value, funEditingEnd)
+                                            if (isCorrectValue==nil) then
+                                                isCorrectValue = function()
+                                                    return("")
+                                                end
                                             end
-                                        end
-                                        if (value==nil) then
-                                            value = ""
-                                        end
-                                        local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight)
-                                        backgroundBlackAlpha:setFillColor(0,0,0,0.6)
-                                        SCENES[SCENE][1]:insert(backgroundBlackAlpha)
-                                        local group = display.newGroup()
-                                        SCENES[SCENE][1]:insert(group)
-                                        local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, roundedRect)
-                                        rect.anchorY=0,
-                                        rect:setFillColor(66/255, 66/255, 66/255)
-                                        group:insert(rect)
-
-                                        backgroundBlackAlpha.alpha = 0
-                                        rect.alpha = 0
-                                        transition.to(backgroundBlackAlpha, {time=150, alpha=1})
-                                        transition.to(rect, {time=150, alpha=1})
-
-                                        local miniGroupTop = display.newGroup()
-                                        group:insert(miniGroupTop)
-                                        local miniGroupBottom = display.newGroup()
-                                        group:insert(miniGroupBottom)
-                                        local textHeader = display.newText({
-                                            text=header,
-                                            width=rect.width-display.contentWidth/17*2,
-                                            x=CENTER_X, 
-                                            y=CENTER_Y+display.contentWidth/17,
-                                            font=nil,
-                                            fontSize=fontSize0,
-                                        })
-                                        textHeader.anchorY=0
-                                        miniGroupTop:insert(textHeader)
-                                        local textPlaceholder = display.newText({
-                                            text=placeholder,
-                                            width=rect.width-display.contentWidth/17*2,
-                                            x=CENTER_X, 
-                                            y=textHeader.y+textHeader.height+display.contentWidth/17,
-                                            font=nil,
-                                            fontSize=fontSize2,
-                                        })
-                                        miniGroupTop:insert(textPlaceholder)
-                                        local input = native.newTextBox(CENTER_X, textPlaceholder.y+textPlaceholder.height, textHeader.width, textHeader.width/10)
-                                        input.isEditable = true
-                                        input.hasBackground = false
-                                        if isSim or isWin then
-                                            input:setTextColor(0,0,0)
-                                            input.size = 25
-                                        else
-                                            input:setTextColor(1,1,1)
-                                        end
-                                        input.anchorY=0
-                                        miniGroupTop:insert(input)
-
-                                        input.text = value
-                                        native.setKeyboardFocus(input)
-                                        if (value~="") then
-                                            input:setSelection(0, utf8.len(value))
-                                        end
-
-                                        local rectInput = display.newRect(CENTER_X, input.y+input.height, input.width, display.contentWidth/150)
-                                        rectInput.anchorY=0
-                                        miniGroupTop:insert(rectInput)
-
-                                        local textError = display.newText({
-                                            text="--",
-                                            width=rect.width-display.contentWidth/17*2,
-                                            x=CENTER_X, 
-                                            y=rectInput.y+rectInput.height+display.contentWidth/34,
-                                            font=nil,
-                                            fontSize=fontSize2,
-                                        })
-                                        textError.anchorY = 0
-                                        textError:setFillColor(1, 113/255, 67/255)
-                                        miniGroupTop:insert(textError)
-
-                                        local textButtonOk = display.newText(words[16], 0, 0, nil, fontSize1)
-                                        textButtonOk:setFillColor(171/255, 219/255, 241/255)
-                                        local rectButtonOk = display.newRoundedRect(CENTER_X+textHeader.width/2, CENTER_Y, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, roundedRect)
-                                        rectButtonOk.anchorX, rectButtonOk.anchorY = 1, 0
-                                        textButtonOk.x, textButtonOk.y = rectButtonOk.x-rectButtonOk.width/2, rectButtonOk.y+rectButtonOk.height/2
-                                        rectButtonOk:setFillColor(66/255,66/255, 66/255)
-                                        miniGroupBottom:insert(rectButtonOk)
-                                        miniGroupBottom:insert(textButtonOk)
-                                        local textButtonCancel = display.newText(words[17], 0, 0, nil, fontSize1)
-                                        textButtonCancel:setFillColor(171/255, 219/255, 241/255)
-                                        local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, roundedRect)
-                                        rectButtonCancel.anchorX, rectButtonCancel.anchorY = 1, 0
-                                        textButtonCancel.x, textButtonCancel.y = rectButtonCancel.x-rectButtonCancel.width/2, rectButtonCancel.y+rectButtonCancel.height/2
-                                        rectButtonCancel:setFillColor(66/255,66/255, 66/255)
-                                        miniGroupBottom:insert(rectButtonCancel)
-                                        miniGroupBottom:insert(textButtonCancel)
-
-
-                                        local textCheckboxGlobal = display.newText({
-                                            text=words[252],
-                                            x=CENTER_X*1.1,
-                                            y=rectButtonCancel.y,
-                                            width=display.contentWidth/1.4,
-                                            fontSize=fontSize1,
-                                        })
-                                        textCheckboxGlobal.anchorY=0
-                                        miniGroupBottom:insert(textCheckboxGlobal)
-                                        local checkboxGlobal = display.newImage("images/circle_checkbox_2.png")
-                                        checkboxGlobal:setFillColor(171/255, 219/255, 241/255)
-                                        checkboxGlobal.width, checkboxGlobal.height = textPlaceholder.width/12.5, textPlaceholder.width/12.5
-                                        checkboxGlobal.x, checkboxGlobal.y = CENTER_X-display.contentWidth/2.75, textCheckboxGlobal.y+textCheckboxGlobal.height/2
-                                        miniGroupBottom:insert(checkboxGlobal)
-
-                                        local textCheckboxLocal = display.newText({
-                                            text=words[253],
-                                            x=CENTER_X*1.1,
-                                            y = textCheckboxGlobal.y+textCheckboxGlobal.height,
-                                            width=display.contentWidth/1.4,
-                                            fontSize=fontSize1,
-                                        })
-                                        textCheckboxLocal.anchorY=0
-                                        miniGroupBottom:insert(textCheckboxLocal)
-                                        local checkboxLocal = display.newImage("images/circle_checkbox_1.png")
-                                        checkboxLocal.width, checkboxLocal.height = textPlaceholder.width/12.5, textPlaceholder.width/12.5
-                                        checkboxLocal.x, checkboxLocal.y = CENTER_X-display.contentWidth/2.75, textCheckboxLocal.y+textCheckboxLocal.height/2
-                                        miniGroupBottom:insert(checkboxLocal)
-
-                                        rectButtonCancel.y = textCheckboxLocal.y+textCheckboxLocal.height+display.contentWidth/10
-                                        textButtonCancel.y = rectButtonCancel.y+rectButtonCancel.height/2
-                                        rectButtonOk.y = rectButtonCancel.y
-                                        textButtonOk.y = textButtonCancel.y
-                                        checkboxLocal.locality = "local"
-                                        checkboxGlobal.locality = "global"
-                                        textCheckboxLocal.locality = "local"
-                                        textCheckboxGlobal.locality = "global"
-                                        checkboxLocal.otherObject = checkboxGlobal
-                                        checkboxGlobal.otherObject = checkboxLocal
-                                        textCheckboxLocal.otherObject = checkboxGlobal
-                                        textCheckboxGlobal.otherObject = checkboxLocal
-                                        checkboxLocal.targetObject = checkboxLocal
-                                        checkboxGlobal.targetObject = checkboxGlobal
-                                        textCheckboxLocal.targetObject = checkboxLocal
-                                        textCheckboxGlobal.targetObject = checkboxGlobal
-                                        local myLocality = "global"
-                                        local function touchTypeLocality(event)
-                                            if (event.phase == "ended" and myLocality ~= event.target.locality) then
-                                                myLocality = event.target.locality
-                                                event.target.targetObject.fill = {
-                                                    type="image",
-                                                    filename="images/circle_checkbox_2.png",
-                                                }
-                                                event.target.targetObject:setFillColor(171/255, 219/255, 241/255)
-                                                event.target.otherObject.fill = {
-                                                    type="image",
-                                                    filename="images/circle_checkbox_1.png",
-                                                }
+                                            if (value==nil) then
+                                                value = ""
                                             end
-                                            return(true)
-                                        end
-                                        checkboxLocal:addEventListener("touch", touchTypeLocality)
-                                        checkboxGlobal:addEventListener("touch", touchTypeLocality)
-                                        textCheckboxLocal:addEventListener("touch", touchTypeLocality)
-                                        textCheckboxGlobal:addEventListener("touch", touchTypeLocality)
-                                        local touchNoTouch = nil
-                                        local function touchEditingEnd(event)
-                                            if (event.target.textButton.alpha>0.9) then
-                                                if (event.phase=="began") then
-                                                    event.target:setFillColor(99/255, 99/255, 99/255)
-                                                elseif (event.phase=="moved") then
-                                                    event.target:setFillColor(66/255, 66/255, 66/255)
-                                                else
-                                                    event.target:setFillColor(66/255, 66/255, 66/255)
+                                            local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight)
+                                            backgroundBlackAlpha:setFillColor(0,0,0,0.6)
+                                            SCENES[SCENE][1]:insert(backgroundBlackAlpha)
+                                            local group = display.newGroup()
+                                            SCENES[SCENE][1]:insert(group)
+                                            local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, roundedRect)
+                                            rect.anchorY=0,
+                                            rect:setFillColor(66/255, 66/255, 66/255)
+                                            group:insert(rect)
+
+                                            backgroundBlackAlpha.alpha = 0
+                                            rect.alpha = 0
+                                            transition.to(backgroundBlackAlpha, {time=150, alpha=1})
+                                            transition.to(rect, {time=150, alpha=1})
+
+                                            local miniGroupTop = display.newGroup()
+                                            group:insert(miniGroupTop)
+                                            local miniGroupBottom = display.newGroup()
+                                            group:insert(miniGroupBottom)
+                                            local textHeader = display.newText({
+                                                text=header,
+                                                width=rect.width-display.contentWidth/17*2,
+                                                x=CENTER_X, 
+                                                y=CENTER_Y+display.contentWidth/17,
+                                                font=nil,
+                                                fontSize=fontSize0,
+                                            })
+                                            textHeader.anchorY=0
+                                            miniGroupTop:insert(textHeader)
+                                            local textPlaceholder = display.newText({
+                                                text=placeholder,
+                                                width=rect.width-display.contentWidth/17*2,
+                                                x=CENTER_X, 
+                                                y=textHeader.y+textHeader.height+display.contentWidth/17,
+                                                font=nil,
+                                                fontSize=fontSize2,
+                                            })
+                                            miniGroupTop:insert(textPlaceholder)
+                                            local input = native.newTextBox(CENTER_X, textPlaceholder.y+textPlaceholder.height, textHeader.width, textHeader.width/10)
+                                            input.isEditable = true
+                                            input.hasBackground = false
+                                            if isSim or isWin then
+                                                input:setTextColor(0,0,0)
+                                                input.size = 25
+                                            else
+                                                input:setTextColor(1,1,1)
+                                            end
+                                            input.anchorY=0
+                                            miniGroupTop:insert(input)
+
+                                            input.text = value
+                                            native.setKeyboardFocus(input)
+                                            if (value~="") then
+                                                input:setSelection(0, utf8.len(value))
+                                            end
+
+                                            local rectInput = display.newRect(CENTER_X, input.y+input.height, input.width, display.contentWidth/150)
+                                            rectInput.anchorY=0
+                                            miniGroupTop:insert(rectInput)
+
+                                            local textError = display.newText({
+                                                text="--",
+                                                width=rect.width-display.contentWidth/17*2,
+                                                x=CENTER_X, 
+                                                y=rectInput.y+rectInput.height+display.contentWidth/34,
+                                                font=nil,
+                                                fontSize=fontSize2,
+                                            })
+                                            textError.anchorY = 0
+                                            textError:setFillColor(1, 113/255, 67/255)
+                                            miniGroupTop:insert(textError)
+
+                                            local textButtonOk = display.newText(words[16], 0, 0, nil, fontSize1)
+                                            textButtonOk:setFillColor(171/255, 219/255, 241/255)
+                                            local rectButtonOk = display.newRoundedRect(CENTER_X+textHeader.width/2, CENTER_Y, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, roundedRect)
+                                            rectButtonOk.anchorX, rectButtonOk.anchorY = 1, 0
+                                            textButtonOk.x, textButtonOk.y = rectButtonOk.x-rectButtonOk.width/2, rectButtonOk.y+rectButtonOk.height/2
+                                            rectButtonOk:setFillColor(66/255,66/255, 66/255)
+                                            miniGroupBottom:insert(rectButtonOk)
+                                            miniGroupBottom:insert(textButtonOk)
+                                            local textButtonCancel = display.newText(words[17], 0, 0, nil, fontSize1)
+                                            textButtonCancel:setFillColor(171/255, 219/255, 241/255)
+                                            local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, roundedRect)
+                                            rectButtonCancel.anchorX, rectButtonCancel.anchorY = 1, 0
+                                            textButtonCancel.x, textButtonCancel.y = rectButtonCancel.x-rectButtonCancel.width/2, rectButtonCancel.y+rectButtonCancel.height/2
+                                            rectButtonCancel:setFillColor(66/255,66/255, 66/255)
+                                            miniGroupBottom:insert(rectButtonCancel)
+                                            miniGroupBottom:insert(textButtonCancel)
+
+
+                                            local textCheckboxGlobal = display.newText({
+                                                text=words[252],
+                                                x=CENTER_X*1.1,
+                                                y=rectButtonCancel.y,
+                                                width=display.contentWidth/1.4,
+                                                fontSize=fontSize1,
+                                            })
+                                            textCheckboxGlobal.anchorY=0
+                                            miniGroupBottom:insert(textCheckboxGlobal)
+                                            local checkboxGlobal = display.newImage("images/circle_checkbox_2.png")
+                                            checkboxGlobal:setFillColor(171/255, 219/255, 241/255)
+                                            checkboxGlobal.width, checkboxGlobal.height = textPlaceholder.width/12.5, textPlaceholder.width/12.5
+                                            checkboxGlobal.x, checkboxGlobal.y = CENTER_X-display.contentWidth/2.75, textCheckboxGlobal.y+textCheckboxGlobal.height/2
+                                            miniGroupBottom:insert(checkboxGlobal)
+
+                                            local textCheckboxLocal = display.newText({
+                                                text=words[253],
+                                                x=CENTER_X*1.1,
+                                                y = textCheckboxGlobal.y+textCheckboxGlobal.height,
+                                                width=display.contentWidth/1.4,
+                                                fontSize=fontSize1,
+                                            })
+                                            textCheckboxLocal.anchorY=0
+                                            miniGroupBottom:insert(textCheckboxLocal)
+                                            local checkboxLocal = display.newImage("images/circle_checkbox_1.png")
+                                            checkboxLocal.width, checkboxLocal.height = textPlaceholder.width/12.5, textPlaceholder.width/12.5
+                                            checkboxLocal.x, checkboxLocal.y = CENTER_X-display.contentWidth/2.75, textCheckboxLocal.y+textCheckboxLocal.height/2
+                                            miniGroupBottom:insert(checkboxLocal)
+
+                                            rectButtonCancel.y = textCheckboxLocal.y+textCheckboxLocal.height+display.contentWidth/10
+                                            textButtonCancel.y = rectButtonCancel.y+rectButtonCancel.height/2
+                                            rectButtonOk.y = rectButtonCancel.y
+                                            textButtonOk.y = textButtonCancel.y
+                                            checkboxLocal.locality = "local"
+                                            checkboxGlobal.locality = "global"
+                                            textCheckboxLocal.locality = "local"
+                                            textCheckboxGlobal.locality = "global"
+                                            checkboxLocal.otherObject = checkboxGlobal
+                                            checkboxGlobal.otherObject = checkboxLocal
+                                            textCheckboxLocal.otherObject = checkboxGlobal
+                                            textCheckboxGlobal.otherObject = checkboxLocal
+                                            checkboxLocal.targetObject = checkboxLocal
+                                            checkboxGlobal.targetObject = checkboxGlobal
+                                            textCheckboxLocal.targetObject = checkboxLocal
+                                            textCheckboxGlobal.targetObject = checkboxGlobal
+                                            local myLocality = "global"
+                                            local function touchTypeLocality(event)
+                                                if (event.phase == "ended" and myLocality ~= event.target.locality) then
+                                                    myLocality = event.target.locality
+                                                    event.target.targetObject.fill = {
+                                                        type="image",
+                                                        filename="images/circle_checkbox_2.png",
+                                                    }
+                                                    event.target.targetObject:setFillColor(171/255, 219/255, 241/255)
+                                                    event.target.otherObject.fill = {
+                                                        type="image",
+                                                        filename="images/circle_checkbox_1.png",
+                                                    }
+                                                end
+                                                return(true)
+                                            end
+                                            checkboxLocal:addEventListener("touch", touchTypeLocality)
+                                            checkboxGlobal:addEventListener("touch", touchTypeLocality)
+                                            textCheckboxLocal:addEventListener("touch", touchTypeLocality)
+                                            textCheckboxGlobal:addEventListener("touch", touchTypeLocality)
+                                            local touchNoTouch = nil
+                                            local function touchEditingEnd(event)
+                                                if (event.target.textButton.alpha>0.9) then
+                                                    if (event.phase=="began") then
+                                                        event.target:setFillColor(99/255, 99/255, 99/255)
+                                                    elseif (event.phase=="moved") then
+                                                        event.target:setFillColor(66/255, 66/255, 66/255)
+                                                    else
+                                                        event.target:setFillColor(66/255, 66/255, 66/255)
+                                                        native.setKeyboardFocus(nil)
+                                                        input.isEditable = false
+                                                        rectButtonOk:removeEventListener("touch", touchEditingEnd)
+                                                        rectButtonCancel:removeEventListener("touch", touchEditingEnd)
+                                                        backgroundBlackAlpha:removeEventListener("touch",touchNoTouch)
+                                                        rect:removeEventListener("touch",touchNoTouch)
+
+                                                        transition.to(backgroundBlackAlpha, {time=200, alpha=0, inComplete=function()
+                                                            display.remove(backgroundBlackAlpha)
+                                                        end})
+                                                        display.remove(input)
+                                                        transition.to(group, {time=200, alpha=0, inComplete=function()
+                                                            display.remove(group)
+                                                        end})
+
+                                                        if (funEditingEnd~=nil) then
+                                                            if (event.target==rectButtonOk) then
+                                                                funEditingEnd({["isOk"]=true, ["value"]=input.text,
+                                                                ["locality"]=myLocality})
+                                                            else
+                                                                funEditingEnd({["isOk"]=false})
+                                                            end
+                                                        end
+                                                    end
+                                                end
+                                                return(true)
+                                            end
+                                            rectButtonOk.textButton = textButtonOk
+                                            rectButtonCancel.textButton = textButtonCancel
+                                            rectButtonOk:addEventListener("touch", touchEditingEnd)
+                                            rectButtonCancel:addEventListener("touch", touchEditingEnd)
+
+                                            touchNoTouch = function(event)
+                                                if (event.phase=="ended" and event.target==backgroundBlackAlpha) then
                                                     native.setKeyboardFocus(nil)
                                                     input.isEditable = false
                                                     rectButtonOk:removeEventListener("touch", touchEditingEnd)
@@ -602,150 +627,116 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                     end})
 
                                                     if (funEditingEnd~=nil) then
-                                                        if (event.target==rectButtonOk) then
-                                                            funEditingEnd({["isOk"]=true, ["value"]=input.text,
-                                                            ["locality"]=myLocality})
-                                                        else
-                                                            funEditingEnd({["isOk"]=false})
-                                                        end
+                                                        funEditingEnd({["isOk"]=false})
                                                     end
                                                 end
+                                                return(true)
                                             end
-                                            return(true)
-                                        end
-                                        rectButtonOk.textButton = textButtonOk
-                                        rectButtonCancel.textButton = textButtonCancel
-                                        rectButtonOk:addEventListener("touch", touchEditingEnd)
-                                        rectButtonCancel:addEventListener("touch", touchEditingEnd)
+                                            backgroundBlackAlpha: addEventListener("touch",touchNoTouch)
+                                            rect:addEventListener("touch",touchNoTouch)
 
-                                        touchNoTouch = function(event)
-                                            if (event.phase=="ended" and event.target==backgroundBlackAlpha) then
-                                                native.setKeyboardFocus(nil)
-                                                input.isEditable = false
-                                                rectButtonOk:removeEventListener("touch", touchEditingEnd)
-                                                rectButtonCancel:removeEventListener("touch", touchEditingEnd)
-                                                backgroundBlackAlpha:removeEventListener("touch",touchNoTouch)
-                                                rect:removeEventListener("touch",touchNoTouch)
-
-                                                transition.to(backgroundBlackAlpha, {time=200, alpha=0, inComplete=function()
-                                                    display.remove(backgroundBlackAlpha)
-                                                end})
-                                                display.remove(input)
-                                                transition.to(group, {time=200, alpha=0, inComplete=function()
-                                                    display.remove(group)
-                                                end})
-
-                                                if (funEditingEnd~=nil) then
-                                                    funEditingEnd({["isOk"]=false})
-                                                end
+                                            local function updateHeightRect()
+                                                rect.height = miniGroupTop.height+miniGroupBottom.height+(textError.text~="" and display.contentWidth/10 or display.contentWidth/30)+display.contentWidth/30
+                                                miniGroupBottom.y = miniGroupTop.height+(textError.text~="" and display.contentWidth/10 or display.contentWidth/30)
+                                                group.y = -group.height/2
                                             end
-                                            return(true)
-                                        end
-                                        backgroundBlackAlpha: addEventListener("touch",touchNoTouch)
-                                        rect:addEventListener("touch",touchNoTouch)
 
-                                        local function updateHeightRect()
-                                            rect.height = miniGroupTop.height+miniGroupBottom.height+(textError.text~="" and display.contentWidth/10 or display.contentWidth/30)+display.contentWidth/30
-                                            miniGroupBottom.y = miniGroupTop.height+(textError.text~="" and display.contentWidth/10 or display.contentWidth/30)
-                                            group.y = -group.height/2
-                                        end
-
-                                        local function isError(value)
-                                            local oldTextError = textError.text
-                                            textError.text = isCorrectValue(value)
-                                            if (textError.text ~= "" and oldTextError~=textError.text) then
-                                                textPlaceholder:setFillColor(1, 113/255, 67/255)
-                                                rectInput:setFillColor(1, 113/255, 67/255)
-                                                updateHeightRect()
-                                                textButtonOk.alpha = 0.25
-                                                textButtonOk:setFillColor(1,1,1)
-                                            elseif (textError.text == "" and oldTextError~="") then
-                                                textPlaceholder:setFillColor(171/255, 219/255, 241/255)
-                                                rectInput:setFillColor(171/255, 219/255, 241/255)
-                                                updateHeightRect()
-                                                textButtonOk.alpha = 1
-                                                textButtonOk:setFillColor(171/255, 219/255, 241/255)
-                                            end
-                                        end
-                                        isError(value)
-
-
-                                        input:addEventListener("userInput", function (event)
-                                            if (event.phase=="began") then
-                                            elseif (event.phase=="editing") then
-
-                                                isError(event.text)
-
-                                                if (select(2, string.gsub(event.oldText, "\n", "\n")) ~= select(2, string.gsub(event.text, "\n", "\n")) and select(2, string.gsub(event.text, "\n", "\n"))<6 ) then
-                                                    event.target.height = textHeader.width/12*math.min(math.max(select(2, string.gsub(event.text, "\n", "\n"))+1, 1), 6)
-                                                    rectInput.y = input.y+input.height
-                                                    textError.y = rectInput.y+rectInput.height+display.contentWidth/34
+                                            local function isError(value)
+                                                local oldTextError = textError.text
+                                                textError.text = isCorrectValue(value)
+                                                if (textError.text ~= "" and oldTextError~=textError.text) then
+                                                    textPlaceholder:setFillColor(1, 113/255, 67/255)
+                                                    rectInput:setFillColor(1, 113/255, 67/255)
                                                     updateHeightRect()
+                                                    textButtonOk.alpha = 0.25
+                                                    textButtonOk:setFillColor(1,1,1)
+                                                elseif (textError.text == "" and oldTextError~="") then
+                                                    textPlaceholder:setFillColor(171/255, 219/255, 241/255)
+                                                    rectInput:setFillColor(171/255, 219/255, 241/255)
+                                                    updateHeightRect()
+                                                    textButtonOk.alpha = 1
+                                                    textButtonOk:setFillColor(171/255, 219/255, 241/255)
                                                 end
-                                            elseif (event.pahse=="ended") then
+                                            end
+                                            isError(value)
+
+
+                                            input:addEventListener("userInput", function (event)
+                                                if (event.phase=="began") then
+                                                elseif (event.phase=="editing") then
+
+                                                    isError(event.text)
+
+                                                    if (select(2, string.gsub(event.oldText, "\n", "\n")) ~= select(2, string.gsub(event.text, "\n", "\n")) and select(2, string.gsub(event.text, "\n", "\n"))<6 ) then
+                                                        event.target.height = textHeader.width/12*math.min(math.max(select(2, string.gsub(event.text, "\n", "\n"))+1, 1), 6)
+                                                        rectInput.y = input.y+input.height
+                                                        textError.y = rectInput.y+rectInput.height+display.contentWidth/34
+                                                        updateHeightRect()
+                                                    end
+                                                elseif (event.pahse=="ended") then
+                                                end
+                                            end)
+
+                                        end
+
+                                        local function isCorrectValue(event)
+                                            if (string.len(event)==0) then
+                                                return(words[18])
+                                            else
+                                                local isCorrect = true
+                                                for i=2, #tableAnswers do
+                                                    if (tableAnswers[i][1]==event) then
+                                                        isCorrect = false
+                                                        break
+                                                    end
+                                                end
+                                                return(isCorrect and "" or words[15])
+                                            end
+                                        end
+                                        local function correctValue(event)
+                                            if (isCorrectValue(event)=="") then
+                                                return(event)
+                                            else
+                                                local i=1
+                                                while (isCorrectValue(event.." ("..i..")")~="") do
+                                                    i = i+1
+                                                end
+                                                return(event.." ("..i..")")
+                                            end
+                                        end
+
+                                        createVariableTextInput(words[idParameter=="variables" and 249 or 254], words[250], isCorrectValue, correctValue(words[(idParameter=="variables") and 251 or 255]), function (answer)
+                                            if (answer.isOk) then
+                                                answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n')," ")
+                                                local variables = json.decode(funsP["получить сохранение"]((answer.locality == "global" and IDPROJECT or IDOBJECT).."/"..idParameter))
+                                                local idVariable = nil
+                                                if (#variables==0) then
+                                                    table.insert(variables, 1, {1, answer.value})
+                                                    idVariable = 1
+                                                else
+                                                    idVariable = variables[1][1]+1
+                                                    table.insert(variables, 1, {idVariable, answer.value})
+                                                end
+                                                funsP["записать сохранение"]((answer.locality == "global" and IDPROJECT or IDOBJECT).."/"..idParameter, json.encode(variables))
+                                                objectsParameter[3].text = answer.value
+                                                blocks[block.id][2][event.target.idParameter] = {answer.locality..varOrArr,idVariable}
+                                                funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+
                                             end
                                         end)
 
-                                    end
-
-                                    local function isCorrectValue(event)
-                                        if (string.len(event)==0) then
-                                            return(words[18])
-                                        else
-                                            local isCorrect = true
-                                            for i=2, #tableAnswers do
-                                                if (tableAnswers[i][1]==event) then
-                                                    isCorrect = false
-                                                    break
-                                                end
+                                    else
+                                        for i=2, #tableAnswers do
+                                            if (tableAnswers[i][2]==answer) then
+                                                objectsParameter[3].text = tableAnswers[i][1]
+                                                break
                                             end
-                                            return(isCorrect and "" or words[15])
-                                        end
+                                        end 
+
+                                        blocks[block.id][2][event.target.idParameter] = answer
+                                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
                                     end
-                                    local function correctValue(event)
-                                        if (isCorrectValue(event)=="") then
-                                            return(event)
-                                        else
-                                            local i=1
-                                            while (isCorrectValue(event.." ("..i..")")~="") do
-                                                i = i+1
-                                            end
-                                            return(event.." ("..i..")")
-                                        end
-                                    end
-
-                                    createVariableTextInput(words[idParameter=="variables" and 249 or 254], words[250], isCorrectValue, correctValue(words[(idParameter=="variables") and 251 or 255]), function (answer)
-                                        if (answer.isOk) then
-                                            answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n')," ")
-                                            local variables = json.decode(funsP["получить сохранение"]((answer.locality == "global" and IDPROJECT or IDOBJECT).."/"..idParameter))
-                                            local idVariable = nil
-                                            if (#variables==0) then
-                                                table.insert(variables, 1, {1, answer.value})
-                                                idVariable = 1
-                                            else
-                                                idVariable = variables[1][1]+1
-                                                table.insert(variables, 1, {idVariable, answer.value})
-                                            end
-                                            funsP["записать сохранение"]((answer.locality == "global" and IDPROJECT or IDOBJECT).."/"..idParameter, json.encode(variables))
-                                            objectsParameter[3].text = answer.value
-                                            blocks[block.id][2][event.target.idParameter] = {answer.locality..varOrArr,idVariable}
-                                            funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-
-                                        end
-                                    end)
-
-                                else
-                                    for i=2, #tableAnswers do
-                                        if (tableAnswers[i][2]==answer) then
-                                            objectsParameter[3].text = tableAnswers[i][1]
-                                            break
-                                        end
-                                    end 
-
-                                    blocks[block.id][2][event.target.idParameter] = answer
-                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
                                 end
-                            end
                         end -- elseif
 
 
@@ -817,7 +808,21 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                             end
                             return(true)
                         end)
-
+                    elseif (idParameter=="shapeHitbox") then
+                        objectsParameter[3].yScale = 1
+                        local file = io.open(system.pathForFile(IDOBJECT.."/images.txt", system.DocumentsDirectory), 'r')
+                        local contents = json.decode(file:read("*a"))
+                        io.close(file)
+                        if (#contents>0) then
+                            SCENES[SCENE][1].alpha = 0
+                            scene_redactorShapeHitbox(blocks[event.target.block.id][2][event.target.idParameter], objectsParameter[4], contents)
+                        else
+                            isBackScene = "block"
+                            local function funEditingEnd()
+                                isBackScene = "back"
+                            end
+                            cerberus.newBannerQuestion(words[524], funEditingEnd)
+                        end
                     end
                     display.getCurrentStage():setFocus(event.target, nil)
                 end
@@ -984,7 +989,7 @@ elseif (event.phase=="moved") then
 
     --if (event.target.isFocus == false) then
     --    event.target.isFocus = nil
-        display.getCurrentStage():setFocus(event.target, event.id)
+    display.getCurrentStage():setFocus(event.target, event.id)
     --end
 
 
@@ -2234,9 +2239,9 @@ arrayAllButtonsFunctions["startmenu"] = arrayAllButtonsFunctions["back"]
 
 
 functionsMenu["startreadySprites"] = function()
-    isBackScene="back"
-    groupScene.alpha = 0
-    scene_readySprites()
+isBackScene="back"
+groupScene.alpha = 0
+scene_readySprites()
 end
 
 
@@ -2313,9 +2318,9 @@ end)
 end
 
 funMenuObjects[1] = function()
-    if (functionsMenu[isBackScene]~=nil) then
-        functionsMenu[isBackScene]()
-    end
+if (functionsMenu[isBackScene]~=nil) then
+    functionsMenu[isBackScene]()
+end
 end
 
 end

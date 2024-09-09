@@ -201,6 +201,10 @@ allBlocks = {
 	["removeKeyboardToTextField"]={"block", "blocks/block_green_1.png", { {{"text", words[516]}} }, 109, 88, false},
 	["insertCameraTextField"]={"block", "blocks/block_green_2.png", { {{"text", words[517]}}, {{"text", words[492]}, {"cell", nil, 3}} }, 109, 142, false},
 	["removeCameraTextField"]={"block", "blocks/block_green_2.png", { {{"text", words[518]}}, {{"text", words[492]}, {"cell", nil, 3}} }, 109, 142, false},
+	["setQuareHitbox"]={"block", "blocks/block_blue_1.png", { {{"text", words[519]}} }, 109, 88, false},
+	["setQuareWHHitbox"]={"block", "blocks/block_blue_2.png", { {{"text", words[519]}}, {{"text", words[490]..":"}, {"cell", nil, 1.5}, {"text", words[491]..":"}, {"cell", nil, 1.5}} }, 109, 142, false},
+	["setCircleHitbox"]={"block", "blocks/block_blue_2.png", { {{"text", words[520]}}, {{"text", words[521]..":"}, {"cell", nil, 1.5}} }, 109, 142, false},
+	["setShapeHitbox"]={"block", "blocks/block_blue_2.png", { {{"text", words[522]}}, {{"shapeHitbox"}} }, 109, 142, false},
 }
 
 

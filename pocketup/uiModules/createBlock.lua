@@ -254,14 +254,37 @@ function createBlock(block)
 				button.typeParameter = formula[1]
 				button.block = group
 				yF = yF-display.contentWidth/40
-end -- elseif
-end
-yF = yF + display.contentWidth/10
-xF = -display.contentCenterX/1.5
-end
-group2.y = -group2.height/2+(infoBlock[1]=="event" and display.contentWidth/10 or display.contentWidth/40)
-for i=1, #group.cells do
-	group.cells[i][2].heightParameters = group2.height
-end
-return(group)
+			elseif (formula[1]=="shapeHitbox") then
+				local button = display.newImage("images/notVisible.png")
+				button.x, button.y, button.width, button.height = -display.screenOriginX+display.contentWidth/25, yF, display.contentWidth/2.625*2, display.contentWidth/15
+				group2:insert(button)
+				local line = display.newRect(button.x, button.y+button.height/2, button.width, display.contentWidth/300)
+				line.anchorY=0
+				group2:insert(line)
+				local valueCell = display.newText({
+					text = formula[2][2],
+					x = button.x,
+					y=button.y,
+					width=button.width,
+					height=button.height,
+					align="left",
+					font=nil,
+					fontSize=fontSize1,
+				})
+				group2:insert(valueCell)
+				group.cells[#group.cells+1] = {"shapeHitbox", button, line, valueCell}
+				button.idParameter = #group.cells
+				button.block = group
+				button.typeParameter = "shapeHitbox"
+				yF = yF-display.contentWidth/40
+			end -- elseif
+		end
+		yF = yF + display.contentWidth/10
+		xF = -display.contentCenterX/1.5
+	end
+	group2.y = -group2.height/2+(infoBlock[1]=="event" and display.contentWidth/10 or display.contentWidth/40)
+	for i=1, #group.cells do
+		group.cells[i][2].heightParameters = group2.height
+	end
+	return(group)
 end
