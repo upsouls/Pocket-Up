@@ -96,6 +96,10 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         add_pcall()
         lua = lua.."target.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = "..make_all_formulas(infoBlock[2][1], object)..", nil, nil\ntarget:physicsReload()"
         end_pcall()
+    elseif (nameBlock=='setShapeHitbox') then
+        add_pcall()
+        lua = lua.."target.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = nil, nil, json.decode('"..infoBlock[2][1][2].."')\ntarget:physicsReload()"
+        end_pcall()
     end
     return(lua)
 end
