@@ -253,7 +253,18 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         local condition = make_all_formulas(infoBlock[2][1], object)
         lua = lua .. 'local _repeat\n'
         add_pcall()
-        lua = lua..'local repeatIsTrue\n_repeat = repeatIsTrue\nrepeatIsTrue = timer.GameNew(0,0, function()\nif not ('..condition..') then\ntimer.cancel(repeatIsTrue)\nreturn true\n\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend\nend'
+        lua = lua..[[
+local repeatIsTrue
+_repeat = repeatIsTrue
+repeatIsTrue = timer.GameNew(0,0, function()
+if not (]]..condition..[[) then
+timer.cancel(repeatIsTrue)
+return true
+end
+if not (target ~= nil and target.x ~= nil) then
+pcall(function() timer.cancel(_repeat) end)
+return true
+end]]
     elseif nameBlock == 'setImageToId' and #images>0 then
         local image = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
