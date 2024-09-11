@@ -100,6 +100,38 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         add_pcall()
         lua = lua.."target.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = nil, nil, json.decode('"..infoBlock[2][1][2].."')\ntarget:physicsReload()"
         end_pcall()
+    elseif (nameBlock=='setPositionMiniScene') then
+        add_pcall()
+        lua = lua.."local miniScene = miniScenes["..make_all_formulas(infoBlock[2][1], object).."]\nminiScene.x, miniScene.y = "..make_all_formulas(infoBlock[2][2], object)..", -"..make_all_formulas(infoBlock[2][3], object)
+        end_pcall()
+    elseif (nameBlock=='editPositionMiniScene') then
+        add_pcall()
+        lua = lua.."miniScenes["..make_all_formulas(infoBlock[2][1], object).."]:translate("..make_all_formulas(infoBlock[2][2], object)..", -"..make_all_formulas(infoBlock[2][3], object)..")"
+        end_pcall()
+    elseif (nameBlock=='setSizeMiniScene') then
+        add_pcall()
+        lua = lua.."local miniScene = miniScenes["..make_all_formulas(infoBlock[2][1], object).."]\nminiScene.xScale = "..make_all_formulas(infoBlock[2][2], object).."/100\nminiScene.yScale=miniScene.xScale"
+        end_pcall()
+    elseif (nameBlock=='editSizeMiniScene') then
+        add_pcall()
+        lua = lua.."local miniScene = miniScenes["..make_all_formulas(infoBlock[2][1], object).."]\nminiScene.xScale = miniScene.xScale+"..make_all_formulas(infoBlock[2][2], object).."/100\nminiScene.yScale=miniScene.xScale"
+        end_pcall()
+    elseif (nameBlock=='setRotationMiniScene') then
+        add_pcall()
+        lua = lua.."miniScenes["..make_all_formulas(infoBlock[2][1], object).."].rotation = "..make_all_formulas(infoBlock[2][2], object)
+        end_pcall()
+    elseif (nameBlock=='editRotationMiniScene') then
+        add_pcall()
+        lua = lua.."miniScenes["..make_all_formulas(infoBlock[2][1], object).."]:rotate("..make_all_formulas(infoBlock[2][2], object)..")"
+        end_pcall()
+    elseif (nameBlock=='setAlphaMiniScene') then
+        add_pcall()
+        lua = lua.."miniScenes["..make_all_formulas(infoBlock[2][1], object).."].alpha = 1-("..make_all_formulas(infoBlock[2][2], object)..")/100"
+        end_pcall()
+    elseif (nameBlock=='editAlphaMiniScene') then
+        add_pcall()
+        lua = lua.."local miniScene = miniScenes["..make_all_formulas(infoBlock[2][1], object).."]\nminiScene.alpha = miniScene.alpha-("..make_all_formulas(infoBlock[2][2], object)..")/100"
+        end_pcall()
     end
     return(lua)
 end

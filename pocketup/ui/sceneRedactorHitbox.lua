@@ -1,4 +1,4 @@
-function scene_redactorShapeHitbox(arrayShape, textParameter, images)
+function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 	SCENE = "redactorHitbox"
 	local isBackScene = "back"
 	local funBackObjects = {}
@@ -49,11 +49,13 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images)
 	funBackObjects[1] = function()
 		if (isBackScene == "back") then
 			funBack = oldFunBack
+			native.setKeyboardFocus( nil )
 			display.remove(groupScene)
 			arrayShape[2] = json.encode(tablePositions)
 			textParameter.text = arrayShape[2]
 			SCENE = "scripts"
 			SCENES[SCENE][1].alpha = 1
+			funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
 		end
 	end
 
@@ -356,8 +358,11 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images)
 		end
 	end)
 	textFieldXPos.x = CENTER_X
-	textFieldXPos.inputType = "no-emoji"
+	textFieldXPos.inputType = "number"
 	textFieldXPos.hasBackground = false
+	if (not isSim) then
+		textFieldYPos:setTextColor(1,1,1)
+	end
 	textFieldXPos.anchorX, textFieldXPos.anchorY = 1, 1
 	groupInterface:insert(textFieldXPos)
 	local line = display.newRect(CENTER_X-display.contentWidth/50, textFieldXPos.y, textFieldXPos.width, display.contentWidth/150)
@@ -378,7 +383,10 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images)
 		end
 	end)
 	textFieldYPos.x = CENTER_X
-	textFieldYPos.inputType = "no-emoji"
+	textFieldYPos.inputType = "number"
+	if (not isSim) then
+		textFieldXPos:setTextColor(1,1,1)
+	end
 	textFieldYPos.hasBackground = false
 	textFieldYPos.anchorX, textFieldYPos.anchorY = 1, 1
 	groupInterface:insert(textFieldYPos)

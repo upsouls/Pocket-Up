@@ -3,6 +3,24 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
+			{"createMiniScene", {{{"text",words[530]}}}},
+			{"deleteMiniScene", {{{"text", words[530]}}}},
+			{"miniSceneInsert", {{{"text",words[530]}}}},
+			{"setPositionMiniScene", { {{"text",words[530]}}, {{"number", 100}}, {{"number", 200}} }},
+			{"setSizeMiniScene", { {{"text",words[530]}}, {{"number", 60}} }},
+			{"editSizeMiniScene", { {{"text",words[530]}}, {{"number", 10}} }},
+			{"editPositionMiniScene", { {{"text",words[530]}}, {{"number", 10}}, {{"number", 20}} }},
+			{"setRotationMiniScene", { {{"text",words[530]}}, {{"number", 90}} }},
+			{"editRotationMiniScene", { {{"text",words[530]}}, {{"number", 90}} }},
+			{"setAlphaMiniScene", { {{"text",words[530]}}, {{"number", 60}} }},
+			{"editAlphaMiniScene", { {{"text",words[530]}}, {{"number", 10}} }},
+			{"miniSceneHide", {{{"text",words[530]}}}},
+			{"miniSceneShow", {{{"text",words[530]}}}},
+			{"miniSceneInsertMiniScene", {{{"text", words[530]}}, {{"text", words[530].." 2"}} }},
+			{"miniSceneInsertCamera", {{{"text",words[530]}}}},
+			{"miniSceneRemoveCamera", {{{"text",words[530]}}}},
+			
+
 			{"setQuareHitbox"},
 			{"setQuareWHHitbox", {{{"number", 100}}, {{"number", 200}}}},
 			{"setCircleHitbox", {{{"number", 200}}}},
@@ -111,6 +129,10 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"jumpY", {{{"number", 20}}}},
 			{"jumpYIf", {{{"number", 20}}}},
 			{"setGravityScale", {{{"function","-"},{"number", 10}}}},
+			{"setQuareHitbox"},
+			{"setQuareWHHitbox", {{{"number", 100}}, {{"number", 200}}}},
+			{"setCircleHitbox", {{{"number", 200}}}},
+			{"setShapeHitbox", { {"shapeHitbox", "[-50, -100, -100, 100, 150, 125, 100, -100]"} }},
 		},
 		["sounds"]={
 			{"playSound", {{"sounds",nameSound}}},
@@ -207,10 +229,33 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"blockTouchScreen"},
 			--{"touchAndSwipe",{{{"function","-"},{"number",1},{"number",0},{"number",0}},{{"function","-"},{"number",2},{"number",0},{"number",0}},{{"number",1},{"number",0},{"number",0}},{{"number",2},{"number",0},{"number",0}}, {{"number",0},{"number","."},{"number",3}}}},
 			{"showToast", {{{"text", words[164]}}}},
-			{"lua", {{{"text", "native.showAlert(\""..words[388].."\", \""..words[389].."\", {\"OK\"})"}}}},
+			--{"lua", {{{"text", "native.showAlert(\""..words[388].."\", \""..words[389].."\", {\"OK\"})"}}}},
 			{"setHorizontalOrientation"},
 			{"setVerticalOrientation"},
 			{"removeAdaptiveSizeDevice"},
+		},
+		["textFields"]={
+			{"ask",{{{"text",words[161]}}, {localityVariable, nameVariable}, {"function",nameFunction} }},
+			{"createTextField", { {{"text", words[493]}}, {"onOrOff","on"}, {{"number",300}}, {{"number", 100}}, {localityVariable, nameVariable} }},
+			{"removeCameraTextField", {{{"text", words[493]}}}},
+			{"insertCameraTextField", {{{"text", words[493]}}}},
+			{"setPositionTextField", { {{"text",words[493]}}, {{"number", 100}}, {{"number", 200}} }},
+			{"editPositionTextField", { {{"text",words[493]}}, {{"number", 10}}, {{"number", 20}} }},
+			{"setFontSizeTextField", { {{"text", words[493]}}, {{"number", 16}} }},
+			{"setTypeInputTextField", { {{"text", words[493]}}, {"typeInput", "phone"} }},
+			{"setAlignTextField", { {{"text", words[493]}}, {"alignText", "center"} }},
+			{"deleteTextField", { {{"text", words[493]}} }},
+			{"isSecureTextField", { {{"text", words[493]}}, {"onOrOff","on"} }},
+			{"placeholderTextField", { {{"text", words[493]}}, {{"text", words[164]}} }},
+			{"valueTextField", { {{"text", words[493]}}, {{"text", words[164]}} }},
+			{"setColorTextField", { {{"text", words[493]}}, {{"text", "#FF0000"}} }},
+			{"setSelectionTextField", { {{"text", words[493]}}, {{"number", 2}}, {{"number", 4}} }},
+			{"getSelectionTextField", { {{"text", words[493]}}, {localityVariable, nameVariable}, {localityVariable, nameVariable} }},
+			{"setKeyboardToTextField", {{{"text", words[493]}}}},
+			{"removeKeyboardToTextField"},
+		},
+		["miniScenes"]={
+
 		},
 	}
 	return(myTable)

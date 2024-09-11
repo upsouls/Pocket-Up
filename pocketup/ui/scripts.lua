@@ -815,7 +815,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                         io.close(file)
                         if (#contents>0) then
                             SCENES[SCENE][1].alpha = 0
-                            scene_redactorShapeHitbox(blocks[event.target.block.id][2][event.target.idParameter], objectsParameter[4], contents)
+                            scene_redactorShapeHitbox(blocks[event.target.block.id][2][event.target.idParameter], objectsParameter[4], contents, blocks)
                         else
                             isBackScene = "block"
                             local function funEditingEnd()

@@ -205,8 +205,23 @@ allBlocks = {
 	["setQuareWHHitbox"]={"block", "blocks/block_blue_2.png", { {{"text", words[519]}}, {{"text", words[490]..":"}, {"cell", nil, 1.5}, {"text", words[491]..":"}, {"cell", nil, 1.5}} }, 109, 142, false},
 	["setCircleHitbox"]={"block", "blocks/block_blue_2.png", { {{"text", words[520]}}, {{"text", words[521]..":"}, {"cell", nil, 1.5}} }, 109, 142, false},
 	["setShapeHitbox"]={"block", "blocks/block_blue_2.png", { {{"text", words[522]}}, {{"shapeHitbox"}} }, 109, 142, false},
+	["createMiniScene"]={"block", "blocks/block_yellow_2.png", { {{"text", words[528]}}, {{"text", words[529]..":"}, {"cell", nil, 3}} }, 109, 142, false},
+	["deleteMiniScene"]={"block", "blocks/block_yellow_2.png", { {{"text",words[533]}},{{"text",words[529]..":"}, {"cell",nil,3}} }, 109, 142, false},
+	["miniSceneInsertMiniScene"]={"block","blocks/block_yellow_2.png", { {{"text",words[534]}, {"cell", nil, 2}}, {{"text", words[535]}, {"cell",nil,2}} }, 109, 142, false},
+	["miniSceneHide"]={"block", "blocks/block_yellow_2.png", { {{"text", words[536]}}, {{"text", words[529]..":"}, {"cell", nil, 3}} }, 109, 142, false},
+	["miniSceneShow"]={"block", "blocks/block_yellow_2.png", { {{"text", words[537]}}, {{"text", words[529]..":"}, {"cell", nil, 3}} }, 109, 142, false},
+	["miniSceneInsertCamera"]={"block", "blocks/block_yellow_2.png", { {{"text", words[538]}}, {{"text", words[529]..":"}, {"cell", nil, 3}} }, 109, 142, false},
+	["miniSceneRemoveCamera"]={"block", "blocks/block_yellow_2.png", { {{"text", words[539]}}, {{"text", words[529]..":"}, {"cell", nil, 3}} }, 109, 142, false},
+	["miniSceneInsert"]={"block", "blocks/block_yellow_2.png", { {{"text", words[540]}}, {{"text", words[529]..":"}, {"cell", nil, 3}} }, 109, 142, false},
+	["setPositionMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[541]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[59]..":"}, {"cell", nil, 3}, {"text",words[60]..":"}, {"cell", nil, 1.5}} }, 109, 188, false},
+	["editPositionMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[542]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[206]..":"}, {"cell", nil, 3}, {"text",words[420]..":"}, {"cell", nil, 1.5}} }, 109, 188, false},
+	["setSizeMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[543]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[337]..":"}, {"cell", nil, 1.5},{"text","%"}} }, 109, 188, false},
+	["editSizeMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[544]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[337]..":"}, {"cell", nil, 1.5},{"text","%"}} }, 109, 188, false},
+	["setRotationMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[545]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[338]..":"}, {"cell", nil, 1.5},{"text","°"}} }, 109, 188, false},
+	["editRotationMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[546]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[338]..":"}, {"cell", nil, 1.5},{"text","°"}} }, 109, 188, false},
+	["setAlphaMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[547]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[328]..":"}, {"cell", nil, 1.5},{"text","%"}} }, 109, 188, false},
+	["editAlphaMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[548]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[328]..":"}, {"cell", nil, 1.5},{"text","%"}} }, 109, 188, false},
 }
-
 
 
 
