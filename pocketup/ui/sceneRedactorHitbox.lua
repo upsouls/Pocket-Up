@@ -49,7 +49,6 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 	funBackObjects[1] = function()
 		if (isBackScene == "back") then
 			funBack = oldFunBack
-			native.setKeyboardFocus( nil )
 			display.remove(groupScene)
 			arrayShape[2] = json.encode(tablePositions)
 			textParameter.text = arrayShape[2]
@@ -172,10 +171,13 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 			return(true)
 		end)
 	end
-	scrollImages:setScrollWidth(tableImages[#images].x+size/1.25-(size-size/1.1)/2)
-	timer.performWithDelay(500, function()
-		scrollImages:scrollToPosition({x=-size*1.5, time=500, transition=easing.inOutQuad})
-	end)
+	local scrollImagesWidth = math.max(tableImages[#images].x+size/1.25-(size-size/1.1)/2, scrollImages.width)
+	scrollImages:setScrollWidth(scrollImagesWidth)
+	if (scrollImagesWidth > scrollImages.width) then
+		timer.performWithDelay(500, function()
+			scrollImages:scrollToPosition({x=-size*1.5, time=500, transition=easing.inOutQuad})
+		end)
+	end
 
 	local textFieldXPos
 	local textFieldYPos
@@ -358,11 +360,8 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 		end
 	end)
 	textFieldXPos.x = CENTER_X
-	textFieldXPos.inputType = "number"
+	textFieldXPos.inputType = "no-emoji"
 	textFieldXPos.hasBackground = false
-	if (not isSim) then
-		textFieldYPos:setTextColor(1,1,1)
-	end
 	textFieldXPos.anchorX, textFieldXPos.anchorY = 1, 1
 	groupInterface:insert(textFieldXPos)
 	local line = display.newRect(CENTER_X-display.contentWidth/50, textFieldXPos.y, textFieldXPos.width, display.contentWidth/150)
@@ -383,10 +382,7 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 		end
 	end)
 	textFieldYPos.x = CENTER_X
-	textFieldYPos.inputType = "number"
-	if (not isSim) then
-		textFieldXPos:setTextColor(1,1,1)
-	end
+	textFieldYPos.inputType = "no-emoji"
 	textFieldYPos.hasBackground = false
 	textFieldYPos.anchorX, textFieldYPos.anchorY = 1, 1
 	groupInterface:insert(textFieldYPos)

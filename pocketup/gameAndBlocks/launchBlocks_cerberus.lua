@@ -98,7 +98,7 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         end_pcall()
     elseif (nameBlock=='setShapeHitbox') then
         add_pcall()
-        lua = lua.."target.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = nil, nil, json.decode('"..infoBlock[2][1][2].."')\ntarget:physicsReload()"
+        lua = lua.."local tableShape = json.decode('"..infoBlock[2][1][2].."')\nlocal tableResizeShape = {}\nlocal size = target.property_size/100\nfor i=1, #tableShape/2 do\ntableResizeShape[i*2-1], tableResizeShape[i*2] = tableShape[i*2-1]*size, tableShape[i*2]*size\nend\ntarget.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = nil, nil, tableResizeShape\ntarget:physicsReload()"
         end_pcall()
     elseif (nameBlock=='setPositionMiniScene') then
         add_pcall()
