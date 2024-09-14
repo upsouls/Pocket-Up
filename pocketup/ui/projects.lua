@@ -72,9 +72,9 @@ end
 local function touchMenuSlot(event)
 	if (event.phase=="began") then
 		display.getCurrentStage():setFocus(event.target, event.id)
-	elseif (event.phase=="moved") then
+	elseif (event.phase=="moved" and (math.abs(event.x-event.xStart)>20 or math.abs(event.y-event.yStart)>20)) then
 		scrollProjects:takeFocus(event)
-	else
+	elseif (event.phase=="ended") then
 		display.getCurrentStage():setFocus(event.target, nil)
 
 		isBackScene="block"
@@ -105,9 +105,9 @@ local function touchMenuSlot(event)
 				buttonContainer:toFront()
 				buttonContainer.y = event.target.y
 				transition.to(buttonCircle, {time=150, xScale=1.1, yScale=1.1, alpha=1})
-			elseif (event.phase=="moved") then
+			elseif (event.phase=="moved" and (math.abs(event.x-event.xStart)>20 or math.abs(event.y-event.yStart)>20)) then
 				transition.to(buttonCircle, {time=150, xScale=0.25, yScale=0.25, alpha=0})
-			else
+			elseif (event.phase=="ended") then
 
 				isBackScene="back"
 
@@ -1046,10 +1046,10 @@ local function touchMenu2CopySlot(event)
 	if (event.phase=="began") then
 		transition.to(event.target, {xScale=0.75, yScale=0.75, time=100})
 		display.getCurrentStage():setFocus(event.target, event.id)
-	elseif (event.phase=="moved") then
+	elseif (event.phase=="moved" and (math.abs(event.x-event.xStart)>20 or math.abs(event.y-event.yStart)>20)) then
 		transition.to(event.target, {xScale=1, yScale=1, time=200})
 		scrollProjects:takeFocus(event)
-	else
+	elseif (event.phase == "began") then
 		if (event.target.isCopySlot) then
 			event.target.isCopySlot=nil
 		else

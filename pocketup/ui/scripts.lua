@@ -256,7 +256,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                 end
 
                             elseif (idParameter=="objects") then
-                                local collOrClone = blocks[block.id][1] == "collision"
+                                local collOrClone = blocks[block.id][1] == "collision" or blocks[block.id][1] == "endedCollision"
                                 tableAnswers[1] = {words[collOrClone and 85 or 90], {"objects", nil}}
                                 local arrayObjects = json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))
                                 for i=(collOrClone and 1 or 2), #arrayObjects do
@@ -762,10 +762,10 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                         local function touchAnswerFunction(event)
                             if (event.phase=="began") then
                                 event.target:setFillColor(55/255,55/255,55/255)
-                            elseif (event.phase=="moved") then
+                            elseif (event.phase=="moved" and (math.abs(event.x-event.xStart)>20 or math.abs(event.y-event.yStart)>20)) then
                                 event.target:setFillColor(48/255,48/255,48/255)
                                 scrollfunctions:takeFocus(event)
-                            else
+                            elseif (event.phase=="ended") then
                                 event.target:setFillColor(48/255,48/255,48/255)
                                 functionOnComplete(event.target.answer)
                                 for i=1, #buttonsFunctions do
@@ -2241,7 +2241,64 @@ arrayAllButtonsFunctions["startmenu"] = arrayAllButtonsFunctions["back"]
 functionsMenu["startreadySprites"] = function()
 isBackScene="back"
 groupScene.alpha = 0
-scene_readySprites()
+local function funAddImage()
+    images = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
+    local i = #images
+    local group = display.newGroup()
+    group.y = display.contentWidth/3.75*(i-0.5)
+    groupSceneScroll:insert(group)
+    local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
+    arraySlots[i] = buttonRect
+    buttonRect.idProject= images[i][2]
+    buttonRect.idSlot = i
+    buttonRect.yGoalPos = group.y
+    buttonRect.anchorX = 0
+    buttonRect:setFillColor(0, 71/255, 93/255)
+    group:insert(buttonRect)
+    local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.55, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
+    strokeIcon.strokeWidth = 3
+    strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
+    strokeIcon:setFillColor(0,0,0,0)
+    group:insert(strokeIcon)
+    local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
+    group:insert(containerIcon)
+    containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
+    buttonRect.pathImage = IDOBJECT.."/image_"..images[i][2]..".png"
+    local imageIcon = display.newImage(buttonRect.pathImage, system.DocumentsDirectory)
+    containerIcon:insert(imageIcon)
+    strokeIcon:toFront()
+
+    local sizeIconProject = containerIcon.height/imageIcon.height
+    if (imageIcon.width*sizeIconProject<containerIcon.width) then
+        sizeIconProject = containerIcon.width/imageIcon.width
+    end
+    imageIcon.xScale, imageIcon.yScale = sizeIconProject, sizeIconProject
+
+    local nameProject = display.newText({
+        text = images[i][1],
+        x = strokeIcon.x+strokeIcon.width/1.5,
+        y = strokeIcon.y,
+        width = display.contentWidth/1.75,
+        height = fontSize0*1.15,
+        fontSize = fontSize0
+    })
+    nameProject.anchorX = 0
+    nameProject:setFillColor(171/255, 219/255, 241/255)
+    group:insert(nameProject)
+
+    local menuProject = display.newImage("images/menu.png")
+    menuProject:addEventListener("touch", touchMenuSlot)
+    menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
+    menuProject:setFillColor(171/255, 219/255, 241/255)
+    group:insert(menuProject)
+    buttonRect.myGroup = group
+    menuProject.slot = buttonRect
+    buttonRect.nameProject = nameProject
+
+    buttonRect:addEventListener("touch", touchOpenImage)
+    scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
+end
+scene_readySprites(funAddImage)
 end
 
 

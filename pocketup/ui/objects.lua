@@ -937,10 +937,10 @@ local function touchMenu2CopySlot(event)
 	if (event.phase=="began") then
 		transition.to(event.target, {xScale=0.75, yScale=0.75, time=100})
 		display.getCurrentStage():setFocus(event.target, event.id)
-	elseif (event.phase=="moved") then
+	elseif (event.phase=="moved" and (math.abs(event.x-event.xStart)>20 or math.abs(event.y-event.yStart)>20)) then
 		transition.to(event.target, {xScale=1, yScale=1, time=200})
 		scrollProjects:takeFocus(event)
-	else
+	elseif (event.phase=="ended") then
 		if (event.target.isCopySlot) then
 			event.target.isCopySlot=nil
 		else
