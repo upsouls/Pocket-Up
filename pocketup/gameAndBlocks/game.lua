@@ -110,7 +110,7 @@ function scene_run_game(typeBack, paramsBack)
 
     function showOldScene()
         display.setDefault("background", 4/255, 34/255, 44/255)
-        timer.performWithDelay(100, function()
+        timer.performWithDelay(200, function()
             if (typeBack=="scripts") then
                 scene_scripts(paramsBack[1], paramsBack[2], paramsBack[3])
             elseif (typeBack=="objects") then

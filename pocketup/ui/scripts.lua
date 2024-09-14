@@ -210,7 +210,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                 local idCounter = idParameter=="sounds" and 4 or 3
                                                 counter[idCounter] = counter[idCounter]+1
                                                 funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
-                                                funsP[(idParameter=="sounds" and "добавить звук в объект" or "добавить изображение в объект")](idBackground.."/image_"..counter[idCounter].."."..(idParameter=="sounds" and "mp3" or "png") )
+                                                funsP[(idParameter=="sounds" and "добавить звук в объект" or "добавить изображение в объект")](idBackground.."/"..(idParameter=="sounds" and "sound" or "image").."_"..counter[idCounter].."."..(idParameter=="sounds" and "mp3" or "png") )
                                                 local arrayImages = json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
                                                 local function correctValue(value)
                                                     local function isCorrect(value)
