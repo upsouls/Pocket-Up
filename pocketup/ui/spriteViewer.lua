@@ -29,8 +29,12 @@ function scene_viewsprite(pathImage, nameImage)
     local image = display.newImage(pathImage, system.DocumentsDirectory)
     image.x = CENTER_X
     image.y = CENTER_Y
-    if image.width > display.actualContentWidth or image.height > display.actualContentHeight then
-        image:scale((image.width/4500), (image.width/4500))
+    if image.width>image.height then
+        image.xScale = display.contentWidth/1.1/image.width
+        image.yScale=image.xScale
+    else
+        image.yScale = display.contentWidth/1.1/image.height
+        image.xScale=image.yScale
     end
     groupScene:insert(image)
     Runtime:addEventListener('touch', touchBg)

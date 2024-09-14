@@ -41,10 +41,10 @@ function scene_readySprites( funAddImage )
     sceneGroup:insert(scroll)
     local headerLoad = display.newText({
         text = words[549],
-        x=CENTER_X, y=CENTER_Y,
+        x=CENTER_X, y=scroll.height/2.25,
         width=display.contentWidth,
         align="center",
-        fontSize=fontSize1,
+        fontSize=fontSize1*1.35,
     })
     headerLoad.alpha=0.75
     scroll:insert(headerLoad)
@@ -161,7 +161,8 @@ function scene_readySprites( funAddImage )
             circleFrontAlpha.xScale, circleFrontAlpha.yScale, circleFrontAlpha.alpha = 0.5, 0.5, 0
             sceneGroup:insert(circleFrontAlpha)
             circleFront.circleAlpha = circleFrontAlpha
-            local circleFrontText = display.newText(">",circleFront.x, circleFront.y, nil, fontSize0*1.75)
+            local circleFrontText = display.newImage("images/back.png", circleFront.x, circleFront.y)
+            circleFrontText.xScale, circleFrontText.yScale = -display.contentWidth/1000, display.contentWidth/800
             sceneGroup:insert(circleFrontText)
             local circleBack = display.newCircle(CENTER_X-display.contentWidth/2+display.contentWidth/8, CENTER_Y+display.contentHeight/2-display.contentWidth/8-75, display.contentWidth/11.5)
             circleBack:setFillColor(1, 172/255, 8/255)
@@ -171,7 +172,8 @@ function scene_readySprites( funAddImage )
             circleBackAlpha.xScale, circleBackAlpha.yScale, circleBackAlpha.alpha = 0.5, 0.5, 0
             sceneGroup:insert(circleBackAlpha)
             circleBack.circleAlpha = circleBackAlpha
-            local circleBackText = display.newText("<",circleBack.x, circleBack.y, nil, fontSize0*1.75)
+            local circleBackText =  display.newImage("images/back.png", circleBack.x, circleBack.y)
+            circleBackText.xScale, circleBackText.yScale = display.contentWidth/1000, display.contentWidth/800
             sceneGroup:insert(circleBackText)
             local function touchCircleList(event)
                 if (true) then
