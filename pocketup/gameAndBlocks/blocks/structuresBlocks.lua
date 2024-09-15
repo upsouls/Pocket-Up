@@ -221,6 +221,8 @@ allBlocks = {
 	["editRotationMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[546]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[338]..":"}, {"cell", nil, 1.5},{"text","°"}} }, 109, 188, false},
 	["setAlphaMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[547]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[328]..":"}, {"cell", nil, 1.5},{"text","%"}} }, 109, 188, false},
 	["editAlphaMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[548]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[328]..":"}, {"cell", nil, 1.5},{"text","%"}} }, 109, 188, false},
+	["setLayer"]={"block", "blocks/block_blue_1.png", { {{"text", words[551]}, {"cell", nil, 1.5}} }, 109, 88, false},
+	["setAnchor"]={"block", "blocks/block_green_2.png", { {{"text", words[552]..":"}, {"cell", nil, 2}, {"text", "%"}},{{"text",words[420]..":"}, {"cell", nil, 2},{"text", "%"}} }, 109, 142, false},
 }
 
 

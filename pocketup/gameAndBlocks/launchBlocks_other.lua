@@ -106,11 +106,11 @@ end
         add_pcall()
         lua = lua..'transition.to(target, {time=('.. time .. ')*1000, x=('..x..'), y=-('..y..')})\n'
         end_pcall()
-    elseif nameBlock == 'lua' then
-        local code = make_all_formulas(infoBlock[2][1], object)
-        add_pcall()
-        lua = lua..'loadstring('..code..')()'..'\n'
-        end_pcall()
+    -- elseif nameBlock == 'lua' then
+    --     local code = make_all_formulas(infoBlock[2][1], object)
+    --     add_pcall()
+    --     lua = lua..'loadstring('..code..')()'..'\n'
+    --     end_pcall()
     elseif nameBlock == 'timer' then
         local rep = make_all_formulas(infoBlock[2][1], object)
         local time = make_all_formulas(infoBlock[2][2], object)
@@ -655,11 +655,11 @@ end'
         end_pcall()
     elseif nameBlock=="removeObjectCamera" then
         add_pcall()
-        lua = lua.."notCameraGroup:insert(target)"
+        lua = lua.."notCameraGroup:insert(target)\ntarget.group = notCameraGroup"
         end_pcall()
     elseif nameBlock=="insertObjectCamera" then
         add_pcall()
-        lua = lua.."cameraGroup:insert(target)"
+        lua = lua.."cameraGroup:insert(target)\ntarget.group = cameraGroup"
         end_pcall()
     elseif nameBlock=="removeVariableCamera" and infoBlock[2][1][2]~=nil then
         add_pcall()

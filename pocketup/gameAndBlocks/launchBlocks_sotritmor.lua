@@ -59,7 +59,7 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
     elseif nameBlock == 'miniSceneInsert' then -- Добавить в мини сцену (имя сцены)
         local name = F(infoBlock[2][1]);
         add_pcall();
-        insert("miniScenes["..name.."]:insert(target)");
+        insert("miniScenes["..name.."]:insert(target)\ntarget.group = miniScenes["..name.."]");
         pcall_end();
     elseif nameBlock == 'miniSceneHide' then -- Скрыть мини сцену (имя сцены)
         local name = F(infoBlock[2][1]);

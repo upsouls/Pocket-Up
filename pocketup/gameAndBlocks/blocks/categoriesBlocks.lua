@@ -3,6 +3,9 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
+			{"setAnchor", {{{"number", 0}}, {{"number", 100}}}},
+			{"setLayer", {{{"number", 2}}}},
+
 			{"createMiniScene", {{{"text",words[530]}}}},
 			{"deleteMiniScene", {{{"text", words[530]}}}},
 			{"miniSceneInsert", {{{"text",words[530]}}}},
@@ -110,6 +113,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"setRotateToObject",{{"objects",nameObject}}},
 			{"setTypeRotate",{{"typeRotate","false"}}},
 			{"transitionPosition",{ {{"number",1}}, {{"number",100}}, {{"number",200}} }},
+			{"setLayer", {{{"number", 2}}}},
 			{"toFrontLayer"},
 			{"toBackLayer"},
 			{"vibration",{{{"number", 1}}}},
@@ -255,7 +259,22 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"removeKeyboardToTextField"},
 		},
 		["miniScenes"]={
-
+			{"createMiniScene", {{{"text",words[530]}}}},
+			{"deleteMiniScene", {{{"text", words[530]}}}},
+			{"miniSceneInsert", {{{"text",words[530]}}}},
+			{"setPositionMiniScene", { {{"text",words[530]}}, {{"number", 100}}, {{"number", 200}} }},
+			{"setSizeMiniScene", { {{"text",words[530]}}, {{"number", 60}} }},
+			{"editSizeMiniScene", { {{"text",words[530]}}, {{"number", 10}} }},
+			{"editPositionMiniScene", { {{"text",words[530]}}, {{"number", 10}}, {{"number", 20}} }},
+			{"setRotationMiniScene", { {{"text",words[530]}}, {{"number", 90}} }},
+			{"editRotationMiniScene", { {{"text",words[530]}}, {{"number", 90}} }},
+			{"setAlphaMiniScene", { {{"text",words[530]}}, {{"number", 60}} }},
+			{"editAlphaMiniScene", { {{"text",words[530]}}, {{"number", 10}} }},
+			{"miniSceneHide", {{{"text",words[530]}}}},
+			{"miniSceneShow", {{{"text",words[530]}}}},
+			{"miniSceneInsertMiniScene", {{{"text", words[530]}}, {{"text", words[530].." 2"}} }},
+			{"miniSceneInsertCamera", {{{"text",words[530]}}}},
+			{"miniSceneRemoveCamera", {{{"text",words[530]}}}},
 		},
 	}
 	return(myTable)
