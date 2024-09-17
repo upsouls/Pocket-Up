@@ -125,9 +125,13 @@ end
 funsP["получить сохранение"] = function(path)
 	local docsPath = system.pathForFile(path..".txt", system.DocumentsDirectory)
 	local file = io.open(docsPath, "r")
-	local contents = file:read("*a")
-	io.close(file)
-	return(contents)
+	if (file~=nil) then
+		local contents = file:read("*a")
+		io.close(file)
+		return(contents)
+	else
+		return("[]")
+	end
 end
 funsP["записать сохранение"] = function(path, value)
 	local docsPath = system.pathForFile(path..".txt", system.DocumentsDirectory)
@@ -137,9 +141,10 @@ funsP["записать сохранение"] = function(path, value)
 end
 
 funsP["копировать объект"] = function (pathObject, pathCopy, idProject)
+	print(idTarget)
 	local docsPath = system.pathForFile("", system.DocumentsDirectory)
 	lfs.mkdir(docsPath.."/"..pathCopy)
-	local tableFiles = {"variables", "arrays","scripts"}
+	local tableFiles = {"variables", "arrays"}
 	for i=1, #tableFiles do
 		local answer = funsP["получить сохранение"](pathObject.."/"..tableFiles[i])
 		funsP["записать сохранение"](pathCopy.."/"..tableFiles[i], answer)
@@ -149,8 +154,10 @@ funsP["копировать объект"] = function (pathObject, pathCopy, idP
 
 
 	local answer = json.decode(funsP["получить сохранение"](pathObject.."/images"))
+	local idsImages = {}
 	for i=1,#answer do
 		counter[3] = counter[3]+1
+		idsImages["image"..answer[i][2]] = counter[3]
 		local nameFile = "/image_"..answer[i][2]..".png"
 		answer[i][2] = counter[3]
 		local nameFileCopy = "/image_"..counter[3]..".png"
@@ -165,8 +172,10 @@ funsP["копировать объект"] = function (pathObject, pathCopy, idP
 	end
 	funsP["записать сохранение"](pathCopy.."/images", json.encode(answer))
 	local answer = json.decode(funsP["получить сохранение"](pathObject.."/sounds"))
+	local idsSounds = {}
 	for i=1,#answer do
 		counter[4] = counter[4]+1
+		idsSounds["sound"..answer[i][2]] = counter[4]
 		local nameFile = "/sound_"..answer[i][2]..".mp3"
 		answer[i][2] = counter[4]
 		local nameFileCopy = "/sound_"..counter[4]..".mp3"
@@ -183,6 +192,23 @@ funsP["копировать объект"] = function (pathObject, pathCopy, idP
 
 	funsP["записать сохранение"](idProject.."/counter", json.encode(counter))
 
+
+	local answer = json.decode(funsP["получить сохранение"](pathObject.."/scripts"))
+	for i=1, #answer do
+		local block = answer[i][2]
+		if (block~=nil) then
+			for i2=1, #block do
+				if (block[i2] and block[i2][2]) then
+					if (block[i2][1] == "sounds") then
+						block[i2][2] = idsSounds["sound"..block[i2][2]]
+					elseif (block[i2][1] == "images") then
+						block[i2][2] = idsImages["image"..block[i2][2]]
+					end
+				end
+			end
+		end
+	end
+	funsP["записать сохранение"](pathCopy.."/scripts", json.encode(answer))
 end
 
 funsP["удалить объект"] = function(pathDir)
@@ -245,15 +271,30 @@ funsP["копировать сцену"] = function(idProject, pathScene, pathCo
 	end
 	
 	local objects = json.decode(funsP["получить сохранение"](pathScene.."/objects"))
+	local idsObjects = {}
 	for i=1, #objects do
 		local counter = json.decode(funsP["получить сохранение"](idProject.."/counter"))
 		counter[2] = counter[2]+1
+		idsObjects["object"..objects[i][2]] = counter[2]
 		funsP["записать сохранение"](idProject.."/counter", json.encode(counter))
 		local oldIdObject = objects[i][2]
 		objects[i][2] = counter[2]
 		funsP["копировать объект"](pathScene.."/object_"..oldIdObject, pathCopy.."/object_"..objects[i][2], idProject)
 	end
 	funsP["записать сохранение"](pathCopy.."/objects", json.encode(objects))
+
+	for i=1, #objects do
+		local blocks = json.decode(funsP["получить сохранение"](pathCopy.."/object_"..objects[i][2].."/scripts"))
+		for i2=1, #blocks do
+			local formulas = blocks[i2][2]
+			for i3=1, #formulas do
+				if ((formulas[i3][1]=="objects" and formulas[i3][2]~=nil) or (formulas[i3][1]=="goTo" and type(formulas[i3][2])=="number")) then
+					formulas[i3][2] = idsObjects["object"..formulas[i3][2]]
+				end
+			end
+		end
+		funsP["записать сохранение"](pathCopy.."/object_"..objects[i][2].."/scripts", json.encode(blocks))
+	end
 end
 
 local pasteboard = require("plugin.pasteboard")

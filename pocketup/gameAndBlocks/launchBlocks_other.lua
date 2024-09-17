@@ -574,8 +574,10 @@ end]]
         end_pcall()
     elseif nameBlock == 'stamp' then
         add_pcall()
-        lua = lua..'local obj = #tableFeathers+1\ntableFeathers[obj] = display.newImage(target.image_path, system.DocumentsDirectory, target.x, target.y)\nstampsGroup:insert(tableFeathers[obj])'
-        lua = lua..'tableFeathers[obj].width, tableFeathers[obj].height = target.width, target.height'
+        lua = lua..'local obj = #tableFeathers+1\nlocal myObj = display.newImage(target.image_path, system.DocumentsDirectory, target.x, target.y)\ntableFeathers[obj] = myObj\nstampsGroup:insert(myObj)\n'
+        lua = lua..'myObj.width, myObj.height, myObj.alpha, myObj.rotation, myObj.xScale, myObj.yScale = target.width, target.height, target.alpha, target.rotation, target.xScale, target.yScale\n'
+        lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\nmyObj:setFillColor(r,g,b)\n"
+        lua = lua.."if (target.property_color~=100) then\nmyObj.fill.effect = 'filter.brightness'\nmyObj.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
         end_pcall()
     elseif nameBlock == 'clearPen' then
         add_pcall()
