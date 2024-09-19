@@ -121,6 +121,13 @@ function bannerPremium(groupScene, onComplete)
 			return(true)
 		end
 		buttonRectCancel:addEventListener("touch", touchButtonCancel)
+		local function decodeString(encoded)
+		    local decoded = ""
+		    for _, v in ipairs(encoded) do
+		        decoded = decoded .. string.char(v)
+		    end
+		    return decoded
+		end
 		local function touchButtonConnect(event)
 			if (event.phase=="began") then
 				display.getCurrentStage():setFocus(event.target, event.id)
@@ -141,6 +148,26 @@ function bannerPremium(groupScene, onComplete)
 				buttonConnect.alpha = 0
 				buttonRectConnect.alpha = 0
 				description.text = words[561]
+
+				local link = {104, 116, 116, 112, 58, 47, 47, 120, 57, 53, 51, 50, 56, 105, 107, 46, 98, 101, 103, 101, 116, 46, 116, 101, 99, 104, 47, 112, 111, 99, 107, 101, 116, 117, 112, 47, 112, 114, 101, 109, 105, 117, 109, 47, 105, 115, 80, 114, 101, 109, 105, 117, 109, 46, 112, 104, 112, 63, 105, 100, 61}
+				print(decodeString(link)..system.getInfo("deviceID"))
+				local function networkListener(event)
+					if (event.isError) then
+						if (event.response=="Unknown error") then
+							description.text = words[565]
+						else
+							description.text = words[564].." ("..event.response..")"
+						end
+					else
+						if (event.response=="false") then
+							description.text = words[563]
+						else
+							description.text = words[562]
+						end
+					end
+				end
+				local headerg = {headers={["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"}}
+		        network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, headerg)
 				-- transition.to(buttonConnect, {alpha=0, time=250})
 				-- transition.to(buttonRectConnect, {alpha=0, time=250})
 				-- transition.to(buttonCancel, {alpha=0, time=250})
