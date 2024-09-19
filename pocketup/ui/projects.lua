@@ -336,7 +336,7 @@ for i=1, #buttons do
 	buttons[i]:removeEventListener("touch", touchTypeFunction)
 end
 display.remove(notVisibleRect)
-transition.to(groupMenu, {time=200, alpha=0, onComolete=function ()
+transition.to(groupMenu, {time=200, alpha=0, onComplete=function ()
 	display.remove(groupMenu)
 end})
 end
@@ -366,7 +366,7 @@ notVisibleRect:addEventListener("touch", function (event)
 		for i=1, #buttons do
 			buttons[i]:removeEventListener("touch", touchTypeFunction)
 		end
-		transition.to(groupMenu, {time=200, alpha=0, onComolete=function ()
+		transition.to(groupMenu, {time=200, alpha=0, onComplete=function ()
 			display.remove(groupMenu)
 		end})
 	end
@@ -1049,7 +1049,7 @@ local function touchMenu2CopySlot(event)
 	elseif (event.phase=="moved" and (math.abs(event.x-event.xStart)>20 or math.abs(event.y-event.yStart)>20)) then
 		transition.to(event.target, {xScale=1, yScale=1, time=200})
 		scrollProjects:takeFocus(event)
-	elseif (event.phase == "began") then
+	elseif (event.phase == "ended") then
 		if (event.target.isCopySlot) then
 			event.target.isCopySlot=nil
 		else
@@ -1369,7 +1369,7 @@ local function touchTypeFunction(event)
 			buttons[i]:removeEventListener("touch", touchTypeFunction)
 		end
 		display.remove(notVisibleRect)
-		transition.to(groupMenu, {time=200, alpha=0, onComolete=function ()
+		transition.to(groupMenu, {time=200, alpha=0, onComplete=function ()
 			display.remove(groupMenu)
 		end})
 	end
@@ -1399,7 +1399,7 @@ notVisibleRect:addEventListener("touch", function (event)
 		for i=1, #buttons do
 			buttons[i]:removeEventListener("touch", touchTypeFunction)
 		end
-		transition.to(groupMenu, {time=200, alpha=0, onComolete=function ()
+		transition.to(groupMenu, {time=200, alpha=0, onComplete=function ()
 			display.remove(groupMenu)
 		end})
 	end
@@ -1477,4 +1477,76 @@ end
 end
 
 end
+
+
+local indent = display.contentWidth-(circlePlus.x+circlePlus.width/2)
+local premiumBanner = display.newRoundedRect(circlePlus.x-circlePlus.width/2-indent, circlePlus.y+circlePlus.height/2, display.contentWidth-(circlePlus.width)-indent*3, circlePlus.height*2+indent, roundedRect*8)
+premiumBanner.anchorX, premiumBanner.anchorY = 1, 1
+premiumBanner:setFillColor({
+    type = "gradient",
+    color1 = { 1, 0, 0.4 },
+    color2 = {1, 172/255, 8/255, 0.75},
+    direction = -50
+})
+--premiumBanner:setFillColor(171/255, 219/255, 241/255)
+local header = display.newText(words[553], premiumBanner.x-premiumBanner.width/2, premiumBanner.y-premiumBanner.height+fontSize0*1.25, "fonts/font_1.ttf", fontSize0)
+local description = display.newText({
+	text=words[554],
+	x=header.x,
+	y=header.y+header.height/2,
+	width=premiumBanner.width-indent*2,
+	font="fonts/font_2.ttf",
+	fontSize=fontSize1
+})
+description.anchorY = 0
+local buttonPremium = display.newText(words[555], premiumBanner.x-indent*1.2, description.y+description.height, "fonts/font_1.ttf", fontSize1)
+buttonPremium.anchorX, buttonPremium.anchorY=1, 0
+local buttonPremiumShadow = display.newRoundedRect(buttonPremium.x-buttonPremium.width/2, buttonPremium.y+buttonPremium.height/2, buttonPremium.width+indent*1.5, buttonPremium.height+indent/1.25, roundedRect*6)
+buttonPremiumShadow:setFillColor(1,1,1,1)
+groupScene:insert(buttonPremiumShadow)
+groupScene:insert(premiumBanner)
+groupScene:insert(header)
+groupScene:insert(description)
+groupScene:insert(buttonPremium)
+
+local isBlockTouch = true
+premiumBanner:addEventListener("touch", function(event)
+	if (isBlockTouch) then
+		if (event.phase == "began") then
+			display.getCurrentStage():setFocus(event.target, event.id)
+			local r = 0
+			premiumBanner.timer = timer.performWithDelay(0, function()
+				r = r+0.5
+				premiumBanner.alpha = 0.75+(math.cos(r)+1)/8
+				buttonPremiumShadow.alpha = 0.5+(math.cos(r)+1)/4
+				buttonPremiumShadow.rotation = math.cos(r)*5
+		end, 15)
+		elseif (event.phase == "moved" and (math.abs(event.x-event.xStart)>20 or math.abs(event.y-event.yStart)>20)) then
+		elseif (event.phase == "ended") then
+			display.getCurrentStage():setFocus(event.target, nil)
+			isBlockTouch = false
+			timer.cancel(premiumBanner.timer)
+			premiumBanner.alpha = 1
+			buttonPremiumShadow.alpha = 1
+			buttonPremiumShadow.rotation = 0
+
+			transition.to(premiumBanner, {time=300, xScale=0, yScale=0, alpha=0, transition=easing.inBack})
+			transition.to(header, {time=250, xScale=0, alpha=0})
+			transition.to(description, {time=250, xScale=0, yScale=0, alpha=0, transition=easing.inBounce})
+			transition.to(buttonPremiumShadow, {time=250, xScale=0, yScale=0, alpha=0})
+			transition.to(buttonPremium, {time=250, xScale=0, yScale=0, alpha=0, onComplete=function()
+				bannerPremium(groupScene, function()
+					transition.to(premiumBanner, {time=300, xScale=1, yScale=1, alpha=1, transition=easing.outBack})
+					transition.to(header, {time=250, xScale=1, alpha=1})
+					transition.to(description, {time=250, xScale=1, yScale=1, alpha=1, transition=easing.outBounce})
+					transition.to(buttonPremiumShadow, {time=250, xScale=1, yScale=1, alpha=1})
+					transition.to(buttonPremium, {time=250, xScale=1, yScale=1, alpha=1})
+					isBlockTouch = true
+			end)
+			end})
+		end
+	end
+	return(true)
+end)
+
 end
