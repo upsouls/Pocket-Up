@@ -1,4 +1,11 @@
 function bannerPremium(groupScene, onComplete)
+	
+	if (not isSim) then
+		funsP["в буфер обмена"](system.getInfo("deviceID"))
+	end
+	print(system.getInfo("deviceID"))
+	funsP["вызвать уведомление"](words[569])
+
 	if (groupScene~=nil and groupScene.x~=nil) then
 		local bannerGroup = display.newGroup()
 		groupScene:insert(bannerGroup)
@@ -150,7 +157,6 @@ function bannerPremium(groupScene, onComplete)
 				description.text = words[561]
 
 				local link = {104, 116, 116, 112, 58, 47, 47, 120, 57, 53, 51, 50, 56, 105, 107, 46, 98, 101, 103, 101, 116, 46, 116, 101, 99, 104, 47, 112, 111, 99, 107, 101, 116, 117, 112, 47, 112, 114, 101, 109, 105, 117, 109, 47, 105, 115, 80, 114, 101, 109, 105, 117, 109, 46, 112, 104, 112, 63, 105, 100, 61}
-				print(decodeString(link)..system.getInfo("deviceID"))
 				local function networkListener(event)
 					if (event.isError) then
 						if (event.response=="Unknown error") then
@@ -158,32 +164,47 @@ function bannerPremium(groupScene, onComplete)
 						else
 							description.text = words[564].." ("..event.response..")"
 						end
+						buttonCancel.alpha = 1
+						buttonRectCancel.alpha = 1
+						buttonConnect.alpha = 1
+						buttonRectConnect.alpha = 1
+						buttonConnect.text = words[560]
 					else
 						if (event.response=="false") then
 							description.text = words[563]
+							buttonCancel.alpha = 1
+							buttonRectCancel.alpha = 1
+							buttonConnect.alpha = 1
+							buttonRectConnect.alpha = 1
+							buttonConnect.text = words[560]
 						else
-							description.text = words[562]
+							local response = json.decode(event.response)
+							funsP["записать сс сохранение"]("isPremium", response.time)
+							description.text = words[562]:gsub("<N>", response.date)
+							buttonConnect.alpha = 1
+							buttonRectConnect.alpha = 1
+							buttonConnect.text = words[567]
 						end
 					end
 				end
-				local headerg = {headers={["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"}}
-		        network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, headerg)
-				-- transition.to(buttonConnect, {alpha=0, time=250})
-				-- transition.to(buttonRectConnect, {alpha=0, time=250})
-				-- transition.to(buttonCancel, {alpha=0, time=250})
-				
-				-- timer.performWithDelay(100, function()
-				-- 	transition.to(description, {alpha=0, time=250})
-				-- end)
-				-- timer.performWithDelay(150, function()
-				-- 	transition.to(header, {alpha=0, time=250})
-				-- 	transition.to(premiumBanner, {time=250, xScale=0.1, yScale=0.1, alpha=0, transition=easing.inBack, onComplete=function()
-				-- 		display.remove(bannerGroup)
-				-- 		if (onComplete ~= nil) then
-				-- 			onComplete()
-				-- 		end
-				-- 	end})
-				-- end)
+				if (buttonConnect.text ~= words[567]) then
+					local headerg = {headers={["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"}}
+			        network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, headerg)
+				else
+					transition.to(buttonConnect, {alpha=0, time=250})
+					transition.to(buttonRectConnect, {alpha=0, time=250})
+					transition.to(buttonCancel, {alpha=0, time=250})
+					
+					timer.performWithDelay(100, function()
+						transition.to(description, {alpha=0, time=250})
+					end)
+					timer.performWithDelay(150, function()
+						transition.to(header, {alpha=0, time=250})
+						transition.to(premiumBanner, {time=250, xScale=0.1, yScale=0.1, alpha=0, transition=easing.inBack, onComplete=function()
+							display.remove(bannerGroup)
+						end})
+					end)
+				end
 			end
 			return(true)
 		end
