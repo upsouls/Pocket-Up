@@ -75,7 +75,7 @@ require("pocketup.settings")
 local listFiles = {
     "createTopBar","paletteAndHex",
     "createTextField","createBannerQuestion",
-    "loadFormulas","createBlock",
+    "loadFormulas","createBlock","bannerPremium"
 }
 for i=1, #listFiles do
     require("pocketup.uiModules."..listFiles[i])
