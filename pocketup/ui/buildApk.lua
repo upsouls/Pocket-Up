@@ -13,7 +13,7 @@ function scene_optionsApk(idProject, nameProject)
         native.setKeyboardFocus(nil)
         scene_projects()
     end
-    local topBarArray = topBar(groupScene, words[551]..': '..nameProject, nil, nil, funBackObjects)
+    local topBarArray = topBar(groupScene, words[570]..': '..nameProject, nil, nil, funBackObjects)
     topBarArray[4].alpha = 0
     local scrollProjects = widget.newScrollView({
         width=display.contentWidth,
