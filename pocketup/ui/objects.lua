@@ -1432,7 +1432,7 @@ end
 --AAAAAAAAAAAAAAAAAAA
 --AAAAAAAAAAAAAAAAAAA
 local arrayAllButtonsFunctions = {
-	["back"]={"back","startmenu",{{4,"copy"},{5,"delete"},{6,"rename"},{7,"newGroup"},{8,"newScene"},{9,"options"}}},
+	["back"]={"back","startmenu",{{4,"copy"},{5,"delete"},{6,"rename"},{7,"newGroup"},{8,"newScene"},{9,"options"},{570, "buildApk"}}},
 
 	["copy"]={"copy","copyAll",{{10,"copyAll"}}},
 	["delete"]={"delete","deleteAll",{{10,"deleteAll"}}},
@@ -1441,6 +1441,12 @@ local arrayAllButtonsFunctions = {
 arrayAllButtonsFunctions["startmenu"] = arrayAllButtonsFunctions["back"]
 arrayAllButtonsFunctions["copyAll"] = arrayAllButtonsFunctions["copy"]
 arrayAllButtonsFunctions["deleteAll"] = arrayAllButtonsFunctions["delete"]
+
+functionsMenu["startbuildApk"] = function()
+	isBackScene="back"
+	groupScene.alpha = 0
+	scene_optionsApk(IDPROJECT, NMPROJECT)
+end
 
 functionsMenu["back"] = function()
 isBackScene = arrayAllButtonsFunctions[isBackScene][2]
