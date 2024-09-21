@@ -24,7 +24,7 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         local time = make_all_formulas(infoBlock[2][1], object)
 if wait_type == 'wait' then
     lua = lua ..
-    'local name = \'Timer'..index..'\'..\'_\'..Timers_max\
+    'local name = \'Timer'..index..'_'..obj_id..'\'..\'_\'..Timers_max\
     if not Timers[name] then\
     timer.new('..time..'*1000, function()\
     Timers[name] = nil\
@@ -32,7 +32,7 @@ if wait_type == 'wait' then
     Timers[name] = timer.new('..time..'*1000, function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
     elseif wait_type == 'repeat' then
 lua = lua ..
-'local name = \'Timer'..index..'\'..\'_\'..Timers_max\
+'local name = \'Timer'..index..'_'..obj_id..'\'..\'_\'..Timers_max\
 if not Timers[name] then\
 pcall(function()timer.pause(_repeat)end)\
 timer.new('..time..'*1000, function()\
