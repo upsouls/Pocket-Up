@@ -1554,22 +1554,6 @@ local function loadBannerPremium()
 end
 local isPrem = not (funsP["прочитать сс сохранение"]("isPremium")==nil)
 local datePrem = funsP["прочитать сс сохранение"]("isPremium")
-local date = funsP["прочитать сс сохранение"]("date")
-if (date==nil or date<os.time()) then
-	funsP["записать сс сохранение"]("date", os.time())
-else
-	SCENES[SCENE][2].alpha = 0
-	isBackScene = "block"
-	local header = display.newText({
-		text=words[566],
-		x=CENTER_X,
-		y=CENTER_Y,
-		width=display.contentWidth,
-		fontSize=fontSize1*1.25,
-		align="center"
-	})
-	header.alpha=0.75
-end
 
 
 local function decodeString(encoded)
