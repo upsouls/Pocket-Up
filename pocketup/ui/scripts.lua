@@ -842,7 +842,13 @@ local timerMoveBlock = nil
 local yNewMoveSlot = nil
 local isTouchBlock = false
 touchBlock = function(event)
+    if (event.phase=="ended" or event.phase=="cancelled") then
+        timer.performWithDelay(0, function()
+            display.getCurrentStage():setFocus(event.target, nil)
+        end)
+    end
     if ((event.phase~="began" or not isMoveBlock) and isBackScene=="back") and (event.phase~="moved" or (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) or event.phase=="ended" then
+        print(event.phase)
         if (event.phase=="began") then
             yNewMoveSlot = event.y
             isTouchBlock = true

@@ -37,7 +37,7 @@ function scene_categoriesScripts(funAddBlock)
 	scrollProjects.anchorY=0
 	scrollProjects.y = topBarArray[1].y+topBarArray[1].height
 
-	local categories = {{67,"used","orange"}, {68,"event","grown"},{69,"control","orange"},{70,"physic","blue"},{71,"sounds","violet"},{72,"images","green"},{427,"particles","green"},{73,"pen","darkgreen"},{74,"data","red"},{75,"device","gold"},{532,"textFields","green"},{531,"miniScenes","yellow"}}
+	local categories = {{67,"used","orange"}, {68,"event","grown"},{69,"control","orange"},{70,"physic","blue"},{71,"sounds","violet"},{72,"images","green"},{427,"particles","green"},{73,"pen","darkgreen"},{74,"data","red"},{75,"device","gold"},{532,"textFields","green"},{531,"miniScenes","yellow"},{587, "elementInterface", "pink"}}
 
 	for i=1, #categories do
 		local sheetOptions = {

@@ -223,6 +223,11 @@ allBlocks = {
 	["editAlphaMiniScene"]={"block", "blocks/block_yellow_3.png", { {{"text", words[548]}}, {{"text", words[529]..":"}, {"cell", nil, 3}}, {{"text", words[328]..":"}, {"cell", nil, 1.5},{"text","%"}} }, 109, 188, false},
 	["setLayer"]={"block", "blocks/block_blue_1.png", { {{"text", words[551]}, {"cell", nil, 1.5}} }, 109, 88, false},
 	["setAnchor"]={"block", "blocks/block_green_2.png", { {{"text", words[552]..":"}, {"cell", nil, 2}, {"text", "%"}},{{"text",words[420]..":"}, {"cell", nil, 2},{"text", "%"}} }, 109, 142, false},
+	["createJoystick"]={"block", "blocks/block_pink_4.png", { {{"text", words[575]..":"}, {"cell", nil, 2}}, {{"text", words[576]..":"}}, {{"images"}}, {{"text", words[577]..":"}}, {{"images"}}, {{"text", words[578]}}, {{"variables"}}, {{"text", words[579]}}, {{"variables"}}, {{"text", words[580]}}, {{"function"}} }, 109, 450, false},
+	["setPositionJoystick"]={"block", "blocks/block_pink_2.png", {{{"text", words[582]}}, {{"text", words[583]..":"}, {"cell", nil, 1.4}, {"text", words[59]..":"}, {"cell", nil, 1.4}, {"text", words[420]..":"}, {"cell", nil, 1.4}}}, 109, 142, false},
+	["setSizeJoystick"]={"block", "blocks/block_pink_2.png", {{{"text", words[584]}}, {{"text", words[583]..":"}, {"cell", nil, 2}, {"text", words[207]..":"}, {"cell", nil, 2}}}, 109, 142, false},
+	["setSizeJoystick1"]={"block", "blocks/block_pink_2.png", {{{"text", words[585]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}, {"text", words[207]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
+	["setSizeJoystick2"]={"block", "blocks/block_pink_2.png", {{{"text", words[586]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}, {"text", words[207]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 }
 
 

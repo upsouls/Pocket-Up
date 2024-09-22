@@ -3,6 +3,12 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
+			{"createJoystick", { {{"text", words[581]}}, {"images", nameImage}, {"images", nameImage}, {localityVariable, nameVariable}, {localityVariable, nameVariable},{"function", nameFunction} }},
+			{"setPositionJoystick", {{{"text", words[581]}}, {{"number", 100}}, {{"number", 200}} }},
+			{"setSizeJoystick", {{{"text", words[581]}}, {{"number", 60}} }},
+			{"setSizeJoystick1", {{{"text", words[581]}}, {{"number", 60}} }},
+			{"setSizeJoystick2", {{{"text", words[581]}}, {{"number", 60}} }},
+
 			{"setAnchor", {{{"number", 0}}, {{"number", 100}}}},
 			{"setLayer", {{{"number", 2}}}},
 
@@ -275,6 +281,13 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"miniSceneInsertMiniScene", {{{"text", words[530]}}, {{"text", words[530].." 2"}} }},
 			{"miniSceneInsertCamera", {{{"text",words[530]}}}},
 			{"miniSceneRemoveCamera", {{{"text",words[530]}}}},
+		},
+		["elementInterface"] = {
+			{"createJoystick", { {{"text", words[581]}}, {"images", nameImage}, {"images", nameImage}, {localityVariable, nameVariable}, {localityVariable, nameVariable},{"function", nameFunction} }},
+			{"setPositionJoystick", {{{"text", words[581]}}, {{"number", 100}}, {{"number", 200}} }},
+			{"setSizeJoystick", {{{"text", words[581]}}, {{"number", 60}} }},
+			{"setSizeJoystick1", {{{"text", words[581]}}, {{"number", 60}} }},
+			{"setSizeJoystick2", {{{"text", words[581]}}, {{"number", 60}} }},
 		},
 	}
 	return(myTable)
