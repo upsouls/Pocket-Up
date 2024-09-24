@@ -293,4 +293,32 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 	return(myTable)
 end
 
+
+
+premBlocks = {
+	createJoystick=true,
+	setPositionJoystick=true,
+	setSizeJoystick=true,
+	setSizeJoystick1=true,
+	setSizeJoystick2=true,
+	setShapeHitbox=true,
+	removeCameraTextField=true,
+	insertCameraTextField=true,
+	setPositionTextField=true,
+	editPositionTextField=true,
+	setFontSizeTextField=true,
+	setTypeInputTextField=true,
+	setAlignTextField=true,
+	--deleteTextField=true,
+	isSecureTextField=true,
+	placeholderTextField=true,
+	valueTextField=true,
+	setColorTextField=true,
+	setSelectionTextField=true,
+	getSelectionTextField=true,
+	setKeyboardToTextField=true,
+	removeKeyboardToTextField=true,
+}
+
+
 return(f)

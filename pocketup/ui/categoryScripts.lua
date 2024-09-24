@@ -93,21 +93,33 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 			block.y = yTargetPos-block.height/2
 			groupSceneScroll:insert(block)
 			block:addEventListener("touch", function (event)
+				local function isPrem()
+					local isPrem = not (funsP["прочитать сс сохранение"]("isPremium")==nil)
+					if (funsP["прочитать сс сохранение"]("blockPrem")~=nil) then
+						return(false)
+					else
+						return(isPrem)
+					end
+				end
 				if (event.phase=="began") then
 					display.getCurrentStage():setFocus(event.target, event.id)
 				elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
 					scrollProjects:takeFocus(event)
 				elseif (event.phase~="moved") then
-					display.getCurrentStage():setFocus(event.target, nil)
 					local infoBlock = event.target.infoBlock
-					display.remove(SCENES[SCENE][1])
-					display.remove(SCENES[SCENE][2])
-					SCENE = "scripts"
-					SCENES[SCENE][1].alpha = 1
-					SCENES[SCENE][1].x = 0
-					funBack = oldBackScripts
-					oldBackScripts = nil
-					funAddBlock(infoBlock)
+					display.getCurrentStage():setFocus(event.target, nil)
+					if ((premBlocks[infoBlock[1]]==nil or isPrem())) then
+						display.remove(SCENES[SCENE][1])
+						display.remove(SCENES[SCENE][2])
+						SCENE = "scripts"
+						SCENES[SCENE][1].alpha = 1
+						SCENES[SCENE][1].x = 0
+						funBack = oldBackScripts
+						oldBackScripts = nil
+						funAddBlock(infoBlock)
+					else
+						bannerPremium(groupScene)
+					end
 				end
 				return(true)
 			end)

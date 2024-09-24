@@ -180,6 +180,7 @@ function bannerPremium(groupScene, onComplete)
 						else
 							local response = json.decode(event.response)
 							funsP["записать сс сохранение"]("isPremium", response.time)
+							funsP["записать сс сохранение"]("blockPrem", nil)
 							description.text = words[562]:gsub("<N>", response.date)
 							buttonConnect.alpha = 1
 							buttonRectConnect.alpha = 1
