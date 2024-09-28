@@ -163,6 +163,14 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         add_pcall()
         lua = lua..'local joystick = joysticks['..make_all_formulas(infoBlock[2][1], object)..'].joystick2\njoystick.xScale = '..make_all_formulas(infoBlock[2][2], object)..'/100\njoystick.yScale = joystick.xScale'
         end_pcall()
+    elseif (nameBlock=='cameraInsertJoystick') then
+        add_pcall()
+        lua = lua..'cameraGroup:insert(joysticks['..make_all_formulas(infoBlock[2][1], object)..'])'
+        end_pcall()
+    elseif (nameBlock=='cameraRemoveJoystick') then
+        add_pcall()
+        lua = lua..'notCameraGroup:insert(joysticks['..make_all_formulas(infoBlock[2][1], object)..'])'
+        end_pcall()
     end
     return(lua)
 end

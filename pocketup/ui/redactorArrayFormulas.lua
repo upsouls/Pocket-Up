@@ -6,7 +6,7 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 	local groupScene = display.newGroup()
 	local groupSceneScroll = display.newGroup()
 	SCENE = "arrayFormulas"
-	SCENES[SCENE] = {groupScene, groupSceneScroll}
+	SCENES[SCENE] = {groupSceneScroll, groupScene}
 	local funBackObjects = {}
 	local topBarArray = topBar(groupScene, headerFormulas, nil, nil, funBackObjects)
 	topBarArray[4].alpha = 0

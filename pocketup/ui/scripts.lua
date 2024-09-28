@@ -112,7 +112,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                         isDeleteFile={{words[222],{"isDeleteFile", "save"}},{words[223],{"isDeleteFile","delete"}}},
                                         typeBody={{words[393],{"typeBody","dynamic"}}, {words[394],{"typeBody","static"}}, {words[395],{"typeBody","noPhysic"}}},
                                         GL={{"GL_ONE",{"GL","GL_ONE"}},{"GL_ZERO",{"GL","GL_DST_COLOR"}},{"GL_ONE_MINUS_DST_COLOR",{"GL","GL_ONE_MINUS_DST_COLOR"}},{"GL_SRC_ALPHA",{"GL","GL_SRC_ALPHA"}},{"GL_ONE_MINUS_SRC_ALPHA",{"GL","GL_ONE_MINUS_SRC_ALPHA"}},{"GL_DST_ALPHA",{"GL","GL_DST_ALPHA"}},{"GL_ONE_MINUS_DST_ALPHA",{"GL","GL_ONE_MINUS_DST_ALPHA"}},{"GL_SRC_ALPHA_SATURATE",{"GL","GL_SRC_ALPHA_SATURATE"}},{"GL_SRC_COLOR",{"GL","SRC_COLOR"}},{"GL_ONE_MINUS_SRC_COLOR",{"GL","GL_ONE_MINUS_SRC_COLOR"}}},
-                                        inputType={{words[498], {"inputType", "default"}}, {words[499], {"inputType", "number"}}, {words[500], {"inputType", "decimal"}}, {words[501], {"inputType", "phone"}}, {words[502], "url"}, {words[503], {"inputType", "email"}}, {words[504], {"inputType", "no-emoji"}}},
+                                        inputType={{words[498], {"inputType", "default"}}, {words[499], {"inputType", "number"}}, {words[500], {"inputType", "decimal"}}, {words[501], {"inputType", "phone"}}, {words[502], {"inputType", "url"}}, {words[503], {"inputType", "email"}}, {words[504], {"inputType", "no-emoji"}}},
                                     }
                                     tableAnswers = allAnswers[idParameter]
                                     functionOnComplete = function (answer)
@@ -781,6 +781,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                     event.target:setFillColor(48/255,48/255,48/255)
                                     scrollfunctions:takeFocus(event)
                                 elseif (event.phase=="ended") then
+                                    isBlockTouchBlock = false
                                     event.target:setFillColor(48/255,48/255,48/255)
                                     functionOnComplete(event.target.answer)
                                     for i=1, #buttonsFunctions do
@@ -792,7 +793,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                     end})
                                     display.remove(backgroundNotTouch)
                                 end
-                                isBlockTouchBlock = false
+                                
                                 return(true)
                             end
                             isBlockTouchBlock = true

@@ -53,6 +53,11 @@ function createBlock(block)
 	local group2 = display.newGroup()
 	group:insert(group2)
 
+	if (infoBlock[2]:gsub("yellow", "")~= infoBlock[2]) then
+		sprite:setFillColor(0.85,0.85,0.75)
+		image:setFillColor(0.85,0.85,0.75)
+	end
+
 local function isPrem()
 	local isPrem = not (funsP["прочитать сс сохранение"]("isPremium")==nil)
 	if (funsP["прочитать сс сохранение"]("blockPrem")~=nil) then

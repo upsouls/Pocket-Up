@@ -107,19 +107,19 @@ function scene_run_game(typeBack, paramsBack)
     renameFormulas.displayWidth, renameFormulas.displayHeight, renameFormulas.displayActualWidth, renameFormulas.displayActualHeight = "("..tostring(options.orientation == "vertical" and options.displayWidth or options.displayHeight)..")", "("..tostring(options.orientation == "vertical" and options.displayHeight or options.displayWidth)..")", "("..tostring(options.orientation == "vertical" and display.actualContentWidth or display.actualContentHeight)..")", "("..tostring(options.orientation == "vertical" and display.actualContentHeight or display.actualContentWidth)..")"
 
     local isScriptsBack = false
+    local dW, dH = display.contentWidth, display.contentHeight
 
     function showOldScene()
         display.setDefault("background", 4/255, 34/255, 44/255)
         orientation.lock('portrait')
-        timer.performWithDelay(0, function()
-            if (typeBack=="scripts") then
-                scene_scripts(paramsBack[1], paramsBack[2], paramsBack[3])
-            elseif (typeBack=="objects") then
-                scene_objects(paramsBack[1], paramsBack[2], paramsBack[3])
-            elseif (typeBack=="scenes") then
-                scene_scenes(paramsBack[1], paramsBack[2])
-            end
-        end)
+        display.contentWidth, display.contentHeight = dW, dH
+        if (typeBack=="scripts") then
+            scene_scripts(paramsBack[1], paramsBack[2], paramsBack[3])
+        elseif (typeBack=="objects") then
+            scene_objects(paramsBack[1], paramsBack[2], paramsBack[3])
+        elseif (typeBack=="scenes") then
+            scene_scenes(paramsBack[1], paramsBack[2])
+        end
     end
     max_fors = 0
     lua = ''
@@ -140,7 +140,7 @@ function scene_run_game(typeBack, paramsBack)
     for i=1, #globalArrays do
             lua = lua..'list_'..globalArrays[i][1].." = {}\n"
     end
-    lua = lua.."local textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nplaySounds = {}\nlocal playingSounds = {}"
+    lua = lua.."local WebViews = {} local textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nplaySounds = {}\nlocal playingSounds = {}"
 
     for s=1, #scenes do
         local scene_id = scenes[s][2]
