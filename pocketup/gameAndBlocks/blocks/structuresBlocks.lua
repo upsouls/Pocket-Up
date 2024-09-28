@@ -224,12 +224,12 @@ allBlocks = {
 	["setLayer"]={"block", "blocks/block_blue_1.png", { {{"text", words[551]}, {"cell", nil, 1.5}} }, 109, 88, false},
 	["setAnchor"]={"block", "blocks/block_green_2.png", { {{"text", words[552]..":"}, {"cell", nil, 2}, {"text", "%"}},{{"text",words[420]..":"}, {"cell", nil, 2},{"text", "%"}} }, 109, 142, false},
 	["createJoystick"]={"block", "blocks/block_pink_4.png", { {{"text", words[575]..":"}, {"cell", nil, 2}}, {{"text", words[576]..":"}}, {{"images"}}, {{"text", words[577]..":"}}, {{"images"}}, {{"text", words[578]}}, {{"variables"}}, {{"text", words[579]}}, {{"variables"}}, {{"text", words[580]}}, {{"function"}} }, 109, 450, false},
-	["setPositionJoystick"]={"block", "blocks/block_pink_2.png", {{{"text", words[582]}, {{"text", words[583]..":"}, {"cell", nil, 1.4}, {"text", words[59]..":"}, {"cell", nil, 1.4}, {"text", words[420]..":"}, {"cell", nil, 1.4}}}}, 109, 142, false},
+	["setPositionJoystick"]={"block", "blocks/block_pink_3.png", {{{"text", words[604]}}, {{"text", words[583]..":"}, {"cell", nil, 1.4}}, {{"text", words[59]..":"}, {"cell", nil, 1.4}, {"text", words[60]..":"}, {"cell", nil, 1.4}}}, 109, 188, false},
 	["setSizeJoystick"]={"block", "blocks/block_pink_2.png", {{{"text", words[584]}}, {{"text", words[583]..":"}, {"cell", nil, 2}, {"text", words[207]..":"}, {"cell", nil, 2}}}, 109, 142, false},
 	["setSizeJoystick1"]={"block", "blocks/block_pink_2.png", {{{"text", words[585]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}, {"text", words[207]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["setSizeJoystick2"]={"block", "blocks/block_pink_2.png", {{{"text", words[586]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}, {"text", words[207]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
-	["cameraInsertJoystick"]={"block", "blocks/block_pink_2.png", {{{"text", words[602]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
-	["cameraRemoveJoystick"]={"block", "blocks/block_pink_2.png", {{{"text", words[603]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
+	["cameraInsertJoystick"]={"block", "blocks/block_pink_2.png", {{{"text", words[603]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
+	["cameraRemoveJoystick"]={"block", "blocks/block_pink_2.png", {{{"text", words[602]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["newWebView"]={"block", "blocks/block_pink_3_5.png", {{{"text", words[588]}},{{"text", words[583]..":"}, {"cell", nil, 1.5}, {"text",words[590]..":"}, {"cell", nil, 1.5}}, {{"text", words[59]..":"}, {"cell", nil, 1.5}, {"text", words[60]..":"}, {'cell', nil, 1.5}}, {{"text", words[490]..":"}, {"cell", nil, 1.5}, {"text", words[491]..":"}, {'cell', nil, 1.5}}}, 109, 250, false},
 	["setWebViewX"]={"block", "blocks/block_pink_2.png", {{{"text", words[591]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}, {"text", words[59]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["setWebViewY"]={"block", "blocks/block_pink_2.png", {{{"text", words[592]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}, {"text", words[60]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
@@ -240,7 +240,7 @@ allBlocks = {
 	["backWebView"]={"block", "blocks/block_pink_2.png", {{{"text", words[598]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["forwardWebView"]={"block", "blocks/block_pink_2.png", {{{"text", words[599]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["stopWebView"]={"block", "blocks/block_pink_2.png", {{{"text", words[600]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
-	["reloadWebView"]={"block", "blocks/block_pink_2.png", {{{"text", words[601]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
+	["reloadWebView"]={"block", "blocks/block_pink_2.png", {{{"text", words[604]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 }
 
 

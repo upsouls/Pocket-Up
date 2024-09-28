@@ -107,12 +107,16 @@ function scene_run_game(typeBack, paramsBack)
     renameFormulas.displayWidth, renameFormulas.displayHeight, renameFormulas.displayActualWidth, renameFormulas.displayActualHeight = "("..tostring(options.orientation == "vertical" and options.displayWidth or options.displayHeight)..")", "("..tostring(options.orientation == "vertical" and options.displayHeight or options.displayWidth)..")", "("..tostring(options.orientation == "vertical" and display.actualContentWidth or display.actualContentHeight)..")", "("..tostring(options.orientation == "vertical" and display.actualContentHeight or display.actualContentWidth)..")"
 
     local isScriptsBack = false
-    local dW, dH = display.contentWidth, display.contentHeight
+    local dW, dH, dCX, dCY, sOX, sOY = display.actualContentWidth, display.contentHeight, CENTER_X, CENTER_Y, display.screenOriginX, display.screenOriginY
 
     function showOldScene()
         display.setDefault("background", 4/255, 34/255, 44/255)
         orientation.lock('portrait')
+        display.screenOriginX, display.screenOriginY = sOX, sOY
         display.contentWidth, display.contentHeight = dW, dH
+        display.contentCenterX = dCX
+        CENTER_X = dCX
+        CENTER_Y = dCY
         if (typeBack=="scripts") then
             scene_scripts(paramsBack[1], paramsBack[2], paramsBack[3])
         elseif (typeBack=="objects") then

@@ -16,8 +16,8 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"reloadWebView", {{{"text", words[589]}}}},
 
 			{"createJoystick", { {{"text", words[581]}}, {"images", nameImage}, {"images", nameImage}, {localityVariable, nameVariable}, {localityVariable, nameVariable},{"function", nameFunction} }},
-			{"cameraInsertJoystick", {{{"text", words[530]}}}},
-			{"cameraRemoveJoystick", {{{"text", words[530]}}}},
+			{"cameraInsertJoystick", {{{"text", words[581]}}}},
+			{"cameraRemoveJoystick", {{{"text", words[581]}}}},
 			{"setPositionJoystick", {{{"text", words[581]}}, {{"number", 100}}, {{"number", 200}} }},
 			{"setSizeJoystick", {{{"text", words[581]}}, {{"number", 60}} }},
 			{"setSizeJoystick1", {{{"text", words[581]}}, {{"number", 60}} }},
@@ -313,12 +313,13 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"reloadWebView", {{{"text", words[589]}}}},
 			
 			{"createJoystick", { {{"text", words[581]}}, {"images", nameImage}, {"images", nameImage}, {localityVariable, nameVariable}, {localityVariable, nameVariable},{"function", nameFunction} }},
-			{"cameraInsertJoystick", {{{"text", words[530]}}}},
-			{"cameraRemoveJoystick", {{{"text", words[530]}}}},
+			{"cameraInsertJoystick", {{{"text", words[581]}}}},
+			{"cameraRemoveJoystick", {{{"text", words[581]}}}},
 			{"setPositionJoystick", {{{"text", words[581]}}, {{"number", 100}}, {{"number", 200}} }},
 			{"setSizeJoystick", {{{"text", words[581]}}, {{"number", 60}} }},
 			{"setSizeJoystick1", {{{"text", words[581]}}, {{"number", 60}} }},
 			{"setSizeJoystick2", {{{"text", words[581]}}, {{"number", 60}} }},
+			{"setPositionJoystick", {{{"text", words[581]}}, {{"number", 100}}, {{"number", 200}} }},
 		},
 	}
 	return(myTable)
