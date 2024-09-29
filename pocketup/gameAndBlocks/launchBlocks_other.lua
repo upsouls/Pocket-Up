@@ -317,6 +317,9 @@ end]]
         end_pcall()
     elseif nameBlock == 'deleteClone' then
         add_pcall()
+        lua = lua..'if true then pcall(function() timer.cancel(_repeat) end) return true end'
+        end_pcall()
+        add_pcall()
         lua = lua.."if (target) then\ntable.remove(target.parent_obj.clones, target.idClone)\nfor i=1, #target.parent_obj.clones do\ntarget.parent_obj.clones[i].idClone = i\nend\ndisplay.remove(target)\n\nend\n"
         end_pcall()
     elseif (nameBlock == 'broadcastFunction' and infoBlock[2][1][2]~=nil) then
