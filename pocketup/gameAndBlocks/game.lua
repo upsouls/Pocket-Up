@@ -146,8 +146,10 @@ function scene_run_game(typeBack, paramsBack)
     end
     lua = lua.."local WebViews = {} local textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nplaySounds = {}\nlocal playingSounds = {}"
 
+    local level_blocks = {}
     for s=1, #scenes do
         local scene_id = scenes[s][2]
+        level_blocks[scene_id] = {}
         local scene_path = IDPROJECT.."/scene_"..scene_id
         local xScaleMainGroup = display.contentWidth/options.displayWidth
         local yScaleMainGroup = display.contentHeight/options.displayHeight
@@ -179,6 +181,9 @@ function scene_run_game(typeBack, paramsBack)
 
         for o=1, #objects do
             if (type(objects[o][2])~="string") then
+
+            wait_type = 'wait'
+            wait_table = {_ends = 0, event = 0}
 
             lua = lua.."\npcall(function()\n"
 
@@ -247,27 +252,29 @@ function scene_run_game(typeBack, paramsBack)
 
             local blocks = json.decode(funsP['получить сохранение'](obj_path.."/scripts"))
 
-            local level_blocks = {}
+            level_blocks[scene_id][obj_id] = {}
             if true then
                 local level = 1
                 for i, value in ipairs(blocks) do
+                    if blocks[i][3] ~= 'off' then
                     local block = blocks[i]
                     local nameBlock = block[1]
                     local table = {'if','timer','repeat','ifElse (2)','waitIfTrue',
                     'foreach','cycleForever','for','repeatIsTrue'}
 
                     local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
-                    'endFor','endForeach','endCycleForever'}
+                    'endFor','endForeach','endCycleForever','endWait'}
                     for _, value in ipairs(table) do
                         if nameBlock == value then
                             level = level+1
                         end
                     end
-                    level_blocks[i] = level
+                    level_blocks[scene_id][obj_id][i] = level
                     for _, value in ipairs(table_end) do
                         if nameBlock == value then
                             level = level-1
                         end
+                    end                          
                     end
                 end    
             end
@@ -397,6 +404,8 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
         end
       else
         local line_number = tonumber(string.match(error_msg, "%d+"))
+        local table = lua:split('\n')
+        print(table[line_number])
         error("Ошибка:".. error_msg .. " строка:" .. line_number)
       end
 end

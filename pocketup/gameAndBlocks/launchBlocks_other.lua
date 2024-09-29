@@ -13,6 +13,11 @@ local end_pcall = function ()
     lua = lua..'\nend)\n'
 end
 
+local isEvent = {
+    start=true, touchObject=true, touchScreen=true, ["function"]=true, whenTheTruth=true, collision=true, changeBackground=true, startClone=true,
+    movedObject=true, onTouchObject=true, movedScreen=true, onTouchScreen=true, touchBack=true, endedCollision=true,
+}
+
 local function make_block(infoBlock, object, images, sounds, index, blocks, level_blocks, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)
     if infoBlock[3] == 'off' then
         return ''
@@ -45,34 +50,36 @@ wait_type = 'wait'
 end
 local numbers = wait_table['block:'..index] or 1
 wait_end = true
-if level_blocks[index] == 1 then
+if level_blocks[scene_id][obj_id][index] == 1 then
     wait_table.event = wait_table.event + 1
 else
     for i = index+1, #blocks, 1 do
-        local block = blocks[i]
-        local nameBlock = block[1]
-        if block[3] == 'off' then
-            nameBlock = ''
-        end
-        if nameBlock == 'wait' and
-        level_blocks[index] == level_blocks[i] then
-            numbers = numbers + 1
-            wait_table['block:'..i] = numbers
-        end
-        local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
-        'endFor','endForeach','endCycleForever','else'}
-        local _break = false
-        for i2, value in ipairs(table_end) do
-            if nameBlock == value and level_blocks[index] == level_blocks[i] then
+        if blocks[i][3] ~= 'off' then
+            local block = blocks[i]
+            local nameBlock = block[1]
+            if block[3] == 'off' then
+                nameBlock = ''
+            end
+            if nameBlock == 'wait' and
+            level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
+                numbers = numbers + 1
                 wait_table['block:'..i] = numbers
-                wait_end = false
-                wait_table['_ends'] = wait_table['_ends'] + 1
-                _break = true
+            end
+            local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
+            'endFor','endForeach','endCycleForever','else','endWait'}
+            local _break = false
+            for i2, value in ipairs(table_end) do
+                if nameBlock == value and level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
+                    wait_table['block:'..i] = numbers
+                    wait_end = false
+                    wait_table['_ends'] = wait_table['_ends'] + 1
+                    _break = true
+                    break
+                end
+            end
+            if _break then
                 break
             end
-        end
-        if _break then
-            break
         end
     end
 end
@@ -200,6 +207,8 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         add_pcall()
         lua = lua..'_repeat = timer.GameNew(0,'..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend\n'
     elseif nameBlock == 'endRepeat' then
+        print(wait_table['block:'..index])
+        print(99999)
                 if wait_table['block:'..index] then
             for i = 1, wait_table['block:'..index], 1 do
                 lua = lua .. 'end)\nend\n'
