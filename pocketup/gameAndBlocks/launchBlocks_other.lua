@@ -288,33 +288,30 @@ end]]
         end
         end_pcall()
     elseif nameBlock == 'clone' then
-        add_pcall()
+        --add_pcall()
         if (infoBlock[2][1][2]~=nil) then
-            timer.new(100, function()
-                print("пизда")
-            end)
-            
             lua = lua.."\nlocal target = objects['object_"..infoBlock[2][1][2].."']"
         end
-        if (#images>0) then
-            lua = lua.."\nlocal myClone = display.newImage(target.image_path, system.DocumentsDirectory, target.x, target.y)"
-            lua = lua.."\nmyClone.image_path = target.image_path\nfor k, v in pairs(target.parent_obj.namesVars) do\nmyClone[v] = 0\nend\nfor k, v in pairs(target.parent_obj.namesLists) do\nmyClone[v] = {}\nend"
-        else
-            lua = lua.."\nlocal myClone = display.newImage('images/notVisible.png', target.x, target.y)"
-        end
+        lua = lua.."\nlocal myClone\nif (target.parent_obj.countImages>0) then"
+        lua = lua.."\nmyClone = display.newImage(target.image_path, system.DocumentsDirectory, target.x, target.y)"
+        lua = lua.."\nmyClone.image_path = target.image_path\nfor k, v in pairs(target.parent_obj.namesVars) do\nmyClone[v] = 0\nend\nfor k, v in pairs(target.parent_obj.namesLists) do\nmyClone[v] = {}\nend"
+        lua = lua.."\nelse"
+        lua = lua.."\nmyClone = display.newImage('images/notVisible.png', target.x, target.y)"
+        lua = lua.."\nend"
         lua = lua.."\ntarget.group:insert(myClone)\nmyClone.group = target.group"
         lua = lua.."\nmyClone:addEventListener('touch', function(event)\nif (event.phase=='began') then\nlocal newIdTouch=globalConstants.touchId+1\nglobalConstants.touchId = newIdTouch\nglobalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true\nglobalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\ndisplay.getCurrentStage():setFocus(event.target, event.id)\nevent.target.isTouch = true\nfor key, value in pairs(objects) do\nfor i=1, #events_touchScreen[key] do\nevents_touchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_touchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #myClone.parent_obj.events_touchObject do\nmyClone.parent_obj.events_touchObject[i](event.target)\nend\nelseif (event.phase=='moved') then\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_movedScreen[key] do\nevents_movedScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_movedScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #myClone.parent_obj.events_movedObject do\nmyClone.parent_obj.events_movedObject[i](event.target)\nend\nelse\ndisplay.getCurrentStage():setFocus(event.target, nil)\nevent.target.isTouch = nil\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (pocketupFuns.getCountTouch(globalConstants.isTouchsId)==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch = false\nend\nfor key, value in pairs(objects) do\nfor i=1, #events_onTouchScreen[key] do\nevents_onTouchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_onTouchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #myClone.parent_obj.events_onTouchObject do\nmyClone.parent_obj.events_onTouchObject[i](event.target)\nend\nend\nreturn(true)\nend)"
         lua = lua.."\nmyClone.xScale, myClone.yScale, myClone.alpha, myClone.rotation, myClone.numberImage, myClone.parent_obj = target.xScale, target.yScale, target.alpha, target.rotation, target.numberImage, target.parent_obj"
         lua = lua.."\nmyClone.fill.effect = 'filter.brightness'\nmyClone.property_brightness = target.property_brightness\nmyClone.fill.effect.intensity = (target.property_brightness)/100-1"
 
 
-        lua = lua.."\ntarget.parent_obj.clones[#target.parent_obj.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
+        lua = lua.."\nmyClone.parent_obj = target\ntarget.parent_obj.clones[#target.parent_obj.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
         lua = lua.."\nmyClone.isVisible = target.isVisible\nmyClone.physicsReload, myClone.physicsType , myClone.physicsTable = target.physicsReload or function(ob) end, target.physicsType or 'static' , json.decode(json.encode(target.physicsTable)) or {}\nmyClone:physicsReload()"
         lua = lua.."\nmyClone.property_color = target.property_color\nlocal r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\nmyClone:setFillColor(r,g,b)"
-        lua = lua.."myClone:addEventListener('collision', function(event)\nif (event.phase=='began') then\nevent.target.isTouchObject = true\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_collision do\nmyClone.parent_obj.events_collision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nelseif (event.phase=='ended') then\nevent.target.isTouchObject = nil\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_endedCollision do\nmyClone.parent_obj.events_endedCollision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nend\nend)"
-        lua = lua.."myClone.gravityScale = target.gravityScale"
-        lua = lua.."\nfor i=1, #myClone.parent_obj.events_startClone do\nmyClone.parent_obj.events_startClone[i](myClone)\nend\n"
-        end_pcall()
+        lua = lua.."\ntimer.new(0, function()\nmyClone:addEventListener('collision', function(event)\nif (event.phase=='began') then\nevent.target.isTouchObject = true\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_collision do\nmyClone.parent_obj.events_collision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nelseif (event.phase=='ended') then\nevent.target.isTouchObject = nil\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_endedCollision do\nmyClone.parent_obj.events_endedCollision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nend\nend)"
+        lua = lua.."\nmyClone.gravityScale, myClone.isSensor = target.gravityScale, target.isSensor"
+        lua = lua.."\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_startClone do\nmyClone.parent_obj.events_startClone[i](myClone)\nend\n"
+        lua = lua.."\nend) end)"
+        --end_pcall()
     elseif nameBlock == 'deleteClone' then
         add_pcall()
         lua = lua..'if true then pcall(function() timer.cancel(_repeat) end) return true end'
@@ -392,10 +389,12 @@ end]]
         max_fors = max_fors+1
         add_pcall()
         lua = lua..'for i'..max_fors..' = '..one..' , '.._end..', 1 do\n'
-        if infoBlock[2][3][1] == 'globalVariable' then
-            lua = lua..'var_'..infoBlock[2][3][2]..' = i'..max_fors..'\n'
-        else
-            lua = lua..'target.var_'..infoBlock[2][3][2]..' = i'..max_fors..'\n'
+        if (infoBlock[2][3][2]~=nil) then
+            if infoBlock[2][3][1] == 'globalVariable' then
+                lua = lua..'var_'..infoBlock[2][3][2]..' = i'..max_fors..'\n'
+            else
+                lua = lua..'target.var_'..infoBlock[2][3][2]..' = i'..max_fors..'\n'
+            end
         end
     elseif nameBlock == 'endFor' then
         if wait_table['block:'..index] then
@@ -746,9 +745,13 @@ end'
         add_pcall()
         lua = lua.."deleteScene()\nscene_"..infoBlock[2][1][2].."()"
         end_pcall()
-    elseif nameBlock == 'foreach' and infoBlock[2][1][2]~=nil and infoBlock[2][2][2]~=nil then
+    elseif nameBlock == 'foreach'then
         add_pcall()
         max_fors = max_fors+1
+        if (infoBlock[2][1][2]==nil or infoBlock[2][2][2]==nil ) then
+            infoBlock[2][1][2] = "nil"
+            infoBlock[2][2][2] = "nil"
+        end
         lua = lua..'for key'..max_fors..', value'..max_fors..' in pairs('
         lua = lua..(infoBlock[2][1][1]=="globalArray" and "" or "target.").."list_"..infoBlock[2][1][2]..') do\n'
         lua = lua..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..' = value'..max_fors..'\n'
@@ -850,11 +853,11 @@ end'
         end_pcall()
     elseif nameBlock == 'setHorizontalOrientation' then
         add_pcall()
-        lua = lua.."orientation.lock('landscape')\nmainGroup.xScale, mainGroup.yScale = "..tostring(not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..", "..tostring(xScaleMainGroup).."\nmainGroup.x, mainGroup.y = CENTER_Y, CENTER_X\nblackRectTop.width, blackRectTop.height = display.contentHeight, display.contentWidth\nblackRectTop.x, blackRectTop.y = "..("-"..tostring(options.displayHeight/2)..",0" ).."\nblackRectTop.anchorX, blackRectTop.anchorY = 1, 0.5\nblackRectBottom.width, blackRectBottom.height = display.contentHeight, display.contentWidth\nblackRectBottom.x, blackRectBottom.y = "..(tostring(options.displayHeight/2)..",0" ).."\nblackRectBottom.anchorX, blackRectBottom.anchorY = 0, 0.5"
+        lua = lua.."CENTER_X = display.contentCenterX\nCENTER_Y = display.screenOriginY+display.contentHeight/2\norientation.lock('landscape')\nmainGroup.xScale, mainGroup.yScale = "..tostring(not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..", "..tostring(xScaleMainGroup).."\nmainGroup.x, mainGroup.y = CENTER_Y, CENTER_X\nblackRectTop.width, blackRectTop.height = display.contentHeight, display.contentWidth\nblackRectTop.x, blackRectTop.y = "..("-"..tostring(options.displayHeight/2)..",0" ).."\nblackRectTop.anchorX, blackRectTop.anchorY = 1, 0.5\nblackRectBottom.width, blackRectBottom.height = display.contentHeight, display.contentWidth\nblackRectBottom.x, blackRectBottom.y = "..(tostring(options.displayHeight/2)..",0" ).."\nblackRectBottom.anchorX, blackRectBottom.anchorY = 0, 0.5"
         end_pcall()
     elseif nameBlock == 'setVerticalOrientation' then
         add_pcall()
-        lua = lua.."orientation.lock('portrait')\nmainGroup.xScale, mainGroup.yScale = "..tostring(xScaleMainGroup)..", "..tostring(not options.aspectRatio and yScaleMainGroup or xScaleMainGroup).."\nmainGroup.x, mainGroup.y = CENTER_X, CENTER_Y\nblackRectTop.width, blackRectTop.height = display.contentWidth, display.contentHeight\nblackRectTop.x, blackRectTop.y = "..("0,-"..tostring(options.displayHeight/2)).."\nblackRectTop.anchorY, blackRectTop.anchorX = 1, 0.5\nblackRectBottom.x, blackRectBottom.y = "..("0,"..tostring(options.displayHeight/2)).."\nblackRectBottom.anchorY, blackRectBottom.anchorX = 0, 0.5"
+        lua = lua.."CENTER_X = display.contentCenterX\nCENTER_Y = display.screenOriginY+display.contentHeight/2\norientation.lock('portrait')\nmainGroup.xScale, mainGroup.yScale = "..tostring(xScaleMainGroup)..", "..tostring(not options.aspectRatio and yScaleMainGroup or xScaleMainGroup).."\nmainGroup.x, mainGroup.y = CENTER_X, CENTER_Y\nblackRectTop.width, blackRectTop.height = display.contentWidth, display.contentHeight\nblackRectTop.x, blackRectTop.y = "..("0,-"..tostring(options.displayHeight/2)).."\nblackRectTop.anchorY, blackRectTop.anchorX = 1, 0.5\nblackRectBottom.x, blackRectBottom.y = "..("0,"..tostring(options.displayHeight/2)).."\nblackRectBottom.anchorY, blackRectBottom.anchorX = 0, 0.5"
         end_pcall()
     elseif nameBlock == 'thinkTime' then
         add_pcall()

@@ -241,6 +241,8 @@ allBlocks = {
 	["forwardWebView"]={"block", "blocks/block_pink_2.png", {{{"text", words[599]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["stopWebView"]={"block", "blocks/block_pink_2.png", {{{"text", words[600]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["reloadWebView"]={"block", "blocks/block_pink_2.png", {{{"text", words[604]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
+	["deleteWebView"]={"block", "blocks/block_pink_2.png", {{{"text", words[605]}}, {{"text", words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
+	["isSensor"]={"block", "blocks/block_blue_2.png", {{{"text", words[606]}}, {{"onOrOff"}}}, 109, 142, false},
 }
 
 

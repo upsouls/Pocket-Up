@@ -112,6 +112,7 @@ end
 local function touchButtonABC()
 
 --AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	local cerberus = {}
 	cerberus.newInputLine = function (header, placeholder, isCorrectValue, value, funEditingEnd)
 	if (isCorrectValue==nil) then
 	    isCorrectValue = function()

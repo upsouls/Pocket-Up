@@ -9,13 +9,12 @@ funEditingEnd - функция, вызывающаяся когда пользо
 ]]
 
 
-cerberus.newInputLine = function (header, placeholder, isCorrectValue, value, funEditingEnd)
+cerberus.newInputLine = function(header, placeholder, isCorrectValue, value, funEditingEnd, isCenter)
 
 local CENTER_X = CENTER_X
 local CENTER_Y = CENTER_Y
-if (SCENE=="game") then
-    CENTER_X = 0
-    CENTER_Y = 0
+if (SCENE=='game') then
+    CENTER_X, CENTER_Y = 0, 0
 end
 
 if (isCorrectValue==nil) then
@@ -26,9 +25,10 @@ end
 if (value==nil) then
     value = ""
 end
-local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight)
+local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentHeight, display.contentHeight)
 backgroundBlackAlpha:setFillColor(0,0,0,0.6)
 local group = display.newGroup()
+group.background = backgroundBlackAlpha
 if (SCENE=="scripts") then
     SCENES[SCENE][1]:insert(backgroundBlackAlpha)
     SCENES[SCENE][1]:insert(group)
@@ -235,5 +235,5 @@ input:addEventListener("userInput", function (event)
     elseif (event.pahse=="ended") then
     end
 end)
-
+return(group)
 end

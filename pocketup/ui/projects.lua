@@ -1571,7 +1571,7 @@ else
 
 	local function networkListener(event)
 		print(json.encode(event))
-		if (event.isError and event.error~=503 and event.response=="Unknown error") then
+		if (event.isError) then
 			cerberus.newBannerQuestion(words[568], function(event)
 				if (event.isOk) then
 					funsP["записать сс сохранение"]("blockPrem", true)

@@ -122,7 +122,10 @@ function scene_readySprites( funAddImage )
                                                 display.getCurrentStage():setFocus(event.target, nil)
                                                 event.target:setFillColor(0/255, 71/255, 93/255)
                                                 local sprites = json.decode(funsP['получить сохранение'](IDOBJECT..'/images'))
-                                                local allocNewSprite = #sprites+1
+                                                local counter = json.decode(funsP['получить сохранение'](IDPROJECT..'/counter'))
+                                                local allocNewSprite = counter[3]+1
+                                                counter[3] = allocNewSprite
+                                                funsP['записать сохранение'](IDPROJECT..'/counter', json.encode(counter))
                                                 local params = {}
                                                 params.progress = true
                                                 network.download( event.target.link, 'GET',  function(event)

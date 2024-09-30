@@ -1978,6 +1978,7 @@ local function compartmentImages()
 
                     if (event.target.typeFunction == "delete") then
                         local idSlot = eventTargetMenu.slot.idSlot
+                        os.remove(system.pathForFile(IDOBJECT.."/image_"..images[idSlot][2]..".png", system.DocumentsDirectory))
                         table.remove(images, idSlot)
                         table.remove(arraySlots, idSlot)
                         display.remove(eventTargetMenu.slot.myGroup)
@@ -2532,6 +2533,7 @@ local function touchMenuSlot(event)
 
                 if (event.target.typeFunction == "delete") then
                     local idSlot = eventTargetMenu.slot.idSlot
+                    os.remove(system.pathForFile(IDOBJECT.."/sound_"..sounds[idSlot][2]..".MP3", system.DocumentsDirectory))
                     table.remove(sounds, idSlot)
                     table.remove(arraySlots, idSlot)
                     display.remove(eventTargetMenu.slot.myGroup)

@@ -3,71 +3,8 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
-			{"newWebView", {{{"text", words[589]}}, {{"text", "https://example.com"}}, {{"number", 100}}, {{"number", 200}}, {{"number", 400}}, {{"number", 800}}}},
-			{"setWebViewX", {{{"text", words[589]}}, {{"number", -100}}}},
-			{"setWebViewY", {{{"text", words[589]}}, {{"number", -200}}}},
-			{"insertWebInMiniScene", {{{"text", words[589]}}, {{"text", words[530]}}}},
-			{"setWebViewWidth", {{{"text", words[589]}}, {{"number", 200}}}},
-			{"setWebViewHeight", {{{"text", words[589]}}, {{"number", 300}}}},
-			{"setLinkWebView", {{{"text", words[589]}}, {{"text", "https://google.com"}}}},
-			{"backWebView", {{{"text", words[589]}}}},
-			{"forwardWebView", {{{"text", words[589]}}}},
-			{"stopWebView", {{{"text", words[589]}}}},
-			{"reloadWebView", {{{"text", words[589]}}}},
-
-			{"createJoystick", { {{"text", words[581]}}, {"images", nameImage}, {"images", nameImage}, {localityVariable, nameVariable}, {localityVariable, nameVariable},{"function", nameFunction} }},
-			{"cameraInsertJoystick", {{{"text", words[581]}}}},
-			{"cameraRemoveJoystick", {{{"text", words[581]}}}},
-			{"setPositionJoystick", {{{"text", words[581]}}, {{"number", 100}}, {{"number", 200}} }},
-			{"setSizeJoystick", {{{"text", words[581]}}, {{"number", 60}} }},
-			{"setSizeJoystick1", {{{"text", words[581]}}, {{"number", 60}} }},
-			{"setSizeJoystick2", {{{"text", words[581]}}, {{"number", 60}} }},
-
-			{"setAnchor", {{{"number", 0}}, {{"number", 100}}}},
-			{"setLayer", {{{"number", 2}}}},
-
-			{"createMiniScene", {{{"text",words[530]}}}},
-			{"deleteMiniScene", {{{"text", words[530]}}}},
-			{"miniSceneInsert", {{{"text",words[530]}}}},
-			{"setPositionMiniScene", { {{"text",words[530]}}, {{"number", 100}}, {{"number", 200}} }},
-			{"setSizeMiniScene", { {{"text",words[530]}}, {{"number", 60}} }},
-			{"editSizeMiniScene", { {{"text",words[530]}}, {{"number", 10}} }},
-			{"editPositionMiniScene", { {{"text",words[530]}}, {{"number", 10}}, {{"number", 20}} }},
-			{"setRotationMiniScene", { {{"text",words[530]}}, {{"number", 90}} }},
-			{"editRotationMiniScene", { {{"text",words[530]}}, {{"number", 90}} }},
-			{"setAlphaMiniScene", { {{"text",words[530]}}, {{"number", 60}} }},
-			{"editAlphaMiniScene", { {{"text",words[530]}}, {{"number", 10}} }},
-			{"miniSceneHide", {{{"text",words[530]}}}},
-			{"miniSceneShow", {{{"text",words[530]}}}},
-			{"miniSceneInsertMiniScene", {{{"text", words[530]}}, {{"text", words[530].." 2"}} }},
-			{"miniSceneInsertCamera", {{{"text",words[530]}}}},
-			{"miniSceneRemoveCamera", {{{"text",words[530]}}}},
-			
-
-			{"setQuareHitbox"},
-			{"setQuareWHHitbox", {{{"number", 100}}, {{"number", 200}}}},
-			{"setCircleHitbox", {{{"number", 200}}}},
-			{"setShapeHitbox", { {"shapeHitbox", "[-50, -100, -100, 100, 150, 125, 100, -100]"} }},
-
-
-			{"ask",{{{"text",words[161]}}, {localityVariable, nameVariable}, {"function",nameFunction} }},
-			{"createTextField", { {{"text", words[493]}}, {"onOrOff","on"}, {{"number",300}}, {{"number", 100}}, {localityVariable, nameVariable} }},
-			{"removeCameraTextField", {{{"text", words[493]}}}},
-			{"insertCameraTextField", {{{"text", words[493]}}}},
-			{"setPositionTextField", { {{"text",words[493]}}, {{"number", 100}}, {{"number", 200}} }},
-			{"editPositionTextField", { {{"text",words[493]}}, {{"number", 10}}, {{"number", 20}} }},
-			{"setFontSizeTextField", { {{"text", words[493]}}, {{"number", 16}} }},
-			{"setTypeInputTextField", { {{"text", words[493]}}, {"typeInput", "phone"} }},
-			{"setAlignTextField", { {{"text", words[493]}}, {"alignText", "center"} }},
-			{"deleteTextField", { {{"text", words[493]}} }},
-			{"isSecureTextField", { {{"text", words[493]}}, {"onOrOff","on"} }},
-			{"placeholderTextField", { {{"text", words[493]}}, {{"text", words[164]}} }},
-			{"valueTextField", { {{"text", words[493]}}, {{"text", words[164]}} }},
-			{"setColorTextField", { {{"text", words[493]}}, {{"text", "#FF0000"}} }},
-			{"setSelectionTextField", { {{"text", words[493]}}, {{"number", 2}}, {{"number", 4}} }},
-			{"getSelectionTextField", { {{"text", words[493]}}, {localityVariable, nameVariable}, {localityVariable, nameVariable} }},
-			{"setKeyboardToTextField", {{{"text", words[493]}}}},
-			{"removeKeyboardToTextField"},
+			{"deleteWebView", {{{"text", words[589]}}}},
+			{"isSensor", {{{"onOrOff", "off"}}}}
 		},
 		["event"]={
 			{"start"},
@@ -125,7 +62,6 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"setPositionY",{ {{"number", 200}} }},
 			{"editPositionX",{ {{"number", 10}} }},
 			{"editPositionY",{ {{"number", 10}} }},
-			{"setLayer", {{{"number", 2}}}},
 			{"goTo",{ {"goTo", "touch"} }},
 			{"goSteps",{ {{"number", 10}} }},
 			{"editRotateLeft",{ {{"number", 15}} }},
@@ -203,7 +139,6 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			--{"setImageBackgroundToNameAndWait",{{"backgrounds",nameBackground}}},
 			--{"setImageBackgroundToIdAndWait",{{{"number",1}}}},
 			{"getLinkImage",{{{"text","https://docs.coronalabs.com/images/simulator/image-mask-base2.png"}}}},
-			{"setAnchor", {{{"number", 0}}, {{"number", 100}}}},
 			{"setAnchor", {{{"number", 0}}, {{"number", 100}}}},
 		},
 		["particles"]={
@@ -319,7 +254,6 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"setSizeJoystick", {{{"text", words[581]}}, {{"number", 60}} }},
 			{"setSizeJoystick1", {{{"text", words[581]}}, {{"number", 60}} }},
 			{"setSizeJoystick2", {{{"text", words[581]}}, {{"number", 60}} }},
-			{"setPositionJoystick", {{{"text", words[581]}}, {{"number", 100}}, {{"number", 200}} }},
 		},
 	}
 	return(myTable)

@@ -100,6 +100,7 @@ end
 
 
 function scene_run_game(typeBack, paramsBack)
+    SCENE="game"
     wait_type = 'wait'
     wait_table = {_ends = 0, event = 0}
     local options = json.decode(funsP['получить сохранение'](IDPROJECT..'/options'))
@@ -226,7 +227,7 @@ function scene_run_game(typeBack, paramsBack)
             end
             lua = lua.."\nobject_"..obj_id..".parent_obj = object_"..obj_id.."\nobject_"..obj_id..".clones = {}\nobjects['object_"..obj_id.."'], object_"..obj_id..".idObject = object_"..obj_id..", "..obj_id.."\nobject_"..obj_id..".numberImage = 1\n\n"
             lua = lua.."object_"..obj_id..".tableVarShow, object_"..obj_id..".origWidth, object_"..obj_id..".origHeight, object_"..obj_id..".nameObject, object_"..obj_id..".property_size, object_"..obj_id..".property_brightness, object_"..obj_id..".property_color = {}, object_"..obj_id..".width, object_"..obj_id..".height, 'object_"..obj_id.."', 100, 100, 0\n"
-
+            lua = lua.."object_"..obj_id..".countImages = "..tostring(#obj_images).."\n"
 
             local localVariables = json.decode(funsP['получить сохранение'](obj_path.."/variables"))
             lua = lua.."object_"..obj_id..".namesVars = {}\n"
