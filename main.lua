@@ -75,7 +75,7 @@ require("pocketup.settings")
 local listFiles = {
     "createTopBar","paletteAndHex",
     "createTextField","createBannerQuestion",
-    "loadFormulas","createBlock","bannerPremium"
+    "loadFormulas","createBlock","bannerPremium","bannerVariants"
 }
 for i=1, #listFiles do
     require("pocketup.uiModules."..listFiles[i])
@@ -105,7 +105,8 @@ end
 listFiles = {
     "projects","objects","scenes","mainScene","optionsProject",
     "scripts","categoriesScripts","categoryScripts","redactorFormulas",
-    "redactorArrayFormulas", "spriteViewer", "readySprites","sceneRedactorHitbox"
+    "redactorArrayFormulas", "spriteViewer", "readySprites","sceneRedactorHitbox",
+    "visualPosition"
 }
 for i=1, #listFiles do
     require("pocketup.ui."..listFiles[i])

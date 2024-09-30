@@ -739,7 +739,7 @@ end'
         end_pcall()
     elseif nameBlock=="exitGame" then
         add_pcall()
-        lua = lua.."timer.new(0, function()\nfunBackListener2({keyName='deleteBack', phase='up'})\nend)"
+        lua = lua.."timer.new(0, function()\ndisplay.save(mainGroup, '"..IDSCENE.."/icon.png', system.DocumentsDirectory)\nfunBackListener2({keyName='deleteBack', phase='up'})\nend)"
         end_pcall()
     elseif nameBlock=="runScene" and infoBlock[2][1][2]~=nil then
         add_pcall()
