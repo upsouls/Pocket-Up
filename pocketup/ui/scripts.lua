@@ -99,7 +99,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                 if (nameBlock=="setPosition" or (nameBlock=="transitionPosition" and event.target.idParameter~=1)) then
                                     cerberus.newVatiants({words[607], words[608]}, function(answer)
                                         if (answer==1) then
-                                            scene_setPosVisual(objectsParameter, event.target.block.id, event.target.idParameter,blocks)
+                                            scene_setPosVisual(event.target.block.id, event.target.idParameter,blocks, blocksObjects)
                                         elseif (answer==2) then
                                             scene_formula_editor(objectsParameter, event.target.block.id, event.target.idParameter,blocks)
                                         end

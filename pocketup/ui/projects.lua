@@ -1067,6 +1067,14 @@ local function touchMenu2CopySlot(event)
 	return(true)
 end
 
+local symbols = {
+    " ","q","w","e","r","t","y","u","i","o","p","[","]","{","}","a","s","d","f","g","h","j","k","l",";",":","'",'"',"\\","|","z","x","c","v","b",
+    "n","m",",","<",".",">","/","?","Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M",
+    "1","2","3","4","5","6","7","8","9","0","~","@","#","$","%","^","&","*","(",")","_","+","-","=","й","ц","у","к","е","н","г","ш","щ","з","х",
+    "ъ","ф","ы","в","а","п","р","о","л","д","ж","э","/","я","ч","с","м","и","т","ь","б","ю","~","`","ё","Ё","Й","Ц","У","К","Е","Н","Г","Ш","Щ",
+    "З","Х","Ъ","Ф","Ы","В","А","П","Р","О","Л","Д","Ж","Э","Я","Ч","С","М","И","Т","Ь","Б","Ю","\n"
+}
+
 functionsMenu["startcopy"] = function()
 local arrayIdsWords = {["copy"]=4, ["delete"]=5}
 if (arrayIdsWords[isBackScene]) then
@@ -1232,6 +1240,32 @@ funsP["записать сс сохранение"]("counter_projects", counter 
 scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
 end
 
+
+local function decryptor(value)
+	local newValue = ""
+	for i=1, math.floor(utf8.len(value)/2) do
+		local symbol = utf8.sub(value, i*2-1, i*2-1)
+		local symbol2 = utf8.sub(value, i*2, i*2)
+		for i2=1, #symbols do
+			if (symbols[i2]==symbol) then
+				symbol = i2
+				break
+			end
+		end
+		for i2=1, #symbols do
+			if (symbols[i2]==symbol2) then
+				symbol2 = i2-1
+				break
+			end
+		end
+		if (symbol>symbol2) then
+			newValue = newValue..(symbols[symbol+symbol2])
+		else
+			newValue = newValue..(symbols[#symbols-symbol-symbol2])
+		end
+	end
+	return(newValue)
+end
 
 functionsMenu["checkdelete"] = function ()
 isBackScene = "back"
@@ -1570,7 +1604,6 @@ else
 	local funNetworkPrem
 
 	local function networkListener(event)
-		print(json.encode(event))
 		if (event.isError) then
 			cerberus.newBannerQuestion(words[568], function(event)
 				if (event.isOk) then
@@ -1595,7 +1628,7 @@ else
 	funNetworkPrem = function()
 		SCENES[SCENE][2].alpha = 0
 		isBackScene="block"
-		local link = {104, 116, 116, 112, 58, 47, 47, 120, 57, 53, 51, 50, 56, 105, 107, 46, 98, 101, 103, 101, 116, 46, 116, 101, 99, 104, 47, 112, 111, 99, 107, 101, 116, 117, 112, 47, 112, 114, 101, 109, 105, 117, 109, 47, 105, 115, 80, 114, 101, 109, 105, 117, 109, 46, 112, 104, 112, 63, 105, 100, 61}
+		local link = {104, 116, 116, 112, 58, 47, 47, 120, 57, 53, 51, 50, 56, 105, 107, 46, 98, 101, 103, 101, 116, 46, 116, 101, 99, 104, 47, 112, 111, 99, 107, 101, 116, 117, 112, 47, 112, 114, 101, 109, 105, 117, 109, 47, 105, 115, 80, 114, 101, 109, 105, 117, 109, 86, 50, 46, 112, 104, 112, 63, 105, 100, 61}
 		local headerg = {headers={["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"}}
 	    network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, headerg)
 	end

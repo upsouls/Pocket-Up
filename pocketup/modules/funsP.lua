@@ -20,23 +20,26 @@ else
 end
 
 funsP["прочитать сс сохранение"] = function(nameSave)
-	local file = io.open(pathSettingsSave, "r")
-	local contents = json.decode(file:read("*a"))
-	io.close(file)
-	return(contents[nameSave])
+	if (((nameSave~="isPremium" and nameSave~="blockPrem") or SCENE~="game") and SCENES[SCENE][1].iscg==nil) then
+		local file = io.open(pathSettingsSave, "r")
+		local contents = json.decode(file:read("*a"))
+		io.close(file)
+		return(contents[nameSave])
+	end
 end
 funsP["записать сс сохранение"] = function(nameSave, value)
-	local pathSettingsSave = system.pathForFile("settingsSave.txt", system.DocumentsDirectory)
-	local file2 = io.open(pathSettingsSave, "r")
-	local contents = json.decode(file2:read("*a"))
-	io.close(file2)
-	contents[nameSave] = value
-	contents = json.encode(contents)
-	local pathSettingsSave = system.pathForFile("settingsSave.txt", system.DocumentsDirectory)
-	local file = io.open(pathSettingsSave, "w")
-	file:write(contents)
-	io.close(file)
-	
+	if (((nameSave~="isPremium" and nameSave~="blockPrem") or SCENE~="game") and SCENES[SCENE][1].iscg==nil) then
+		local pathSettingsSave = system.pathForFile("settingsSave.txt", system.DocumentsDirectory)
+		local file2 = io.open(pathSettingsSave, "r")
+		local contents = json.decode(file2:read("*a"))
+		io.close(file2)
+		contents[nameSave] = value
+		contents = json.encode(contents)
+		local pathSettingsSave = system.pathForFile("settingsSave.txt", system.DocumentsDirectory)
+		local file = io.open(pathSettingsSave, "w")
+		file:write(contents)
+		io.close(file)
+	end
 	
 end
 

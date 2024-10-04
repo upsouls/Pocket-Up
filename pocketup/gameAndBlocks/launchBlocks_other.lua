@@ -87,6 +87,7 @@ end
         local formula = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
         lua = lua..'target.property_size = ('..(nameBlock=='setSize' and '' or 'target.property_size)+(')..formula..')\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)'
+        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].size = target.property_size/100\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\nend"
         lua = lua.."\ntarget:physicsReload()"
         end_pcall()
     elseif nameBlock == 'setPosition' then
@@ -142,11 +143,13 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
         lua = lua..'target:rotate(-'..rotate..')\n'
+        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'editRotateRight' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
         lua = lua..'target:rotate('..rotate..')\n'
+        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'editPositionX'  then
         local x = make_all_formulas(infoBlock[2][1], object)
@@ -162,6 +165,7 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
         lua = lua..'target.rotation = '..rotate..'\n'
+        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'hide' then
         add_pcall()
@@ -286,6 +290,7 @@ end]]
         if (o==1) then
             lua = lua.."broadcastChangeBackground(listImages[numberImage])\n"
         end
+        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].path = target.image_path\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'clone' then
         --add_pcall()
@@ -461,6 +466,7 @@ end]]
     elseif nameBlock == 'setRotateToObject' and infoBlock[2][1][2]~=nil then -- ["setRotateToObject",[["objects",7]],"on"]
         add_pcall()
         lua = lua..'if ( objects[\'object_'..infoBlock[2][1][2]..'\']~=nil) then\ntarget.rotation = pocketupFuns.atan2(objects[\'object_'..infoBlock[2][1][2]..'\'].x - target.x, target.y - objects[\'object_'..infoBlock[2][1][2]..'\'].y)\nend'
+        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'toFrontLayer' then
         add_pcall()
@@ -487,6 +493,7 @@ end]]
                 lua = lua.."broadcastChangeBackground(listImages[numberImage])\n"
             end
             lua = lua.."end\n"
+            lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].path = target.image_path\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\nend"
             end_pcall()
         end
     elseif nameBlock == "nextImage" and #images>1 then
@@ -496,6 +503,7 @@ end]]
         lua = lua.."target.origWidth, target.origHeight = getImageProperties(target.image_path, system.DocumentsDirectory)\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)\n"
         lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\ntarget:setFillColor(r,g,b)\n"
         lua = lua.."if (target.property_color~=100) then\ntarget.fill.effect = 'filter.brightness'\ntarget.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
+        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].path = target.image_path\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == "previousImage" and #images>1 then
         add_pcall()
@@ -504,6 +512,7 @@ end]]
         lua = lua.."target.origWidth, target.origHeight = getImageProperties(target.image_path, system.DocumentsDirectory)\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)\n"
         lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\ntarget:setFillColor(r,g,b)\n"
         lua = lua.."if (target.property_color~=100) then\ntarget.fill.effect = 'filter.brightness'\ntarget.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
+        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].path = target.image_path\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == "editAlpha" then
         add_pcall()
@@ -739,7 +748,7 @@ end'
         end_pcall()
     elseif nameBlock=="exitGame" then
         add_pcall()
-        lua = lua.."timer.new(0, function()\ndisplay.save(mainGroup, '"..IDSCENE.."/icon.png', system.DocumentsDirectory)\nfunBackListener2({keyName='deleteBack', phase='up'})\nend)"
+        lua = lua.."timer.new(0, function()\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nfunBackListener2({keyName='deleteBack', phase='up'})\nend)"
         end_pcall()
     elseif nameBlock=="runScene" and infoBlock[2][1][2]~=nil then
         add_pcall()

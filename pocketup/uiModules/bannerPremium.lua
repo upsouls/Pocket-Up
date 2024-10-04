@@ -6,6 +6,15 @@ function bannerPremium(groupScene, onComplete)
 	print(system.getInfo("deviceID"))
 	funsP["вызвать уведомление"](words[569])
 
+
+	local symbols = {
+	    " ","q","w","e","r","t","y","u","i","o","p","[","]","{","}","a","s","d","f","g","h","j","k","l",";",":","'",'"',"\\","|","z","x","c","v","b",
+	    "n","m",",","<",".",">","/","?","Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M",
+	    "1","2","3","4","5","6","7","8","9","0","~","@","#","$","%","^","&","*","(",")","_","+","-","=","й","ц","у","к","е","н","г","ш","щ","з","х",
+	    "ъ","ф","ы","в","а","п","р","о","л","д","ж","э","/","я","ч","с","м","и","т","ь","б","ю","~","`","ё","Ё","Й","Ц","У","К","Е","Н","Г","Ш","Щ",
+	    "З","Х","Ъ","Ф","Ы","В","А","П","Р","О","Л","Д","Ж","Э","Я","Ч","С","М","И","Т","Ь","Б","Ю","\n"
+	}
+
 	if (groupScene~=nil and groupScene.x~=nil) then
 		local bannerGroup = display.newGroup()
 		groupScene:insert(bannerGroup)
@@ -66,6 +75,31 @@ function bannerPremium(groupScene, onComplete)
 		local buttonRectCancel = display.newImage("images/notVisible.png", buttonCancel.x+buttonCancel.width/2, buttonCancel.y-buttonCancel.height/2)
 		buttonRectCancel.width, buttonRectCancel.height = buttonCancel.width+display.contentWidth/26, buttonCancel.height+display.contentWidth/26
 		
+		local function decryptor(value)
+			local newValue = ""
+			for i=1, math.floor(utf8.len(value)/2) do
+				local symbol = utf8.sub(value, i*2-1, i*2-1)
+				local symbol2 = utf8.sub(value, i*2, i*2)
+				for i2=1, #symbols do
+					if (symbols[i2]==symbol) then
+						symbol = i2
+						break
+					end
+				end
+				for i2=1, #symbols do
+					if (symbols[i2]==symbol2) then
+						symbol2 = i2-1
+						break
+					end
+				end
+				if (symbol>symbol2) then
+					newValue = newValue..(symbols[symbol+symbol2])
+				else
+					newValue = newValue..(symbols[#symbols-symbol-symbol2])
+				end
+			end
+			return(newValue)
+		end
 
 		buttonCancel.alpha = 0
 		buttonConnect.alpha = 0
@@ -156,7 +190,7 @@ function bannerPremium(groupScene, onComplete)
 				buttonRectConnect.alpha = 0
 				description.text = words[561]
 
-				local link = {104, 116, 116, 112, 58, 47, 47, 120, 57, 53, 51, 50, 56, 105, 107, 46, 98, 101, 103, 101, 116, 46, 116, 101, 99, 104, 47, 112, 111, 99, 107, 101, 116, 117, 112, 47, 112, 114, 101, 109, 105, 117, 109, 47, 105, 115, 80, 114, 101, 109, 105, 117, 109, 46, 112, 104, 112, 63, 105, 100, 61}
+				local link = {104, 116, 116, 112, 58, 47, 47, 120, 57, 53, 51, 50, 56, 105, 107, 46, 98, 101, 103, 101, 116, 46, 116, 101, 99, 104, 47, 112, 111, 99, 107, 101, 116, 117, 112, 47, 112, 114, 101, 109, 105, 117, 109, 47, 105, 115, 80, 114, 101, 109, 105, 117, 109, 86, 50, 46, 112, 104, 112, 63, 105, 100, 61}
 				local function networkListener(event)
 					if (event.isError) then
 						if (event.response=="Unknown error") then
@@ -170,7 +204,14 @@ function bannerPremium(groupScene, onComplete)
 						buttonRectConnect.alpha = 1
 						buttonConnect.text = words[560]
 					else
-						if (event.response=="false") then
+						event.response = decryptor(event.response)
+						print("dddd:"..event.response)
+						local response
+						if (event.response~="false") then
+							response = json.decode(event.response)
+						end
+						print(response)
+						if (event.response=="false" or response~=nil and (response.device~=system.getInfo("deviceID") and utf8.len(response.device)~=64)) then
 							description.text = words[563]
 							buttonCancel.alpha = 1
 							buttonRectCancel.alpha = 1
@@ -178,7 +219,6 @@ function bannerPremium(groupScene, onComplete)
 							buttonRectConnect.alpha = 1
 							buttonConnect.text = words[560]
 						else
-							local response = json.decode(event.response)
 							funsP["записать сс сохранение"]("isPremium", response.time)
 							funsP["записать сс сохранение"]("blockPrem", nil)
 							description.text = words[562]:gsub("<N>", response.date)

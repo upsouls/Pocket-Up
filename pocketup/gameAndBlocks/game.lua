@@ -47,7 +47,11 @@ local function make_all_formulas(formulas, object)
     for i=1, #formulas do
         local formula = formulas[i]
         if (formula[1]=="number") then
-            answer = answer..formula[2]
+            if (type(formula[2])=="number") then
+                answer = answer..formula[2]
+            else
+                answer = answer.."0"
+            end
         elseif (formula[1]=="text") then
             answer = answer.." '"..formula[2]:gsub('\r\n','\\n'):gsub('\n','\\n'):gsub("'","\\'").."' "
         elseif (formula[1]=="globalVariable") then
@@ -145,7 +149,7 @@ function scene_run_game(typeBack, paramsBack)
     for i=1, #globalArrays do
             lua = lua..'list_'..globalArrays[i][1].." = {}\n"
     end
-    lua = lua.."local WebViews = {} local textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nplaySounds = {}\nlocal playingSounds = {}"
+    lua = lua.."local myScene\nlocal WebViews = {} local textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nplaySounds = {}\nlocal playingSounds = {}"
 
     local level_blocks = {}
     for s=1, #scenes do
@@ -154,10 +158,9 @@ function scene_run_game(typeBack, paramsBack)
         local scene_path = IDPROJECT.."/scene_"..scene_id
         local xScaleMainGroup = display.contentWidth/options.displayWidth
         local yScaleMainGroup = display.contentHeight/options.displayHeight
-        lua = lua.."\n\n\nfunction scene_"..scene_id.."()\nlocal focusCameraObject = nil\nmainGroup = display.newGroup()\nSCENE = 'game'\nSCENES[SCENE] = {mainGroup}\nmainGroup.xScale, mainGroup.yScale = "..tostring(options.orientation~="vertical" and not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..", "..tostring(options.orientation=="vertical" and  not options.aspectRatio and yScaleMainGroup or xScaleMainGroup).."\nmainGroup.x, mainGroup.y = "..(options.orientation=="vertical" and "CENTER_X, CENTER_Y" or "CENTER_Y, CENTER_X").."\nlocal cameraGroup = display.newGroup()\nlocal stampsGroup = display.newGroup()\ncameraGroup:insert(stampsGroup)\nmainGroup:insert(cameraGroup)\nlocal notCameraGroup = display.newGroup()\nmainGroup:insert(notCameraGroup)"..( not options.aspectRatio and "" or "\nlocal blackRectTop = display.newRect("..(options.orientation=="vertical" and ("0,-"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or ("-"..tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectTop.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 1\nblackRectTop:setFillColor(0,0,0)\nmainGroup:insert(blackRectTop)\nlocal blackRectBottom = display.newRect("..(options.orientation=="vertical" and ("0,"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or (tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectBottom.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 0\nblackRectBottom:setFillColor(0,0,0)\nmainGroup:insert(blackRectBottom)").."\nobjects = {}\n"
+        lua = lua.."\n\n\nfunction scene_"..scene_id.."()\nlocal focusCameraObject = nil\nmainGroup = display.newGroup()\nSCENE = 'game'\nSCENES[SCENE] = {mainGroup}\nmainGroup.iscg = true\nmainGroup.xScale, mainGroup.yScale = "..tostring(options.orientation~="vertical" and not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..", "..tostring(options.orientation=="vertical" and  not options.aspectRatio and yScaleMainGroup or xScaleMainGroup).."\nmainGroup.x, mainGroup.y = "..(options.orientation=="vertical" and "CENTER_X, CENTER_Y" or "CENTER_Y, CENTER_X").."\nlocal cameraGroup = display.newGroup()\nlocal stampsGroup = display.newGroup()\ncameraGroup:insert(stampsGroup)\nmainGroup:insert(cameraGroup)\nlocal notCameraGroup = display.newGroup()\nmainGroup:insert(notCameraGroup)"..( not options.aspectRatio and "" or "\nlocal blackRectTop = display.newRect("..(options.orientation=="vertical" and ("0,-"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or ("-"..tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectTop.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 1\nblackRectTop:setFillColor(0,0,0)\nmainGroup:insert(blackRectTop)\nlocal blackRectBottom = display.newRect("..(options.orientation=="vertical" and ("0,"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or (tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectBottom.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 0\nblackRectBottom:setFillColor(0,0,0)\nmainGroup:insert(blackRectBottom)").."\nobjects = {}\n"
         lua = lua.."\nlocal events_changeBackground = {}\nlocal events_function = {}\nlocal function broadcastFunction(nameFunction)\nfor key, value in pairs(objects) do\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nend\n"
-        lua = lua.."\nlocal tableVarShow = {}\nlocal tableNamesClones = {}\nlocal miniScenes = display.newGroup()\ncameraGroup:insert(miniScenes)"
-
+        lua = lua.."\nmyScene = '"..scene_path.."'\nlocal tableVarShow = {}\nlocal tableNamesClones = {}\nlocal miniScenes = display.newGroup()\ncameraGroup:insert(miniScenes)"
         local objects = json.decode(funsP['получить сохранение'](scene_path.."/objects"))
         local functions = json.decode(funsP['получить сохранение'](scene_path.."/functions"))
         for i=1, #objects do
@@ -221,6 +224,8 @@ function scene_run_game(typeBack, paramsBack)
             else
                 lua = lua.."\n\nlocal object_"..obj_id.." = display.newImage('images/notVisible.png')"
             end
+            lua = lua.."\nobject_"..obj_id..".infoSaveVisPos = "..tostring(o).."\n"
+            lua = lua.."\nlocal objectsTable = json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nobjectsTable[object_"..obj_id..".infoSaveVisPos][3] = nil\nfunsP['записать сохранение']('"..scene_path.."/objects', json.encode(objectsTable))\n"
             lua = lua.."cameraGroup:insert(object_"..obj_id..")"
             if (o==1) then
                 lua = lua.."\nlocal background = object_"..obj_id.."\nbackground.listImagesBack, background.listNamesImagesBack, background.obj_pathBack = listImages, listNamesImages, '"..obj_path.."'"
@@ -387,12 +392,12 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
     if (isScriptsBack) then
         lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nfor key, value in pairs(objects) do\nfor i=1, #events_touchBack[key] do\nevents_touchBack[key][i](value)\nfor i2=1, #value.clones do\nevents_touchBack[key][i](value.clones[i2])\nend\nend\nend\nend\nreturn(true)\nend\nRuntime:addEventListener('key', funBackListener)"
     else
-        lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\ndisplay.save(mainGroup, '"..IDSCENE.."/icon.png', system.DocumentsDirectory)\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\norientation.lock('portrait')\nend\nreturn(true)\nend\nRuntime:addEventListener('key', funBackListener)"
+        lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\norientation.lock('portrait')\nend\nreturn(true)\nend\nRuntime:addEventListener('key', funBackListener)"
     end
         lua = lua.."\nfunction funBackListener2(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\norientation.lock('portrait')\nend\nend"
 
-    --lua = lua.."\ntimer.new(100,function()\nif (mainGroup~=nil and mainGroup.x~=nil) then\ndisplay.save(mainGroup, '"..IDSCENE.."/icon.png', system.DocumentsDirectory)\nend\nend)\n"
-    print(lua)
+    --lua = lua.."\ntimer.new(100,function()\nif (mainGroup~=nil and mainGroup.x~=nil) then\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nend\nend)\n"
+    lua = lua:gsub("prem", "prеm"):gsub("Prem", "Prеm")
     noremoveAllObjects()
     local f, error_msg = loadstring(lua)
     if f then

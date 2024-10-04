@@ -19,13 +19,18 @@ local function funBackListener(event)
 end
 Runtime:addEventListener("key", funBackListener)
 
-function topBar(group, idWord, onTouchMenu, onTouchCheck, onTouchBack)
+function topBar(group, idWord, onTouchMenu, onTouchCheck, onTouchBack, isHorizontal)
 	if (onTouchBack~=nil) then
 		funBack = onTouchBack
 	else
 		funBack = nil
 	end
-	local rectTopBar = display.newRect(CENTER_X, CENTER_Y-display.contentHeight/2, display.contentWidth, display.contentWidth/6.5)
+	local CENTER_X = CENTER_X
+	local CENTER_Y = CENTER_Y
+	if (isHorizontal) then
+		CENTER_X, CENTER_Y = CENTER_Y, CENTER_X
+	end
+	local rectTopBar = display.newRect(CENTER_X, CENTER_Y-(isHorizontal and display.contentWidth or display.contentHeight)/2, (isHorizontal and display.contentHeight or display.contentWidth), display.contentWidth/6.5)
 	rectTopBar:addEventListener("touch", function(event)
 		if (event.phase == "began") then
 			display.getCurrentStage():setFocus(event.target, event.id)
@@ -37,14 +42,14 @@ function topBar(group, idWord, onTouchMenu, onTouchCheck, onTouchBack)
 	rectTopBar.anchorY = 0
 	rectTopBar:setFillColor(0, 43/255, 59/255)
 	local buttonBack = display.newImage("images/back.png")
-	buttonBack.x, buttonBack.y, buttonBack.width, buttonBack.height = CENTER_X-display.contentWidth/2.3,rectTopBar.y+rectTopBar.height/2, rectTopBar.height/1.5, rectTopBar.height/1.5
+	buttonBack.x, buttonBack.y, buttonBack.width, buttonBack.height = CENTER_X-(isHorizontal and display.contentHeight or display.contentWidth)/2.3,rectTopBar.y+rectTopBar.height/2, rectTopBar.height/1.5, rectTopBar.height/1.5
 	local circleTouchBack = display.newCircle(buttonBack.x, buttonBack.y, buttonBack.height/2)
 	circleTouchBack.alpha, circleTouchBack.xScale, circleTouchBack.yScale = 0, 0.75, 0.75
 	buttonBack.circleTouch = circleTouchBack
 
 	local buttonCheck = display.newImage("images/check.png")
 	buttonCheck.alpha = 0
-	buttonCheck.x, buttonCheck.y, buttonCheck.width, buttonCheck.height = CENTER_X+display.contentWidth/2.3-buttonBack.width/1.75*2.5, buttonBack.y, buttonBack.width/1.75, buttonBack.height/1.75
+	buttonCheck.x, buttonCheck.y, buttonCheck.width, buttonCheck.height = CENTER_X+(isHorizontal and display.contentHeight or display.contentWidth)/2.3-buttonBack.width/1.75*2.5, buttonBack.y, buttonBack.width/1.75, buttonBack.height/1.75
 	local circleTouchBack = display.newCircle(buttonCheck.x, buttonCheck.y, buttonBack.height/2)
 	circleTouchBack.alpha, circleTouchBack.xScale, circleTouchBack.yScale = 0, 0.75, 0.75
 	buttonCheck.circleTouch = circleTouchBack
@@ -88,7 +93,7 @@ function topBar(group, idWord, onTouchMenu, onTouchCheck, onTouchBack)
 	headerBar.anchorX = 0
 
 	local buttonMenu = display.newImage("images/menu.png")
-	buttonMenu.x, buttonMenu.y, buttonMenu.width, buttonMenu.height = CENTER_X+display.contentWidth/2.3, buttonBack.y, buttonBack.width/1.75, buttonBack.height/1.75
+	buttonMenu.x, buttonMenu.y, buttonMenu.width, buttonMenu.height = CENTER_X+(isHorizontal and display.contentHeight or display.contentWidth)/2.3, buttonBack.y, buttonBack.width/1.75, buttonBack.height/1.75
 	local circleTouchBack = display.newCircle(buttonMenu.x, buttonMenu.y, buttonBack.height/2)
 	circleTouchBack.alpha, circleTouchBack.xScale, circleTouchBack.yScale = 0, 0.75, 0.75
 	buttonMenu.circleTouch = circleTouchBack
