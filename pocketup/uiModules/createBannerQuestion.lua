@@ -13,7 +13,17 @@ cerberus.newBannerQuestion = function(header, funEditingEnd, no, yes)
 		no = words[55]
 	end
 
-	local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight)
+	local CENTER_X = CENTER_X
+	local CENTER_Y = CENTER_Y
+	if (SCENE=="visual_position") then
+	    local settings = json.decode(funsP["получить сохранение"](IDPROJECT.."/options"))
+	    if (settings.orientation=="horizontal") then
+	        CENTER_X, CENTER_Y = CENTER_Y, CENTER_X
+	    end
+	    settings=nil
+	end
+
+	local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentHeight, display.contentHeight)
 	backgroundBlackAlpha:setFillColor(0,0,0,0.6)
 	SCENES[SCENE][(SCENE=="scripts" and 1 or #SCENES[SCENE])]:insert(backgroundBlackAlpha)
 	local group = display.newGroup()
