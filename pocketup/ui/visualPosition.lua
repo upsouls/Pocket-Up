@@ -16,13 +16,7 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 	local funBackObjects = {}
 	local funMenuObjects = {}
 	local isBackScene = "back"
-	local topBarArray = topBar(groupScene, words[272], funMenuObjects, nil, funBackObjects, settings.orientation=="horizontal")
-	topBarArray[1].alpha = 0.3
-	topBarArray[4].fill = {
-		type="image",
-		filename="images/check.png"
-	}
-	topBarArray[3].alpha = 0.75
+	
 	local block = blocks[idBlock]
 	--local formulas = blocks[idBlock][2][idParameter]
 	local xResize, yResize = display.contentWidth/settings.displayWidth, display.contentHeight/settings.displayHeight
@@ -109,7 +103,15 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 			return(true)
 		end)
 	end
-
+	
+	local topBarArray = topBar(groupScene, words[272], funMenuObjects, nil, funBackObjects, settings.orientation=="horizontal")
+	topBarArray[1].alpha = 0.3
+	topBarArray[4].fill = {
+		type="image",
+		filename="images/check.png"
+	}
+	topBarArray[3].alpha = 0.75
+	
 	funBackObjects[1] = function()
 		if (isBackScene=="back") then
 			local function funEditingEnd(event)
