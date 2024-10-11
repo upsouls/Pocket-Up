@@ -6,7 +6,7 @@ funEditingEnd - вызывает функцию когдда человек за
 yes - заменить "да" на другое слово. необязательный параметр ( nil ) ,
 no - заменить "отмена" на другое слово. необязательный параметр ( nil )
 ]]
-
+local dH = display.actualContentHeight
 cerberus.newBannerQuestion = function(header, funEditingEnd, no, yes)
 	if (yes==nil) then
 		yes = words[56]
@@ -23,7 +23,7 @@ cerberus.newBannerQuestion = function(header, funEditingEnd, no, yes)
 	    settings=nil
 	end
 
-	local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentHeight, display.contentHeight)
+	local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, dH, dH)
 	backgroundBlackAlpha:setFillColor(0,0,0,0.6)
 	SCENES[SCENE][(SCENE=="scripts" and 1 or #SCENES[SCENE])]:insert(backgroundBlackAlpha)
 	local group = display.newGroup()

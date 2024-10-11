@@ -17,6 +17,7 @@ if (SCENE=='game') then
     CENTER_X, CENTER_Y = 0, 0
 end
 
+
 if (isCorrectValue==nil) then
     isCorrectValue = function()
         return("")

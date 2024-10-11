@@ -859,7 +859,8 @@ isBackScene = "back"
 --CCCCCCCCCCCCCCCCCCCCCCCCC
 --CCCCCCCCCCCCCCCCCCCCCCCCC
 funsP["импортировать проект"](function (pathProject)
-	if (funsP["получить сохранение"](pathProject.."/options")==nil) then
+	if (funsP["получить сохранение"](pathProject.."/options")=="[]") then
+		os.removeFolder(system.pathForFile(pathProject, system.DocumentsDirectory))
 		funsP["вызвать уведомление"](words[267])
 	else
 		local projects = json.decode(funsP["прочитать сс сохранение"]("список проектов"))
@@ -1264,6 +1265,8 @@ local function decryptor(value)
 			newValue = newValue..(symbols[#symbols-symbol-symbol2])
 		end
 	end
+	newValue = newValue:gsub(",,", ",")
+	--print("okvepo")
 	return(newValue)
 end
 
@@ -1514,128 +1517,6 @@ end
 end
 
 
-local function loadBannerPremium()
-	local indent = display.contentWidth-(circlePlus.x+circlePlus.width/2)
-	local premiumBanner = display.newRoundedRect(circlePlus.x-circlePlus.width/2-indent, circlePlus.y+circlePlus.height/2, display.contentWidth-(circlePlus.width)-indent*3, circlePlus.height*2+indent, roundedRect*8)
-	premiumBanner.anchorX, premiumBanner.anchorY = 1, 1
-	premiumBanner:setFillColor({
-	    type = "gradient",
-	    color1 = { 1, 0, 0.4 },
-	    color2 = {1, 172/255, 8/255, 0.75},
-	    direction = -50
-	})
-	--premiumBanner:setFillColor(171/255, 219/255, 241/255)
-	local header = display.newText(words[553], premiumBanner.x-premiumBanner.width/2, premiumBanner.y-premiumBanner.height+fontSize0*1.25, "fonts/font_1.ttf", fontSize0)
-	local description = display.newText({
-		text=words[554],
-		x=header.x,
-		y=header.y+header.height/2,
-		width=premiumBanner.width-indent*2,
-		font="fonts/font_2.ttf",
-		fontSize=fontSize1
-	})
 
-	description.anchorY = 0
-	local buttonPremium = display.newText(words[555], premiumBanner.x-indent*1.2, description.y+description.height, "fonts/font_1.ttf", fontSize1)
-	buttonPremium.anchorX, buttonPremium.anchorY=1, 0
-	local buttonPremiumShadow = display.newRoundedRect(buttonPremium.x-buttonPremium.width/2, buttonPremium.y+buttonPremium.height/2, buttonPremium.width+indent*1.5, buttonPremium.height+indent/1.25, roundedRect*6)
-	buttonPremiumShadow:setFillColor(1,1,1,1)
-	groupScene:insert(buttonPremiumShadow)
-	groupScene:insert(premiumBanner)
-	groupScene:insert(header)
-	groupScene:insert(description)
-	groupScene:insert(buttonPremium)
-
-	local isBlockTouch = true
-	premiumBanner:addEventListener("touch", function(event)
-		if (isBlockTouch) then
-			if (event.phase == "began") then
-				display.getCurrentStage():setFocus(event.target, event.id)
-				local r = 0
-				premiumBanner.timer = timer.performWithDelay(0, function()
-					r = r+0.5
-					premiumBanner.alpha = 0.75+(math.cos(r)+1)/8
-					buttonPremiumShadow.alpha = 0.5+(math.cos(r)+1)/4
-					buttonPremiumShadow.rotation = math.cos(r)*5
-			end, 15)
-			elseif (event.phase == "moved" and (math.abs(event.x-event.xStart)>20 or math.abs(event.y-event.yStart)>20)) then
-			elseif (event.phase == "ended") then
-				display.getCurrentStage():setFocus(event.target, nil)
-				isBlockTouch = false
-				timer.cancel(premiumBanner.timer)
-				premiumBanner.alpha = 1
-				buttonPremiumShadow.alpha = 1
-				buttonPremiumShadow.rotation = 0
-
-				transition.to(premiumBanner, {time=300, xScale=0, yScale=0, alpha=0, transition=easing.inBack})
-				transition.to(header, {time=250, xScale=0, alpha=0})
-				transition.to(description, {time=250, xScale=0, yScale=0, alpha=0, transition=easing.inBounce})
-				transition.to(buttonPremiumShadow, {time=250, xScale=0, yScale=0, alpha=0})
-				transition.to(buttonPremium, {time=250, xScale=0, yScale=0, alpha=0, onComplete=function()
-					bannerPremium(groupScene, function()
-						transition.to(premiumBanner, {time=300, xScale=1, yScale=1, alpha=1, transition=easing.outBack})
-						transition.to(header, {time=250, xScale=1, alpha=1})
-						transition.to(description, {time=250, xScale=1, yScale=1, alpha=1, transition=easing.outBounce})
-						transition.to(buttonPremiumShadow, {time=250, xScale=1, yScale=1, alpha=1})
-						transition.to(buttonPremium, {time=250, xScale=1, yScale=1, alpha=1})
-						isBlockTouch = true
-				end)
-				end})
-			end
-		end
-		return(true)
-	end)
-end
-local isPrem = not (funsP["прочитать сс сохранение"]("isPremium")==nil)
-local datePrem = funsP["прочитать сс сохранение"]("isPremium")
-
-
-local function decodeString(encoded)
-	    local decoded = ""
-	    for _, v in ipairs(encoded) do
-	        decoded = decoded .. string.char(v)
-	    end
-	    return decoded
-	end
-
-if (not isPrem) then
-	loadBannerPremium()
-else
-	local funNetworkPrem
-
-	local function networkListener(event)
-		if (event.isError) then
-			cerberus.newBannerQuestion(words[568], function(event)
-				if (event.isOk) then
-					funsP["записать сс сохранение"]("blockPrem", true)
-					isBackScene="back"
-				else
-					funNetworkPrem()
-				end
-			end, words[560], words[16])
-		else
-			funsP["записать сс сохранение"]("blockPrem", nil)
-			if (event.response == "false") then
-				funsP["записать сс сохранение"]("isPremium", nil)
-				isPrem = false
-				loadBannerPremium()
-			end
-			isBackScene="back"
-		end
-		SCENES[SCENE][2].alpha = 1
-	end
-
-	funNetworkPrem = function()
-		SCENES[SCENE][2].alpha = 0
-		isBackScene="block"
-		local link = {104, 116, 116, 112, 58, 47, 47, 120, 57, 53, 51, 50, 56, 105, 107, 46, 98, 101, 103, 101, 116, 46, 116, 101, 99, 104, 47, 112, 111, 99, 107, 101, 116, 117, 112, 47, 112, 114, 101, 109, 105, 117, 109, 47, 105, 115, 80, 114, 101, 109, 105, 117, 109, 86, 50, 46, 112, 104, 112, 63, 105, 100, 61}
-		local headerg = {headers={["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"}}
-	    network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, headerg)
-	end
-
-	if (isStart) then
-		funNetworkPrem()
-	end
-end
 
 end

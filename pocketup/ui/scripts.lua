@@ -96,6 +96,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                             if (idParameter=="cell") then
                                 objectsParameter[3].yScale = 1
                                 local nameBlock = blocks[block.id][1]
+                                
                                 if (nameBlock=="setPosition" or (nameBlock=="transitionPosition" and event.target.idParameter~=1)) then
                                     cerberus.newVatiants({words[607], words[608]}, function(answer)
                                         if (answer==1) then
@@ -2302,13 +2303,14 @@ isBackScene="back"
 groupScene.alpha = 0
 local function funAddImage()
     images = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
+    print(jso)
     local i = #images
     local group = display.newGroup()
     group.y = display.contentWidth/3.75*(i-0.5)
     groupSceneScroll:insert(group)
     local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
     arraySlots[i] = buttonRect
-    buttonRect.idProject= images[i][2]
+    buttonRect.idProject = images[i][2]
     buttonRect.idSlot = i
     buttonRect.yGoalPos = group.y
     buttonRect.anchorX = 0

@@ -14,6 +14,9 @@ group.cells[i] - массив, содержащий в себе тип пара�
 
 function createBlock(block)
 	local infoBlock = allBlocks[block[1]]
+	if (allBlocks[block[1]]==nil) then
+		infoBlock = {"block", "blocks/block_light_1.png", { {{"text", words[612]}} }, 109, 88, false}
+	end
 	local group = display.newGroup()
 	group.x, group.y = CENTER_X, CENTER_Y
 	local image = display.newImage(infoBlock[2])
@@ -119,6 +122,9 @@ end
 
 			if (formula[1]=="text") then
 				local header = display.newText(formula[2], xF, yF, "fonts/font_1.ttf", fontSize1)
+				if (infoBlock[2]:gsub("light_", "")~=infoBlock[2]) then
+					header:setFillColor(0, 0, 0)
+				end
 				header.anchorX=0
 				group2:insert(header)
 				xF = header.x+header.width+display.contentWidth/30

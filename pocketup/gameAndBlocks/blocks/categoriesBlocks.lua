@@ -93,7 +93,6 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"setQuareHitbox"},
 			{"setQuareWHHitbox", {{{"number", 100}}, {{"number", 200}}}},
 			{"setCircleHitbox", {{{"number", 200}}}},
-			{"setShapeHitbox", { {"shapeHitbox", "[-50, -100, -100, 100, 150, 125, 100, -100]"} }},
 		},
 		["sounds"]={
 			{"playSound", {{"sounds",nameSound}}},
@@ -199,22 +198,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 		["textFields"]={
 			{"ask",{{{"text",words[161]}}, {localityVariable, nameVariable}, {"function",nameFunction} }},
 			{"createTextField", { {{"text", words[493]}}, {"onOrOff","on"}, {{"number",300}}, {{"number", 100}}, {localityVariable, nameVariable} }},
-			{"removeCameraTextField", {{{"text", words[493]}}}},
-			{"insertCameraTextField", {{{"text", words[493]}}}},
-			{"setPositionTextField", { {{"text",words[493]}}, {{"number", 100}}, {{"number", 200}} }},
-			{"editPositionTextField", { {{"text",words[493]}}, {{"number", 10}}, {{"number", 20}} }},
-			{"setFontSizeTextField", { {{"text", words[493]}}, {{"number", 16}} }},
-			{"setTypeInputTextField", { {{"text", words[493]}}, {"typeInput", "phone"} }},
-			{"setAlignTextField", { {{"text", words[493]}}, {"alignText", "center"} }},
 			{"deleteTextField", { {{"text", words[493]}} }},
-			{"isSecureTextField", { {{"text", words[493]}}, {"onOrOff","on"} }},
-			{"placeholderTextField", { {{"text", words[493]}}, {{"text", words[164]}} }},
-			{"valueTextField", { {{"text", words[493]}}, {{"text", words[164]}} }},
-			{"setColorTextField", { {{"text", words[493]}}, {{"text", "#FF0000"}} }},
-			{"setSelectionTextField", { {{"text", words[493]}}, {{"number", 2}}, {{"number", 4}} }},
-			{"getSelectionTextField", { {{"text", words[493]}}, {localityVariable, nameVariable}, {localityVariable, nameVariable} }},
-			{"setKeyboardToTextField", {{{"text", words[493]}}}},
-			{"removeKeyboardToTextField"},
 		},
 		["miniScenes"]={
 			{"createMiniScene", {{{"text",words[530]}}}},
@@ -246,14 +230,6 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"forwardWebView", {{{"text", words[589]}}}},
 			{"stopWebView", {{{"text", words[589]}}}},
 			{"reloadWebView", {{{"text", words[589]}}}},
-			
-			{"createJoystick", { {{"text", words[581]}}, {"images", nameImage}, {"images", nameImage}, {localityVariable, nameVariable}, {localityVariable, nameVariable},{"function", nameFunction} }},
-			{"cameraInsertJoystick", {{{"text", words[581]}}}},
-			{"cameraRemoveJoystick", {{{"text", words[581]}}}},
-			{"setPositionJoystick", {{{"text", words[581]}}, {{"number", 100}}, {{"number", 200}} }},
-			{"setSizeJoystick", {{{"text", words[581]}}, {{"number", 60}} }},
-			{"setSizeJoystick1", {{{"text", words[581]}}, {{"number", 60}} }},
-			{"setSizeJoystick2", {{{"text", words[581]}}, {{"number", 60}} }},
 		},
 	}
 	return(myTable)
@@ -262,28 +238,6 @@ end
 
 
 premBlocks = {
-	createJoystick=true,
-	setPositionJoystick=true,
-	setSizeJoystick=true,
-	setSizeJoystick1=true,
-	setSizeJoystick2=true,
-	setShapeHitbox=true,
-	removeCameraTextField=true,
-	insertCameraTextField=true,
-	setPositionTextField=true,
-	editPositionTextField=true,
-	setFontSizeTextField=true,
-	setTypeInputTextField=true,
-	setAlignTextField=true,
-	--deleteTextField=true,
-	isSecureTextField=true,
-	placeholderTextField=true,
-	valueTextField=true,
-	setColorTextField=true,
-	setSelectionTextField=true,
-	getSelectionTextField=true,
-	setKeyboardToTextField=true,
-	removeKeyboardToTextField=true,
 }
 
 

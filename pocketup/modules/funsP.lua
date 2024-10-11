@@ -512,6 +512,7 @@ funsP["корректность формулы"] = function(code)
 end
 
 funsP["импортировать проект"] = function(onComplete)
+	os.remove(system.pathForFile("importfile.zip", system.DocumentsDirectory))
 	local isAndroid = isSim or  isWin
 	local function onCompleteImportImage(event)
 		if (event.done=="ok") then

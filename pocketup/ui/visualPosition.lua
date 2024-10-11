@@ -44,8 +44,11 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 
 	local images = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
 	local image
-	if (#images~=0) then
-		if (properties==nil) then
+	if (true) then
+		if (#images==0) then
+			image = display.newImage("images/pocketup.png")
+			image.width, image.height = 100, 100
+		elseif (properties==nil) then
 			image = display.newImage(IDOBJECT.."/image_"..images[1][2]..".png", system.DocumentsDirectory)
 		else
 			if (properties.path==nil) then
@@ -131,6 +134,9 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 					funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
 				end
 				display.remove(groupScene)
+				if (settings.orientation=="horizontal") then
+					orientation.lock('portrait')
+				end
 				funBack = oldSceneBack
 				SCENES["scripts"][1].alpha = 1
 				SCENE = "scripts"
@@ -154,6 +160,9 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 		end
 		funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
 		display.remove(groupScene)
+		if (settings.orientation=="horizontal") then
+			orientation.lock('portrait')
+		end
 		funBack = oldSceneBack
 		SCENES["scripts"][1].alpha = 1
 		SCENE = "scripts"

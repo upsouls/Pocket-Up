@@ -106,7 +106,15 @@ function scene_readySprites( funAddImage )
                                         bg.container.y = bg.y
                                         bg.container:insert(obj)
                                         groupSceneScroll:insert(bg.container)
-                                        local name = display.newText(v['name'], 0, bg.y, display.contentWidth-obj_bg.width-15, bg.height-50, native.systemFont, 35)
+                                        local name = display.newText({
+                                            text=v['name'],
+                                            x=0,
+                                            y=bg.y,
+                                            width=display.contentWidth-obj_bg.width-15,
+                                            --height=bg.height-50,
+                                            font=native.systemFont,
+                                            fontSize=fontSize1
+                                        })
                                         name.x = obj_bg.x + obj_bg.width/2 + name.width/2 + 15
                                         name:setFillColor(170/255,218/255,240/255)
 
@@ -130,7 +138,7 @@ function scene_readySprites( funAddImage )
                                                 params.progress = true
                                                 network.download( event.target.link, 'GET',  function(event)
                                                     if event.phase == 'ended' then
-                                                        sprites[allocNewSprite] = {v['name'], allocNewSprite}
+                                                        sprites[#sprites+1] = {v['name'], allocNewSprite}
                                                         funsP['записать сохранение'](IDOBJECT..'/images', json.encode(sprites))
                                                         funAddImage()
                                                         onBack()
@@ -164,8 +172,9 @@ function scene_readySprites( funAddImage )
             circleFrontAlpha.xScale, circleFrontAlpha.yScale, circleFrontAlpha.alpha = 0.5, 0.5, 0
             sceneGroup:insert(circleFrontAlpha)
             circleFront.circleAlpha = circleFrontAlpha
-            local circleFrontText = display.newImage("images/back.png", circleFront.x, circleFront.y)
-            circleFrontText.xScale, circleFrontText.yScale = -display.contentWidth/1000, display.contentWidth/800
+            local circleFrontText = display.newImage("images/triangle.png", circleFront.x+display.contentWidth/100, circleFront.y)
+            circleFrontText.xScale, circleFrontText.yScale = -display.contentWidth/2500, display.contentWidth/2500
+            circleFrontText.rotation = 90
             sceneGroup:insert(circleFrontText)
             local circleBack = display.newCircle(CENTER_X-display.contentWidth/2+display.contentWidth/8, CENTER_Y+display.contentHeight/2-display.contentWidth/8-75, display.contentWidth/11.5)
             circleBack:setFillColor(1, 172/255, 8/255)
@@ -175,8 +184,9 @@ function scene_readySprites( funAddImage )
             circleBackAlpha.xScale, circleBackAlpha.yScale, circleBackAlpha.alpha = 0.5, 0.5, 0
             sceneGroup:insert(circleBackAlpha)
             circleBack.circleAlpha = circleBackAlpha
-            local circleBackText =  display.newImage("images/back.png", circleBack.x, circleBack.y)
-            circleBackText.xScale, circleBackText.yScale = display.contentWidth/1000, display.contentWidth/800
+            local circleBackText =  display.newImage("images/triangle.png", circleBack.x+display.contentWidth/100, circleBack.y)
+            circleBackText.xScale, circleBackText.yScale = display.contentWidth/2500, display.contentWidth/2500
+            circleBackText.rotation = -90
             sceneGroup:insert(circleBackText)
             local function touchCircleList(event)
                 if (true) then
