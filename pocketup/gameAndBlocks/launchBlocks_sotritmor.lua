@@ -41,7 +41,7 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         --         end
         --     end
         --     if (newIdImage ~= nil) then
-        --         local image_path = ]]..IDPROJECT..[['/scene_']]..scene_id..[['/object_']]..obj_id..[['/image_']]..image..[['.png\'
+        --         local image_path = ]]..app.idProject..[['/scene_']]..scene_id..[['/object_']]..obj_id..[['/image_']]..image..[['.png\'
         --         Animations[name] = {}
         --     end
         -- ]]); --[[Animations - таблицу надо создать вначале кода]]

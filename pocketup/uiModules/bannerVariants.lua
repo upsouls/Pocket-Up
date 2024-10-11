@@ -1,12 +1,12 @@
 -- принимает массив строк. пример {"переименовать","копировать","удалить"}
 
-cerberus.newVatiants = function (variants, onComplete)
+app.cerberus.newVatiants = function (variants, onComplete)
 	local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight)
 	backgroundBlackAlpha:setFillColor(0,0,0,0.6)
-	SCENES[SCENE][(SCENE=="scripts" and 1 or #SCENES[SCENE])]:insert(backgroundBlackAlpha)
+	app.scenes[app.scene][(app.scene=="scripts" and 1 or #app.scenes[app.scene])]:insert(backgroundBlackAlpha)
 	local group = display.newGroup()
-	SCENES[SCENE][(SCENE=="scripts" and 1 or #SCENES[SCENE])]:insert(group)
-	local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.16, 0, roundedRect)
+	app.scenes[app.scene][(app.scene=="scripts" and 1 or #app.scenes[app.scene])]:insert(group)
+	local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.16, 0, app.roundedRect)
 	rect.anchorY=0,
 	rect:setFillColor(66/255, 66/255, 66/255)
 	group:insert(rect)
@@ -49,7 +49,7 @@ cerberus.newVatiants = function (variants, onComplete)
 			x=button.x,
 			y=button.y,
 			width=display.contentWidth/1.16-(display.contentWidth-display.contentWidth/1.16),
-			fontSise=fontSize1,
+			fontSise=app.fontSize1,
 		})
 		group:insert(text)
 		buttons[i] = button

@@ -58,7 +58,7 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         end_pcall()
     elseif (nameBlock=='setColorTextField') then
         add_pcall()
-        lua = lua.."local rgb = hexToRgb("..make_all_formulas(infoBlock[2][2], object)..")\ntextFields["..make_all_formulas(infoBlock[2][1], object).."]:setTextColor(rgb[1], rgb[2], rgb[3])"
+        lua = lua.."local rgb = utils.hexToRgb("..make_all_formulas(infoBlock[2][2], object)..")\ntextFields["..make_all_formulas(infoBlock[2][1], object).."]:setTextColor(rgb[1], rgb[2], rgb[3])"
         end_pcall()
     elseif (nameBlock=='setSelectionTextField') then
         add_pcall()
@@ -66,7 +66,7 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         end_pcall()
     elseif (nameBlock=='getSelectionTextField') then
         add_pcall()
-        lua = lua.."local startPos, endPos = textFields["..make_all_formulas(infoBlock[2][1], object).."]:getSelection()\n"..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].." = utf8.sub(textFields["..make_all_formulas(infoBlock[2][1], object).."].text, startPos+1, endPos)"
+        lua = lua.."local startPos, endPos = textFields["..make_all_formulas(infoBlock[2][1], object).."]:getSelection()\n"..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].." = plugins.utf8.sub(textFields["..make_all_formulas(infoBlock[2][1], object).."].text, startPos+1, endPos)"
         end_pcall()
     elseif (nameBlock=='setKeyboardToTextField') then
         add_pcall()
@@ -98,7 +98,7 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         end_pcall()
     elseif (nameBlock=='setShapeHitbox') then
         add_pcall()
-        lua = lua.."local tableShape = json.decode('"..infoBlock[2][1][2].."')\nlocal tableResizeShape = {}\nlocal size = target.property_size/100\nfor i=1, #tableShape/2 do\ntableResizeShape[i*2-1], tableResizeShape[i*2] = tableShape[i*2-1]*size, tableShape[i*2]*size\nend\ntarget.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = nil, nil, tableResizeShape\ntarget:physicsReload()"
+        lua = lua.."local tableShape = plugins.json.decode('"..infoBlock[2][1][2].."')\nlocal tableResizeShape = {}\nlocal size = target.property_size/100\nfor i=1, #tableShape/2 do\ntableResizeShape[i*2-1], tableResizeShape[i*2] = tableShape[i*2-1]*size, tableShape[i*2]*size\nend\ntarget.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = nil, nil, tableResizeShape\ntarget:physicsReload()"
         end_pcall()
     elseif (nameBlock=='setPositionMiniScene') then
         add_pcall()

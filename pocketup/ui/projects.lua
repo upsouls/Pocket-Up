@@ -1,19 +1,19 @@
 -- сцена со всеми проектами
 
 function scene_projects()
-	local isStart = SCENES["projects"]==nil
+	local isStart = app.scenes["projects"]==nil
 	local groupScene = display.newGroup()
 	local groupSceneScroll = display.newGroup()
-	SCENE = "projects"
-	SCENES[SCENE] = {groupSceneScroll, groupScene}
+	app.scene = "projects"
+	app.scenes[app.scene] = {groupSceneScroll, groupScene}
 	local funMenuObjects={}
 	local funCheckObjects = {}
 	local funBackObjects = {}
 	local isBackScene = "back"
-	local valueHeaderTopBar = words[1]
+	local valueHeaderTopBar = app.words[1]
 	local topBarArray = topBar(groupScene, 1, funMenuObjects, funCheckObjects, funBackObjects)
 
-	local scrollProjects = widget.newScrollView({
+	local scrollProjects = plugins.widget.newScrollView({
 		width=display.contentWidth,
 		height=display.contentHeight-topBarArray[1].height,
 		horizontalScrollDisabled=true,
@@ -26,7 +26,7 @@ groupScene:insert(scrollProjects)
 scrollProjects.anchorY = 0
 scrollProjects.y = topBarArray[1].y+topBarArray[1].height
 scrollProjects:insert(groupSceneScroll)
-select_Scroll = scrollProjects
+utils.select_Scroll = scrollProjects
 
 local isSortProjects = funsP["прочитать сс сохранение"]("наличие сортировки проектов")=="true"
 local projectsAndIds = funsP["получить проекты"](isSortProjects)
@@ -48,16 +48,16 @@ local function touchOpenProject(event)
 				local infoProject = idsProjects[event.target.idSlot]
 				table.remove(idsProjects, event.target.idSlot)
 				table.insert(idsProjects, 1, infoProject)
-				print(json.encode(idsProjects))
+				print(plugins.json.encode(idsProjects))
 
-				funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(idsProjects))
+				funsP["записать сс сохранение"]("сортировка проектов - дата открытия", plugins.json.encode(idsProjects))
 
-				display.remove(SCENES[SCENE][1])
-				display.remove(SCENES[SCENE][2])
-				local scenesToProject = json.decode(funsP["получить сохранение"](event.target.idProject.."/scenes"))
+				display.remove(app.scenes[app.scene][1])
+				display.remove(app.scenes[app.scene][2])
+				local scenesToProject = plugins.json.decode(funsP["получить сохранение"](event.target.idProject.."/scenes"))
 				if (#scenesToProject==1) then
-					IDPROJECT = event.target.idProject
-					NMPROJECT = event.target.nameProject
+					app.idProject = event.target.idProject
+					app.nmProject = event.target.nameProject
 					scene_objects(event.target.idProject.."/scene_"..scenesToProject[1][2].."/objects", event.target.nameProject, scenesToProject[1])
 				else
 					scene_scenes(event.target.idProject, event.target.nameProject)
@@ -141,21 +141,21 @@ if (event.target.typeFunction=="copy") then
 	local i = eventTargetMenu.slot.idSlot
 	local counterProject = tonumber(funsP["прочитать сс сохранение"]("counter_projects"))
 	counterProject = counterProject+1
-	local copyObject = json.decode(json.encode(projects[idsProjects[i]]))
+	local copyObject = plugins.json.decode(plugins.json.encode(projects[idsProjects[i]]))
 	copyObject[1] = correctNameSlot(copyObject[1])
 	copyObject[2] = "project_"..counterProject
 	funsP["записать сс сохранение"]("counter_projects",counterProject)
 	funsP["копировать проект"](eventTargetMenu.slot.idProject, "project_"..counterProject)
 	projects[#projects+1] = copyObject
 
-	funsP["записать сс сохранение"]("список проектов",json.encode(projects))
+	funsP["записать сс сохранение"]("список проектов",plugins.json.encode(projects))
 	table.insert(idsProjects, 1, #projects)
-	local idsProjectsCreated = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
-	local idsProjectsOpen = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
+	local idsProjectsCreated = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
+	local idsProjectsOpen = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
 	table.insert(idsProjectsCreated, 1, #projects)
 	table.insert(idsProjectsOpen, 1, #projects)
-	funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(idsProjectsOpen))
-	funsP["записать сс сохранение"]("сортировка проектов - дата создания", json.encode(idsProjectsCreated))
+	funsP["записать сс сохранение"]("сортировка проектов - дата открытия", plugins.json.encode(idsProjectsOpen))
+	funsP["записать сс сохранение"]("сортировка проектов - дата создания", plugins.json.encode(idsProjectsCreated))
 
 	local iSort = 1
 	local i = idsProjects[iSort]
@@ -193,8 +193,8 @@ if (event.target.typeFunction=="copy") then
 		x = strokeIcon.x+strokeIcon.width/1.5,
 		y = strokeIcon.y,
 		width = display.contentWidth/1.75,
-		height = fontSize0*1.15,
-		fontSize = fontSize0
+		height = app.fontSize0*1.15,
+		fontSize = app.fontSize0
 	})
 	nameProject.anchorX = 0
 	nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -245,8 +245,8 @@ elseif (event.target.typeFunction=="delete") then
 	table.remove(idsProjects, i)
 	display.remove(slot.myGroup)
 
-	local idsProjectsCreated = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
-	local idsProjectsOpen = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
+	local idsProjectsCreated = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
+	local idsProjectsOpen = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
 	for iDelSave=1, #idsProjectsCreated do
 		if (idsProjectsCreated[iDelSave]==idDelSave) then
 			table.remove(idsProjectsCreated, iDelSave)
@@ -272,13 +272,13 @@ elseif (event.target.typeFunction=="delete") then
 		end
 	end
 
-	funsP["записать сс сохранение"]("список проектов", json.encode(projects))
-	funsP["записать сс сохранение"]("сортировка проектов - дата создания", json.encode(idsProjectsCreated))
-	funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(idsProjectsOpen))
+	funsP["записать сс сохранение"]("список проектов", plugins.json.encode(projects))
+	funsP["записать сс сохранение"]("сортировка проектов - дата создания", plugins.json.encode(idsProjectsCreated))
+	funsP["записать сс сохранение"]("сортировка проектов - дата открытия", plugins.json.encode(idsProjectsOpen))
 
 	if (#projects==0) then
-		display.remove(SCENES[SCENE][1])
-		display.remove(SCENES[SCENE][2])
+		display.remove(app.scenes[app.scene][1])
+		display.remove(app.scenes[app.scene][2])
 		scene_projects()
 	else
 
@@ -300,36 +300,36 @@ elseif (event.target.typeFunction=="delete") then
 			time=0, 
 			y=math.min(math.max(yScroll, -newScrollHeight+scrollProjects.height), 0)
 		})
-		funsP["вызвать уведомление"](string.gsub(words[37], "<count>", 1))
+		funsP["вызвать уведомление"](string.gsub(app.words[37], "<count>", 1))
 
 	end
 elseif (event.target.typeFunction=="rename") then 
 	local function isErrorCorrectNameObject(value)
 		if (string.len(value)==0) then
-			return(words[18])
+			return(app.words[18])
 		else
-			return(isCorrectValue(value) and "" or words[15])
+			return(isCorrectValue(value) and "" or app.words[15])
 		end
 	end
 	local function endEditingRename(tableAnswer)
 		if (tableAnswer.isOk) then
-			tableAnswer.value = tableAnswer.value:gsub( (isWin and '\r\n' or '\n'), ' ')
+			tableAnswer.value = tableAnswer.value:gsub( (utils.isWin and '\r\n' or '\n'), ' ')
 			local slot = eventTargetMenu.slot
 			slot.textNameProject.text = tableAnswer.value
 			slot.nameProject = tableAnswer.value
 			projects[idsProjects[slot.idSlot]][1] = tableAnswer.value
-			funsP["записать сс сохранение"]("список проектов", json.encode(projects))
+			funsP["записать сс сохранение"]("список проектов", plugins.json.encode(projects))
 		end
 	end
-	cerberus.newInputLine(words[39],words[40], isErrorCorrectNameObject, eventTargetMenu.slot.nameProject, endEditingRename)
+	app.cerberus.newInputLine(app.words[39],app.words[40], isErrorCorrectNameObject, eventTargetMenu.slot.nameProject, endEditingRename)
 
 
 elseif (event.target.typeFunction=="options") then
 	local slot = eventTargetMenu.slot
 	local idProject = slot.idProject
 	local nameProject = slot.nameProject
-	display.remove(SCENES[SCENE][1])
-	display.remove(SCENES[SCENE][2])
+	display.remove(app.scenes[app.scene][1])
+	display.remove(app.scenes[app.scene][2])
 	scene_options(idProject, nameProject)
 end
 
@@ -352,7 +352,7 @@ for i=1, #arrayButtonsFunctions do
 	buttons[i].typeFunction = arrayButtonsFunctions[i][2]
 	buttons[i]:addEventListener("touch",touchTypeFunction)
 
-	buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+	buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
 	buttons[i].header.anchorX=0
 	groupMenu:insert(buttons[i].header)
 
@@ -416,8 +416,8 @@ for iSort=1, #idsProjects do
 		x = strokeIcon.x+strokeIcon.width/1.5,
 		y = strokeIcon.y,
 		width = display.contentWidth/1.75,
-		height = fontSize0*1.15,
-		fontSize = fontSize0
+		height = app.fontSize0*1.15,
+		fontSize = app.fontSize0
 	})
 	nameProject.anchorX = 0
 	nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -481,7 +481,7 @@ circleDiscordAlpha.xScale, circleDiscordAlpha.yScale, circleDiscordAlpha.alpha =
 groupScene:insert(circleDiscordAlpha)
 circleDiscord.circleAlpha = circleDiscordAlpha
 
-circlePlusText = display.newText("+",circlePlus.x, circlePlus.y, nil, fontSize0*1.75)
+circlePlusText = display.newText("+",circlePlus.x, circlePlus.y, nil, app.fontSize0*1.75)
 groupScene:insert(circlePlusText)
 local function touchCirclePlus(event)
 	if (event.phase=="began") then
@@ -504,10 +504,10 @@ local function touchCirclePlus(event)
 				end
 				local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight)
 				backgroundBlackAlpha:setFillColor(0,0,0,0.6)
-				SCENES[SCENE][#SCENES[SCENE]]:insert(backgroundBlackAlpha)
+				app.scenes[app.scene][#app.scenes[app.scene]]:insert(backgroundBlackAlpha)
 				local group = display.newGroup()
-				SCENES[SCENE][#SCENES[SCENE]]:insert(group)
-				local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, roundedRect)
+				app.scenes[app.scene][#app.scenes[app.scene]]:insert(group)
+				local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, app.roundedRect)
 				rect.anchorY=0,
 				rect:setFillColor(66/255, 66/255, 66/255)
 				group:insert(rect)
@@ -527,13 +527,13 @@ local function touchCirclePlus(event)
 					x=CENTER_X, 
 					y=CENTER_Y+display.contentWidth/17,
 					font=nil,
-					fontSize=fontSize2,
+					fontSize=app.fontSize2,
 				})
 				miniGroupTop:insert(textPlaceholder)
 				local input = native.newTextBox(CENTER_X, textPlaceholder.y+textPlaceholder.height, textPlaceholder.width, textPlaceholder.width/10)
 				input.isEditable = true
 				input.hasBackground = false
-				if isSim or isWin then
+				if utils.isSim or utils.isWin then
 					input:setTextColor(0,0,0)
 					input.size = 25
 				else
@@ -545,7 +545,7 @@ local function touchCirclePlus(event)
 				input.text = value
 				native.setKeyboardFocus(input)
 				if (value~="") then
-					input:setSelection(0, utf8.len(value))
+					input:setSelection(0, plugins.utf8.len(value))
 				end
 
 				local rectInput = display.newRect(CENTER_X, input.y+input.height, input.width, display.contentWidth/150)
@@ -558,23 +558,23 @@ local function touchCirclePlus(event)
 					x=CENTER_X, 
 					y=rectInput.y+rectInput.height+display.contentWidth/34,
 					font=nil,
-					fontSize=fontSize2,
+					fontSize=app.fontSize2,
 				})
 				textError.anchorY = 0
 				textError:setFillColor(1, 113/255, 67/255)
 				miniGroupTop:insert(textError)
 
-				local textButtonOk = display.newText(words[16], 0, 0, nil, fontSize1)
+				local textButtonOk = display.newText(app.words[16], 0, 0, nil, app.fontSize1)
 				textButtonOk:setFillColor(171/255, 219/255, 241/255)
-				local rectButtonOk = display.newRoundedRect(CENTER_X+textPlaceholder.width/2, CENTER_Y+textPlaceholder.width/10*2, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, roundedRect)
+				local rectButtonOk = display.newRoundedRect(CENTER_X+textPlaceholder.width/2, CENTER_Y+textPlaceholder.width/10*2, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, app.roundedRect)
 				rectButtonOk.anchorX, rectButtonOk.anchorY = 1, 0
 				textButtonOk.x, textButtonOk.y = rectButtonOk.x-rectButtonOk.width/2, rectButtonOk.y+rectButtonOk.height/2
 				rectButtonOk:setFillColor(66/255,66/255, 66/255)
 				miniGroupBottom:insert(rectButtonOk)
 				miniGroupBottom:insert(textButtonOk)
-				local textButtonCancel = display.newText(words[17], 0, 0, nil, fontSize1)
+				local textButtonCancel = display.newText(app.words[17], 0, 0, nil, app.fontSize1)
 				textButtonCancel:setFillColor(171/255, 219/255, 241/255)
-				local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y+textPlaceholder.width/10*2, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, roundedRect)
+				local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y+textPlaceholder.width/10*2, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, app.roundedRect)
 				rectButtonCancel.anchorX, rectButtonCancel.anchorY = 1, 0
 				textButtonCancel.x, textButtonCancel.y = rectButtonCancel.x-rectButtonCancel.width/2, rectButtonCancel.y+rectButtonCancel.height/2
 				rectButtonCancel:setFillColor(66/255,66/255, 66/255)
@@ -678,7 +678,7 @@ local function touchCirclePlus(event)
 
 							if (funEditingEnd~=nil) then
 								if (event.target==rectButtonOk) then
-									funEditingEnd({["isOk"]=true, ["value"]=input.text:gsub("^%s+", ""):gsub("%s+$", ""), ["orientation"]=orientationProject})
+									funEditingEnd({["isOk"]=true, ["value"]=input.text:gsub("^%s+", ""):gsub("%s+$", ""), ["plugins.orientation"]=orientationProject})
 								else
 									funEditingEnd({["isOk"]=false})
 								end
@@ -765,7 +765,7 @@ local function touchCirclePlus(event)
 
 			local function isCorrectValue(value)
 				if (string.len(value)==0) then
-					return(words[18])
+					return(app.words[18])
 				else
 					local isCorrect = true
 					for i=1, #projects do
@@ -774,7 +774,7 @@ local function touchCirclePlus(event)
 							break
 						end
 					end
-					return(isCorrect and "" or words[15])
+					return(isCorrect and "" or app.words[15])
 				end
 			end
 
@@ -792,38 +792,38 @@ local function touchCirclePlus(event)
 
 			local function createProject(tableAnswer)
 				if (tableAnswer.isOk) then
-					tableAnswer.value = tableAnswer.value:gsub( (isWin and '\r\n' or '\n'), ' ')
+					tableAnswer.value = tableAnswer.value:gsub( (utils.isWin and '\r\n' or '\n'), ' ')
 					local counter = tonumber(funsP["прочитать сс сохранение"]("counter_projects"))+1
 					funsP["записать сс сохранение"]("counter_projects", counter)
 					projects[#projects+1] = {tableAnswer.value, "project_"..counter}
 
 
-					funsP["записать сс сохранение"]("список проектов",json.encode(projects))
+					funsP["записать сс сохранение"]("список проектов",plugins.json.encode(projects))
 
-					local idsProjectsCreated = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
-					local idsProjectsOpen = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
+					local idsProjectsCreated = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
+					local idsProjectsOpen = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
 					table.insert(idsProjectsCreated, 1, #projects)
 					table.insert(idsProjectsOpen, 1, #projects)
-					funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(idsProjectsOpen))
-					funsP["записать сс сохранение"]("сортировка проектов - дата создания", json.encode(idsProjectsCreated))
+					funsP["записать сс сохранение"]("сортировка проектов - дата открытия", plugins.json.encode(idsProjectsOpen))
+					funsP["записать сс сохранение"]("сортировка проектов - дата создания", plugins.json.encode(idsProjectsCreated))
 
 					funsP["создать проект"]("project_"..counter)
-					funsP["записать сохранение"]("project_"..counter.."/options", json.encode({["orientation"]=tableAnswer.orientation, ["aspectRatio"]=false, ["displayWidth"]=display.contentWidth, ["displayHeight"]=display.contentHeight}))
+					funsP["записать сохранение"]("project_"..counter.."/options", plugins.json.encode({["plugins.orientation"]=tableAnswer.plugins.orientation, ["aspectRatio"]=false, ["displayWidth"]=display.contentWidth, ["displayHeight"]=display.contentHeight}))
 
 
-					display.remove(SCENES[SCENE][1])
-					display.remove(SCENES[SCENE][2])
+					display.remove(app.scenes[app.scene][1])
+					display.remove(app.scenes[app.scene][2])
 
 
-					IDPROJECT = "project_"..counter
-					NMPROJECT = tableAnswer.value
-					scene_objects(IDPROJECT.."/scene_1/objects", NMPROJECT, {"Сцена",1})
+					app.idProject = "project_"..counter
+					app.nmProject = tableAnswer.value
+					scene_objects(app.idProject.."/scene_1/objects", app.nmProject, {"Сцена",1})
 
 
 				end
 			end
 
-			inputLineProject(words[40], isCorrectValue, correctNameSlot(words[43]), createProject)
+			inputLineProject(app.words[40], isCorrectValue, correctNameSlot(app.words[43]), createProject)
 
 
 		end
@@ -861,11 +861,11 @@ isBackScene = "back"
 funsP["импортировать проект"](function (pathProject)
 	if (funsP["получить сохранение"](pathProject.."/options")=="[]") then
 		os.removeFolder(system.pathForFile(pathProject, system.DocumentsDirectory))
-		funsP["вызвать уведомление"](words[267])
+		funsP["вызвать уведомление"](app.words[267])
 	else
-		local projects = json.decode(funsP["прочитать сс сохранение"]("список проектов"))
-		local sortDate = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
-		local sortOpen = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
+		local projects = plugins.json.decode(funsP["прочитать сс сохранение"]("список проектов"))
+		local sortDate = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
+		local sortOpen = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
 
 		local function isCorrectName(value)
 			local isCorrect = true
@@ -889,18 +889,18 @@ funsP["импортировать проект"](function (pathProject)
 			end
 		end
 
-		local nameProject = json.decode(funsP["получить сохранение"](pathProject.."/options"))["name"]
+		local nameProject = plugins.json.decode(funsP["получить сохранение"](pathProject.."/options"))["name"]
 
 		projects[#projects+1] = {correctName(nameProject),pathProject}
 		table.insert(sortDate, 1, #projects)
 		table.insert(sortOpen, 1, #projects)
-		funsP["записать сс сохранение"]("список проектов", json.encode(projects))
-		funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(sortOpen))
-		funsP["записать сс сохранение"]("сортировка проектов - дата создания", json.encode(sortDate))
-		display.remove(SCENES[SCENE][2])
-		display.remove(SCENES[SCENE][1])
+		funsP["записать сс сохранение"]("список проектов", plugins.json.encode(projects))
+		funsP["записать сс сохранение"]("сортировка проектов - дата открытия", plugins.json.encode(sortOpen))
+		funsP["записать сс сохранение"]("сортировка проектов - дата создания", plugins.json.encode(sortDate))
+		display.remove(app.scenes[app.scene][2])
+		display.remove(app.scenes[app.scene][1])
 		scene_projects()
-		funsP["вызвать уведомление"](words[266])
+		funsP["вызвать уведомление"](app.words[266])
 	end
 end)
 --CCCCCCCCCCCCCCCCCCCCCCCCC
@@ -975,8 +975,8 @@ functionsMenu["startisSort"] = function ()
 local isSort = funsP["прочитать сс сохранение"]("наличие сортировки проектов")=="true" and "false" or "true"
 funsP["записать сс сохранение"]("наличие сортировки проектов", isSort)
 
-display.remove(SCENES[SCENE][1])
-display.remove(SCENES[SCENE][2])
+display.remove(app.scenes[app.scene][1])
+display.remove(app.scenes[app.scene][2])
 scene_projects()
 end
 
@@ -988,11 +988,11 @@ local function renameButton(event)
 		local function editingEnd(tableRenameSlot)
 
 			if (tableRenameSlot.isOk) then
-				tableRenameSlot.value = tableRenameSlot.value:gsub( (isWin and '\r\n' or '\n'), ' ')
+				tableRenameSlot.value = tableRenameSlot.value:gsub( (utils.isWin and '\r\n' or '\n'), ' ')
 				projects[event.target.idSlot][1] = tableRenameSlot.value
 				event.target.textNameProject.text = tableRenameSlot.value
 				event.target.nameProject = tableRenameSlot.value
-				funsP["записать сс сохранение"]("список проектов", json.encode(projects))
+				funsP["записать сс сохранение"]("список проектов", plugins.json.encode(projects))
 			end
 
 			isBackScene = "back"
@@ -1007,8 +1007,8 @@ local function renameButton(event)
 
 		end
 		local function checkCorrectName(value)
-			if (utf8.len(value)==0) then
-				return(words[18])
+			if (plugins.utf8.len(value)==0) then
+				return(app.words[18])
 			else
 				local isCorrect = true
 				for i=1, #projects do
@@ -1020,11 +1020,11 @@ local function renameButton(event)
 				if (isCorrect) then
 					return("")
 				else
-					return(words[15])
+					return(app.words[15])
 				end
 			end
 		end
-		cerberus.newInputLine(words[39],words[40], checkCorrectName, event.target.nameProject, editingEnd)
+		app.cerberus.newInputLine(app.words[39],app.words[40], checkCorrectName, event.target.nameProject, editingEnd)
 
 	end
 end
@@ -1033,7 +1033,7 @@ end
 
 functionsMenu["startrename"] = function ()
 topBarArray[4].alpha = 0
-topBarArray[3].text = words[6]
+topBarArray[3].text = app.words[6]
 
 for i=1, #projects do
 	local slot = arraySlots[i]
@@ -1079,7 +1079,7 @@ local symbols = {
 functionsMenu["startcopy"] = function()
 local arrayIdsWords = {["copy"]=4, ["delete"]=5}
 if (arrayIdsWords[isBackScene]) then
-	topBarArray[3].text = words[arrayIdsWords[isBackScene]]
+	topBarArray[3].text = app.words[arrayIdsWords[isBackScene]]
 else
 	topBarArray[3].text = "заполни название!"
 	topBarArray[3]:setFillColor(1,0,0)
@@ -1147,19 +1147,19 @@ while (is+countCopiedSlot<#projects) do
 		for i=2, #idsProjects do
 			idsProjects[i] = idsProjects[i]+1
 		end
-		funsP["записать сс сохранение"]("список проектов", json.encode(projects))
-		local idsProjects = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
+		funsP["записать сс сохранение"]("список проектов", plugins.json.encode(projects))
+		local idsProjects = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
 		table.insert(idsProjects, 1, 1)
 		for i=2, #idsProjects do
 			idsProjects[i] = idsProjects[i]+1
 		end
-		funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(idsProjects))
-		local idsProjects = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
+		funsP["записать сс сохранение"]("сортировка проектов - дата открытия", plugins.json.encode(idsProjects))
+		local idsProjects = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
 		table.insert(idsProjects, 1, 1)
 		for i=2, #idsProjects do
 			idsProjects[i] = idsProjects[i]+1
 		end
-		funsP["записать сс сохранение"]("сортировка проектов - дата создания", json.encode(idsProjects))
+		funsP["записать сс сохранение"]("сортировка проектов - дата создания", plugins.json.encode(idsProjects))
 
 		local iSort = 1
 		local i = idsProjects[iSort]
@@ -1195,8 +1195,8 @@ while (is+countCopiedSlot<#projects) do
 			x = strokeIcon.x+strokeIcon.width/1.5,
 			y = strokeIcon.y,
 			width = display.contentWidth/1.75,
-			height = fontSize0*1.15,
-			fontSize = fontSize0
+			height = app.fontSize0*1.15,
+			fontSize = app.fontSize0
 		})
 		nameProject.anchorX = 0
 		nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -1244,9 +1244,9 @@ end
 
 local function decryptor(value)
 	local newValue = ""
-	for i=1, math.floor(utf8.len(value)/2) do
-		local symbol = utf8.sub(value, i*2-1, i*2-1)
-		local symbol2 = utf8.sub(value, i*2, i*2)
+	for i=1, math.floor(plugins.utf8.len(value)/2) do
+		local symbol = plugins.utf8.sub(value, i*2-1, i*2-1)
+		local symbol2 = plugins.utf8.sub(value, i*2, i*2)
 		for i2=1, #symbols do
 			if (symbols[i2]==symbol) then
 				symbol = i2
@@ -1277,8 +1277,8 @@ topBarArray[5].alpha = 0
 local iMinus = 0
 local i2 = 0
 
-local idsProjectsCreated = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
-local idsProjectsOpen = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
+local idsProjectsCreated = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
+local idsProjectsOpen = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
 
 while (i2-iMinus<#arraySlots) do
 	i2 = i2+1
@@ -1337,12 +1337,12 @@ while (i2-iMinus<#arraySlots) do
 
 end
 
-funsP["записать сс сохранение"]("сортировка проектов - дата создания", json.encode(idsProjectsCreated))
-funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(idsProjectsOpen))
-funsP["записать сс сохранение"]("список проектов", json.encode(projects))
+funsP["записать сс сохранение"]("сортировка проектов - дата создания", plugins.json.encode(idsProjectsCreated))
+funsP["записать сс сохранение"]("сортировка проектов - дата открытия", plugins.json.encode(idsProjectsOpen))
+funsP["записать сс сохранение"]("список проектов", plugins.json.encode(projects))
 
 if (iMinus~=0) then
-	funsP["вызвать уведомление"](string.gsub(words[iMinus==1 and 37 or 38], "<count>", iMinus))
+	funsP["вызвать уведомление"](string.gsub(app.words[iMinus==1 and 37 or 38], "<count>", iMinus))
 
 	if (#arraySlots~=0) then
 		local iEndSlot = #arraySlots
@@ -1355,8 +1355,8 @@ if (iMinus~=0) then
 			y=math.min(math.max(yScroll, -newScrollHeight+scrollProjects.height), 0)
 		})
 	else
-		display.remove(SCENES[SCENE][1])
-		display.remove(SCENES[SCENE][2])
+		display.remove(app.scenes[app.scene][1])
+		display.remove(app.scenes[app.scene][2])
 		scene_projects()
 	end
 end
@@ -1422,7 +1422,7 @@ for i=1, #arrayButtonsFunctions do
 	buttons[i].typeFunction = arrayButtonsFunctions[i][2]
 	buttons[i]:addEventListener("touch",touchTypeFunction)
 
-	buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+	buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
 	buttons[i].header.anchorX=0
 	groupMenu:insert(buttons[i].header)
 
@@ -1491,8 +1491,8 @@ end
 funBackObjects[1] = function (isSystem)
 if (isSystem==nil or isBackScene=="back") then
 	if (isBackScene=="back") then
-		display.remove(SCENES[SCENE][1])
-		display.remove(SCENES[SCENE][2])
+		display.remove(app.scenes[app.scene][1])
+		display.remove(app.scenes[app.scene][2])
 
 		scene_main()
 

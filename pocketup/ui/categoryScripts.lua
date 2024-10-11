@@ -8,20 +8,20 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 		oldBackScripts=funBack
 	end
 
-	local namesFunctions = json.decode(funsP["получить сохранение"](IDSCENE.."/functions"))
+	local namesFunctions = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/functions"))
 	local nameFunction = nil
 	if (#namesFunctions>0) then
 		nameFunction = namesFunctions[#namesFunctions][1]
 	else
-		namesFunctions[1] = {1, words[79], 0}
-		funsP["записать сохранение"](IDSCENE.."/functions", json.encode(namesFunctions))
+		namesFunctions[1] = {1, app.words[79], 0}
+		funsP["записать сохранение"](app.idScene.."/functions", plugins.json.encode(namesFunctions))
 		nameFunction = 1
 	end
-	local idBackgroundObject = json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))[1][2]
-	local namesBackgrounds = json.decode(funsP["получить сохранение"](IDSCENE.."/object_"..idBackgroundObject.."/images"))
+	local idBackgroundObject = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/objects"))[1][2]
+	local namesBackgrounds = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/object_"..idBackgroundObject.."/images"))
 	local nameBackground = #namesBackgrounds>0 and namesBackgrounds[1][2] or nil
-	local namesGlobalVariables = json.decode(funsP["получить сохранение"](IDPROJECT.."/variables"))
-	local namesLocalVariables = json.decode(funsP["получить сохранение"](IDOBJECT.."/variables"))
+	local namesGlobalVariables = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/variables"))
+	local namesLocalVariables = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/variables"))
 	local nameVariable = nil
 	local localityVariable = "globalVariable"
 	if (#namesLocalVariables>0) then
@@ -30,8 +30,8 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 	elseif (#namesGlobalVariables>0) then
 		nameVariable = namesGlobalVariables[#namesGlobalVariables][1]
 	end
-	local namesGlobalArrays = json.decode(funsP["получить сохранение"](IDPROJECT.."/arrays"))
-	local namesLocalArrays = json.decode(funsP["получить сохранение"](IDOBJECT.."/arrays"))
+	local namesGlobalArrays = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/arrays"))
+	local namesLocalArrays = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/arrays"))
 	local nameArray = nil
 	local localityArray = "globalArray"
 	if (#namesLocalArrays>0) then
@@ -40,18 +40,18 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 	elseif (#namesGlobalArrays>0) then
 		nameArray = namesGlobalArrays[#namesGlobalArrays][1]
 	end
-	local namesScenes = json.decode(funsP["получить сохранение"](IDPROJECT.."/scenes"))
+	local namesScenes = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/scenes"))
 	local nameScene = nil
 	if (#namesScenes>1) then
-		if (IDSCENE~=IDPROJECT.."/scene_"..namesScenes[1][2]) then
+		if (app.idScene~=app.idProject.."/scene_"..namesScenes[1][2]) then
 			nameScene = namesScenes[1][2]
 		else
 			nameScene = namesScenes[2][2]
 		end
 	end
-	local namesSounds = json.decode(funsP["получить сохранение"](IDOBJECT.."/sounds"))
+	local namesSounds = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/sounds"))
 	local nameSound = #namesSounds>0 and namesSounds[1][2] or nil
-	local namesImages = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
+	local namesImages = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/images"))
 	local nameImage = #namesImages>0 and namesImages[1][2] or nil
 
 
@@ -59,8 +59,8 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 	local groupScene = display.newGroup()
 	local groupSceneScroll = display.newGroup()
 
-	SCENE = "categoryScripts"
-	SCENES[SCENE] = {groupScene, groupSceneScroll}
+	app.scene = "categoryScripts"
+	app.scenes[app.scene] = {groupScene, groupSceneScroll}
 	local touchBackMenu = {function ()
 		display.remove(groupScene)
 		display.remove(groupSceneScroll)
@@ -69,7 +69,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 	local topBarArray = topBar(groupScene, nameCategory, nil, nil, touchBackMenu)
 	topBarArray[4].alpha = 0
 
-	local scrollProjects = widget.newScrollView({
+	local scrollProjects = plugins.widget.newScrollView({
 		width=display.contentWidth,
 		height=display.contentHeight-topBarArray[1].height,
 		horizontalScrollDisabled=true,
@@ -88,7 +88,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 		local yTargetPos = 0
 		for i=1, #blocksCategory do
 			local block = createBlock(blocksCategory[i])
-			block.infoBlock = json.decode(json.encode(blocksCategory[i]))
+			block.infoBlock = plugins.json.decode(plugins.json.encode(blocksCategory[i]))
 			yTargetPos = yTargetPos+block.height
 			block.y = yTargetPos-block.height/2
 			groupSceneScroll:insert(block)
@@ -109,11 +109,11 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 					local infoBlock = event.target.infoBlock
 					display.getCurrentStage():setFocus(event.target, nil)
 					if ((premBlocks[infoBlock[1]]==nil or isPrem())) then
-						display.remove(SCENES[SCENE][1])
-						display.remove(SCENES[SCENE][2])
-						SCENE = "scripts"
-						SCENES[SCENE][1].alpha = 1
-						SCENES[SCENE][1].x = 0
+						display.remove(app.scenes[app.scene][1])
+						display.remove(app.scenes[app.scene][2])
+						app.scene = "scripts"
+						app.scenes[app.scene][1].alpha = 1
+						app.scenes[app.scene][1].x = 0
 						funBack = oldBackScripts
 						oldBackScripts = nil
 						funAddBlock(infoBlock)

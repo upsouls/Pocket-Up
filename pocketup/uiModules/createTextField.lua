@@ -9,11 +9,11 @@ funEditingEnd - функция, вызывающаяся когда пользо
 ]]
 
 
-cerberus.newInputLine = function(header, placeholder, isCorrectValue, value, funEditingEnd, isCenter)
+app.cerberus.newInputLine = function(header, placeholder, isCorrectValue, value, funEditingEnd, isCenter)
 
 local CENTER_X = CENTER_X
 local CENTER_Y = CENTER_Y
-if (SCENE=='game') then
+if (app.scene=='game') then
     CENTER_X, CENTER_Y = 0, 0
 end
 
@@ -30,14 +30,14 @@ local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.content
 backgroundBlackAlpha:setFillColor(0,0,0,0.6)
 local group = display.newGroup()
 group.background = backgroundBlackAlpha
-if (SCENE=="scripts") then
-    SCENES[SCENE][1]:insert(backgroundBlackAlpha)
-    SCENES[SCENE][1]:insert(group)
+if (app.scene=="scripts") then
+    app.scenes[app.scene][1]:insert(backgroundBlackAlpha)
+    app.scenes[app.scene][1]:insert(group)
 else
-    SCENES[SCENE][#SCENES[SCENE]]:insert(backgroundBlackAlpha)
-    SCENES[SCENE][#SCENES[SCENE]]:insert(group)
+    app.scenes[app.scene][#app.scenes[app.scene]]:insert(backgroundBlackAlpha)
+    app.scenes[app.scene][#app.scenes[app.scene]]:insert(group)
 end
-local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, roundedRect)
+local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, app.roundedRect)
 rect.anchorY=0,
 rect:setFillColor(66/255, 66/255, 66/255)
 group:insert(rect)
@@ -57,7 +57,7 @@ local textHeader = display.newText({
     x=CENTER_X, 
     y=CENTER_Y+display.contentWidth/17,
     font=nil,
-    fontSize=fontSize0,
+    fontSize=app.fontSize0,
 })
 textHeader.anchorY=0
 miniGroupTop:insert(textHeader)
@@ -67,13 +67,13 @@ local textPlaceholder = display.newText({
     x=CENTER_X, 
     y=textHeader.y+textHeader.height+display.contentWidth/17,
     font=nil,
-    fontSize=fontSize2,
+    fontSize=app.fontSize2,
 })
 miniGroupTop:insert(textPlaceholder)
 local input = native.newTextBox(-display.contentWidth, textPlaceholder.y+textPlaceholder.height, textHeader.width, textHeader.width/10)
 input.isEditable = true
 input.hasBackground = false
-if isSim or isWin then
+if utils.isSim or utils.isWin then
     input:setTextColor(0,0,0)
     input.size = 25
 else
@@ -87,7 +87,7 @@ input.x = CENTER_X
 input.text = value
 native.setKeyboardFocus(input)
 if (value~="") then
-    input:setSelection(0, utf8.len(value))
+    input:setSelection(0, plugins.utf8.len(value))
 end
 
 local rectInput = display.newRect(CENTER_X, input.y+input.height, input.width, display.contentWidth/150)
@@ -100,23 +100,23 @@ local textError = display.newText({
     x=CENTER_X, 
     y=rectInput.y+rectInput.height+display.contentWidth/34,
     font=nil,
-    fontSize=fontSize2,
+    fontSize=app.fontSize2,
 })
 textError.anchorY = 0
 textError:setFillColor(1, 113/255, 67/255)
 miniGroupTop:insert(textError)
 
-local textButtonOk = display.newText(words[16], 0, 0, nil, fontSize1)
+local textButtonOk = display.newText(app.words[16], 0, 0, nil, app.fontSize1)
 textButtonOk:setFillColor(171/255, 219/255, 241/255)
-local rectButtonOk = display.newRoundedRect(CENTER_X+textHeader.width/2, CENTER_Y, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, roundedRect)
+local rectButtonOk = display.newRoundedRect(CENTER_X+textHeader.width/2, CENTER_Y, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, app.roundedRect)
 rectButtonOk.anchorX, rectButtonOk.anchorY = 1, 0
 textButtonOk.x, textButtonOk.y = rectButtonOk.x-rectButtonOk.width/2, rectButtonOk.y+rectButtonOk.height/2
 rectButtonOk:setFillColor(66/255,66/255, 66/255)
 miniGroupBottom:insert(rectButtonOk)
 miniGroupBottom:insert(textButtonOk)
-local textButtonCancel = display.newText(words[17], 0, 0, nil, fontSize1)
+local textButtonCancel = display.newText(app.words[17], 0, 0, nil, app.fontSize1)
 textButtonCancel:setFillColor(171/255, 219/255, 241/255)
-local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, roundedRect)
+local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, app.roundedRect)
 rectButtonCancel.anchorX, rectButtonCancel.anchorY = 1, 0
 textButtonCancel.x, textButtonCancel.y = rectButtonCancel.x-rectButtonCancel.width/2, rectButtonCancel.y+rectButtonCancel.height/2
 rectButtonCancel:setFillColor(66/255,66/255, 66/255)

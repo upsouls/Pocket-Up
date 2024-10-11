@@ -1,7 +1,7 @@
 -- визуальная прогрузка формулы в блоке или редакторе выражений
 
 --[[ отправляемы данные
-event - json формула конкретного параметра в блоке
+event - plugins.json формула конкретного параметра в блоке
 posCursor - позиция(number), на которой нужно отобразить курсор. необязательный параметр(при указании nil курсор в формуле не будет добавлен)
 ]]
 
@@ -9,8 +9,8 @@ posCursor - позиция(number), на которой нужно отобра�
 
 function loadFormula(event, posCursor)
 
-	local globalVariables = json.decode(funsP["получить сохранение"](IDPROJECT.."/variables"))
-	local localVariables = json.decode(funsP["получить сохранение"](IDOBJECT.."/variables"))
+	local globalVariables = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/variables"))
+	local localVariables = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/variables"))
 	local allVariables = {}
 	for i=1, #globalVariables do
 		allVariables["globalVariable_"..globalVariables[i][1]] = globalVariables[i][2]
@@ -18,8 +18,8 @@ function loadFormula(event, posCursor)
 	for i=1, #localVariables do
 		allVariables["localVariable_"..localVariables[i][1]] = localVariables[i][2]
 	end
-	local globalArrays = json.decode(funsP["получить сохранение"](IDPROJECT.."/arrays"))
-	local localArrays = json.decode(funsP["получить сохранение"](IDOBJECT.."/arrays"))
+	local globalArrays = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/arrays"))
+	local localArrays = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/arrays"))
 	local allArrays = {}
 	for i=1, #globalArrays do
 		allArrays["globalArray_"..globalArrays[i][1]] = globalArrays[i][2]
@@ -57,10 +57,10 @@ function loadFormula(event, posCursor)
 			value = value.."'"..event[i][2].."'"
 		elseif (typeFormula=="localVariable" or typeFormula=="globalVariable") then
 			local nameVar = allVariables[typeFormula.."_"..event[i][2]]
-			value = value..'"'..(nameVar==nil and words[380] or nameVar)..'"'
+			value = value..'"'..(nameVar==nil and app.words[380] or nameVar)..'"'
 		elseif (typeFormula=="localArray" or typeFormula=="globalArray") then
 			local nameArr = allArrays[typeFormula.."_"..event[i][2]]
-			value = value..'*'..(nameArr==nil and words[381] or nameArr)..'*'
+			value = value..'*'..(nameArr==nil and app.words[381] or nameArr)..'*'
 		else
 			value = value..nameFormulas[event[i][2]]
 		end

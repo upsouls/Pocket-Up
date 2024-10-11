@@ -2,7 +2,7 @@
 
 --[[ данные отправляемые в функцию topBar
 group - группа, к которой привяжется верхний бар
-idWord - заголовок. строка(string) или число(number. id элемента из массива words);
+idWord - заголовок. строка(string) или число(number. id элемента из массива app.words);
 onTouchMenu - вызывает функцию при нажатии на меню
 onTouchCheck - вызывает функцию при нажатии на галочку
 onTouchBack - функция, вызываемая при нажатии на кнопку назад(не важно, системную или ту что в баре)
@@ -83,12 +83,12 @@ function topBar(group, idWord, onTouchMenu, onTouchCheck, onTouchBack, isHorizon
 	buttonBack:addEventListener("touch",back)
 	buttonCheck:addEventListener("touch",back)
 	local headerBar = display.newText({
-		text = type(idWord)=="number" and words[idWord] or idWord,
+		text = type(idWord)=="number" and app.words[idWord] or idWord,
 		x = buttonBack.x+buttonBack.width,
 		y = buttonBack.y,
 		width = display.contentWidth/1.4,
-		height = fontSize0*1.1,
-		fontSize = fontSize1
+		height = app.fontSize0*1.1,
+		fontSize = app.fontSize1
 	})
 	headerBar.anchorX = 0
 

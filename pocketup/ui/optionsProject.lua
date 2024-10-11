@@ -1,22 +1,22 @@
 -- сцена опци проекта
 
 function scene_options(idProject, nameProject)
-    local optionsProject = json.decode(funsP["получить сохранение"](idProject.."/options"))
+    local optionsProject = plugins.json.decode(funsP["получить сохранение"](idProject.."/options"))
     local groupScene = display.newGroup()
     local groupSceneScroll = display.newGroup()
-    SCENE = "options"
-    SCENES[SCENE] = {groupSceneScroll, groupScene}
+    app.scene = "options"
+    app.scenes[app.scene] = {groupSceneScroll, groupScene}
     local funBackObjects = {}
     funBackObjects[1] = function ()
-    display.remove(SCENES[SCENE][1])
-    display.remove(SCENES[SCENE][2])
+    display.remove(app.scenes[app.scene][1])
+    display.remove(app.scenes[app.scene][2])
     native.setKeyboardFocus(nil)
     scene_projects()
 end
-local topBarArray = topBar(groupScene, words[9], nil, nil, funBackObjects)
+local topBarArray = topBar(groupScene, app.words[9], nil, nil, funBackObjects)
 topBarArray[4].alpha = 0
 
-local scrollProjects = widget.newScrollView({
+local scrollProjects = plugins.widget.newScrollView({
     width=display.contentWidth,
     height=display.contentHeight-topBarArray[1].height,
     horizontalScrollDisabled=true,
@@ -29,14 +29,14 @@ scrollProjects.anchorY=0
 scrollProjects.y = topBarArray[1].y+topBarArray[1].height
 scrollProjects:insert(groupSceneScroll)
 
-local headerName = display.newText(words[40], CENTER_X-display.contentWidth/1.2/2-display.screenOriginX, display.contentWidth/20, nil, fontSize2)
+local headerName = display.newText(app.words[40], CENTER_X-display.contentWidth/1.2/2-display.screenOriginX, display.contentWidth/20, nil, app.fontSize2)
 headerName.anchorX, headerName.anchorY = 0, 0
 headerName:setFillColor(1,1,1,0.5)
 groupSceneScroll:insert(headerName)
 local inputName = native.newTextBox(CENTER_X-display.screenOriginX, headerName.y+headerName.height+display.contentWidth/50, display.contentWidth/1.2, display.contentWidth/12)
 inputName.isEditable = true
 inputName.hasBackground = false
-if isSim or isWin then
+if utils.isSim or utils.isWin then
     inputName:setTextColor(0,0,0)
     inputName.size = 25
 else
@@ -60,7 +60,7 @@ local errorName = display.newText({
     x=headerName.x,
     y=rectInputName.y+rectInputName.height+display.contentWidth/50,
     font=nil,
-    fontSize=fontSize2/1.05,
+    fontSize=app.fontSize2/1.05,
     width = inputName.width,
 })
 errorName.anchorX, errorName.anchorY = 0,0
@@ -68,7 +68,7 @@ errorName:setFillColor(1, 113/255, 67/255)
 miniGroup1:insert(errorName)
 
 
-local allProjects = json.decode(funsP["прочитать сс сохранение"]("список проектов"))
+local allProjects = plugins.json.decode(funsP["прочитать сс сохранение"]("список проектов"))
 local idSlotProject = 1
 while (allProjects[idSlotProject][2]~=idProject and idSlotProject<#allProjects) do
     idSlotProject = idSlotProject+1
@@ -82,7 +82,7 @@ namesAllProjects[nameProject] = nil
 inputName:addEventListener("userInput", function (event)
     if (event.phase=="began") then
         if (event.text~="") then
-            inputName:setSelection(0, utf8.len(inputName.text))
+            inputName:setSelection(0, plugins.utf8.len(inputName.text))
         end
         if (errorName.text=="") then
             headerName:setFillColor(171/255, 219/255, 241/255)
@@ -90,11 +90,11 @@ inputName:addEventListener("userInput", function (event)
         end
     elseif (event.phase=="editing") then
         if (event.text:gsub("^%s+", ""):gsub("%s+$", "")=="") then
-            errorName.text = words[18]
+            errorName.text = app.words[18]
             headerName:setFillColor(1, 113/255, 67/255)
             rectInputName:setFillColor(1, 113/255, 67/255)
         elseif (namesAllProjects[event.text:gsub("^%s+", ""):gsub("%s+$", "")]) then
-            errorName.text = words[15]
+            errorName.text = app.words[15]
             headerName:setFillColor(1, 113/255, 67/255)
             rectInputName:setFillColor(1, 113/255, 67/255)
         else
@@ -102,7 +102,7 @@ inputName:addEventListener("userInput", function (event)
             headerName:setFillColor(171/255, 219/255, 241/255)
             rectInputName:setFillColor(171/255, 219/255, 241/255)
             allProjects[idSlotProject][1] = event.text:gsub("^%s+", ""):gsub("%s+$", "")
-            funsP["записать сс сохранение"]("список проектов", json.encode(allProjects))
+            funsP["записать сс сохранение"]("список проектов", plugins.json.encode(allProjects))
         end
     else
         if (errorName.text=="") then
@@ -117,7 +117,7 @@ local line1 = display.newRect(CENTER_X-display.screenOriginX, errorName.y+errorN
 line1.alpha = 0.25
 miniGroup1:insert(line1)
 
-local headerDescription = display.newText(words[44], headerName.x, line1.y+line1.height+display.contentWidth/20, nil, fontSize2)
+local headerDescription = display.newText(app.words[44], headerName.x, line1.y+line1.height+display.contentWidth/20, nil, app.fontSize2)
 headerDescription.anchorX, headerDescription.anchorY = 0, 0
 headerDescription:setFillColor(1,1,1,0.5)
 miniGroup1:insert(headerDescription)
@@ -127,7 +127,7 @@ if (optionsProject.description~=nil) then
 end
 inputDescription.isEditable = true
 inputDescription.hasBackground = false
-if isSim or isWin then
+if utils.isSim or utils.isWin then
     inputDescription:setTextColor(0,0,0)
     inputDescription.size = 25
 else
@@ -149,7 +149,7 @@ line2.alpha = 0.25
 miniGroup2:insert(line2)
 
 
-local headerNote = display.newText(words[45], headerName.x, line2.y+line2.height+display.contentWidth/20, nil, fontSize2)
+local headerNote = display.newText(app.words[45], headerName.x, line2.y+line2.height+display.contentWidth/20, nil, app.fontSize2)
 headerNote.anchorX, headerNote.anchorY = 0, 0
 headerNote:setFillColor(1,1,1,0.5)
 miniGroup2:insert(headerNote)
@@ -159,7 +159,7 @@ if (optionsProject.note~=nil) then
 end
 inputNote.isEditable = true
 inputNote.hasBackground = false
-if isSim or isWin then
+if utils.isSim or utils.isWin then
     inputNote:setTextColor(0,0,0)
     inputNote.size = 25
 else
@@ -184,13 +184,13 @@ miniGroup3:insert(line3)
 local function editingInput(event)
     if (event.phase=="began") then
         if (event.text~="") then
-            event.target:setSelection(0, utf8.len(event.target.text))
+            event.target:setSelection(0, plugins.utf8.len(event.target.text))
         end
         event.target.header:setFillColor(171/255, 219/255, 241/255)
         event.target.rect:setFillColor(171/255, 219/255, 241/255)
     elseif (event.phase=="editing") then
         optionsProject[event.target.nameSave] = event.text
-        funsP["записать сохранение"](idProject.."/options", json.encode(optionsProject))
+        funsP["записать сохранение"](idProject.."/options", plugins.json.encode(optionsProject))
     else
         event.target.header:setFillColor(1,1,1,0.5)
         event.target.rect:setFillColor(1,1,1,0.75)
@@ -211,11 +211,11 @@ buttonIsAspectRatio.anchorY=0
 buttonIsAspectRatio:setFillColor(4/255, 34/255, 44/255)
 miniGroup3:insert(buttonIsAspectRatio)
 local headerAspectRatio = display.newText({
-    text=words[46],
+    text=app.words[46],
     x=headerName.x,
     y = buttonIsAspectRatio.y+buttonIsAspectRatio.height/2,
     font=nil,
-    fontSize=fontSize1,
+    fontSize=app.fontSize1,
     width=display.contentWidth/2,
     align="left",
 })
@@ -256,7 +256,7 @@ buttonIsAspectRatio:addEventListener("touch", function (event)
     else
         display.getCurrentStage():setFocus(event.target, nil)
         optionsProject.aspectRatio= not optionsProject.aspectRatio
-        funsP["записать сохранение"](idProject.."/options", json.encode(optionsProject))
+        funsP["записать сохранение"](idProject.."/options", plugins.json.encode(optionsProject))
         local plusOrMinus = optionsProject.aspectRatio and 1 or -1
         transition.to(checkboxAspectRatio2alpha, { time=200, x=checkboxAspectRatio1.x+checkboxAspectRatio1.width/4*plusOrMinus, transition=easing.inOutSine, onComplete=function()
             transition.to(checkboxAspectRatio2alpha, { time=150, xScale=0.5, yScale=0.5, alpha=0, transition=easing.outSine})
@@ -284,7 +284,7 @@ local buttonPublicProject = display.newRect(CENTER_X-display.screenOriginX, line
 buttonPublicProject.anchorY=0
 buttonPublicProject:setFillColor(4/255, 34/255, 44/255)
 miniGroup3:insert(buttonPublicProject)
-local headerPublicProject = display.newText(words[47], headerName.x, buttonPublicProject.y+buttonPublicProject.height/2, nil, fontSize1)
+local headerPublicProject = display.newText(app.words[47], headerName.x, buttonPublicProject.y+buttonPublicProject.height/2, nil, app.fontSize1)
 headerPublicProject.anchorX=0
 headerPublicProject:setFillColor(1,1,1,0.75)
 miniGroup3:insert(headerPublicProject)
@@ -297,7 +297,7 @@ local buttonExportProject = display.newRect(CENTER_X-display.screenOriginX, line
 buttonExportProject.anchorY=0
 buttonExportProject:setFillColor(4/255, 34/255, 44/255)
 miniGroup3:insert(buttonExportProject)
-local headerExportProject = display.newText(words[48], headerName.x, buttonExportProject.y+buttonExportProject.height/2, nil, fontSize1)
+local headerExportProject = display.newText(app.words[48], headerName.x, buttonExportProject.y+buttonExportProject.height/2, nil, app.fontSize1)
 headerExportProject.anchorX=0
 headerExportProject:setFillColor(1,1,1,0.75)
 miniGroup3:insert(headerExportProject)
@@ -310,7 +310,7 @@ local buttonMoreDetails = display.newRect(CENTER_X-display.screenOriginX, line6.
 buttonMoreDetails.anchorY=0
 buttonMoreDetails:setFillColor(4/255, 34/255, 44/255)
 miniGroup3:insert(buttonMoreDetails)
-local headerMoreDetails = display.newText(words[49], headerName.x, buttonMoreDetails.y+buttonMoreDetails.height/2, nil, fontSize1)
+local headerMoreDetails = display.newText(app.words[49], headerName.x, buttonMoreDetails.y+buttonMoreDetails.height/2, nil, app.fontSize1)
 headerMoreDetails.anchorX=0
 headerMoreDetails:setFillColor(1,1,1,0.75)
 miniGroup3:insert(headerMoreDetails)
@@ -340,21 +340,21 @@ local function funTouchOption(event)
 -- СДЕЛАТЬ ПУБЛИКАЦИЮ ПРОЕ
 -- СДЕЛАТЬ ПУБЛИКАЦИЮ ПРОЕ
 -- СДЕЛАТЬ ПУБЛИКАЦИЮ ПРОЕ
-funsP["вызвать уведомление"](words[51])
+funsP["вызвать уведомление"](app.words[51])
 elseif (event.target==buttonExportProject) then
     local function onCompleteExport()
-        funsP["вызвать уведомление"](words[53])
+        funsP["вызвать уведомление"](app.words[53])
     end
     print(allProjects[idSlotProject][1])
     funsP["экспортировать проект"](idProject, allProjects[idSlotProject][1], onCompleteExport)
-    funsP["вызвать уведомление"](words[52])
+    funsP["вызвать уведомление"](app.words[52])
 elseif (event.target==buttonMoreDetails) then
 --СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
 --СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
 --СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
 --СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
 --СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
-funsP["вызвать уведомление"](words[51])
+funsP["вызвать уведомление"](app.words[51])
 end
 
 display.getCurrentStage():setFocus(event.target, nil)
@@ -365,10 +365,10 @@ buttonPublicProject:addEventListener("touch", funTouchOption)
 buttonExportProject:addEventListener("touch", funTouchOption)
 buttonMoreDetails:addEventListener("touch", funTouchOption)
 
-local buttonDeleteProject = display.newRoundedRect(CENTER_X-display.screenOriginX, line7.y+display.contentWidth/6, display.contentWidth/1.5, display.contentWidth/8.5, roundedRect)
+local buttonDeleteProject = display.newRoundedRect(CENTER_X-display.screenOriginX, line7.y+display.contentWidth/6, display.contentWidth/1.5, display.contentWidth/8.5, app.roundedRect)
 buttonDeleteProject:setFillColor(213/255, 1/255, 0)
 miniGroup3:insert(buttonDeleteProject)
-local headerDeleteProject = display.newText(words[50], CENTER_X-display.screenOriginX, buttonDeleteProject.y, nil, fontSize1)
+local headerDeleteProject = display.newText(app.words[50], CENTER_X-display.screenOriginX, buttonDeleteProject.y, nil, app.fontSize1)
 miniGroup3:insert(headerDeleteProject)
 scrollProjects:setScrollHeight(buttonDeleteProject.y+display.contentWidth/6)
 
@@ -383,12 +383,12 @@ buttonDeleteProject:addEventListener("touch", function(event)
         buttonDeleteProject:setFillColor(213/255, 1/255, 0)
         display.getCurrentStage():setFocus(event.target, nil)
 
-        cerberus.newBannerQuestion(words[54], function (tableAnswer)
+        app.cerberus.newBannerQuestion(app.words[54], function (tableAnswer)
             if(tableAnswer.isOk) then
                 table.remove(allProjects, idSlotProject)
-                funsP["записать сс сохранение"]("список проектов",json.encode(allProjects))
-                local idsProjectsCreated = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
-                local idsProjectsOpen = json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
+                funsP["записать сс сохранение"]("список проектов",plugins.json.encode(allProjects))
+                local idsProjectsCreated = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
+                local idsProjectsOpen = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
                 for i=1, #idsProjectsCreated do
                     if (idsProjectsCreated[i] == idSlotProject) then
                         table.remove(idsProjectsCreated, i)
@@ -409,11 +409,11 @@ buttonDeleteProject:addEventListener("touch", function(event)
                         idsProjectsOpen[i]=idsProjectsOpen[i]-1
                     end
                 end
-                funsP["записать сс сохранение"]("сортировка проектов - дата открытия", json.encode(idsProjectsOpen))
-                funsP["записать сс сохранение"]("сортировка проектов - дата создания", json.encode(idsProjectsCreated))
+                funsP["записать сс сохранение"]("сортировка проектов - дата открытия", plugins.json.encode(idsProjectsOpen))
+                funsP["записать сс сохранение"]("сортировка проектов - дата создания", plugins.json.encode(idsProjectsCreated))
                 funsP["удалить объект"](idProject)
-                display.remove(SCENES[SCENE][1])
-                display.remove(SCENES[SCENE][2])
+                display.remove(app.scenes[app.scene][1])
+                display.remove(app.scenes[app.scene][2])
                 scene_projects()
             end
         end)

@@ -1,14 +1,14 @@
 function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
-	SCENE = "redactorHitbox"
+	app.scene = "redactorHitbox"
 	local isBackScene = "back"
 	local funBackObjects = {}
 	local groupScene = display.newGroup()
-	SCENES[SCENE] = {groupScene}
+	app.scenes[app.scene] = {groupScene}
 	local oldFunBack = funBack
 	local arrayTopBar = topBar(groupScene, 523, nil, nil, funBackObjects)
 	arrayTopBar[4].alpha = 0
 
-	local scrollImages = widget.newScrollView({
+	local scrollImages = plugins.widget.newScrollView({
 		width=display.contentWidth,
 		height=display.contentWidth/4,
 		verticalScrollDisabled=true,
@@ -44,35 +44,35 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 	groupScene:insert(rectLeftGradient)
 	groupScene:insert(rectRightGradient)
 
-	local tablePositions = json.decode(arrayShape[2])
+	local tablePositions = plugins.json.decode(arrayShape[2])
 
 	funBackObjects[1] = function()
 		if (isBackScene == "back") then
 			funBack = oldFunBack
 			display.remove(groupScene)
-			arrayShape[2] = json.encode(tablePositions)
+			arrayShape[2] = plugins.json.encode(tablePositions)
 			textParameter.text = arrayShape[2]
-			SCENE = "scripts"
-			SCENES[SCENE][1].alpha = 1
-			funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+			app.scene = "scripts"
+			app.scenes[app.scene][1].alpha = 1
+			funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 		end
 	end
 
 
 	local mainImage
 	local polygonHitbox
-	physics.setDrawMode('hybrid')
-	physics.start()
+	plugins.physics.setDrawMode('hybrid')
+	plugins.physics.start()
 	local function updatePolygon()
 		if (polygonHitbox~=nil or true) then
-			physics.removeBody(mainImage)
+			plugins.physics.removeBody(mainImage)
 		end
 		local resizePositions = {}
 		for i=1, #tablePositions/2 do
 			resizePositions[i*2-1] = tablePositions[i*2-1]*mainImage.xScale
 			resizePositions[i*2] = tablePositions[i*2]*mainImage.yScale
 		end
-		physics.addBody(mainImage, "static", {shape=resizePositions})
+		plugins.physics.addBody(mainImage, "static", {shape=resizePositions})
 	end
 
 	local tablePoints = {}
@@ -85,7 +85,7 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 		if (mainImage~=nil) then
 			display.remove(mainImage)
 		end
-		mainImage = display.newImage(IDOBJECT.."/image_"..path..".png", system.DocumentsDirectory)
+		mainImage = display.newImage(app.idObject.."/image_"..path..".png", system.DocumentsDirectory)
 		local size = display.contentWidth/1.5
 		if (mainImage.width>mainImage.height) then
 			mainImage.xScale = size/mainImage.width/1.2
@@ -124,7 +124,7 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 	local tableImages = {}
 	local idImage = 1
 	for i=1, #images do
-		local image = display.newImage(IDOBJECT.."/image_"..images[i][2]..".png", system.DocumentsDirectory)
+		local image = display.newImage(app.idObject.."/image_"..images[i][2]..".png", system.DocumentsDirectory)
 		local strokeImage = display.newImage("images/notVisible.png")
 		if (image.width>image.height) then
 			image.xScale = size/image.width/1.2
@@ -247,11 +247,11 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 	groupInterface.alpha = 0.5
 	groupScene:insert(groupInterface)
 
-	local deleteButton = display.newRoundedRect(CENTER_X, CENTER_Y+display.contentHeight/2-display.contentWidth/20, display.contentWidth/1.5, display.contentWidth/8.5, roundedRect)
+	local deleteButton = display.newRoundedRect(CENTER_X, CENTER_Y+display.contentHeight/2-display.contentWidth/20, display.contentWidth/1.5, display.contentWidth/8.5, app.roundedRect)
 	deleteButton.anchorY = 1
 	deleteButton:setFillColor(213/255, 1/255, 0)
 	groupInterface:insert(deleteButton)
-	local headerDelete = display.newText(words[525], deleteButton.x, deleteButton.y-deleteButton.height/2, nil, fontSize1)
+	local headerDelete = display.newText(app.words[525], deleteButton.x, deleteButton.y-deleteButton.height/2, nil, app.fontSize1)
 	groupInterface:insert(headerDelete)
 	deleteButton:addEventListener("touch", function(event)
 		if (groupInterface.alpha>0.75 and #tablePoints>3) then
@@ -283,11 +283,11 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 			return(true)
 		elseif (groupInterface.alpha>0.75) then
 			isBackScene = "block"
-			physics.removeBody(mainImage)
-			cerberus.newBannerQuestion(words[526], function()
+			plugins.physics.removeBody(mainImage)
+			app.cerberus.newBannerQuestion(app.words[526], function()
 				isBackScene = "back"
 				updatePolygon()
-			end, "", words[16])
+			end, "", app.words[16])
 		end
 	end)
 
@@ -321,7 +321,7 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 		local button = display.newRect(deleteButton.x, yPos, deleteButton.width, display.contentWidth/15)
 		button:setFillColor(4/255, 34/255, 44/255)
 		groupInterface:insert(button)
-		local text = display.newText((i==1 and words[59] or words[60])..':', button.x-button.width/2-display.contentWidth/40, yPos, nil, fontSize2)
+		local text = display.newText((i==1 and app.words[59] or app.words[60])..':', button.x-button.width/2-display.contentWidth/40, yPos, nil, app.fontSize2)
 		text.anchorX=1
 		text:setFillColor(1, 1, 1)
 		groupInterface:insert(text)
@@ -396,18 +396,18 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 		textFieldXPos.text = "0"
 		textFieldYPos.text = "0"
 	end)
-	local headerX = display.newText(words[59]..":", CENTER_X-display.contentWidth/50-textFieldXPos.width-display.contentWidth/40, textFieldXPos.y-textFieldXPos.height/2, nil, fontSize0)
+	local headerX = display.newText(app.words[59]..":", CENTER_X-display.contentWidth/50-textFieldXPos.width-display.contentWidth/40, textFieldXPos.y-textFieldXPos.height/2, nil, app.fontSize0)
 	headerX.anchorX = 1
 	groupInterface:insert(headerX)
-	local headerX = display.newText(words[60]..":", CENTER_X+display.contentWidth/3-textFieldXPos.width-display.contentWidth/40, textFieldXPos.y-textFieldXPos.height/2, nil, fontSize0)
+	local headerX = display.newText(app.words[60]..":", CENTER_X+display.contentWidth/3-textFieldXPos.width-display.contentWidth/40, textFieldXPos.y-textFieldXPos.height/2, nil, app.fontSize0)
 	headerX.anchorX = 1
 	groupInterface:insert(headerX)
 
-	local createButton = display.newRoundedRect(CENTER_X,textFieldXPos.y-textFieldXPos.height-display.contentWidth/20, display.contentWidth/1.5, display.contentWidth/8.5, roundedRect)
+	local createButton = display.newRoundedRect(CENTER_X,textFieldXPos.y-textFieldXPos.height-display.contentWidth/20, display.contentWidth/1.5, display.contentWidth/8.5, app.roundedRect)
 	createButton.anchorY = 1
 	createButton:setFillColor(32/255,213/255, 0)
 	groupScene:insert(createButton)
-	local headerCreate = display.newText(words[527], createButton.x, createButton.y-createButton.height/2, nil, fontSize1)
+	local headerCreate = display.newText(app.words[527], createButton.x, createButton.y-createButton.height/2, nil, app.fontSize1)
 	groupScene:insert(headerCreate)
 
 	local isTouch = false

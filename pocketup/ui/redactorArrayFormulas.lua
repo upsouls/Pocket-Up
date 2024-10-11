@@ -2,17 +2,17 @@
 
 function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formulas, cursor)
 	local oldSceneBack = funBack
-	SCENES["formula_editor"][1].alpha = 0
+	app.scenes["formula_editor"][1].alpha = 0
 	local groupScene = display.newGroup()
 	local groupSceneScroll = display.newGroup()
-	SCENE = "arrayFormulas"
-	SCENES[SCENE] = {groupSceneScroll, groupScene}
+	app.scene = "arrayFormulas"
+	app.scenes[app.scene] = {groupSceneScroll, groupScene}
 	local funBackObjects = {}
 	local topBarArray = topBar(groupScene, headerFormulas, nil, nil, funBackObjects)
 	topBarArray[4].alpha = 0
 	local isBackScene = "back"
 
-	local scrollProjects = widget.newScrollView({
+	local scrollProjects = plugins.widget.newScrollView({
 		width=display.contentWidth,
 		height=display.contentHeight-topBarArray[1].height,
 		horizontalScrollDisabled=true,
@@ -25,8 +25,8 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 	scrollProjects.y = topBarArray[1].y+topBarArray[1].height
 	scrollProjects:insert(groupSceneScroll)
 
-	local namesGlobalVariables = json.decode(funsP["получить сохранение"](IDPROJECT.."/variables"))
-	local namesLocalVariables = json.decode(funsP["получить сохранение"](IDOBJECT.."/variables"))
+	local namesGlobalVariables = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/variables"))
+	local namesLocalVariables = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/variables"))
 	local nameVariable = nil
 	local localityVariable = "globalVariable"
 	if (#namesLocalVariables>0) then
@@ -35,8 +35,8 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 	elseif (#namesGlobalVariables>0) then
 		nameVariable = namesGlobalVariables[#namesGlobalVariables][1]
 	end
-	local namesGlobalArrays = json.decode(funsP["получить сохранение"](IDPROJECT.."/arrays"))
-	local namesLocalArrays = json.decode(funsP["получить сохранение"](IDOBJECT.."/arrays"))
+	local namesGlobalArrays = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/arrays"))
+	local namesLocalArrays = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/arrays"))
 	local nameArray = nil
 	local localityArray = "globalArray"
 	if (#namesLocalArrays>0) then
@@ -46,39 +46,39 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 		nameArray = namesGlobalArrays[#namesGlobalArrays][1]
 	end
 
-	local arrayAllFunctions = json.decode(json.encode(allCategotiesAndFormulas))----------------------------------------------
+	local arrayAllFunctions = plugins.json.decode(plugins.json.encode(allCategotiesAndFormulas))----------------------------------------------
 		if (typeFormulas=="functions") then
 			if (nameArray~=nil) then
-				arrayAllFunctions.functions[3] = {words[321],{
+				arrayAllFunctions.functions[3] = {app.words[321],{
 					{{"function","lengthArray"},{"function","("},{localityArray,nameArray},{"function",")"}}, {{"function","elementArray"},{"function","("},{"number",1},{"function",","},{localityArray,nameArray},{"function",")"}}, {{"function","containsArray"},{"function","("},{localityArray,nameArray},{"function",","},{"number",1},{"function",")"}},  {{"function","indexArray"},{"function","("},{"number",1},{"function",","},{localityArray,nameArray},{"function",")"}},{{"function","levelingArray"},{"function","("},{localityArray,nameArray},{"function",")"}},--{{"function","array2json"},{"function","("},{localityArray,nameArray},{"function",")"}},{{"function","json2array"},{"function","("},{localityArray,nameArray},{"function",")"}},
 				}}
 			else
-				arrayAllFunctions.functions[3] = {words[326],{}}
+				arrayAllFunctions.functions[3] = {app.words[326],{}}
 			end
 		elseif (typeFormulas=="data") then
 			if (#namesGlobalVariables>0) then
-				arrayAllFunctions.data[1] = {words[376],{}}
+				arrayAllFunctions.data[1] = {app.words[376],{}}
 				local array = arrayAllFunctions.data[1][2]
 				for i=1, #namesGlobalVariables do
 					array[i] = {{"globalVariable",namesGlobalVariables[i][1]}}
 				end
 			end
 			if (#namesLocalVariables>0) then
-				arrayAllFunctions.data[#arrayAllFunctions.data+1] = {words[377],{}}
+				arrayAllFunctions.data[#arrayAllFunctions.data+1] = {app.words[377],{}}
 				local array = arrayAllFunctions.data[#arrayAllFunctions.data][2]
 				for i=1, #namesLocalVariables do
 					array[i] = {{"localVariable",namesLocalVariables[i][1]}}
 				end
 			end
 			if (#namesGlobalArrays>0) then
-				arrayAllFunctions.data[#arrayAllFunctions.data+1] = {words[378],{}}
+				arrayAllFunctions.data[#arrayAllFunctions.data+1] = {app.words[378],{}}
 				local array = arrayAllFunctions.data[#arrayAllFunctions.data][2]
 				for i=1, #namesGlobalArrays do
 					array[i] = {{"globalArray",namesGlobalArrays[i][1]}}
 				end
 			end
 			if (#namesLocalArrays>0) then
-				arrayAllFunctions.data[#arrayAllFunctions.data+1] = {words[379],{}}
+				arrayAllFunctions.data[#arrayAllFunctions.data+1] = {app.words[379],{}}
 				local array = arrayAllFunctions.data[#arrayAllFunctions.data][2]
 				for i=1, #namesLocalArrays do
 					array[i] = {{"localArray",namesLocalArrays[i][1]}}
@@ -127,7 +127,7 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 
 				isBackScene="block"
 
-				local notVisibleRect = cerberus.newImage("images/notVisible.png")
+				local notVisibleRect = app.cerberus.newImage("images/notVisible.png")
 				notVisibleRect.x, notVisibleRect.y, notVisibleRect.width, notVisibleRect.height = CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight
 
 				local xPosScroll, yPosScroll = scrollProjects:getContentPosition()
@@ -162,15 +162,15 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 						local info = eventTargetMenu.info[1]
 						local pathSave = nil
 						if (info[1]=="globalVariable") then
-							pathSave = IDPROJECT.."/variables"
+							pathSave = app.idProject.."/variables"
 						elseif (info[1]=="localVariable") then
-							pathSave = IDOBJECT.."/variables"
+							pathSave = app.idObject.."/variables"
 						elseif (info[1]=="globalArray") then
-							pathSave = IDPROJECT.."/arrays"
+							pathSave = app.idProject.."/arrays"
 						elseif (info[1]=="localArray") then
-							pathSave = IDOBJECT.."/arrays"
+							pathSave = app.idObject.."/arrays"
 						end
-						local arrayVarsArrs = json.decode(funsP["получить сохранение"](pathSave))
+						local arrayVarsArrs = plugins.json.decode(funsP["получить сохранение"](pathSave))
 
 						if (event.target.typeFunction == "delete") then
 							local function onCompleteFun(answer)
@@ -182,7 +182,7 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 											break
 										end
 									end
-									funsP["записать сохранение"](pathSave, json.encode(arrayVarsArrs))
+									funsP["записать сохранение"](pathSave, plugins.json.encode(arrayVarsArrs))
 									if (#arrayVarsArrs==0) then
 										local header = tableObjectsList[eventTargetMenu.id-1][2]
 										table.remove(tableObjectsList, eventTargetMenu.id-1)
@@ -199,12 +199,12 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 									updateFormulas()
 								end
 							end
-							cerberus.newBannerQuestion(words[382], onCompleteFun, words[289],words[383])
+							app.cerberus.newBannerQuestion(app.words[382], onCompleteFun, app.words[289],app.words[383])
 						elseif (event.target.typeFunction == "rename") then
 
 							local function isCorrectValue(value)
 								if (string.len(value)==0) then
-									return(words[18])
+									return(app.words[18])
 								else
 									local isCorrect = true
 									for i=1, #tableObjectsList do
@@ -213,13 +213,13 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 											break
 										end
 									end
-									return(isCorrect and "" or words[15])
+									return(isCorrect and "" or app.words[15])
 								end
 							end
 
 							local function funEditingEnd(answer)
 								if (answer.isOk) then
-									answer.value = answer.value:gsub( (isWin and '\r\n' or '\n'), " ")
+									answer.value = answer.value:gsub( (utils.isWin and '\r\n' or '\n'), " ")
 									eventTargetMenu.text.text = answer.value
 									for i=1, #arrayVarsArrs do
 										if (arrayVarsArrs[i][1]==info[2]) then
@@ -227,11 +227,11 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 											break
 										end
 									end
-									funsP["записать сохранение"](pathSave, json.encode(arrayVarsArrs))
+									funsP["записать сохранение"](pathSave, plugins.json.encode(arrayVarsArrs))
 									updateFormulas()
 								end
 							end
-							cerberus.newInputLine(words[6], words[250], isCorrectValue, eventTargetMenu.text.text, funEditingEnd)
+							app.cerberus.newInputLine(app.words[6], app.words[250], isCorrectValue, eventTargetMenu.text.text, funEditingEnd)
 						end
 
 						for i=1, #buttons do
@@ -253,7 +253,7 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 					buttons[i].typeFunction = arrayButtonsFunctions[i][2]
 					buttons[i]:addEventListener("touch",touchTypeFunction)
 
-					buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+					buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
 					buttons[i].header.anchorX=0
 					groupMenu:insert(buttons[i].header)
 
@@ -292,7 +292,7 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 				text=arrayFunctions[i][1], 
 				x=display.contentWidth/20, 
 				y=0,
-				fontSize=fontSize1/1.1,
+				fontSize=app.fontSize1/1.1,
 				width=display.contentWidth-display.contentWidth/10,
 				align="left",
 			})
@@ -310,7 +310,7 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 				group:insert(button)
 				button.functions = arrayFunctions[i][2][i2]
 				button:addEventListener("touch", touchFunction)
-				local text = display.newText(loadFormula(button.functions), header.x, 0, nil, fontSize1/1.1)
+				local text = display.newText(loadFormula(button.functions), header.x, 0, nil, app.fontSize1/1.1)
 				text.anchorX = 0
 				text:setFillColor(171/255, 219/255, 241/255)
 				group:insert(text)
@@ -321,7 +321,7 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 					menuRect:setFillColor(0, 71/255, 93/255)
 					menuRect.anchorX=1
 					group:insert(menuRect)
-					local menu = cerberus.newImage("images/menu.png")
+					local menu = app.cerberus.newImage("images/menu.png")
 					menu.x = display.contentWidth-display.contentWidth/20
 					menu:setFillColor(171/255, 219/255, 241/255)
 					menu.yScale = (button.height/menu.height)/2.75
@@ -342,10 +342,10 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 
 		funBackObjects[1] = function ()
 		if (isBackScene=="back") then
-			display.remove(SCENES[SCENE][2])
-			display.remove(SCENES[SCENE][1])
-			SCENE = "formula_editor"
-			SCENES[SCENE][1].alpha = 1
+			display.remove(app.scenes[app.scene][2])
+			display.remove(app.scenes[app.scene][1])
+			app.scene = "formula_editor"
+			app.scenes[app.scene][1].alpha = 1
 			funBack = oldSceneBack
 		end
 	end

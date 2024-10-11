@@ -1,24 +1,27 @@
 -- базовые настройки проекта
+_G.app = {}
+_G.plugins = {}
+_G.utils = {}
 
-utf8 = require( "plugin.utf8" )
-utf8.split = function(text, sep) local result = {} for s in text:gmatch('[^' .. sep .. ']+') do result[#result + 1] = s end return result end
-json = require("json")
-widget = require("widget")
---math = require("math")
-lfs = require("lfs")
-physics = require("physics")
-orientation = require('plugin.orientation')
+plugins.utf8 = require( "plugin.utf8" )
+plugins.utf8.split = function(text, sep) local result = {} for s in text:gmatch('[^' .. sep .. ']+') do result[#result + 1] = s end return result end
+plugins.json = require("json")
+plugins.widget = require("widget")
 
-words = require("pocketup.modules.loadLanguage")
+plugins.lfs = require("lfs")
+plugins.physics = require("physics")
+plugins.orientation = require('plugin.orientation')
+
+app.words = require("pocketup.modules.loadLanguage")
 
 display.setDefault( 'minTextureFilter', 'nearest' )
 display.setDefault( 'magTextureFilter', 'nearest' )
 
 os.removeFolder = function (path)
-    for file in lfs.dir(path) do
+    for file in plugins.lfs.dir(path) do
         if file ~= "." and file ~= ".." then
             local filePath = path.."/"..file
-            local attr = lfs.attributes(filePath)
+            local attr = plugins.lfs.attributes(filePath)
             if (attr~=nil) then
                 if attr.mode == "directory" then
                     os.removeFolder(filePath)
@@ -28,15 +31,16 @@ os.removeFolder = function (path)
             end
         end
     end
-    lfs.rmdir(path)
+    plugins.lfs.rmdir(path)
 end
 
-isWin = system.getInfo 'platform' ~= 'android'
-isSim = system.getInfo 'environment' == 'simulator'
+utils.isWin = system.getInfo 'platform' ~= 'android'
+utils.isSim = system.getInfo 'environment' == 'simulator'
+
 _G.display = display
 _G.system = system
-
 _G.os = os
+
 os.write = function (value , path , basedir)
     if type(path) ~= 'string' or value == nil then
         return true
@@ -73,8 +77,8 @@ function setFocus(object, id)
 	display.getCurrentStage():setFocus( object, id )
 end
 
-cerberus = {}
-cerberus.newImage = function(nameFile, directory, x, y)
+app.cerberus = {}
+app.cerberus.newImage = function(nameFile, directory, x, y)
 	if (directory~=system.DocumentsDirectory) then
 		return display.newImage(nameFile)
 	else
@@ -82,20 +86,20 @@ cerberus.newImage = function(nameFile, directory, x, y)
 	end
 end
 
-IDPROJECT = nil
-NMPROJECT = nil
-IDSCENE = nil
-IDOBJECT = nil
+app.idProject = nil
+app.nmProject = nil
+app.idScene = nil
+app.idObject = nil
 display.setDefault("background", 4/255, 34/255, 44/255)
 display.contentWidth = display.actualContentWidth
 --display.contentHeight = display.safeActualContentHeight
 CENTER_X = display.contentCenterX
 CENTER_Y = display.screenOriginY+display.contentHeight/2
-SCENE = nil
-SCENES = {}
+app.scene = nil
+app.scenes = {}
 
 ---------------------------------------------------
-printText = display.newText({
+utils.printText = display.newText({
 	text="тест",
 	x=CENTER_X,
 	y=CENTER_Y*1.5,
@@ -103,26 +107,26 @@ printText = display.newText({
 	font=nil,
 	fontSize=nil,
 })
-function printC(event)
-	printText.text = event
-	printText:toFront()
+function utils.printC(event)
+	utils.printText.text = event
+	utils.printText:toFront()
 end
-printText.alpha=0
+utils.printText.alpha=0
 ---------------------------------------------------
 
-fontSize1 = math.min(display.contentWidth/20, 32.5)
-fontSize2 = math.min(display.contentWidth/24, 25)
-fontSize0 = fontSize1*1.125
-roundedRect = fontSize1/8
+app.fontSize1 = math.min(display.contentWidth/20, 32.5)
+app.fontSize2 = math.min(display.contentWidth/24, 25)
+app.fontSize0 = app.fontSize1*1.125
+app.roundedRect = app.fontSize1/8
 
 
 
-_G.select_Scroll = ''
+utils.select_Scroll = ''
 local function moveScroll(event)
-	if event.type == 'scroll' and type(select_Scroll)~='string' then
-		local x, y = select_Scroll:getContentPosition()
+	if event.type == 'scroll' and type(utils.select_Scroll)~='string' then
+		local x, y = utils.select_Scroll:getContentPosition()
 		if (event.scrollY > 0 and (y + (event.scrollY /2)) <0) or (event.scrollY < 0)  then
-			select_Scroll:scrollToPosition({
+			utils.select_Scroll:scrollToPosition({
 				y = y + (event.scrollY),
 				time = 0
 			})

@@ -21,7 +21,7 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
     display.setStatusBar(display.HiddenStatusBar)
 
     local file = io.open(system.pathForFile("acces.txt", system.DocumentsDirectory), "r")
-    if (file ~= nil or isSim) then 
+    if (file ~= nil or utils.isSim) then 
         if (file ~= nil) then
             io.close(file)
         end
@@ -34,7 +34,7 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
                     width=display.contentWidth/1.1,
                     x=CENTER_X,
                     y=CENTER_Y,
-                    fontSize=fontSize1,
+                    fontSize=app.fontSize1,
                     align="center"
                 })
                 text.alpha = 0.75
@@ -44,7 +44,7 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
                     width=display.contentWidth/1.1,
                     x=CENTER_X,
                     y=CENTER_Y,
-                    fontSize=fontSize1,
+                    fontSize=app.fontSize1,
                     align="center"
                 })
                 text.alpha = 0.75
@@ -63,13 +63,18 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
         network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, header)
     end
     --
+    if utils.isWin then
+        local text = display.newText('',70, 30, nil, 30)
+timer.performWithDelay(100, function ()
+    text.text = math.round(collectgarbage ('count'))..'byte'
+end, 0)
+    end
 end)
 
 
 
 
 require("pocketup.settings")
-
 
 
 -- модули, отвечающие за создание конкретных элементов интерфейса

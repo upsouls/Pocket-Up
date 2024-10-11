@@ -2,9 +2,9 @@
 
 function scene_scripts(headerBar, pathObject, infoSceneObjects)
 
-    IDOBJECT = pathObject
+    app.idObject = pathObject
 
-    local blocks = json.decode(funsP["получить сохранение"](pathObject.."/scripts"))
+    local blocks = plugins.json.decode(funsP["получить сохранение"](pathObject.."/scripts"))
     if (false) then
         blocks = {
             {"start",{ {{"number",0}, {"text", "привет"}} }},
@@ -14,8 +14,8 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
 
     local groupScene = display.newGroup()
 
-    SCENE = "scripts"
-    SCENES[SCENE] = {groupScene}
+    app.scene = "scripts"
+    app.scenes[app.scene] = {groupScene}
     local isBackScene = "back"
     local funMenuObjects = {}
     local funCheckObjects = {}
@@ -32,7 +32,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
     groupScene:insert(switchBarRect)
 
 
-    local scrollProjects = widget.newScrollView({
+    local scrollProjects = plugins.widget.newScrollView({
         width=display.contentWidth,
         height=display.contentHeight-topBarArray[1].height,
         horizontalScrollDisabled=true,
@@ -43,7 +43,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
     groupScene:insert(scrollProjects)
     scrollProjects.anchorY=0
     scrollProjects.y = switchBar.y+switchBar.height
-    select_Scroll = scrollProjects
+    utils.select_Scroll = scrollProjects
 
     local funAddImage = nil
     local funAddBlock = nil
@@ -52,7 +52,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
     local function compartmentScripts()
         local groupSceneScroll = display.newGroup()
         scrollProjects:insert(groupSceneScroll)
-        SCENES[SCENE][2] = groupSceneScroll
+        app.scenes[app.scene][2] = groupSceneScroll
 
 
         local yTargetPos = 0
@@ -98,7 +98,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                 local nameBlock = blocks[block.id][1]
                                 
                                 if (nameBlock=="setPosition" or (nameBlock=="transitionPosition" and event.target.idParameter~=1)) then
-                                    cerberus.newVatiants({words[607], words[608]}, function(answer)
+                                    app.cerberus.newVatiants({app.words[607], app.words[608]}, function(answer)
                                         if (answer==1) then
                                             scene_setPosVisual(event.target.block.id, event.target.idParameter,blocks, blocksObjects)
                                         elseif (answer==2) then
@@ -116,15 +116,15 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
 
                                 if (idParameter=="scripts" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL" or idParameter=="inputType") then
                                     local allAnswers = {
-                                        scripts = {{words[114], {"scripts","thisScript"}},{words[115], {"scripts","allScripts"}},{words[116], {"scripts","otherScripts"}}},
-                                        typeRotate = {{words[134],{"typeRotate","true"}},{words[135],{"typeRotate","false"}}},
-                                        effectParticle = {{words[178],{"effectParticle","in"}},{words[179],{"effectParticle","out"}}},
-                                        onOrOff = {{words[183],{"onOrOff","on"}},{words[184],{"onOrOff","off"}}},
-                                        alignText = {{words[210], {"alignText","center"}},{words[211], {"alignText","left"}},{words[212], {"alignText","right"}}},
-                                        isDeleteFile={{words[222],{"isDeleteFile", "save"}},{words[223],{"isDeleteFile","delete"}}},
-                                        typeBody={{words[393],{"typeBody","dynamic"}}, {words[394],{"typeBody","static"}}, {words[395],{"typeBody","noPhysic"}}},
+                                        scripts = {{app.words[114], {"scripts","thisScript"}},{app.words[115], {"scripts","allScripts"}},{app.words[116], {"scripts","otherScripts"}}},
+                                        typeRotate = {{app.words[134],{"typeRotate","true"}},{app.words[135],{"typeRotate","false"}}},
+                                        effectParticle = {{app.words[178],{"effectParticle","in"}},{app.words[179],{"effectParticle","out"}}},
+                                        onOrOff = {{app.words[183],{"onOrOff","on"}},{app.words[184],{"onOrOff","off"}}},
+                                        alignText = {{app.words[210], {"alignText","center"}},{app.words[211], {"alignText","left"}},{app.words[212], {"alignText","right"}}},
+                                        isDeleteFile={{app.words[222],{"isDeleteFile", "save"}},{app.words[223],{"isDeleteFile","delete"}}},
+                                        typeBody={{app.words[393],{"typeBody","dynamic"}}, {app.words[394],{"typeBody","static"}}, {app.words[395],{"typeBody","noPhysic"}}},
                                         GL={{"GL_ONE",{"GL","GL_ONE"}},{"GL_ZERO",{"GL","GL_DST_COLOR"}},{"GL_ONE_MINUS_DST_COLOR",{"GL","GL_ONE_MINUS_DST_COLOR"}},{"GL_SRC_ALPHA",{"GL","GL_SRC_ALPHA"}},{"GL_ONE_MINUS_SRC_ALPHA",{"GL","GL_ONE_MINUS_SRC_ALPHA"}},{"GL_DST_ALPHA",{"GL","GL_DST_ALPHA"}},{"GL_ONE_MINUS_DST_ALPHA",{"GL","GL_ONE_MINUS_DST_ALPHA"}},{"GL_SRC_ALPHA_SATURATE",{"GL","GL_SRC_ALPHA_SATURATE"}},{"GL_SRC_COLOR",{"GL","SRC_COLOR"}},{"GL_ONE_MINUS_SRC_COLOR",{"GL","GL_ONE_MINUS_SRC_COLOR"}}},
-                                        inputType={{words[498], {"inputType", "default"}}, {words[499], {"inputType", "number"}}, {words[500], {"inputType", "decimal"}}, {words[501], {"inputType", "phone"}}, {words[502], {"inputType", "url"}}, {words[503], {"inputType", "email"}}, {words[504], {"inputType", "no-emoji"}}},
+                                        inputType={{app.words[498], {"inputType", "default"}}, {app.words[499], {"inputType", "number"}}, {app.words[500], {"inputType", "decimal"}}, {app.words[501], {"inputType", "phone"}}, {app.words[502], {"inputType", "url"}}, {app.words[503], {"inputType", "email"}}, {app.words[504], {"inputType", "no-emoji"}}},
                                     }
                                     tableAnswers = allAnswers[idParameter]
                                     functionOnComplete = function (answer)
@@ -135,14 +135,14 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                             end
                                         end
                                         blocks[block.id][2][event.target.idParameter] = answer
-                                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                        funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
                                     end
                                 elseif (idParameter == "goTo") then
-                                    tableAnswers[1] = {words[123], {"goTo", "touch"}}
-                                    tableAnswers[2] = {words[124], {"goTo", "random"}}
-                                    local arrayObjects = json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))
+                                    tableAnswers[1] = {app.words[123], {"goTo", "touch"}}
+                                    tableAnswers[2] = {app.words[124], {"goTo", "random"}}
+                                    local arrayObjects = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/objects"))
                                     for i=2, #arrayObjects do
-                                        if (IDSCENE.."/object_"..arrayObjects[i][2]~=IDOBJECT) then
+                                        if (app.idScene.."/object_"..arrayObjects[i][2]~=app.idObject) then
                                             tableAnswers[#tableAnswers+1] = {arrayObjects[i][1], {"goTo", arrayObjects[i][2]}}
                                         end
                                     end
@@ -154,13 +154,13 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                             end
                                         end
                                         blocks[block.id][2][event.target.idParameter] = answer
-                                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                        funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
                                     end
                                 elseif (idParameter=="scenes") then
-                                    tableAnswers[1] = {words[87], {"scenes", nil}}
-                                    local arrayScenes = json.decode(funsP["получить сохранение"](IDPROJECT.."/scenes"))
+                                    tableAnswers[1] = {app.words[87], {"scenes", nil}}
+                                    local arrayScenes = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/scenes"))
                                     for i=1, #arrayScenes do
-                                        if (IDSCENE~=IDPROJECT.."/scene_"..arrayScenes[i][2]) then
+                                        if (app.idScene~=app.idProject.."/scene_"..arrayScenes[i][2]) then
                                             tableAnswers[#tableAnswers+1] = {arrayScenes[i][1], {"scenes",arrayScenes[i][2]}}
                                         end
                                     end
@@ -169,7 +169,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                         if (answer[2]==nil) then
                                             local function isCorrectValue(value)
                                                 if (string.len(value)==0) then
-                                                    return(words[18])
+                                                    return(app.words[18])
                                                 else
                                                     local isCorrect = true
                                                     for i=1, #arrayScenes do
@@ -178,7 +178,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                             break
                                                         end
                                                     end
-                                                    return(isCorrect and "" or words[15])
+                                                    return(isCorrect and "" or app.words[15])
                                                 end
                                             end
                                             local function correctValue(value)
@@ -192,26 +192,26 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                     return(value.." ("..i..")")
                                                 end
                                             end
-                                            cerberus.newInputLine(words[26], words[27], isCorrectValue, correctValue(words[28]), function (answer)
+                                            app.cerberus.newInputLine(app.words[26], app.words[27], isCorrectValue, correctValue(app.words[28]), function (answer)
                                                 if (answer.isOk) then
-                                                    answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
-                                                    local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
+                                                    answer.value = string.gsub(answer.value, (utils.isWin and '\r\n' or '\n'), " ")
+                                                    local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
                                                     counter[1] = counter[1]+1
-                                                    funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
+                                                    funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter))
 
-                                                    funsP["создать сцену"](IDPROJECT, IDPROJECT.."/scene_"..counter[1])
+                                                    funsP["создать сцену"](app.idProject, app.idProject.."/scene_"..counter[1])
                                                     table.insert(arrayScenes, #arrayScenes+1, {answer.value, counter[1]})
-                                                    funsP["записать сохранение"](IDPROJECT.."/scenes", json.encode(arrayScenes))
+                                                    funsP["записать сохранение"](app.idProject.."/scenes", plugins.json.encode(arrayScenes))
 
                                                     blocks[block.id][2][event.target.idParameter][2] = counter[1]
-                                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                                    funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
                                                     objectsParameter[3].text = answer.value
 
                                                 end
                                             end)
                                         else
                                             blocks[block.id][2][event.target.idParameter] = answer
-                                            funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                            funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
                                             for i=1, #arrayScenes do
                                                 if (arrayScenes[i][2]==answer[2]) then
                                                     objectsParameter[3].text = arrayScenes[i][1]
@@ -222,9 +222,9 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                     end
 
                                 elseif (idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds") then
-                                    tableAnswers[1] = {words[87], {idParameter, nil}}
-                                    local idBackground = idParameter=="backgrounds" and (IDSCENE.."/object_"..json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))[1][2]) or IDOBJECT
-                                    local arrayBackgrounds = json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
+                                    tableAnswers[1] = {app.words[87], {idParameter, nil}}
+                                    local idBackground = idParameter=="backgrounds" and (app.idScene.."/object_"..plugins.json.decode(funsP["получить сохранение"](app.idScene.."/objects"))[1][2]) or app.idObject
+                                    local arrayBackgrounds = plugins.json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
                                     for i=1, #arrayBackgrounds do
                                         tableAnswers[#tableAnswers+1] = {arrayBackgrounds[i][1], {idParameter, arrayBackgrounds[i][2]}}
                                     end
@@ -233,12 +233,12 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                             funsP[(idParameter=="sounds" and "импортировать звук" or "импортировать изображение")](function (answer)
                                                 if (answer.done=="ok") then
                                                     local fileName = answer.origFileName:match("(.+)%.") or answer.origFileName
-                                                    local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
+                                                    local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
                                                     local idCounter = idParameter=="sounds" and 4 or 3
                                                     counter[idCounter] = counter[idCounter]+1
-                                                    funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
+                                                    funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter))
                                                     funsP[(idParameter=="sounds" and "добавить звук в объект" or "добавить изображение в объект")](idBackground.."/"..(idParameter=="sounds" and "sound" or "image").."_"..counter[idCounter].."."..(idParameter=="sounds" and "mp3" or "png") )
-                                                    local arrayImages = json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
+                                                    local arrayImages = plugins.json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
                                                     local function correctValue(value)
                                                         local function isCorrect(value)
                                                             local isCorrect = true
@@ -263,16 +263,16 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                     end
                                                     objectsParameter[3].text = correctValue(fileName)
                                                     arrayImages[#arrayImages+1] = {correctValue(fileName), counter[idCounter]}
-                                                    funsP["записать сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images"), json.encode(arrayImages))
+                                                    funsP["записать сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images"), plugins.json.encode(arrayImages))
 
                                                     blocks[block.id][2][event.target.idParameter][2] = counter[idCounter]
-                                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                                    funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 
                                                 end
                                             end)
                                         else
                                             blocks[block.id][2][event.target.idParameter] = answer
-                                            funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                            funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
                                             for i=1, #tableAnswers do
                                                 if (tableAnswers[i][2] == answer) then
                                                     objectsParameter[3].text = tableAnswers[i][1]
@@ -284,16 +284,16 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
 
                                 elseif (idParameter=="objects") then
                                     local collOrClone = blocks[block.id][1] == "collision" or blocks[block.id][1] == "endedCollision"
-                                    tableAnswers[1] = {words[collOrClone and 85 or 90], {"objects", nil}}
-                                    local arrayObjects = json.decode(funsP["получить сохранение"](IDSCENE.."/objects"))
+                                    tableAnswers[1] = {app.words[collOrClone and 85 or 90], {"objects", nil}}
+                                    local arrayObjects = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/objects"))
                                     for i=(collOrClone and 1 or 2), #arrayObjects do
-                                        if (collOrClone or IDSCENE.."/object_"..arrayObjects[i][2]~=IDOBJECT) then
+                                        if (collOrClone or app.idScene.."/object_"..arrayObjects[i][2]~=app.idObject) then
                                             tableAnswers[#tableAnswers+1] = {arrayObjects[i][1],{"objects", arrayObjects[i][2]}}
                                         end
                                     end
                                     functionOnComplete = function (answer)
                                         blocks[block.id][2][event.target.idParameter] = answer
-                                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                        funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 
                                         for i=1, #tableAnswers do
                                             if (tableAnswers[i][2] == answer) then
@@ -305,9 +305,9 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                     end
 
                                 elseif (idParameter=="function") then
-                                    tableAnswers[1] = {words[87],{"functions","new"}}
-                                    tableAnswers[2] = {words[256],{"functions","edit"}}
-                                    local arrayFunctions = json.decode(funsP["получить сохранение"](IDSCENE.."/functions"))
+                                    tableAnswers[1] = {app.words[87],{"functions","new"}}
+                                    tableAnswers[2] = {app.words[256],{"functions","edit"}}
+                                    local arrayFunctions = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/functions"))
                                     for i=1, #arrayFunctions do
                                         tableAnswers[#tableAnswers+1] = {arrayFunctions[i][2], {"function",arrayFunctions[i][1]}}
                                     end
@@ -315,7 +315,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                     functionOnComplete = function(answer)
                                         local function isCorrectValue(value)
                                             if (string.len(value)==0) then
-                                                return(words[18])
+                                                return(app.words[18])
                                             else
                                                 local isCorrectValue = true
                                                 for i=3, #tableAnswers do
@@ -324,7 +324,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                         break
                                                     end
                                                 end
-                                                return(isCorrectValue and "" or words[15])
+                                                return(isCorrectValue and "" or app.words[15])
                                             end
                                         end
                                         local function correctValue(value)
@@ -339,24 +339,24 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                             end
                                         end
                                         if (answer[2]=="new") then
-                                            cerberus.newInputLine(words[257], words[258], isCorrectValue, correctValue(words[259]), function(answer)
+                                            app.cerberus.newInputLine(app.words[257], app.words[258], isCorrectValue, correctValue(app.words[259]), function(answer)
                                                 if (answer.isOk) then
-                                                    answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
+                                                    answer.value = string.gsub(answer.value, (utils.isWin and '\r\n' or '\n'), " ")
                                                     local oldIdFunction = blocks[block.id][2][event.target.idParameter][2]
                                                     local newIdFunction = arrayFunctions[1][1]+1
                                                     table.insert(arrayFunctions, 1, {newIdFunction, answer.value,1})
 
                                                     blocks[block.id][2][event.target.idParameter][2] = newIdFunction
                                                     
-                                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-                                                    funsP["записать сохранение"](IDSCENE.."/functions", json.encode(arrayFunctions))
+                                                    funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
+                                                    funsP["записать сохранение"](app.idScene.."/functions", plugins.json.encode(arrayFunctions))
                                                     block.cells[1][3].text = answer.value
                                                 end
                                             end)
                                         elseif (answer[2]=="edit") then
-                                            cerberus.newInputLine(words[260], "", isCorrectValue, objectsParameter[3].text, function(answer)
+                                            app.cerberus.newInputLine(app.words[260], "", isCorrectValue, objectsParameter[3].text, function(answer)
                                                 if (answer.isOk) then
-                                                    answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
+                                                    answer.value = string.gsub(answer.value, (utils.isWin and '\r\n' or '\n'), " ")
                                                     local myIdFunction = blocks[block.id][2][event.target.idParameter][2]
                                                     for i=1, #arrayFunctions do
                                                         if (arrayFunctions[i][1]==myIdFunction) then
@@ -373,7 +373,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                             end
                                                         end 
                                                     end
-                                                    funsP["записать сохранение"](IDSCENE.."/functions", json.encode(arrayFunctions))
+                                                    funsP["записать сохранение"](app.idScene.."/functions", plugins.json.encode(arrayFunctions))
 
                                                 end
                                             end)
@@ -401,8 +401,8 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                 end
 
 
-                                                funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
-                                                funsP["записать сохранение"](IDSCENE.."/functions", json.encode(arrayFunctions))
+                                                funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
+                                                funsP["записать сохранение"](app.idScene.."/functions", plugins.json.encode(arrayFunctions))
 
                                                 for i=3, #tableAnswers do
                                                     if (tableAnswers[i][2]==answer) then
@@ -418,10 +418,10 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
 
                                 elseif (idParameter=="variables" or idParameter=="arrays") then
                                     local varOrArr = idParameter=="variables" and "Variable" or "Array"
-                                    local localVariables = json.decode(funsP["получить сохранение"](IDOBJECT.."/"..idParameter))
-                                    local globalVariables = json.decode(funsP["получить сохранение"](IDPROJECT.."/"..idParameter))
+                                    local localVariables = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/"..idParameter))
+                                    local globalVariables = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/"..idParameter))
 
-                                    tableAnswers[1] = {words[87], "global"..varOrArr, nil}
+                                    tableAnswers[1] = {app.words[87], "global"..varOrArr, nil}
                                     for i=1, #localVariables do
                                         tableAnswers[#tableAnswers+1] = {localVariables[i][2], {"local"..varOrArr, localVariables[i][1]}}
                                     end
@@ -442,10 +442,10 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                 end
                                                 local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight)
                                                 backgroundBlackAlpha:setFillColor(0,0,0,0.6)
-                                                SCENES[SCENE][1]:insert(backgroundBlackAlpha)
+                                                app.scenes[app.scene][1]:insert(backgroundBlackAlpha)
                                                 local group = display.newGroup()
-                                                SCENES[SCENE][1]:insert(group)
-                                                local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, roundedRect)
+                                                app.scenes[app.scene][1]:insert(group)
+                                                local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, app.roundedRect)
                                                 rect.anchorY=0,
                                                 rect:setFillColor(66/255, 66/255, 66/255)
                                                 group:insert(rect)
@@ -465,7 +465,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                     x=CENTER_X, 
                                                     y=CENTER_Y+display.contentWidth/17,
                                                     font=nil,
-                                                    fontSize=fontSize0,
+                                                    fontSize=app.fontSize0,
                                                 })
                                                 textHeader.anchorY=0
                                                 miniGroupTop:insert(textHeader)
@@ -475,13 +475,13 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                     x=CENTER_X, 
                                                     y=textHeader.y+textHeader.height+display.contentWidth/17,
                                                     font=nil,
-                                                    fontSize=fontSize2,
+                                                    fontSize=app.fontSize2,
                                                 })
                                                 miniGroupTop:insert(textPlaceholder)
                                                 local input = native.newTextBox(CENTER_X, textPlaceholder.y+textPlaceholder.height, textHeader.width, textHeader.width/10)
                                                 input.isEditable = true
                                                 input.hasBackground = false
-                                                if isSim or isWin then
+                                                if utils.isSim or utils.isWin then
                                                     input:setTextColor(0,0,0)
                                                     input.size = 25
                                                 else
@@ -493,7 +493,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                 input.text = value
                                                 native.setKeyboardFocus(input)
                                                 if (value~="") then
-                                                    input:setSelection(0, utf8.len(value))
+                                                    input:setSelection(0, plugins.utf8.len(value))
                                                 end
 
                                                 local rectInput = display.newRect(CENTER_X, input.y+input.height, input.width, display.contentWidth/150)
@@ -506,23 +506,23 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                     x=CENTER_X, 
                                                     y=rectInput.y+rectInput.height+display.contentWidth/34,
                                                     font=nil,
-                                                    fontSize=fontSize2,
+                                                    fontSize=app.fontSize2,
                                                 })
                                                 textError.anchorY = 0
                                                 textError:setFillColor(1, 113/255, 67/255)
                                                 miniGroupTop:insert(textError)
 
-                                                local textButtonOk = display.newText(words[16], 0, 0, nil, fontSize1)
+                                                local textButtonOk = display.newText(app.words[16], 0, 0, nil, app.fontSize1)
                                                 textButtonOk:setFillColor(171/255, 219/255, 241/255)
-                                                local rectButtonOk = display.newRoundedRect(CENTER_X+textHeader.width/2, CENTER_Y, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, roundedRect)
+                                                local rectButtonOk = display.newRoundedRect(CENTER_X+textHeader.width/2, CENTER_Y, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, app.roundedRect)
                                                 rectButtonOk.anchorX, rectButtonOk.anchorY = 1, 0
                                                 textButtonOk.x, textButtonOk.y = rectButtonOk.x-rectButtonOk.width/2, rectButtonOk.y+rectButtonOk.height/2
                                                 rectButtonOk:setFillColor(66/255,66/255, 66/255)
                                                 miniGroupBottom:insert(rectButtonOk)
                                                 miniGroupBottom:insert(textButtonOk)
-                                                local textButtonCancel = display.newText(words[17], 0, 0, nil, fontSize1)
+                                                local textButtonCancel = display.newText(app.words[17], 0, 0, nil, app.fontSize1)
                                                 textButtonCancel:setFillColor(171/255, 219/255, 241/255)
-                                                local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, roundedRect)
+                                                local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, app.roundedRect)
                                                 rectButtonCancel.anchorX, rectButtonCancel.anchorY = 1, 0
                                                 textButtonCancel.x, textButtonCancel.y = rectButtonCancel.x-rectButtonCancel.width/2, rectButtonCancel.y+rectButtonCancel.height/2
                                                 rectButtonCancel:setFillColor(66/255,66/255, 66/255)
@@ -531,11 +531,11 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
 
 
                                                 local textCheckboxGlobal = display.newText({
-                                                    text=words[252],
+                                                    text=app.words[252],
                                                     x=CENTER_X*1.1,
                                                     y=rectButtonCancel.y,
                                                     width=display.contentWidth/1.4,
-                                                    fontSize=fontSize1,
+                                                    fontSize=app.fontSize1,
                                                 })
                                                 textCheckboxGlobal.anchorY=0
                                                 miniGroupBottom:insert(textCheckboxGlobal)
@@ -546,11 +546,11 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                 miniGroupBottom:insert(checkboxGlobal)
 
                                                 local textCheckboxLocal = display.newText({
-                                                    text=words[253],
+                                                    text=app.words[253],
                                                     x=CENTER_X*1.1,
                                                     y = textCheckboxGlobal.y+textCheckboxGlobal.height,
                                                     width=display.contentWidth/1.4,
-                                                    fontSize=fontSize1,
+                                                    fontSize=app.fontSize1,
                                                 })
                                                 textCheckboxLocal.anchorY=0
                                                 miniGroupBottom:insert(textCheckboxLocal)
@@ -708,7 +708,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
 
                                             local function isCorrectValue(event)
                                                 if (string.len(event)==0) then
-                                                    return(words[18])
+                                                    return(app.words[18])
                                                 else
                                                     local isCorrect = true
                                                     for i=2, #tableAnswers do
@@ -717,7 +717,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                             break
                                                         end
                                                     end
-                                                    return(isCorrect and "" or words[15])
+                                                    return(isCorrect and "" or app.words[15])
                                                 end
                                             end
                                             local function correctValue(event)
@@ -732,10 +732,10 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                 end
                                             end
 
-                                            createVariableTextInput(words[idParameter=="variables" and 249 or 254], words[250], isCorrectValue, correctValue(words[(idParameter=="variables") and 251 or 255]), function (answer)
+                                            createVariableTextInput(app.words[idParameter=="variables" and 249 or 254], app.words[250], isCorrectValue, correctValue(app.words[(idParameter=="variables") and 251 or 255]), function (answer)
                                                 if (answer.isOk) then
-                                                    answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n')," ")
-                                                    local variables = json.decode(funsP["получить сохранение"]((answer.locality == "global" and IDPROJECT or IDOBJECT).."/"..idParameter))
+                                                    answer.value = string.gsub(answer.value, (utils.isWin and '\r\n' or '\n')," ")
+                                                    local variables = plugins.json.decode(funsP["получить сохранение"]((answer.locality == "global" and app.idProject or app.idObject).."/"..idParameter))
                                                     local idVariable = nil
                                                     if (#variables==0) then
                                                         table.insert(variables, 1, {1, answer.value})
@@ -744,10 +744,10 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                         idVariable = variables[1][1]+1
                                                         table.insert(variables, 1, {idVariable, answer.value})
                                                     end
-                                                    funsP["записать сохранение"]((answer.locality == "global" and IDPROJECT or IDOBJECT).."/"..idParameter, json.encode(variables))
+                                                    funsP["записать сохранение"]((answer.locality == "global" and app.idProject or app.idObject).."/"..idParameter, plugins.json.encode(variables))
                                                     objectsParameter[3].text = answer.value
                                                     blocks[block.id][2][event.target.idParameter] = {answer.locality..varOrArr,idVariable}
-                                                    funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                                    funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 
                                                 end
                                             end)
@@ -761,7 +761,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                             end 
 
                                             blocks[block.id][2][event.target.idParameter] = answer
-                                            funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                                            funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
                                         end
                                     end
                             end -- elseif
@@ -771,7 +771,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                             backgroundNotTouch.width, backgroundNotTouch.height = display.contentWidth, display.contentHeight
                             backgroundNotTouch.x, backgroundNotTouch.y = CENTER_X, CENTER_Y
                             local  group = display.newGroup()
-                            local scrollfunctions = widget.newScrollView({
+                            local scrollfunctions = plugins.widget.newScrollView({
                                 width=display.contentWidth/1.45,
                                 height=math.min(display.contentWidth/8*#tableAnswers,display.contentHeight/3),
                                 horizontalScrollDisabled=true,
@@ -838,18 +838,18 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                             end)
                         elseif (idParameter=="shapeHitbox") then
                             objectsParameter[3].yScale = 1
-                            local file = io.open(system.pathForFile(IDOBJECT.."/images.txt", system.DocumentsDirectory), 'r')
-                            local contents = json.decode(file:read("*a"))
+                            local file = io.open(system.pathForFile(app.idObject.."/images.txt", system.DocumentsDirectory), 'r')
+                            local contents = plugins.json.decode(file:read("*a"))
                             io.close(file)
                             if (#contents>0) then
-                                SCENES[SCENE][1].alpha = 0
+                                app.scenes[app.scene][1].alpha = 0
                                 scene_redactorShapeHitbox(blocks[event.target.block.id][2][event.target.idParameter], objectsParameter[4], contents, blocks)
                             else
                                 isBackScene = "block"
                                 local function funEditingEnd()
                                     isBackScene = "back"
                                 end
-                                cerberus.newBannerQuestion(words[524], funEditingEnd)
+                                app.cerberus.newBannerQuestion(app.words[524], funEditingEnd)
                             end
                         end
                     end
@@ -1091,9 +1091,9 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
             local backgroundNoTouch = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight )
             backgroundNoTouch:setFillColor(0,0,0,0.5)
             backgroundNoTouch.alpha = 0
-            SCENES[SCENE][1]:insert(backgroundNoTouch)
+            app.scenes[app.scene][1]:insert(backgroundNoTouch)
             local group = display.newGroup()
-            SCENES[SCENE][1]:insert(group)
+            app.scenes[app.scene][1]:insert(group)
             group.alpha = 0
             local rect = display.newRect(CENTER_X, CENTER_Y, display.contentWidth/1.1, 0)
             rect.anchorY=0
@@ -1111,9 +1111,9 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
             group:insert(containerBlock)
 
             local arrayButtons = {
-                {words[261], "copy"},
-                {words[262],"delete"},
-                {words[blocks[event.target.id][3]=="on" and 263 or 264], "off"},
+                {app.words[261], "copy"},
+                {app.words[262],"delete"},
+                {app.words[blocks[event.target.id][3]=="on" and 263 or 264], "off"},
             }
             local buttons = {}
             local tBlock = event.target
@@ -1186,7 +1186,7 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                             end
 
                         end
-                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                        funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
                     elseif (event.target.nameFunction == "delete") then
                         local idBlock = tBlock.id
                         local isEvent = allBlocks[blocks[idBlock][1]][1]=="event"
@@ -1228,7 +1228,7 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                             block.yGoalPos = yTargetPos-block.height/2
                             block.y = block.yGoalPos
                         end
-                        funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+                        funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 
                         local xS, yS = scrollProjects:getContentPosition()
                         scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
@@ -1243,7 +1243,7 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
 
                         isBlockTouchBlock = true
                         local idBlock = tBlock.id
-                        local tableBlock = json.decode(json.encode(blocks[idBlock]))
+                        local tableBlock = plugins.json.decode(plugins.json.encode(blocks[idBlock]))
                         local block = createBlock(tableBlock)
                         if (tableBlock[3]=="off") then
                             block.image1.fill.effect = "filter.desaturate"
@@ -1267,7 +1267,7 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                             block.investBlocks = {}
                             local i = idOldBlock+1
                             while (i<=#blocks and allBlocks[blocks[i][1]][1]~="event") do
-                                local mTableBlock = json.decode(json.encode(blocks[i]))
+                                local mTableBlock = plugins.json.decode(plugins.json.encode(blocks[i]))
                                 local mBlock = createBlock(mTableBlock)
                                 if (mTableBlock[3]=="off") then
                                     mBlock.image1.fill.effect = "filter.desaturate"
@@ -1306,7 +1306,7 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                                 elseif (allBlocks[blocks[i][1]][6]=="end") then
                                     attachments = attachments-1
                                 end
-                                local mTableBlock = json.decode(json.encode(blocks[i]))
+                                local mTableBlock = plugins.json.decode(plugins.json.encode(blocks[i]))
                                 local mBlock = createBlock(mTableBlock)
                                 if (mTableBlock[3]=="off") then
                                     mBlock.image1.fill.effect = "filter.desaturate"
@@ -1353,7 +1353,7 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                 button:setFillColor(66/255,66/255,66/255)
                 button:addEventListener("touch", funTouchButton)
                 group:insert(button)
-                local header = display.newText(arrayButtons[i][1], button.x-button.width/2.3, button.y, nil, fontSize1/1.1 )
+                local header = display.newText(arrayButtons[i][1], button.x-button.width/2.3, button.y, nil, app.fontSize1/1.1 )
                 header.anchorX = 0
                 group:insert(header)
                 buttons[i] = button
@@ -1452,7 +1452,7 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                 time=0,
                 y = math.min(math.max( -event.target.y+scrollProjects.height/2+ysdv, -(groupSceneScroll.height+display.contentWidth/1.5)),0)
             })
-            funsP["записать сохранение"](pathObject.."/scripts", json.encode(blocks))
+            funsP["записать сохранение"](pathObject.."/scripts", plugins.json.encode(blocks))
         end
         display.getCurrentStage():setFocus(event.target, nil)
         isBlockTouchBlock = false
@@ -1528,7 +1528,7 @@ for i=1, #blocks do
     end
     block.isCheck = nil
 end
-funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 end
 
 functionsMenu["checkdelete"] = function()
@@ -1560,7 +1560,7 @@ for i2=1, #blocks do
         block.y = block.yGoalPos
     end
 end
-funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 local xS, yS = scrollProjects:getContentPosition()
 scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
 if (-yS+scrollProjects.height>groupSceneScroll.height+display.contentWidth/1.5) then
@@ -1666,7 +1666,7 @@ end
 
 functionsMenu["startdelete"] = function()
 if (#blocks==0) then
-    funsP["вызвать уведомление"](words[12])
+    funsP["вызвать уведомление"](app.words[12])
     isBackScene="back"
 else
     local arrayHeaders = {
@@ -1674,7 +1674,7 @@ else
         delete=5,
         off=265
     }
-    topBarArray[3].text = words[arrayHeaders[isBackScene]]
+    topBarArray[3].text = app.words[arrayHeaders[isBackScene]]
     topBarArray[4].alpha = 0
     topBarArray[5].alpha = 1
     topBarArray[5].x = topBarArray[4].x
@@ -1712,7 +1712,7 @@ local arrayButtonsFunctions = arrayAllButtonsFunctions[isBackScene][3]
 local buttons = {}
 local buttonContainer = display.newContainer(display.contentWidth/1.8, display.contentWidth/7)
 buttonContainer.anchorX, buttonContainer.anchorY = 1, 0
-SCENES[SCENE][1]:insert(buttonContainer)
+app.scenes[app.scene][1]:insert(buttonContainer)
 local buttonCircle = display.newCircle(0,0,buttonContainer.width/2)
 buttonCircle:setFillColor(1,1,1,0.25)
 buttonCircle.xScale, buttonCircle.yScale, buttonCircle.alpha = 0.25, 0.25, 0
@@ -1747,7 +1747,7 @@ for i=1, #arrayButtonsFunctions do
     buttons[i].typeFunction = arrayButtonsFunctions[i][2]
     buttons[i]:addEventListener("touch",touchTypeFunction)
 
-    buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+    buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
     buttons[i].header.anchorX=0
     groupMenu:insert(buttons[i].header)
 
@@ -1804,7 +1804,7 @@ funAddBlock = function (blockTable)
 
     for i=1, #blockTable[2] do
         if (blockTable[2][i][1]=="function") then
-            local arrFunctions = json.decode(funsP["получить сохранение"](IDSCENE.."/functions"))
+            local arrFunctions = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/functions"))
             local idFunction = blockTable[2][i][2]
             for i=1, #arrFunctions do
                 if (arrFunctions[i][1]==idFunction) then
@@ -1812,7 +1812,7 @@ funAddBlock = function (blockTable)
                     break
                 end
             end
-            funsP["записать сохранение"](IDSCENE.."/functions", json.encode(arrFunctions))
+            funsP["записать сохранение"](app.idScene.."/functions", plugins.json.encode(arrFunctions))
             break
         end
     end
@@ -1838,7 +1838,7 @@ funAddBlock = function (blockTable)
         end
         return(answer)
     end
-    local tableInvestBlocks = json.decode(json.encode(additionallyBlocks))
+    local tableInvestBlocks = plugins.json.decode(plugins.json.encode(additionallyBlocks))
 
     if (#blocksObjects==0 and allBlocks[blockTable[1]][1]~="event") then
         local startBlock = createBlock({"start",{}})
@@ -1881,7 +1881,7 @@ funAddBlock = function (blockTable)
             end
         end
         block.investBlocks = nil
-        funsP["записать сохранение"](pathObject.."/scripts", json.encode(blocks))
+        funsP["записать сохранение"](pathObject.."/scripts", plugins.json.encode(blocks))
     elseif (#blocksObjects==0 and allBlocks[blockTable[1]][1]=="event") then
         block.y = block.height/2-display.contentWidth/60
         block.yGoalPos = block.y
@@ -1889,7 +1889,7 @@ funAddBlock = function (blockTable)
         blocks[1] = blockTable
         blocksObjects[1] = block
         block:addEventListener("touch", touchBlock)
-        funsP["записать сохранение"](pathObject.."/scripts", json.encode(blocks))
+        funsP["записать сохранение"](pathObject.."/scripts", plugins.json.encode(blocks))
     else
 -- разместить блок (старт)
 local xS, yS = scrollProjects:getContentPosition()
@@ -1941,8 +1941,8 @@ compartmentScripts()
 local function compartmentImages()
     local groupSceneScroll = display.newGroup()
     scrollProjects:insert(groupSceneScroll)
-    SCENES[SCENE][2] = groupSceneScroll
-    local images = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
+    app.scenes[app.scene][2] = groupSceneScroll
+    local images = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/images"))
     local arraySlots = {}
 
     local function touchMenuSlot(event)
@@ -1990,7 +1990,7 @@ local function compartmentImages()
 
                     if (event.target.typeFunction == "delete") then
                         local idSlot = eventTargetMenu.slot.idSlot
-                        os.remove(system.pathForFile(IDOBJECT.."/image_"..images[idSlot][2]..".png", system.DocumentsDirectory))
+                        os.remove(system.pathForFile(app.idObject.."/image_"..images[idSlot][2]..".png", system.DocumentsDirectory))
                         table.remove(images, idSlot)
                         table.remove(arraySlots, idSlot)
                         display.remove(eventTargetMenu.slot.myGroup)
@@ -2000,11 +2000,11 @@ local function compartmentImages()
                             slot.myGroup.y = slot.yGoalPos
                             slot.idSlot = i
                         end
-                        funsP["записать сохранение"](IDOBJECT.."/images", json.encode(images))
+                        funsP["записать сохранение"](app.idObject.."/images", plugins.json.encode(images))
                     elseif (event.target.typeFunction == "rename") then
                         local function isCorrectValue(value)
                             if (string.len(value)==0) then
-                                return(words[18])
+                                return(app.words[18])
                             else
                                 local isCorrect = true
                                 for i=1, #images do
@@ -2013,16 +2013,16 @@ local function compartmentImages()
                                         break
                                     end
                                 end
-                                return(isCorrect and "" or words[15])
+                                return(isCorrect and "" or app.words[15])
                             end
                         end
                         local slot = eventTargetMenu.slot
-                        cerberus.newInputLine(words[268], words[269], isCorrectValue, images[slot.idSlot][1], function(answer)
+                        app.cerberus.newInputLine(app.words[268], app.words[269], isCorrectValue, images[slot.idSlot][1], function(answer)
                             if (answer.isOk) then
-                                answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
+                                answer.value = string.gsub(answer.value, (utils.isWin and '\r\n' or '\n'), " ")
                                 slot.nameProject.text = answer.value
                                 images[slot.idSlot][1] = answer.value
-                                funsP["записать сохранение"](IDOBJECT.."/images", json.encode(images))
+                                funsP["записать сохранение"](app.idObject.."/images", plugins.json.encode(images))
                             end
                         end)
                     end
@@ -2046,7 +2046,7 @@ local function compartmentImages()
                 buttons[i].typeFunction = arrayButtonsFunctions[i][2]
                 buttons[i]:addEventListener("touch",touchTypeFunction)
 
-                buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+                buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
                 buttons[i].header.anchorX=0
                 groupMenu:insert(buttons[i].header)
 
@@ -2130,7 +2130,7 @@ local function compartmentImages()
             if (isMoveSlot) then
                 isMoveSlot=false
                 event.target.myGroup.y = event.target.yGoalPos
-                funsP["записать сохранение"](IDOBJECT.."/images", json.encode(images))
+                funsP["записать сохранение"](app.idObject.."/images", plugins.json.encode(images))
             end
         end
         return(true)
@@ -2156,7 +2156,7 @@ local function compartmentImages()
         local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
         group:insert(containerIcon)
         containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
-        buttonRect.pathImage = IDOBJECT.."/image_"..images[i][2]..".png"
+        buttonRect.pathImage = app.idObject.."/image_"..images[i][2]..".png"
         local imageIcon = display.newImage(buttonRect.pathImage, system.DocumentsDirectory)
         containerIcon:insert(imageIcon)
         strokeIcon:toFront()
@@ -2172,8 +2172,8 @@ local function compartmentImages()
             x = strokeIcon.x+strokeIcon.width/1.5,
             y = strokeIcon.y,
             width = display.contentWidth/1.75,
-            height = fontSize0*1.15,
-            fontSize = fontSize0
+            height = app.fontSize0*1.15,
+            fontSize = app.fontSize0
         })
         nameProject.anchorX = 0
         nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -2219,17 +2219,17 @@ local function compartmentImages()
             end
 
             local imageName = event.origFileName:match("(.+)%.") or event.origFileName
-            if isSim then
+            if utils.isSim then
             -- Фикс имён на винде
             local elems = imageName:split('\\')
             imageName = elems[#elems]
         end
-        local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
+        local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
         counter[3] = counter[3]+1
-        funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
+        funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter))
         images[#images+1] = {correctName(imageName), counter[3]}
-        funsP["записать сохранение"](IDOBJECT.."/images", json.encode(images))
-        funsP["добавить изображение в объект"](IDOBJECT.."/image_"..counter[3]..".png")
+        funsP["записать сохранение"](app.idObject.."/images", plugins.json.encode(images))
+        funsP["добавить изображение в объект"](app.idObject.."/image_"..counter[3]..".png")
 
         local i = #images
         local group = display.newGroup()
@@ -2251,7 +2251,7 @@ local function compartmentImages()
         local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
         group:insert(containerIcon)
         containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
-        buttonRect.pathImage = IDOBJECT.."/image_"..images[i][2]..".png"
+        buttonRect.pathImage = app.idObject.."/image_"..images[i][2]..".png"
         local imageIcon = display.newImage(buttonRect.pathImage, system.DocumentsDirectory)
         containerIcon:insert(imageIcon)
         strokeIcon:toFront()
@@ -2267,8 +2267,8 @@ local function compartmentImages()
             x = strokeIcon.x+strokeIcon.width/1.5,
             y = strokeIcon.y,
             width = display.contentWidth/1.75,
-            height = fontSize0*1.15,
-            fontSize = fontSize0
+            height = app.fontSize0*1.15,
+            fontSize = app.fontSize0
         })
         nameProject.anchorX = 0
         nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -2302,7 +2302,7 @@ functionsMenu["startreadySprites"] = function()
 isBackScene="back"
 groupScene.alpha = 0
 local function funAddImage()
-    images = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
+    images = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/images"))
     print(jso)
     local i = #images
     local group = display.newGroup()
@@ -2324,7 +2324,7 @@ local function funAddImage()
     local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
     group:insert(containerIcon)
     containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
-    buttonRect.pathImage = IDOBJECT.."/image_"..images[i][2]..".png"
+    buttonRect.pathImage = app.idObject.."/image_"..images[i][2]..".png"
     local imageIcon = display.newImage(buttonRect.pathImage, system.DocumentsDirectory)
     containerIcon:insert(imageIcon)
     strokeIcon:toFront()
@@ -2340,8 +2340,8 @@ local function funAddImage()
         x = strokeIcon.x+strokeIcon.width/1.5,
         y = strokeIcon.y,
         width = display.contentWidth/1.75,
-        height = fontSize0*1.15,
-        fontSize = fontSize0
+        height = app.fontSize0*1.15,
+        fontSize = app.fontSize0
     })
     nameProject.anchorX = 0
     nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -2377,7 +2377,7 @@ local arrayButtonsFunctions = arrayAllButtonsFunctions[isBackScene][3]
 local buttons = {}
 local buttonContainer = display.newContainer(display.contentWidth/1.8, display.contentWidth/7)
 buttonContainer.anchorX, buttonContainer.anchorY = 1, 0
-SCENES[SCENE][1]:insert(buttonContainer)
+app.scenes[app.scene][1]:insert(buttonContainer)
 local buttonCircle = display.newCircle(0,0,buttonContainer.width/2)
 buttonCircle:setFillColor(1,1,1,0.25)
 buttonCircle.xScale, buttonCircle.yScale, buttonCircle.alpha = 0.25, 0.25, 0
@@ -2412,7 +2412,7 @@ for i=1, #arrayButtonsFunctions do
     buttons[i].typeFunction = arrayButtonsFunctions[i][2]
     buttons[i]:addEventListener("touch",touchTypeFunction)
 
-    buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+    buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
     buttons[i].header.anchorX=0
     groupMenu:insert(buttons[i].header)
 
@@ -2449,8 +2449,8 @@ local touchPlaySound = nil
 local function compartmentSounds()
     local groupSceneScroll = display.newGroup()
     scrollProjects:insert(groupSceneScroll)
-    SCENES[SCENE][2] = groupSceneScroll
-    local sounds = json.decode(funsP["получить сохранение"](IDOBJECT.."/sounds"))
+    app.scenes[app.scene][2] = groupSceneScroll
+    local sounds = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/sounds"))
     local arraySlots = {}
 
 --BBBBBBBBBBBBBBBBBBBBBBB
@@ -2546,7 +2546,7 @@ local function touchMenuSlot(event)
 
                 if (event.target.typeFunction == "delete") then
                     local idSlot = eventTargetMenu.slot.idSlot
-                    os.remove(system.pathForFile(IDOBJECT.."/sound_"..sounds[idSlot][2]..".MP3", system.DocumentsDirectory))
+                    os.remove(system.pathForFile(app.idObject.."/sound_"..sounds[idSlot][2]..".MP3", system.DocumentsDirectory))
                     table.remove(sounds, idSlot)
                     table.remove(arraySlots, idSlot)
                     display.remove(eventTargetMenu.slot.myGroup)
@@ -2556,11 +2556,11 @@ local function touchMenuSlot(event)
                         slot.myGroup.y = slot.yGoalPos
                         slot.idSlot = i
                     end
-                    funsP["записать сохранение"](IDOBJECT.."/sounds", json.encode(sounds))
+                    funsP["записать сохранение"](app.idObject.."/sounds", plugins.json.encode(sounds))
                 elseif (event.target.typeFunction == "rename") then
                     local function isCorrectValue(value)
                         if (string.len(value)==0) then
-                            return(words[18])
+                            return(app.words[18])
                         else
                             local isCorrect = true
                             for i=1, #sounds do
@@ -2569,16 +2569,16 @@ local function touchMenuSlot(event)
                                     break
                                 end
                             end
-                            return(isCorrect and "" or words[15])
+                            return(isCorrect and "" or app.words[15])
                         end
                     end
                     local slot = eventTargetMenu.slot
-                    cerberus.newInputLine(words[270], words[271], isCorrectValue, sounds[slot.idSlot][1], function(answer)
+                    app.cerberus.newInputLine(app.words[270], app.words[271], isCorrectValue, sounds[slot.idSlot][1], function(answer)
                         if (answer.isOk) then
-                            answer.value = string.gsub(answer.value, (isWin and '\r\n' or '\n'), " ")
+                            answer.value = string.gsub(answer.value, (utils.isWin and '\r\n' or '\n'), " ")
                             slot.nameProject.text = answer.value
                             sounds[slot.idSlot][1] = answer.value
-                            funsP["записать сохранение"](IDOBJECT.."/sounds", json.encode(sounds))
+                            funsP["записать сохранение"](app.idObject.."/sounds", plugins.json.encode(sounds))
                         end
                     end)
                 end
@@ -2602,7 +2602,7 @@ local function touchMenuSlot(event)
             buttons[i].typeFunction = arrayButtonsFunctions[i][2]
             buttons[i]:addEventListener("touch",touchTypeFunction)
 
-            buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+            buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
             buttons[i].header.anchorX=0
             groupMenu:insert(buttons[i].header)
 
@@ -2686,7 +2686,7 @@ end
 if (isMoveSlot) then
     isMoveSlot=false
     event.target.myGroup.y = event.target.yGoalPos
-    funsP["записать сохранение"](IDOBJECT.."/sounds", json.encode(sounds))
+    funsP["записать сохранение"](app.idObject.."/sounds", plugins.json.encode(sounds))
 end
 end
 return(true)
@@ -2715,7 +2715,7 @@ containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
 local imageIcon = display.newImage("images/play.png")
 containerIcon:insert(imageIcon)
 strokeIcon:toFront()
-imageIcon.pathSound = IDOBJECT.."/sound_"..sounds[i][2]..".mp3"
+imageIcon.pathSound = app.idObject.."/sound_"..sounds[i][2]..".mp3"
 imageIcon:addEventListener("touch", touchPlaySound)
 imageIcon.slot = buttonRect
 
@@ -2730,8 +2730,8 @@ local nameProject = display.newText({
     x = strokeIcon.x+strokeIcon.width/1.5,
     y = strokeIcon.y,
     width = display.contentWidth/1.75,
-    height = fontSize0*1.15,
-    fontSize = fontSize0
+    height = app.fontSize0*1.15,
+    fontSize = app.fontSize0
 })
 nameProject.anchorX = 0
 nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -2778,12 +2778,12 @@ funAddSound = function (event)
         end
 
         local soundName = event.origFileName:match("(.+)%.") or event.origFileName
-        local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
+        local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
         counter[4] = counter[4]+1
-        funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
+        funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter))
         sounds[#sounds+1] = {correctName(soundName), counter[4]}
-        funsP["записать сохранение"](IDOBJECT.."/sounds", json.encode(sounds))
-        funsP["добавить звук в объект"](IDOBJECT.."/sound_"..counter[4]..".mp3")
+        funsP["записать сохранение"](app.idObject.."/sounds", plugins.json.encode(sounds))
+        funsP["добавить звук в объект"](app.idObject.."/sound_"..counter[4]..".mp3")
 
         local i = #sounds
         local group = display.newGroup()
@@ -2808,7 +2808,7 @@ funAddSound = function (event)
         local imageIcon = display.newImage("images/play.png")
         containerIcon:insert(imageIcon)
         strokeIcon:toFront()
-        imageIcon.pathSound = IDOBJECT.."/sound_"..sounds[i][2]..".mp3"
+        imageIcon.pathSound = app.idObject.."/sound_"..sounds[i][2]..".mp3"
         imageIcon:addEventListener("touch", touchPlaySound)
         imageIcon.slot = buttonRect
 
@@ -2823,8 +2823,8 @@ funAddSound = function (event)
             x = strokeIcon.x+strokeIcon.width/1.5,
             y = strokeIcon.y,
             width = display.contentWidth/1.75,
-            height = fontSize0*1.15,
-            fontSize = fontSize0
+            height = app.fontSize0*1.15,
+            fontSize = app.fontSize0
         })
         nameProject.anchorX = 0
         nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -2886,7 +2886,7 @@ switchBar:addEventListener("touch", function (event)
                 end
                 switchBarRect.xGoalPos = CENTER_X+((idCategory-1)*display.contentWidth/3)
                 transition.to(switchBarRect, {x=switchBarRect.xGoalPos, time=200, transition=easing.outQuad})
-                display.remove(SCENES[SCENE][2])
+                display.remove(app.scenes[app.scene][2])
                 if (tableFunctionsCompartments[idCategory+1]~=nil) then
                     tableFunctionsCompartments[idCategory+1]()
                 end
@@ -2910,7 +2910,7 @@ circlePlus.circleAlpha = circlePlusAlpha
 local circlePlay = display.newCircle(circlePlus.x, circlePlus.y-display.contentWidth/8*1.75, display.contentWidth/11.5)
 circlePlay:setFillColor(1, 172/255, 8/255)
 groupScene:insert(circlePlay)
-local runIcon = display.newImageRect('images/play.png', fontSize0*1.75, fontSize0*1.75)
+local runIcon = display.newImageRect('images/play.png', app.fontSize0*1.75, app.fontSize0*1.75)
 runIcon.x = circlePlay.x
 runIcon.y = circlePlay.y
 groupScene:insert(runIcon)
@@ -2919,7 +2919,7 @@ circlePlayAlpha:setFillColor(1,1,1,0.25)
 circlePlayAlpha.xScale, circlePlayAlpha.yScale, circlePlayAlpha.alpha = 0.75, 0.75, 0
 groupScene:insert(circlePlayAlpha)
 circlePlay.circleAlpha = circlePlayAlpha
-circlePlusText = display.newText("+",circlePlus.x, circlePlus.y, nil, fontSize0*1.75)
+circlePlusText = display.newText("+",circlePlus.x, circlePlus.y, nil, app.fontSize0*1.75)
 groupScene:insert(circlePlusText)
 local function touchCirclePlus(event)
     if (not isBlockTouchBlock) then
@@ -2933,8 +2933,8 @@ local function touchCirclePlus(event)
 
             if (isBackScene=="back") then
                 if (typeFunctionCompartment==0) then
-                    SCENES[SCENE][1].alpha = 0
-                    SCENES[SCENE][1].x = display.contentWidth
+                    app.scenes[app.scene][1].alpha = 0
+                    app.scenes[app.scene][1].x = display.contentWidth
                     scene_categoriesScripts(funAddBlock)
                 elseif (typeFunctionCompartment==1) then
                     funsP["импортировать изображение"](funAddImage)
@@ -2956,8 +2956,8 @@ local function touchCirclePlay(event)
             transition.to(event.target.circleAlpha, {alpha=0, xScale=0.75, yScale=0.75, time=100})
             display.getCurrentStage():setFocus(event.target, nil)
             if isBackScene == 'back' then
-                SCENES[SCENE][2].alpha = 0
-                SCENES[SCENE][1].alpha = 0
+                app.scenes[app.scene][2].alpha = 0
+                app.scenes[app.scene][1].alpha = 0
                 isBackScene = 'block'
                 if (objectPlay~=nil) then
                     audio.stop(playSound)
@@ -2967,8 +2967,8 @@ local function touchCirclePlay(event)
                     }
                     objectPlay = nil
                 end
-                display.remove(SCENES[SCENE][2])
-                display.remove(SCENES[SCENE[1]])
+                display.remove(app.scenes[app.scene][2])
+                display.remove(app.scenes[app.scene[1]])
                 scene_run_game('scripts', {headerBar, pathObject, infoSceneObjects})
             end
         end

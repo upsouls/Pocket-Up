@@ -13,7 +13,7 @@ end
 local function onBack()
     display.remove(objs.sceneGroup)
     objs.gen = false
-    SCENES["scripts"][1].alpha = 1
+    app.scenes["scripts"][1].alpha = 1
     funBack = objs.oldFunBack
 end
 
@@ -23,9 +23,9 @@ function scene_readySprites( funAddImage )
     local groupSceneScroll
     local funBackObjects = {}
     objs.oldFunBack = funBack
-    local topBarArray = topBar(sceneGroup, words[486], nil, nil, funBackObjects)
+    local topBarArray = topBar(sceneGroup, app.words[486], nil, nil, funBackObjects)
     topBarArray[4].alpha = 0
-    local scroll = require('widget').newScrollView( {
+    local scroll = require('plugins.widget').newScrollView( {
         width=display.contentWidth,
         height=display.contentHeight-topBarArray[1].height,
         hideBackground=true,
@@ -40,11 +40,11 @@ function scene_readySprites( funAddImage )
 
     sceneGroup:insert(scroll)
     local headerLoad = display.newText({
-        text = words[549],
+        text = app.words[549],
         x=CENTER_X, y=scroll.height/2.25,
         width=display.contentWidth,
         align="center",
-        fontSize=fontSize1*1.35,
+        fontSize=app.fontSize1*1.35,
     })
     headerLoad.alpha=0.75
     scroll:insert(headerLoad)
@@ -55,13 +55,13 @@ function scene_readySprites( funAddImage )
     network.request( link..'/sprites.json', "GET", function(event)
         if not event.isError then
             -- загрузка листа готовых образов
-            local sprites = json.decode(event.response)
+            local sprites = plugins.json.decode(event.response)
             local spritesArray = {}
             for i, v in pairs(sprites) do
                 spritesArray[#spritesArray+1] = {i, v}
             end
             headerLoad.alpha = 0
-            print(json.encode(spritesArray))
+            print(plugins.json.encode(spritesArray))
             local function loadList(startId, endId)
                 local y = display.contentWidth/6
                 if (groupSceneScroll~=nil) then
@@ -113,7 +113,7 @@ function scene_readySprites( funAddImage )
                                             width=display.contentWidth-obj_bg.width-15,
                                             --height=bg.height-50,
                                             font=native.systemFont,
-                                            fontSize=fontSize1
+                                            fontSize=app.fontSize1
                                         })
                                         name.x = obj_bg.x + obj_bg.width/2 + name.width/2 + 15
                                         name:setFillColor(170/255,218/255,240/255)
@@ -129,21 +129,21 @@ function scene_readySprites( funAddImage )
                                             elseif event.phase == 'ended' then
                                                 display.getCurrentStage():setFocus(event.target, nil)
                                                 event.target:setFillColor(0/255, 71/255, 93/255)
-                                                local sprites = json.decode(funsP['получить сохранение'](IDOBJECT..'/images'))
-                                                local counter = json.decode(funsP['получить сохранение'](IDPROJECT..'/counter'))
+                                                local sprites = plugins.json.decode(funsP['получить сохранение'](app.idObject..'/images'))
+                                                local counter = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/counter'))
                                                 local allocNewSprite = counter[3]+1
                                                 counter[3] = allocNewSprite
-                                                funsP['записать сохранение'](IDPROJECT..'/counter', json.encode(counter))
+                                                funsP['записать сохранение'](app.idProject..'/counter', plugins.json.encode(counter))
                                                 local params = {}
                                                 params.progress = true
                                                 network.download( event.target.link, 'GET',  function(event)
                                                     if event.phase == 'ended' then
                                                         sprites[#sprites+1] = {v['name'], allocNewSprite}
-                                                        funsP['записать сохранение'](IDOBJECT..'/images', json.encode(sprites))
+                                                        funsP['записать сохранение'](app.idObject..'/images', plugins.json.encode(sprites))
                                                         funAddImage()
                                                         onBack()
                                                     end
-                                                end, params, IDOBJECT..'/image_'..allocNewSprite..'.png', system.DocumentsDirectory)
+                                                end, params, app.idObject..'/image_'..allocNewSprite..'.png', system.DocumentsDirectory)
                                             end
                                             return true
                                         end)
@@ -235,7 +235,7 @@ function scene_readySprites( funAddImage )
             end
         else
             onBack()
-            cerberus.newBannerQuestion(words[550], nil, "", words[16])
+            app.cerberus.newBannerQuestion(app.words[550], nil, "", app.words[16])
         end
     end)
 

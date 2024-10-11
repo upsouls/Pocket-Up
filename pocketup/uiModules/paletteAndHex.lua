@@ -1,18 +1,18 @@
 -- работа с hex и создание палитры для выбра цвета. в этом файле 4 функции
 
---[[ функция 1. isCorrectHex
+--[[ функция 1. utils.isCorrectHex
   проверяет на корректность hex цвета;
   отправляемые данные: текст(string) с хексом;
 ]]
 
---функция 2. hexToRgb и hex2rgb
+--функция 2. utils.hexToRgb и hex2rgb
 
---[[ функция 3. rgbToHex
+--[[ функция 3. utils.rgbToHex
   отправляемые данные - массив {0.75, 1, 0.3}
 ]]
 
 
-function isCorrectHex(value)
+function utils.isCorrectHex(value)
 	if(string.len(value)==7) then
 	value = string.gsub(value, "#","")
 		if (string.len(value)==6) then
@@ -153,7 +153,7 @@ end
 
 
 
-function rgbToHex(rgb)
+function utils.rgbToHex(rgb)
 	local hexadecimal = '#'
 	for key, value in pairs(rgb) do
 		local hex = ''
@@ -174,8 +174,8 @@ end
 
 
 
-function hexToRgb(hexCode)
-	if (isCorrectHex(hexCode)) then
+function utils.hexToRgb(hexCode)
+	if (utils.isCorrectHex(hexCode)) then
 		hexCode = string.upper(hexCode)
 		assert((#hexCode == 7) or (#hexCode == 9), "The hex value must be passed in the form of #RRGGBB or #AARRGGBB" )
 		local hexCode = hexCode:gsub("#","")

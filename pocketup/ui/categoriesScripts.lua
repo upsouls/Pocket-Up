@@ -10,21 +10,21 @@ function scene_categoriesScripts(funAddBlock)
 	local groupScene = display.newGroup()
 	local groupSceneScroll = display.newGroup()
 
-	SCENE = "categoriesScripts"
-	SCENES[SCENE] = {groupScene, groupSceneScroll}
+	app.scene = "categoriesScripts"
+	app.scenes[app.scene] = {groupScene, groupSceneScroll}
 	local touchBackMenu = {function ()
 		display.remove(groupScene)
 		display.remove(groupSceneScroll)
-		SCENE = "scripts"
-		SCENES[SCENE][1].alpha = 1
-		SCENES[SCENE][1].x = 0
+		app.scene = "scripts"
+		app.scenes[app.scene][1].alpha = 1
+		app.scenes[app.scene][1].x = 0
 		funBack = oldBackScripts
 		oldBackScripts = nil
 	end}
-	local topBarArray = topBar(groupScene, words[66], nil, nil, touchBackMenu)
+	local topBarArray = topBar(groupScene, app.words[66], nil, nil, touchBackMenu)
 	topBarArray[4].alpha = 0
 
-	local scrollProjects = widget.newScrollView({
+	local scrollProjects = plugins.widget.newScrollView({
 		width=display.contentWidth,
 		height=display.contentHeight-topBarArray[1].height,
 		horizontalScrollDisabled=true,
@@ -63,7 +63,7 @@ function scene_categoriesScripts(funAddBlock)
 			sprite.fill.effect = "filter.desaturate"
 			sprite.fill.effect.intensity = 1
 		end
-		local header = display.newText(words[categories[i][1]], display.contentWidth/22, sprite.y, nil, fontSize0*1.25)
+		local header = display.newText(app.words[categories[i][1]], display.contentWidth/22, sprite.y, nil, app.fontSize0*1.25)
 		header.anchorX=0
 		header.alpha = 0.75
 		groupSceneScroll:insert(header)
@@ -78,8 +78,8 @@ function scene_categoriesScripts(funAddBlock)
 				display.getCurrentStage():setFocus(event.target, nil)
 				local myCategory = event.target.category
 				local myNameCategory = event.target.nameCategory
-				display.remove(SCENES[SCENE][1])
-				display.remove(SCENES[SCENE][2])
+				display.remove(app.scenes[app.scene][1])
+				display.remove(app.scenes[app.scene][2])
 				scene_categoryScripts(myCategory, myNameCategory, funAddBlock)
 			end
 			return true

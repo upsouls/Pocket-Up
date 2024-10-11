@@ -1,21 +1,21 @@
 -- сцена сборки апк
 
 function scene_optionsApk(idProject, nameProject)
-    local optionsProject = json.decode(funsP["получить сохранение"](idProject.."/options"))
+    local optionsProject = plugins.json.decode(funsP["получить сохранение"](idProject.."/options"))
     local groupScene = display.newGroup()
     local groupSceneScroll = display.newGroup()
-    SCENE = "options"
-    SCENES[SCENE] = {groupSceneScroll, groupScene}
+    app.scene = "options"
+    app.scenes[app.scene] = {groupSceneScroll, groupScene}
     local funBackObjects = {}
     funBackObjects[1] = function ()
-        display.remove(SCENES[SCENE][1])
-        display.remove(SCENES[SCENE][2])
+        display.remove(app.scenes[app.scene][1])
+        display.remove(app.scenes[app.scene][2])
         native.setKeyboardFocus(nil)
         scene_projects()
     end
-    local topBarArray = topBar(groupScene, words[570]..': '..nameProject, nil, nil, funBackObjects)
+    local topBarArray = topBar(groupScene, app.words[570]..': '..nameProject, nil, nil, funBackObjects)
     topBarArray[4].alpha = 0
-    local scrollProjects = widget.newScrollView({
+    local scrollProjects = plugins.widget.newScrollView({
         width=display.contentWidth,
         height=display.contentHeight-topBarArray[1].height,
         horizontalScrollDisabled=true,
@@ -28,14 +28,14 @@ function scene_optionsApk(idProject, nameProject)
     scrollProjects.y = topBarArray[1].y+topBarArray[1].height
     scrollProjects:insert(groupSceneScroll)
 
-    local headerName = display.newText(words[571], CENTER_X-display.contentWidth/1.2/2-display.screenOriginX, display.contentWidth/20, nil, fontSize2)
+    local headerName = display.newText(app.words[571], CENTER_X-display.contentWidth/1.2/2-display.screenOriginX, display.contentWidth/20, nil, app.fontSize2)
     headerName.anchorX, headerName.anchorY = 0, 0
     headerName:setFillColor(1,1,1,0.5)
     groupSceneScroll:insert(headerName)
     local inputName = native.newTextBox(CENTER_X-display.screenOriginX, topBarArray[1].height/2-30+headerName.y+headerName.height+display.contentWidth/50, display.contentWidth/1.2, display.contentWidth/12)
     inputName.isEditable = true
     inputName.hasBackground = false
-    if isSim or isWin then
+    if utils.isSim or utils.isWin then
         inputName:setTextColor(0,0,0)
         inputName.size = 25
     else
@@ -43,7 +43,7 @@ function scene_optionsApk(idProject, nameProject)
     end
     inputName.placeholder = "1.0"
     groupSceneScroll:insert(inputName)
-    local codeName = display.newText(words[572], CENTER_X-display.contentWidth/1.2/2-display.screenOriginX, display.contentWidth/20+(display.contentWidth/175)+topBarArray[1].height+headerName.height+30, nil, fontSize2)
+    local codeName = display.newText(app.words[572], CENTER_X-display.contentWidth/1.2/2-display.screenOriginX, display.contentWidth/20+(display.contentWidth/175)+topBarArray[1].height+headerName.height+30, nil, app.fontSize2)
     codeName.anchorX, codeName.anchorY = 0, 0
     codeName:setFillColor(1,1,1,0.5)
     groupSceneScroll:insert(codeName)
@@ -53,7 +53,7 @@ function scene_optionsApk(idProject, nameProject)
     local codeName = native.newTextBox(CENTER_X-display.screenOriginX, codeName.y+codeName.height+40, display.contentWidth/1.2, display.contentWidth/12)
     codeName.isEditable = true
     codeName.hasBackground = false
-    if isSim or isWin then
+    if utils.isSim or utils.isWin then
         codeName:setTextColor(0,0,0)
         codeName.size = 25
     else
@@ -64,14 +64,14 @@ function scene_optionsApk(idProject, nameProject)
     local line2 = display.newRect(CENTER_X-display.screenOriginX, codeName.y+codeName.height, display.contentWidth, display.contentWidth/175)
     line2.alpha = 0.25
     groupSceneScroll:insert(line2)
-    local packageName = display.newText(words[573], CENTER_X-display.contentWidth/1.2/2-display.screenOriginX, codeName.y+codeName.height+line2.height+30, nil, fontSize2)
+    local packageName = display.newText(app.words[573], CENTER_X-display.contentWidth/1.2/2-display.screenOriginX, codeName.y+codeName.height+line2.height+30, nil, app.fontSize2)
     packageName.anchorX, packageName.anchorY = 0, 0
     packageName:setFillColor(1,1,1,0.5)
     groupSceneScroll:insert(packageName)
     local inputPackageName = native.newTextBox(CENTER_X-display.screenOriginX, packageName.y+packageName.height+40, display.contentWidth/1.2, display.contentWidth/12)
     inputPackageName.isEditable = true
     inputPackageName.hasBackground = false
-    if isSim or isWin then
+    if utils.isSim or utils.isWin then
         inputPackageName:setTextColor(0,0,0)
         inputPackageName.size = 25
     else
@@ -82,10 +82,10 @@ function scene_optionsApk(idProject, nameProject)
     local line3 = display.newRect(CENTER_X-display.screenOriginX, inputPackageName.y+inputPackageName.height, display.contentWidth, display.contentWidth/175)
     line3.alpha = 0.25
     groupSceneScroll:insert(line3)
-    local buttonApkProject = display.newRoundedRect(CENTER_X-display.screenOriginX, line3.y+display.contentWidth/6, display.contentWidth/1.5, display.contentWidth/8.5, roundedRect)
+    local buttonApkProject = display.newRoundedRect(CENTER_X-display.screenOriginX, line3.y+display.contentWidth/6, display.contentWidth/1.5, display.contentWidth/8.5, app.roundedRect)
     buttonApkProject:setFillColor(1/255, 213/255, 0)
     groupSceneScroll:insert(buttonApkProject)
-    local headerDeleteProject = display.newText(words[574], CENTER_X-display.screenOriginX, buttonApkProject.y, nil, fontSize1)
+    local headerDeleteProject = display.newText(app.words[574], CENTER_X-display.screenOriginX, buttonApkProject.y, nil, app.fontSize1)
     groupSceneScroll:insert(headerDeleteProject)
     --scrollProjects:setScrollHeight(buttonDeleteProject.y+display.contentWidth/6)
     buttonApkProject:addEventListener("touch", function(event)
@@ -98,17 +98,17 @@ function scene_optionsApk(idProject, nameProject)
         elseif (event.phase=="ended") then
             buttonApkProject:setFillColor(1/255, 213/255, 0)
             if codeName.text ~= '' and inputPackageName.text ~= '' and inputName.text ~= '' then
-                funsP["вызвать уведомление"](words[556])
+                funsP["вызвать уведомление"](app.words[556])
                 local options = {
                     versionName = inputName.text,
                     versionCode = codeName.text,
                     packageJava = inputPackageName.text
                 }
-                funsP["экспортировать проект apk"](IDPROJECT, NMPROJECT, function(val)
+                funsP["экспортировать проект apk"](app.idProject, app.nmProject, function(val)
                     print(1)
                 end, options)
             else
-                funsP["вызвать уведомление"](words[557])
+                funsP["вызвать уведомление"](app.words[557])
             end
         end
         return true

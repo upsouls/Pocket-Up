@@ -3,13 +3,13 @@
 function scene_formula_editor(objectsParameter, idBlock, idParameter, blocks)
 	local oldSceneBack = funBack
 
-	SCENES["scripts"][1].alpha = 0
+	app.scenes["scripts"][1].alpha = 0
 	local groupScene = display.newGroup()
-	SCENE = "formula_editor"
-	SCENES[SCENE] = {groupScene}
+	app.scene = "formula_editor"
+	app.scenes[app.scene] = {groupScene}
 	local funBackObjects = {}
 	local isBackScene = "back"
-	local topBarArray = topBar(groupScene, words[272], nil, nil, funBackObjects)
+	local topBarArray = topBar(groupScene, app.words[272], nil, nil, funBackObjects)
 	topBarArray[4].alpha = 0
 	local block = blocks[idBlock]
 	local formulas = blocks[idBlock][2][idParameter]
@@ -22,7 +22,7 @@ function scene_formula_editor(objectsParameter, idBlock, idParameter, blocks)
 	containerBlock:insert(blockObject)
 	groupScene:insert(containerBlock)
 
-	local scrollFormulas = widget.newScrollView({
+	local scrollFormulas = plugins.widget.newScrollView({
 		width=display.contentWidth,
 		height=(display.contentHeight-topBarArray[1].height)/2-containerBlock.height,
 		horizontalScrollDisabled=true,
@@ -40,7 +40,7 @@ function scene_formula_editor(objectsParameter, idBlock, idParameter, blocks)
 		y=0, 
 		width=display.contentWidth,
 		align="left",
-		fontSize=fontSize0,
+		fontSize=app.fontSize0,
 	})
 	textFormulas.anchorY, textFormulas.anchorX = 0, 0
 	scrollFormulas:insert(textFormulas)
@@ -60,9 +60,9 @@ function scene_formula_editor(objectsParameter, idBlock, idParameter, blocks)
 local function isCorrectFormulas()
 	local lang = system.getPreference( "locale", "language" )
 	local tableAnswers = calculateRedactorFormulas
-	local imagesObject = json.decode(funsP["получить сохранение"](IDOBJECT.."/images"))
+	local imagesObject = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/images"))
 	tableAnswers.countImages = #imagesObject
-	tableAnswers.nameImage = #imagesObject>0 and " '"..imagesObject[1][1]:gsub("'","\\'"):gsub(( isWin and "\r\n" or "\n"),"\\n").."' " or " '' "
+	tableAnswers.nameImage = #imagesObject>0 and " '"..imagesObject[1][1]:gsub("'","\\'"):gsub(( utils.isWin and "\r\n" or "\n"),"\\n").."' " or " '' "
 	local myCode = ""
 	for i=1, #formulas do
 		local typeFormulaI= formulas[i][1]
@@ -71,7 +71,7 @@ local function isCorrectFormulas()
 		elseif (typeFormulaI=="globalArray" or typeFormulaI=="localArray") then
 			myCode = myCode.." {} "
 		elseif (typeFormulaI=="text") then
-			myCode = myCode.." '"..formulas[i][2]:gsub("'","\\'"):gsub(( isWin and "\r\n" or "\n"),"\\n").."' "
+			myCode = myCode.." '"..formulas[i][2]:gsub("'","\\'"):gsub(( utils.isWin and "\r\n" or "\n"),"\\n").."' "
 		elseif (tableAnswers[formulas[i][2]]==nil) then
 			myCode = myCode.."(0)"
 		else
@@ -88,19 +88,19 @@ end
 
 
 local function touchButtonFunctions()
-	scene_arrayFormulas(words[273], "functions", updateFormulas, formulas, cursor)
+	scene_arrayFormulas(app.words[273], "functions", updateFormulas, formulas, cursor)
 end
 local function touchButtonProperties()
-	scene_arrayFormulas(words[291], "properties", updateFormulas, formulas, cursor) 
+	scene_arrayFormulas(app.words[291], "properties", updateFormulas, formulas, cursor) 
 end
 local function touchButtonDevice()
-	scene_arrayFormulas(words[275], "device", updateFormulas, formulas, cursor) 
+	scene_arrayFormulas(app.words[275], "device", updateFormulas, formulas, cursor) 
 end
 local function touchButtonLogics()
-	scene_arrayFormulas(words[276], "logics", updateFormulas, formulas, cursor) 
+	scene_arrayFormulas(app.words[276], "logics", updateFormulas, formulas, cursor) 
 end
 local function touchButtonData()
-	scene_arrayFormulas(words[277], "data", updateFormulas, formulas, cursor) 
+	scene_arrayFormulas(app.words[277], "data", updateFormulas, formulas, cursor) 
 end
 local function touchButtonErase()
 	if (cursor>1) then 
@@ -125,14 +125,14 @@ local function touchButtonABC()
 	local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight)
 	backgroundBlackAlpha:setFillColor(0,0,0,0.6)
 	local group = display.newGroup()
-	if (SCENE=="scripts") then
-	    SCENES[SCENE][1]:insert(backgroundBlackAlpha)
-	    SCENES[SCENE][1]:insert(group)
+	if (app.scene=="scripts") then
+	    app.scenes[app.scene][1]:insert(backgroundBlackAlpha)
+	    app.scenes[app.scene][1]:insert(group)
 	else
-	    SCENES[SCENE][#SCENES[SCENE]]:insert(backgroundBlackAlpha)
-	    SCENES[SCENE][#SCENES[SCENE]]:insert(group)
+	    app.scenes[app.scene][#app.scenes[app.scene]]:insert(backgroundBlackAlpha)
+	    app.scenes[app.scene][#app.scenes[app.scene]]:insert(group)
 	end
-	local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, roundedRect)
+	local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.08, 0, app.roundedRect)
 	rect.anchorY=0,
 	rect:setFillColor(66/255, 66/255, 66/255)
 	group:insert(rect)
@@ -152,7 +152,7 @@ local function touchButtonABC()
 	    x=CENTER_X, 
 	    y=CENTER_Y+display.contentWidth/17,
 	    font=nil,
-	    fontSize=fontSize0,
+	    fontSize=app.fontSize0,
 	})
 	textHeader.anchorY=0
 	miniGroupTop:insert(textHeader)
@@ -162,13 +162,13 @@ local function touchButtonABC()
 	    x=CENTER_X, 
 	    y=textHeader.y+textHeader.height+display.contentWidth/17,
 	    font=nil,
-	    fontSize=fontSize2,
+	    fontSize=app.fontSize2,
 	})
 	miniGroupTop:insert(textPlaceholder)
 	local input = native.newTextBox(CENTER_X, textPlaceholder.y+textPlaceholder.height, textHeader.width, textHeader.width/10)
 	input.isEditable = true
 	input.hasBackground = false
-	if isSim or isWin then
+	if isSim or utils.isWin then
 	    input:setTextColor(0,0,0)
 	    input.size = 25
 	else
@@ -180,7 +180,7 @@ local function touchButtonABC()
 	input.text = value
 	native.setKeyboardFocus(input)
 	if (value~="") then
-	    input:setSelection(0, utf8.len(value))
+	    input:setSelection(0, plugins.utf8.len(value))
 	end
 
 	local rectInput = display.newRect(CENTER_X, input.y+input.height, input.width, display.contentWidth/150)
@@ -193,23 +193,23 @@ local function touchButtonABC()
 	    x=CENTER_X, 
 	    y=rectInput.y+rectInput.height+display.contentWidth/34,
 	    font=nil,
-	    fontSize=fontSize2,
+	    fontSize=app.fontSize2,
 	})
 	textError.anchorY = 0
 	textError:setFillColor(1, 113/255, 67/255)
 	miniGroupTop:insert(textError)
 
-	local textButtonOk = display.newText(words[16], 0, 0, nil, fontSize1)
+	local textButtonOk = display.newText(app.words[16], 0, 0, nil, app.fontSize1)
 	textButtonOk:setFillColor(171/255, 219/255, 241/255)
-	local rectButtonOk = display.newRoundedRect(CENTER_X+textHeader.width/2, CENTER_Y, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, roundedRect)
+	local rectButtonOk = display.newRoundedRect(CENTER_X+textHeader.width/2, CENTER_Y, textButtonOk.width+display.contentWidth/10, textButtonOk.height+display.contentWidth/30, app.roundedRect)
 	rectButtonOk.anchorX, rectButtonOk.anchorY = 1, 0
 	textButtonOk.x, textButtonOk.y = rectButtonOk.x-rectButtonOk.width/2, rectButtonOk.y+rectButtonOk.height/2
 	rectButtonOk:setFillColor(66/255,66/255, 66/255)
 	miniGroupBottom:insert(rectButtonOk)
 	miniGroupBottom:insert(textButtonOk)
-	local textButtonCancel = display.newText(words[17], 0, 0, nil, fontSize1)
+	local textButtonCancel = display.newText(app.words[17], 0, 0, nil, app.fontSize1)
 	textButtonCancel:setFillColor(171/255, 219/255, 241/255)
-	local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, roundedRect)
+	local rectButtonCancel = display.newRoundedRect(rectButtonOk.x-rectButtonOk.width-display.contentWidth/40, CENTER_Y, textButtonCancel.width+display.contentWidth/20, textButtonCancel.height+display.contentWidth/30, app.roundedRect)
 	rectButtonCancel.anchorX, rectButtonCancel.anchorY = 1, 0
 	textButtonCancel.x, textButtonCancel.y = rectButtonCancel.x-rectButtonCancel.width/2, rectButtonCancel.y+rectButtonCancel.height/2
 	rectButtonCancel:setFillColor(66/255,66/255, 66/255)
@@ -330,7 +330,7 @@ local function touchButtonABC()
 --AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 	local isEdit = (cursor>1 and formulas[cursor-1][1]=="text")
-	cerberus.newInputLine(words[isEdit and 281 or 280], words[282], nil, (isEdit and formulas[cursor-1][2] or ""), function (answer)
+	cerberus.newInputLine(app.words[isEdit and 281 or 280], app.words[282], nil, (isEdit and formulas[cursor-1][2] or ""), function (answer)
 		if (answer.isOk) then
 
 			if (isEdit) then
@@ -352,7 +352,7 @@ local function touchButtonColor()
 	transition.to(backgroundNoTouch, {alpha=1, time=200})
 	local group = display.newGroup()
 	groupScene:insert(group)
-	local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.1, 100, roundedRect)
+	local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.1, 100, app.roundedRect)
 	rect.anchorY=0
 	group:insert(rect)
 	local rectColorOld = display.newRect(rect.x-rect.width/2+display.contentWidth/20, rect.y+display.contentWidth/20, display.contentWidth/7.5, display.contentWidth/7.5)
@@ -361,17 +361,17 @@ local function touchButtonColor()
 	local rectColorNew = display.newRect(rectColorOld.x+rectColorOld.width, rectColorOld.y, rectColorOld.width, rectColorOld.height)
 	rectColorNew.anchorX, rectColorNew.anchorY = 0,0
 	group:insert(rectColorNew)
-	local strokeColor = display.newRoundedRect(rectColorOld.x-display.contentWidth/175, rectColorOld.y-display.contentWidth/175, rectColorOld.width*2+display.contentWidth/150, rectColorOld.height+display.contentWidth/150, roundedRect)
+	local strokeColor = display.newRoundedRect(rectColorOld.x-display.contentWidth/175, rectColorOld.y-display.contentWidth/175, rectColorOld.width*2+display.contentWidth/150, rectColorOld.height+display.contentWidth/150, app.roundedRect)
 	strokeColor.anchorX, strokeColor.anchorY = 0, 0
 	strokeColor:setFillColor(0,0,0,0)
 	strokeColor.strokeWidth = display.contentWidth/150
 	strokeColor:setStrokeColor(184/255,184/255,184/255)
 	group:insert(strokeColor)
-	local textColorOld = display.newText(words[283], rectColorOld.x+rectColorOld.width/2, rectColorOld.y+rectColorOld.height, nil, fontSize2/1.15)
+	local textColorOld = display.newText(app.words[283], rectColorOld.x+rectColorOld.width/2, rectColorOld.y+rectColorOld.height, nil, app.fontSize2/1.15)
 	textColorOld:setFillColor(184/255,184/255,184/255)
 	textColorOld.anchorY = 0
 	group:insert(textColorOld)
-	local textColorNew = display.newText(words[284], rectColorNew.x+rectColorNew.width/2, rectColorNew.y+rectColorNew.height, nil, fontSize2/1.15)
+	local textColorNew = display.newText(app.words[284], rectColorNew.x+rectColorNew.width/2, rectColorNew.y+rectColorNew.height, nil, app.fontSize2/1.15)
 	textColorNew:setFillColor(184/255,184/255,184/255)
 	textColorNew.anchorY = 0
 	group:insert(textColorNew)
@@ -385,7 +385,7 @@ local function touchButtonColor()
 	local idTypeSelect = 1
 
 	local isEdit = cursor>1 and formulas[cursor-1][1]=="text"
-	local color = isEdit and hexToRgb(formulas[cursor-1][2]) or {0,0,0}
+	local color = isEdit and utils.hexToRgb(formulas[cursor-1][2]) or {0,0,0}
 	rectColorOld:setFillColor(color[1],color[2],color[3])
 	rectColorNew:setFillColor(color[1],color[2],color[3])
 
@@ -395,7 +395,7 @@ local function touchButtonColor()
 		miniGroup = display.newGroup()
 		miniGroup.y = lineColor.y+lineColor.height+rect.width/6.5
 		group:insert(miniGroup)
-		local tableColors = {{words[285],{235/255,70/255,24/255}},{words[286],{7/255,135/255,7/255}},{words[287],{2/255,132/255,231/255}}}
+		local tableColors = {{app.words[285],{235/255,70/255,24/255}},{app.words[286],{7/255,135/255,7/255}},{app.words[287],{2/255,132/255,231/255}}}
 		local colorsObjects = {}
 		local textFieldHEX = nil
 
@@ -413,7 +413,7 @@ local function touchButtonColor()
 				textNumber.text = math.round((widthTouch/rectLine.width)*255)
 				color[rectLine.idColor] = widthTouch/rectLine.width
 				rectColorNew:setFillColor(color[1],color[2],color[3])
-				textFieldHEX.text = rgbToHex({color[1]*255,color[2]*255,color[3]*255})
+				textFieldHEX.text = utils.rgbToHex({color[1]*255,color[2]*255,color[3]*255})
 			else
 				display.getCurrentStage():setFocus(event.target, nil)
 			end
@@ -421,7 +421,7 @@ local function touchButtonColor()
 		end
 
 		for i=1, #tableColors do
-			local text = display.newText(tableColors[i][1], rectColorOld.x, display.contentWidth/8*(i-0.5), nil, fontSize2)
+			local text = display.newText(tableColors[i][1], rectColorOld.x, display.contentWidth/8*(i-0.5), nil, app.fontSize2)
 			text.anchorX=0
 			local c = tableColors[i][2]
 			text:setFillColor(c[1], c[2], c[3])
@@ -436,7 +436,7 @@ local function touchButtonColor()
 			rectLineBlue.anchorX = 0
 			rectLineBlue:setFillColor(171/255, 219/255, 241/255)
 			miniGroup:insert(rectLineBlue)
-			local textNumber = display.newText(math.round(color[i]*255), rect.x+rect.width/2-display.contentWidth/20, text.y, nil, fontSize2)
+			local textNumber = display.newText(math.round(color[i]*255), rect.x+rect.width/2-display.contentWidth/20, text.y, nil, app.fontSize2)
 			textNumber.anchorX=1
 			textNumber:setFillColor(171/255, 219/255, 241/255)
 			miniGroup:insert(textNumber)
@@ -452,14 +452,14 @@ local function touchButtonColor()
 			colorsObjects[i] = rectLine
 		end
 
-		local textHEX = display.newText(words[288], rectColorOld.x, display.contentWidth/8*(3.75), nil, fontSize2)
+		local textHEX = display.newText(app.words[288], rectColorOld.x, display.contentWidth/8*(3.75), nil, app.fontSize2)
 		textHEX.anchorX = 0
 		textHEX:setFillColor(0,0,0)
 		miniGroup:insert(textHEX)
 		textFieldHEX = native.newTextField(rect.x, textHEX.y, rect.width/5, textHEX.height)
-		textFieldHEX.font = native.newFont(nil, fontSize2)
+		textFieldHEX.font = native.newFont(nil, app.fontSize2)
 		textFieldHEX.hasBackground = false
-		textFieldHEX.text = rgbToHex({color[1]*255,color[2]*255,color[3]*255})
+		textFieldHEX.text = utils.rgbToHex({color[1]*255,color[2]*255,color[3]*255})
 		miniGroup:insert(textFieldHEX)
 		local lineHEX = display.newRect(textFieldHEX.x, textFieldHEX.y+textFieldHEX.height/2, textFieldHEX.width, display.contentWidth/150)
 		lineHEX:setFillColor(171/255, 219/255, 241/255)
@@ -471,9 +471,9 @@ local function touchButtonColor()
 		miniGroup:insert(noVisibleRect)
 		textFieldHEX:addEventListener("userInput", function (event)
 			if (event.phase=="editing") then
-				if (isCorrectHex(textFieldHEX.text)) then
+				if (utils.isCorrectHex(textFieldHEX.text)) then
 					textFieldHEX:setTextColor(0,0,0)
-					color = hexToRgb(textFieldHEX.text)
+					color = utils.hexToRgb(textFieldHEX.text)
 					rectColorNew:setFillColor(color[1], color[2], color[3])
 					for i=1, #colorsObjects do
 						local rectLine = colorsObjects[i]
@@ -595,11 +595,11 @@ for i=1, #tableTypesSelectColor do
 	button:addEventListener("touch", touchTypeSelect)
 end
 miniGroup2.y = miniGroup.y+miniGroup.height+display.contentWidth/15
-local textOk = display.newText(words[290], rect.x+rect.width/2-display.contentWidth/20, 0, nil, fontSize1)
+local textOk = display.newText(app.words[290], rect.x+rect.width/2-display.contentWidth/20, 0, nil, app.fontSize1)
 textOk.anchorX, textOk.anchorY = 1, 0
 textOk:setFillColor(171/255, 219/255, 241/255)
 miniGroup2:insert(textOk)
-local textCancel = display.newText(words[289], textOk.x-textOk.width-display.contentWidth/20, textOk.y, nil, fontSize1)
+local textCancel = display.newText(app.words[289], textOk.x-textOk.width-display.contentWidth/20, textOk.y, nil, app.fontSize1)
 textCancel.anchorX, textCancel.anchorY = 1, 0
 textCancel:setFillColor(171/255, 219/255, 241/255)
 miniGroup2:insert(textCancel)
@@ -613,9 +613,9 @@ local function funNoTouch(event)
 		if (event.target==textOk) then
 			color = {color[1]*255, color[2]*255, color[3]*255}
 			if (isEdit) then
-				formulas[cursor-1][2] = rgbToHex(color)
+				formulas[cursor-1][2] = utils.rgbToHex(color)
 			else
-				table.insert(formulas, cursor, {"text",rgbToHex(color)})
+				table.insert(formulas, cursor, {"text",utils.rgbToHex(color)})
 				cursor=cursor+1
 			end
 			updateFormulas()
@@ -654,21 +654,21 @@ backgroundNoTouch.alpha = 0
 local group = display.newGroup()
 group.alpha = 0
 groupScene:insert(group)
-local rectGrey = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.2, 0, roundedRect)
+local rectGrey = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.2, 0, app.roundedRect)
 rectGrey:setFillColor(66/255,66/255,66/255)
 group:insert(rectGrey)
 local rectLight = display.newRect(CENTER_X, CENTER_Y, display.contentWidth/1.6, 0)
 group:insert(rectLight)
 
 local answerCalculate = isCorrectFormulas()
-local answerCalculate = answerCalculate==nil and words[384] or answerCalculate=="nan" and words[385] or type(answerCalculate)=="boolean" and (answerCalculate and words[373] or words[374]) or answerCalculate
+local answerCalculate = answerCalculate==nil and app.words[384] or answerCalculate=="nan" and app.words[385] or type(answerCalculate)=="boolean" and (answerCalculate and app.words[373] or app.words[374]) or answerCalculate
 local textCalculate = display.newText({
 	text=(answerCalculate),
 	x=CENTER_X,
 	y=CENTER_Y,
 	width=display.contentWidth/1.6,
 	font=nil,
-	fontSize=fontSize1*1.5,
+	fontSize=app.fontSize1*1.5,
 	align="center",
 })
 textCalculate:setFillColor(0,0,0)
@@ -719,12 +719,12 @@ local function touchButtonNumber(value)
 	updateFormulas()
 end
 local tableButtons = {
-	{{words[273],touchButtonFunctions},{words[274],touchButtonProperties}},
-	{{words[275],touchButtonDevice}, {words[276],touchButtonLogics},{words[277], touchButtonData}},
+	{{app.words[273],touchButtonFunctions},{app.words[274],touchButtonProperties}},
+	{{app.words[275],touchButtonDevice}, {app.words[276],touchButtonLogics},{app.words[277], touchButtonData}},
 	{{"(","("},{7,7},{8,8},{9,9},{")",")"},{"⌫",touchButtonErase, true}},
-	{{words[278],touchButtonABC},{4,4},{5,5},{6,6},{"÷","÷"},{"×","×"}},
+	{{app.words[278],touchButtonABC},{4,4},{5,5},{6,6},{"÷","÷"},{"×","×"}},
 	{{"color",touchButtonColor},{1,1},{2,2},{3,3},{"-","-"},{"+","+"}},
-	{{"<-",touchButtonBack, true},{"->",touchButtonFront, true},{0,0},{".","."},{"=","="},{words[279],touchButtonCalculate}},
+	{{"<-",touchButtonBack, true},{"->",touchButtonFront, true},{0,0},{".","."},{"=","="},{app.words[279],touchButtonCalculate}},
 }
 local heightButton = (display.contentHeight+topBarArray[1].y-(scrollFormulas.y+scrollFormulas.height+50))/#tableButtons
 
@@ -778,7 +778,7 @@ for i=1, #tableButtons do
 		button.functional = tableButtons[i][i2][2]
 		button.isSpam = tableButtons[i][i2][3]
 		button:addEventListener("touch",touchButton)
-		local header = display.newText(tableButtons[i][i2][1], button.x+button.width/2, button.y+button.height/2, nil, fontSize1)
+		local header = display.newText(tableButtons[i][i2][1], button.x+button.width/2, button.y+button.height/2, nil, app.fontSize1)
 		groupScene:insert(header)
 	end
 end
@@ -786,14 +786,14 @@ end
 funBackObjects[1] = function ()
 if (isBackScene=="back" and isCorrectFormulas()~=nil) then
 	objectsParameter[4].text = loadFormula(formulas)
-	funsP["записать сохранение"](IDOBJECT.."/scripts", json.encode(blocks))
+	funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 	funBack = oldSceneBack
-	display.remove(SCENES[SCENE][2])
-	display.remove(SCENES[SCENE][1])
-	SCENE = "scripts"
-	SCENES[SCENE][1].alpha = 1
+	display.remove(app.scenes[app.scene][2])
+	display.remove(app.scenes[app.scene][1])
+	app.scene = "scripts"
+	app.scenes[app.scene][1].alpha = 1
 elseif (isBackScene=="back") then
-	funsP["вызвать уведомление"](words[386])
+	funsP["вызвать уведомление"](app.words[386])
 end
 end
 

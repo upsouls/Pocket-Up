@@ -16,7 +16,7 @@
 
 allCategotiesAndFormulas = {
 	functions= {
-		{words[292],{ {{"function","sinus"},{"function","("},{"number",9},
+		{app.words[292],{ {{"function","sinus"},{"function","("},{"number",9},
 		{"number",0},{"function",")"}}, {{"function","cosine"},
 		{"function","("},{"number",3},{"number",6},{"number",0},
 		{"function",")"}}, {{"function","tangent"},{"function","("},
@@ -55,7 +55,7 @@ allCategotiesAndFormulas = {
 		{"function","false"},{"function",","},{"number",2},{"function",","},
 		{"number",3},{"function",")"}} 
 	}},
-	{words[315],{ 
+	{app.words[315],{ 
 		{{"function","length"},{"function","("},{"text","hello world"},{"function",")"}},
 		{{"function","characterFromText"},{"function","("},{"number",1},{"function",","},{"text","hello world"},{"function",")"}}, 
 		{{"function","connect"},{"function","("},{"text","hello"},{"function",","},{"text"," world"},{"function",")"}}, 
@@ -63,37 +63,37 @@ allCategotiesAndFormulas = {
 		{{"function","regularExpression"},{"function","("},{"text"," an? ([^ .]+)"},{"function",","},{"text","I am a panda."},{"function",")"}} }}
 	},
 	properties={
-		{words[327],{ --[[]]
+		{app.words[327],{ --[[]]
 			{{"function","transparency"}}, {{"function","brightness"}}, 
 			{{"function","color"}},{{"function","numberImage"}},
 			{{"function","nameImage"}},{{"function","countImages"}} }},
-			{words[334], { {{"function","positionX"}},{{"function","positionY"}},
+			{app.words[334], { {{"function","positionX"}},{{"function","positionY"}},
 			{{"function","size"}},{{"function","direction"}},{{"function","directionView"}},
 			{{"function","touchesObject"}},
 			{{"function","touchesFinger"}},{{"function","speedX"}},{{"function","speedY"}},
 			{{"function","angularVelocity"}} }}
 		},
 	device={
-		{words[347],{
+		{app.words[347],{
 			{{"function","displayWidth"}},{{"function","displayHeight"}},{{"function","displayActualWidth"}},{{"function","displayActualHeight"}},
 		{{"function","displayPositionColor"},{"function","("},{"number",1},{"number",0},{"number",0},{"function",","},{"number",2},{"number",0},{"number",0},{"function",")"}}, 
 		{{"function","language"}} }},
-		{words[350],{ {{"function","touchDisplayX"}},{{"function","touchDisplayY"}},
+		{app.words[350],{ {{"function","touchDisplayX"}},{{"function","touchDisplayY"}},
 		{{"function","touchDisplay"}},{{"function","touchDisplayXId"},{"function","("},{"number",1},{"function",")"}},
 		{{"function","touchDisplayYId"},{"function","("},{"number",1},{"function",")"}},
 		{{"function","touchDisplayId"},{"function","("},{"number",1},{"function",")"}},
 		{{"function","countTouchDisplay"}},{{"function","countTouch"}},
 		{{"function","positionCameraX"}},{{"function","positionCameraY"}},
 		--[[{{"function","indexThisTouch"},{"function","("},{"number",1},{"function",")"}}]] }},
-		{words[360], { {{"function","timer"}},{{"function","year"}},
+		{app.words[360], { {{"function","timer"}},{{"function","year"}},
 		{{"function","month"}},{{"function","day"}},{{"function","dayWeek"}},
 		{{"function","hour"}},{{"function","minute"}},{{"function","second"}},
 		 }},
 	},
 	logics={
-		{words[369],{ {{"function","and"}},{{"function","or"}},
+		{app.words[369],{ {{"function","and"}},{{"function","or"}},
 		{{"function","not"}},{{"function","true"}},{{"function","false"}}, }},
-		{words[375],{ {{"function","="}},{{"function","≠"}},{{"function","<"}},
+		{app.words[375],{ {{"function","="}},{{"function","≠"}},{{"function","<"}},
 		{{"function","≤"}},{{"function",">"}},{{"function","≥"}}, {{"function",","}} }},
 	},
 	data={}
@@ -102,30 +102,30 @@ allCategotiesAndFormulas = {
 
 
 nameFormulas = {
-	["and"]=words[370],["or"]=words[371],["not"]=words[372],["true"]=words[373],
-	["false"]=words[374],["-"]="-",["+"]="+",["÷"]="÷",["×"]="×",["("]="(",
+	["and"]=app.words[370],["or"]=app.words[371],["not"]=app.words[372],["true"]=app.words[373],
+	["false"]=app.words[374],["-"]="-",["+"]="+",["÷"]="÷",["×"]="×",["("]="(",
 	[")"]=")",["="]="=",["≠"]="≠",["<"]="<",["≤"]="≤",[">"]=">",["≥"]="≥",
-	[","]=",",sinus=words[293],cosine=words[294],tangent=words[295],naturalLogarithm=words[296]
-	,decimalLogarithm=words[297],pi=words[298],root=words[299],random=words[300],
-	absoluteValue=words[301],round=words[302],modulo=words[303],arcsine=words[304],
-	arccosine=words[305],arctangent=words[306],arctangent2=words[307],
-	exponent=words[308],degree=words[309],roundDown=words[310],roundUp=words[311],
-	maximum=words[312],minimum=words[313],ternaryExpression=words[314],length=words[316]
-	,characterFromText=words[317],connect=words[318],connect2=words[318],
-	regularExpression=words[319],levelingArray=words[320],lengthArray=words[322],
-	elementArray=words[323],containsArray=words[324],indexArray=words[325],
-	transparency=words[328],brightness=words[329],color=words[330],numberImage=words[331]
-	,nameImage=words[332],countImages=words[333], positionX=words[335],
-	positionY=words[336],size=words[337],direction=words[338],directionView=words[339]
-	,touchesObject=words[341],touchesFinger=words[343]
-	,speedX=words[344],speedY=words[345],angularVelocity=words[346],displayPositionColor=words[348]
-	,language=words[349],touchDisplayX=words[351],touchDisplayY=words[352],
-	touchDisplay=words[353],touchDisplayXId=words[354],touchDisplayYId=words[355],
-	touchDisplayId=words[356],countTouchDisplay=words[357],countTouch=words[358],
-	indexThisTouch=words[359],timer=words[361],year=words[362],month=words[363],
-	day=words[364],dayWeek=words[365],hour=words[366],minute=words[367],second=words[368],
-	displayWidth=words[477],displayHeight=words[478],displayActualWidth=words[479],displayActualHeight=words[480],
-	array2json=words[482],json2array=words[483],positionCameraX=words[484],positionCameraY=words[485]
+	[","]=",",sinus=app.words[293],cosine=app.words[294],tangent=app.words[295],naturalLogarithm=app.words[296]
+	,decimalLogarithm=app.words[297],pi=app.words[298],root=app.words[299],random=app.words[300],
+	absoluteValue=app.words[301],round=app.words[302],modulo=app.words[303],arcsine=app.words[304],
+	arccosine=app.words[305],arctangent=app.words[306],arctangent2=app.words[307],
+	exponent=app.words[308],degree=app.words[309],roundDown=app.words[310],roundUp=app.words[311],
+	maximum=app.words[312],minimum=app.words[313],ternaryExpression=app.words[314],length=app.words[316]
+	,characterFromText=app.words[317],connect=app.words[318],connect2=app.words[318],
+	regularExpression=app.words[319],levelingArray=app.words[320],lengthArray=app.words[322],
+	elementArray=app.words[323],containsArray=app.words[324],indexArray=app.words[325],
+	transparency=app.words[328],brightness=app.words[329],color=app.words[330],numberImage=app.words[331]
+	,nameImage=app.words[332],countImages=app.words[333], positionX=app.words[335],
+	positionY=app.words[336],size=app.words[337],direction=app.words[338],directionView=app.words[339]
+	,touchesObject=app.words[341],touchesFinger=app.words[343]
+	,speedX=app.words[344],speedY=app.words[345],angularVelocity=app.words[346],displayPositionColor=app.words[348]
+	,language=app.words[349],touchDisplayX=app.words[351],touchDisplayY=app.words[352],
+	touchDisplay=app.words[353],touchDisplayXId=app.words[354],touchDisplayYId=app.words[355],
+	touchDisplayId=app.words[356],countTouchDisplay=app.words[357],countTouch=app.words[358],
+	indexThisTouch=app.words[359],timer=app.words[361],year=app.words[362],month=app.words[363],
+	day=app.words[364],dayWeek=app.words[365],hour=app.words[366],minute=app.words[367],second=app.words[368],
+	displayWidth=app.words[477],displayHeight=app.words[478],displayActualWidth=app.words[479],displayActualHeight=app.words[480],
+	array2json=app.words[482],json2array=app.words[483],positionCameraX=app.words[484],positionCameraY=app.words[485]
 }
 
 
@@ -134,7 +134,7 @@ nameFormulas = {
 local lang = system.getPreference( "locale", "language" )
 allFunsRedRorms = {}
 allFunsRedRorms.random = function(v, v2) if (type(v)=="number" and type(v2)=="number") then if (v<v2) then return(math.random(v, v2)) else return(v) end end end
-allFunsRedRorms.utf8 = utf8 allFunsRedRorms.math2 = math
+allFunsRedRorms.utf8 = plugins.utf8 allFunsRedRorms.math2 = math
 allFunsRedRorms.sin = function(value) return(math.sin(math.rad(value))) end
 allFunsRedRorms.cos = function(value) return(math.cos(math.rad(value))) end
 allFunsRedRorms.tan = function(value) return(math.tan(math.rad(value))) end
@@ -152,7 +152,7 @@ allFunsRedRorms.round = function(value) local flValue = math.floor(value) local 
 allFunsRedRorms.connect = function(value,value2,value3) local answerValue = value..value2..(value3==nil and "" or value3) return(answerValue) end
 allFunsRedRorms.ternaryExpression = function(condition, answer1, answer2) return(condition and answer1 or answer2) end
 allFunsRedRorms.regularExpression = function(regular, expression) return(string.match(expression, regular)) end
-allFunsRedRorms.characterFromText = function(pos, value) return(utf8.sub(value,pos,pos)) end
+allFunsRedRorms.characterFromText = function(pos, value) return(plugins.utf8.sub(value,pos,pos)) end
 
 calculateRedactorFormulas = {
 	["+"]="+",["-"]="-",["÷"]="/",["×"]="*",["("]="(",[")"]=")",
@@ -166,7 +166,7 @@ calculateRedactorFormulas = {
 	arctangent="allFunsRedRorms.atan", arctangent2="allFunsRedRorms.atan2",exponent="math.exp",
 	degree="math.pow",roundDown="math.floor",roundUp="allFunsRedRorms.roundUp",
 	maximum="math.max",minimum="math.min",ternaryExpression="allFunsRedRorms.ternaryExpression"
-	,characterFromText="allFunsRedRorms.characterFromText",length="utf8.len",
+	,characterFromText="allFunsRedRorms.characterFromText",length="plugins.utf8.len",
 	connect="allFunsRedRorms.connect",connect2="allFunsRedRorms.connect",regularExpression="allFunsRedRorms.regularExpression",
 	lengthArray="#",elementArray="allFunsRedRorms.get0",containsArray="allFunsRedRorms.getFalse",
 	indexArray="allFunsRedRorms.get0",levelingArray="allFunsRedRorms.getNil",brightness='(100)',
@@ -194,7 +194,7 @@ calculateGameFormulas = {
         arctangent="pocketupFuns.atan", arctangent2="pocketupFuns.atan2",exponent="math.exp",
         degree="math.pow",roundDown="math.floor",roundUp="pocketupFuns.roundUp",
         maximum="math.max",minimum="math.min",ternaryExpression="pocketupFuns.ternaryExpression"
-        ,characterFromText="pocketupFuns.characterFromText",length="utf8.len",
+        ,characterFromText="pocketupFuns.characterFromText",length="plugins.utf8.len",
         connect="pocketupFuns.connect",connect2="pocketupFuns.connect",regularExpression="pocketupFuns.regularExpression",
         layer="(0)",language=" '"..lang.."-"..string.upper(lang).."' ",
         lengthArray="#",elementArray="pocketupFuns.getEllementArray",containsArray="pocketupFuns.containsElementArray",
@@ -205,6 +205,6 @@ calculateGameFormulas = {
         timer="os.time()",year="tonumber(os.date('%Y', os.time()))",month="tonumber(os.date('%m', os.time()))",
         dayWeek="tonumber(os.date('%w', os.time()))",day="tonumber(os.date('%d', os.time()))",hour="tonumber(os.date('%H', os.time()))",
         minute="tonumber(os.date('%M', os.time()))",second="tonumber(os.date('%S', os.time()))",
-        json2array="pocketupFuns.jsonEncode", array2json="json.encode",positionCameraX="(cameraGroup.x)",
+        json2array="pocketupFuns.jsonEncode", array2json="plugins.json.encode",positionCameraX="(cameraGroup.x)",
         positionCameraY="(-cameraGroup.x)"
 }

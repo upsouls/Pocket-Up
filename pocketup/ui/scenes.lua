@@ -1,12 +1,12 @@
 -- сцена для просмотра сцен проекта
 
 function scene_scenes(idProject, nameProjectScenes)
-	IDPROJECT = idProject
-	NMPROJECT = nameProjectScenes
+	app.idProject = idProject
+	app.nmProject = nameProjectScenes
 	local groupScene = display.newGroup()
 	local groupSceneScroll = display.newGroup()
-	SCENE = "scenes"
-	SCENES[SCENE] = {groupSceneScroll, groupScene}
+	app.scene = "scenes"
+	app.scenes[app.scene] = {groupSceneScroll, groupScene}
 	local isBackScene = "back"
 	local funMenuObjects = {}
 	local funCheckObjects = {}
@@ -14,7 +14,7 @@ function scene_scenes(idProject, nameProjectScenes)
 	local valueHeaderTopBar = nameProjectScenes
 	local topBarArray = topBar(groupScene, nameProjectScenes, funMenuObjects, funCheckObjects, funBackObjects)
 
-	local scrollProjects = widget.newScrollView({
+	local scrollProjects = plugins.widget.newScrollView({
 		width=display.contentWidth,
 		height=display.contentHeight-topBarArray[1].height,
 		horizontalScrollDisabled=true,
@@ -26,9 +26,9 @@ function scene_scenes(idProject, nameProjectScenes)
 	scrollProjects.anchorY=0
 	scrollProjects.y = topBarArray[1].y+topBarArray[1].height
 	scrollProjects:insert(groupSceneScroll)
-	select_Scroll = scrollProjects
+	utils.select_Scroll = scrollProjects
 
-	local scenes = json.decode(funsP["получить сохранение"](idProject.."/scenes"))
+	local scenes = plugins.json.decode(funsP["получить сохранение"](idProject.."/scenes"))
 	print("работает")
 	local arraySlots = {}
 
@@ -73,7 +73,7 @@ function scene_scenes(idProject, nameProjectScenes)
 					table.insert(arraySlots, idNewSlot, slot)
 					table.remove(scenes, idOldSlot)
 					table.insert(scenes, idNewSlot, event.target.infoScene)
-					funsP["записать сохранение"](idProject.."/scenes", json.encode(scenes))
+					funsP["записать сохранение"](idProject.."/scenes", plugins.json.encode(scenes))
 					local oldSlot = arraySlots[idOldSlot]
 					oldSlot.idSlot = idOldSlot
 					transition.to(oldSlot.myGroup, {time=200, y=oldSlot.height*(oldSlot.idSlot-0.5), transition=easing.inOutQuad})
@@ -90,8 +90,8 @@ function scene_scenes(idProject, nameProjectScenes)
 				timer.cancel(timerMoveSlot)
 				isTimerMoveSlot = false
 
-				display.remove(SCENES[SCENE][1])
-				display.remove(SCENES[SCENE][2])
+				display.remove(app.scenes[app.scene][1])
+				display.remove(app.scenes[app.scene][2])
 				scene_objects(idProject.."/scene_"..event.target.infoScene[2].."/objects", nameProjectScenes, event.target.infoScene)
 
 			end
@@ -173,16 +173,16 @@ function scene_scenes(idProject, nameProjectScenes)
 
 					if (event.target.typeFunction=="copy") then
 						local i = eventTargetMenu.slot.idSlot
-						local counterProject = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
+						local counterProject = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
 						counterProject[1] = counterProject[1]+1
-						local copyObject = json.decode(json.encode(scenes[i]))
+						local copyObject = plugins.json.decode(plugins.json.encode(scenes[i]))
 						copyObject[1] = correctNameSlot(copyObject[1])
 						copyObject[2] = counterProject[1]
-						funsP["записать сохранение"](IDPROJECT.."/counter",json.encode(counterProject))
-						funsP["копировать сцену"](IDPROJECT, IDPROJECT.."/scene_"..scenes[i][2], IDPROJECT.."/scene_"..copyObject[2])
+						funsP["записать сохранение"](app.idProject.."/counter",plugins.json.encode(counterProject))
+						funsP["копировать сцену"](app.idProject, app.idProject.."/scene_"..scenes[i][2], app.idProject.."/scene_"..copyObject[2])
 						scenes[#scenes+1] = copyObject
 
-						funsP["записать сохранение"](IDPROJECT.."/scenes",json.encode(scenes))
+						funsP["записать сохранение"](app.idProject.."/scenes",plugins.json.encode(scenes))
 
 						local iSlot = #scenes
 
@@ -221,8 +221,8 @@ function scene_scenes(idProject, nameProjectScenes)
 							x = strokeIcon.x+strokeIcon.width/1.5,
 							y = strokeIcon.y,
 							width = display.contentWidth/2.12,
-							height = fontSize0*1.15,
-							fontSize = fontSize0
+							height = app.fontSize0*1.15,
+							fontSize = app.fontSize0
 						})
 						nameProject.anchorX = 0
 						nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -255,23 +255,23 @@ function scene_scenes(idProject, nameProjectScenes)
 						local newScrollHeight = arSlEnd.y+arSlEnd.height/2+display.contentWidth/1.5
 						scrollProjects:setScrollHeight(newScrollHeight)
 
-						funsP["вызвать уведомление"](string.gsub(words[32], "<count>", 1))
+						funsP["вызвать уведомление"](string.gsub(app.words[32], "<count>", 1))
 
 
 					elseif (event.target.typeFunction=="delete") then
 						local i = eventTargetMenu.slot.idSlot
 						local slot = eventTargetMenu.slot
-						funsP["удалить объект"](IDPROJECT.."/scene_"..scenes[i][2])
+						funsP["удалить объект"](app.idProject.."/scene_"..scenes[i][2])
 						table.remove(arraySlots, i)
 						table.remove(scenes, i)
 						display.remove(slot.myGroup)
 
-						funsP["записать сохранение"](IDPROJECT.."/scenes",json.encode(scenes))
+						funsP["записать сохранение"](app.idProject.."/scenes",plugins.json.encode(scenes))
 
 						if (#scenes==1) then
-							display.remove(SCENES[SCENE][1])
-							display.remove(SCENES[SCENE][2])
-							scene_objects(IDPROJECT.."/scene_"..scenes[1][2].."/objects", nameProjectScenes, scenes[1])
+							display.remove(app.scenes[app.scene][1])
+							display.remove(app.scenes[app.scene][2])
+							scene_objects(app.idProject.."/scene_"..scenes[1][2].."/objects", nameProjectScenes, scenes[1])
 						else
 
 
@@ -292,28 +292,28 @@ function scene_scenes(idProject, nameProjectScenes)
 								time=0, 
 								y=math.min(math.max(yScroll, -newScrollHeight+scrollProjects.height), 0)
 							})
-							funsP["вызвать уведомление"](string.gsub(words[34], "<count>", 1))
+							funsP["вызвать уведомление"](string.gsub(app.words[34], "<count>", 1))
 
 						end
 
 					elseif (event.target.typeFunction=="rename") then 
 						local function isErrorCorrectNameObject(value)
 							if (string.len(value)==0) then
-								return(words[18])
+								return(app.words[18])
 							else
-								return(isCorrectValue(value) and "" or words[15])
+								return(isCorrectValue(value) and "" or app.words[15])
 							end
 						end
 						local function endEditingRename(tableAnswer)
 							if (tableAnswer.isOk) then
-								tableAnswer.value = tableAnswer.value:gsub( (isWin and '\r\n' or '\n'), ' ')
+								tableAnswer.value = tableAnswer.value:gsub( (utils.isWin and '\r\n' or '\n'), ' ')
 								local slot = eventTargetMenu.slot
 								slot.nameProject.text = tableAnswer.value
 								scenes[slot.idSlot][1] = tableAnswer.value
-								funsP["записать сохранение"](IDPROJECT.."/scenes", json.encode(scenes))
+								funsP["записать сохранение"](app.idProject.."/scenes", plugins.json.encode(scenes))
 							end
 						end
-						cerberus.newInputLine(words[31],words[27], isErrorCorrectNameObject, eventTargetMenu.slot.infoScene[1], endEditingRename)
+						app.cerberus.newInputLine(app.words[31],app.words[27], isErrorCorrectNameObject, eventTargetMenu.slot.infoScene[1], endEditingRename)
 					end
 
 					for i=1, #buttons do
@@ -335,7 +335,7 @@ function scene_scenes(idProject, nameProjectScenes)
 				buttons[i].typeFunction = arrayButtonsFunctions[i][2]
 				buttons[i]:addEventListener("touch",touchTypeFunction)
 
-				buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+				buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
 				buttons[i].header.anchorX=0
 				groupMenu:insert(buttons[i].header)
 
@@ -400,8 +400,8 @@ function scene_scenes(idProject, nameProjectScenes)
 			x = strokeIcon.x+strokeIcon.width/1.5,
 			y = strokeIcon.y,
 			width = display.contentWidth/2.12,
-			height = fontSize0*1.15,
-			fontSize = fontSize0
+			height = app.fontSize0*1.15,
+			fontSize = app.fontSize0
 		})
 		nameProject.anchorX = 0
 		nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -445,7 +445,7 @@ circlePlus.circleAlpha = circlePlusAlpha
 local circlePlay = display.newCircle(circlePlus.x, circlePlus.y-display.contentWidth/8*1.75, display.contentWidth/11.5)
 circlePlay:setFillColor(1, 172/255, 8/255)
 groupScene:insert(circlePlay)
-local runIcon = display.newImageRect('images/play.png', fontSize0*1.75, fontSize0*1.75)
+local runIcon = display.newImageRect('images/play.png', app.fontSize0*1.75, app.fontSize0*1.75)
 runIcon.x = circlePlay.x
 runIcon.y = circlePlay.y
 groupScene:insert(runIcon)
@@ -454,7 +454,7 @@ circlePlayAlpha:setFillColor(1,1,1,0.25)
 circlePlayAlpha.xScale, circlePlayAlpha.yScale, circlePlayAlpha.alpha = 0.75, 0.75, 0
 groupScene:insert(circlePlayAlpha)
 circlePlay.circleAlpha = circlePlayAlpha
-circlePlusText = display.newText("+",circlePlus.x, circlePlus.y, nil, fontSize0*1.75)
+circlePlusText = display.newText("+",circlePlus.x, circlePlus.y, nil, app.fontSize0*1.75)
 groupScene:insert(circlePlusText)
 local function touchCirclePlus(event)
 	if (event.phase=="began") then
@@ -470,7 +470,7 @@ local function touchCirclePlus(event)
 
 				local function isCorrectValue(value)
 					if (string.len(value)==0) then
-						return(words[18])
+						return(app.words[18])
 					else
 						local isCorrect = true
 						for i=1, #scenes do
@@ -479,7 +479,7 @@ local function touchCirclePlus(event)
 								break
 							end
 						end
-						return(isCorrect and "" or words[15])
+						return(isCorrect and "" or app.words[15])
 					end
 				end
 
@@ -497,13 +497,13 @@ local function touchCirclePlus(event)
 
 				local function onCompleteObject(event)
 					if (event.isOk) then
-						event.value = event.value:gsub( (isWin and '\r\n' or '\n'), ' ')
-						local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
+						event.value = event.value:gsub( (utils.isWin and '\r\n' or '\n'), ' ')
+						local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
 						counter[1] = counter[1]+1
 						scenes[#scenes+1] = {event.value, counter[1]}
-						funsP["записать сохранение"](IDPROJECT.."/scenes", json.encode(scenes))
-						funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter))
-						funsP["создать сцену"](IDPROJECT, IDPROJECT.."/scene_"..counter[1])
+						funsP["записать сохранение"](app.idProject.."/scenes", plugins.json.encode(scenes))
+						funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter))
+						funsP["создать сцену"](app.idProject, app.idProject.."/scene_"..counter[1])
 
 						local iSlot = #scenes
 						local groupScene = display.newGroup()
@@ -541,8 +541,8 @@ local function touchCirclePlus(event)
 							x = strokeIcon.x+strokeIcon.width/1.5,
 							y = strokeIcon.y,
 							width = display.contentWidth/2.12,
-							height = fontSize0*1.15,
-							fontSize = fontSize0
+							height = app.fontSize0*1.15,
+							fontSize = app.fontSize0
 						})
 						nameProject.anchorX = 0
 						nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -578,14 +578,14 @@ local function touchCirclePlus(event)
 					end
 				end
 
-				cerberus.newInputLine(words[26],words[27], isCorrectValue,correctNameSlot(words[28]), onCompleteObject)
+				app.cerberus.newInputLine(app.words[26],app.words[27], isCorrectValue,correctNameSlot(app.words[28]), onCompleteObject)
 			else
 				if isBackScene == 'back' then
-	                SCENES[SCENE][2].alpha = 0
-	                SCENES[SCENE][1].alpha = 0
+	                app.scenes[app.scene][2].alpha = 0
+	                app.scenes[app.scene][1].alpha = 0
 	                isBackScene = 'block'
-	                display.remove(SCENES[SCENE][1])
-	                display.remove(SCENES[SCENE[2]])
+	                display.remove(app.scenes[app.scene][1])
+	                display.remove(app.scenes[app.scene[2]])
 	                scene_run_game('scenes', {idProject, nameProjectScenes})
 	            end
 			end
@@ -649,9 +649,9 @@ arrayAllButtonsFunctions["copyAll"] = arrayAllButtonsFunctions["copy"]
 arrayAllButtonsFunctions["deleteAll"] = arrayAllButtonsFunctions["delete"]
 
 functionsMenu["startoptions"] = function()
-display.remove(SCENES[SCENE][1])
-display.remove(SCENES[SCENE][2])
-scene_options(IDPROJECT, NMPROJECT)
+display.remove(app.scenes[app.scene][1])
+display.remove(app.scenes[app.scene][2])
+scene_options(app.idProject, app.nmProject)
 end
 
 local function touchMenu2CopySlot(event)
@@ -682,7 +682,7 @@ end
 functionsMenu["startcopy"] = function()
 local arrayIdsWords = {["copy"]=4, ["delete"]=5}
 if (arrayIdsWords[isBackScene]) then
-	topBarArray[3].text = words[arrayIdsWords[isBackScene]]
+	topBarArray[3].text = app.words[arrayIdsWords[isBackScene]]
 else
 	topBarArray[3].text = "заполни название!"
 	topBarArray[3]:setFillColor(1,0,0)
@@ -732,12 +732,12 @@ for i=1, #scenes do
 
 	if (slot.menu2.isCopySlot) then
 		countCopiedSlot = countCopiedSlot+1
-		local counter = json.decode(funsP["получить сохранение"](IDPROJECT.."/counter"))
+		local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
 		counter[1] = counter[1]+1
-		funsP["записать сохранение"](IDPROJECT.."/counter", json.encode(counter) )
+		funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter) )
 		scenes[#scenes+1] = {correctNameScene(slot.infoScene[1]), counter[1]}
-		funsP["копировать сцену"](IDPROJECT, IDPROJECT.."/scene_"..slot.infoScene[2], IDPROJECT.."/scene_"..counter[1])
-		funsP["записать сохранение"](IDPROJECT.."/scenes", json.encode(scenes))
+		funsP["копировать сцену"](app.idProject, app.idProject.."/scene_"..slot.infoScene[2], app.idProject.."/scene_"..counter[1])
+		funsP["записать сохранение"](app.idProject.."/scenes", plugins.json.encode(scenes))
 
 
 		local i = #scenes
@@ -776,8 +776,8 @@ for i=1, #scenes do
 			x = strokeIcon.x+strokeIcon.width/1.5,
 			y = strokeIcon.y,
 			width = display.contentWidth/2.12,
-			height = fontSize0*1.15,
-			fontSize = fontSize0
+			height = app.fontSize0*1.15,
+			fontSize = app.fontSize0
 		})
 		nameProject.anchorX = 0
 		nameProject:setFillColor(171/255, 219/255, 241/255)
@@ -806,7 +806,7 @@ for i=1, #scenes do
 end
 
 if (countCopiedSlot~=0) then
-	funsP["вызвать уведомление"](string.gsub(words[countCopiedSlot==1 and 32 or 33], "<count>", countCopiedSlot))
+	funsP["вызвать уведомление"](string.gsub(app.words[countCopiedSlot==1 and 32 or 33], "<count>", countCopiedSlot))
 end
 
 scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
@@ -847,8 +847,8 @@ while (i2-iMinus<#scenes) do
 		display.remove(slot.myGroup)
 		table.remove(scenes, i)
 		iMinus = iMinus+1
-		funsP["удалить объект"](IDPROJECT.."/scene_"..slot.infoScene[2])
-		funsP["записать сохранение"](IDPROJECT.."/scenes", json.encode(scenes))
+		funsP["удалить объект"](app.idProject.."/scene_"..slot.infoScene[2])
+		funsP["записать сохранение"](app.idProject.."/scenes", plugins.json.encode(scenes))
 
 	end
 
@@ -856,7 +856,7 @@ while (i2-iMinus<#scenes) do
 end
 
 if (iMinus~=0) then
-	funsP["вызвать уведомление"](string.gsub(words[iMinus==1 and 34 or 35], "<count>", iMinus))
+	funsP["вызвать уведомление"](string.gsub(app.words[iMinus==1 and 34 or 35], "<count>", iMinus))
 
 	local iEndSlot = #arraySlots
 	local xScroll, yScroll = scrollProjects:getContentPosition()
@@ -871,14 +871,14 @@ if (iMinus~=0) then
 end
 
 if (#scenes==0) then
-	scenes = {{words[28],1}}
-	funsP["записать сохранение"](IDPROJECT.."/counter", "[1, 0, 0, 0]" )
-	funsP["записать сохранение"](IDPROJECT.."/scenes", json.encode(scenes) )
-	funsP["создать сцену"](IDPROJECT, IDPROJECT.."/scene_1")
+	scenes = {{app.words[28],1}}
+	funsP["записать сохранение"](app.idProject.."/counter", "[1, 0, 0, 0]" )
+	funsP["записать сохранение"](app.idProject.."/scenes", plugins.json.encode(scenes) )
+	funsP["создать сцену"](app.idProject, app.idProject.."/scene_1")
 end
 if (#scenes==1) then
-	display.remove(SCENES[SCENE][1])
-	display.remove(SCENES[SCENE][2])
+	display.remove(app.scenes[app.scene][1])
+	display.remove(app.scenes[app.scene][2])
 	scene_objects(idProject.."/scene_"..scenes[1][2].."/objects", nameProjectScenes, scenes[1])
 end
 
@@ -892,10 +892,10 @@ local function renameButton(event)
 		local function editingEnd(tableRenameSlot)
 
 			if (tableRenameSlot.isOk) then
-				tableRenameSlot.value = tableRenameSlot.value:gsub( (isWin and '\r\n' or '\n'), ' ')
+				tableRenameSlot.value = tableRenameSlot.value:gsub( (utils.isWin and '\r\n' or '\n'), ' ')
 				scenes[event.target.idSlot][1] = tableRenameSlot.value
 				event.target.nameProject.text = tableRenameSlot.value
-				funsP["записать сохранение"](IDPROJECT.."/scenes", json.encode(scenes))
+				funsP["записать сохранение"](app.idProject.."/scenes", plugins.json.encode(scenes))
 			end
 
 			isBackScene = "back"
@@ -922,8 +922,8 @@ local function renameButton(event)
 
 		end
 		local function checkCorrectName(value)
-			if (utf8.len(value)==0) then
-				return(words[18])
+			if (plugins.utf8.len(value)==0) then
+				return(app.words[18])
 			else
 				local isCorrect = true
 				for i=1, #scenes do
@@ -935,11 +935,11 @@ local function renameButton(event)
 				if (isCorrect) then
 					return("")
 				else
-					return(words[15])
+					return(app.words[15])
 				end
 			end
 		end
-		cerberus.newInputLine(words[31],words[27], checkCorrectName, event.target.infoScene[1], editingEnd)
+		app.cerberus.newInputLine(app.words[31],app.words[27], checkCorrectName, event.target.infoScene[1], editingEnd)
 
 	end
 end
@@ -948,7 +948,7 @@ end
 
 functionsMenu["startrename"] = function ()
 topBarArray[4].alpha = 0
-topBarArray[3].text = words[6]
+topBarArray[3].text = app.words[6]
 
 
 for i=1, #scenes do
@@ -1026,7 +1026,7 @@ for i=1, #arrayButtonsFunctions do
 	buttons[i].typeFunction = arrayButtonsFunctions[i][2]
 	buttons[i]:addEventListener("touch",touchTypeFunction)
 
-	buttons[i].header = display.newText(words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, fontSize1)
+	buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
 	buttons[i].header.anchorX=0
 	groupMenu:insert(buttons[i].header)
 
@@ -1096,8 +1096,8 @@ end
 funBackObjects[1] = function (isSystem)
 if (isSystem==nil or isBackScene=="back") then
 	if (isBackScene=="back") then
-		display.remove(SCENES[SCENE][1])
-		display.remove(SCENES[SCENE][2])
+		display.remove(app.scenes[app.scene][1])
+		display.remove(app.scenes[app.scene][2])
 
 		scene_projects()
 
