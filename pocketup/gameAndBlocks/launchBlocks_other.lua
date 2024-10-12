@@ -124,7 +124,7 @@ end
         local time = make_all_formulas(infoBlock[2][2], object)
         lua = lua .. 'local _repeat\n'
         add_pcall()
-        lua = lua .. 
+        lua = lua ..
 'local name = \'Timer'..index..'\'..\'_\'..Timers_max\
 if not Timers[name] then\
 timer.new(('..time..'*1000)*'..rep..', function()\

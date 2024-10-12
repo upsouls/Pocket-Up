@@ -265,7 +265,7 @@ function scene_run_game(typeBack, paramsBack)
                     local block = blocks[i]
                     local nameBlock = block[1]
                     local table = {'if','timer','repeat','ifElse (2)','waitIfTrue',
-                    'foreach','cycleForever','for','repeatIsTrue'}
+                    'foreach','cycleForever','for','repeatIsTrue','timer2','repeat2','repeatIsTrue2'}
 
                     local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
                     'endFor','endForeach','endCycleForever','endWait'}
@@ -324,7 +324,7 @@ function scene_run_game(typeBack, paramsBack)
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
                     else
-                    local luaBlock = makeBlock_sotritmor(block, 'target', make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)
+                    local luaBlock = makeBlock_sotritmor(block, 'target', make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, b)
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
                     else
