@@ -132,7 +132,7 @@ function scene_run_game(typeBack, paramsBack)
     end
     max_fors = 0
     lua = ''
-    lua = lua..(options.orientation=="horizontal" and "\nplugins.orientation.lock('landscape')" or "").."\nsystem.activate('multitouch')\nphysics.start(true)\nlocal function getImageProperties(path, dir)\nlocal image = display.newImage(path, dir)\nimage.alpha=0\nlocal width = image.width\nlocal height = image.height\ndisplay.remove(image)\nreturn width, height\nend"
+    lua = lua..(options.orientation=="horizontal" and "\nplugins.orientation.lock('landscape')" or "").."\nsystem.activate('multitouch')\nplugins.physics.start(true)\nlocal function getImageProperties(path, dir)\nlocal image = display.newImage(path, dir)\nimage.alpha=0\nlocal width = image.width\nlocal height = image.height\ndisplay.remove(image)\nreturn width, height\nend"
     --local groupScene = display.newGroup()
     display.setDefault('background', 1, 1, 1)
     local scenes = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/scenes'))
@@ -387,8 +387,8 @@ local newIdTouch=globalConstants.touchId+1\nglobalConstants.touchId = newIdTouch
 globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.x, event.y
 globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (#globalConstants.isTouchsId==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch = nil\nend
 ]]
-    lua = lua.."\nfunction exitGame()\nphysics.setDrawMode('normal')\nsystem.deactivate('multitouch')\nphysics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\nshowOldScene()\nend"
-    lua = lua.."\nfunction deleteScene()\nphysics.setDrawMode('normal')\nremoveAllObjects()\ntimer.cancelAll()\n"..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')").."\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nend"
+    lua = lua.."\nfunction exitGame()\nplugins.physics.setDrawMode('normal')\nsystem.deactivate('multitouch')\nplugins.physics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\nshowOldScene()\nend"
+    lua = lua.."\nfunction deleteScene()\nplugins.physics.setDrawMode('normal')\nremoveAllObjects()\ntimer.cancelAll()\n"..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')").."\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nend"
     if (isScriptsBack) then
         lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nfor key, value in pairs(objects) do\nfor i=1, #events_touchBack[key] do\nevents_touchBack[key][i](value)\nfor i2=1, #value.clones do\nevents_touchBack[key][i](value.clones[i2])\nend\nend\nend\nend\nreturn(true)\nend\nRuntime:addEventListener('key', funBackListener)"
     else

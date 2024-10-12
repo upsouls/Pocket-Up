@@ -63,7 +63,7 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
         network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, header)
     end
     --
-    if utils.isWin then
+    if utils.isSim then
         local text = display.newText('',70, 30, nil, 30)
 timer.performWithDelay(100, function ()
     text.text = math.round(collectgarbage ('count'))..'byte'
