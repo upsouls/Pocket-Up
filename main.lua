@@ -65,9 +65,10 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
     --
     if utils.isSim then
         local text = display.newText('',70, 30, nil, 30)
-timer.performWithDelay(100, function ()
-    text.text = math.round(collectgarbage ('count'))..'byte'
-end, 0)
+        Runtime:addEventListener('enterFrame', function ()
+                text.text = math.round(collectgarbage ('count'))..'byte'
+                text:toFront()
+        end)
     end
 end)
 

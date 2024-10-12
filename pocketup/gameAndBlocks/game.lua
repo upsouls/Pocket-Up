@@ -2,7 +2,6 @@ lua = nil
 local makeBlock_other = require("pocketup.gameAndBlocks.launchBlocks_other")
 local makeBlock_cerberus = require("pocketup.gameAndBlocks.launchBlocks_cerberus")
 local makeBlock_sotritmor = require("pocketup.gameAndBlocks.launchBlocks_sotritmor")
-local makeBlock_monsler = require("pocketup.gameAndBlocks.launchBlocks_monsler")
 local makeBlock_terra = require("pocketup.gameAndBlocks.launchBlocks_terra")
 
 local _Vars = {}
@@ -329,10 +328,6 @@ function scene_run_game(typeBack, paramsBack)
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
                     else
-                        local luaBlock = makeBlock_monsler(block, 'target', make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)
-                    if (luaBlock~=nil and luaBlock~="") then
-                        lua = lua.."\n"..luaBlock..'\n'
-                    else
                     local luaBlock = makeBlock_terra(block, 'target', make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
@@ -341,7 +336,6 @@ function scene_run_game(typeBack, paramsBack)
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
                     else
-                    end
                     end
                     end
                     end
