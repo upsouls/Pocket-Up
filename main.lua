@@ -71,8 +71,18 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
     end
 end)
 
-
-
+_G.funsP = {}
+funsP["получить сохранение"] = function(path)
+	local docsPath = system.pathForFile(path..".txt", system.DocumentsDirectory)
+	local file = io.open(docsPath, "r")
+	if (file~=nil) then
+		local contents = file:read("*a")
+		io.close(file)
+		return(contents)
+	else
+		return("[]")
+	end
+end
 
 require("pocketup.settings")
 

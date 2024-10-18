@@ -1,5 +1,9 @@
 -- базовые настройки проекта
 _G.app = {}
+app.cerberus = {}
+app.scenes = {}
+app.scene = 'null'
+
 _G.plugins = {}
 _G.utils = {}
 
@@ -11,6 +15,11 @@ plugins.widget = require("widget")
 plugins.lfs = require("lfs")
 plugins.physics = require("physics")
 plugins.orientation = require('plugin.orientation')
+
+display.contentWidth = display.actualContentWidth
+--display.contentHeight = display.safeActualContentHeight
+CENTER_X = display.contentCenterX
+CENTER_Y = display.screenOriginY+display.contentHeight/2
 
 app.words = require("pocketup.modules.loadLanguage")
 
@@ -77,7 +86,6 @@ function setFocus(object, id)
 	display.getCurrentStage():setFocus( object, id )
 end
 
-app.cerberus = {}
 app.cerberus.newImage = function(nameFile, directory, x, y)
 	if (directory~=system.DocumentsDirectory) then
 		return display.newImage(nameFile)
@@ -91,12 +99,7 @@ app.nmProject = nil
 app.idScene = nil
 app.idObject = nil
 display.setDefault("background", 4/255, 34/255, 44/255)
-display.contentWidth = display.actualContentWidth
---display.contentHeight = display.safeActualContentHeight
-CENTER_X = display.contentCenterX
-CENTER_Y = display.screenOriginY+display.contentHeight/2
 app.scene = nil
-app.scenes = {}
 
 ---------------------------------------------------
 utils.printText = display.newText({
