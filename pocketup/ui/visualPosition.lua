@@ -23,6 +23,9 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 
 
 	local background = display.newImage(groupScene, app.idScene.."/icon.png", system.DocumentsDirectory)
+	if background == nil then
+		background = display.newRect(groupScene, 0,0,0,0)
+	end
 	if (background~=nil) then
 		background.width, background.height = (settings.orientation=="horizontal" and display.contentHeight or display.contentWidth), (settings.orientation=="horizontal" and display.contentWidth or display.contentHeight)
 		background.x, background.y = CENTER_X, CENTER_Y
