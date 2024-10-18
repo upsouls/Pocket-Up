@@ -93,7 +93,7 @@ funsP["получить проекты"] = function(isSort)
 			{"project_1/scene_1/object_2/sounds.txt","[]"},
 			{"project_1/scene_1/object_3/sounds.txt","[]"},
 			{"project_1/scene_1/object_4/sounds.txt","[]"},
-			{"project_1/options.txt","{\"plugins.orientation\":\"vertical\",\"aspectRatio\":false, \"displayWidth\":720, \"displayHeight\":1420}"},
+			{"project_1/options.txt","{\"orientation\":\"vertical\",\"aspectRatio\":false, \"displayWidth\":720, \"displayHeight\":1420}"},
 			{"project_1/scene_1/functions.txt","[]"},
 			{"project_1/variables.txt","[]"},
 			{"project_1/arrays.txt","[]"},
@@ -138,15 +138,15 @@ funsP["получить сохранение"] = function(path)
 	end
 end
 funsP["записать сохранение"] = function(path, value)
-	print(path)
 	local docsPath = system.pathForFile(path..".txt", system.DocumentsDirectory)
-	local file = io.open(docsPath, "w")
-	file:write(value)
-	io.close(file)
+	pcall(function ()
+		local file = io.open(docsPath, "w")
+		file:write(value)
+		io.close(file)
+	end)
 end
 
 funsP["копировать объект"] = function (pathObject, pathCopy, idProject)
-	print(idTarget)
 	local docsPath = system.pathForFile("", system.DocumentsDirectory)
 	plugins.lfs.mkdir(docsPath.."/"..pathCopy)
 	local tableFiles = {"variables", "arrays"}
@@ -278,13 +278,16 @@ funsP["копировать сцену"] = function(idProject, pathScene, pathCo
 	local objects = plugins.json.decode(funsP["получить сохранение"](pathScene.."/objects"))
 	local idsObjects = {}
 	for i=1, #objects do
-		local counter = plugins.json.decode(funsP["получить сохранение"](idProject.."/counter"))
-		counter[2] = counter[2]+1
-		idsObjects["object"..objects[i][2]] = counter[2]
-		funsP["записать сохранение"](idProject.."/counter", plugins.json.encode(counter))
-		local oldIdObject = objects[i][2]
-		objects[i][2] = counter[2]
-		funsP["копировать объект"](pathScene.."/object_"..oldIdObject, pathCopy.."/object_"..objects[i][2], idProject)
+		if (type(objects[i][2])=="number") then
+			local counter = plugins.json.decode(funsP["получить сохранение"](idProject.."/counter"))
+			counter[2] = counter[2]+1
+			idsObjects["object"..objects[i][2]] = counter[2]
+			funsP["записать сохранение"](idProject.."/counter", plugins.json.encode(counter))
+			local oldIdObject = objects[i][2]
+			objects[i][2] = counter[2]
+			funsP["копировать объект"](pathScene.."/object_"..oldIdObject, pathCopy.."/object_"..objects[i][2], idProject)
+		else
+		end
 	end
 	funsP["записать сохранение"](pathCopy.."/objects", plugins.json.encode(objects))
 

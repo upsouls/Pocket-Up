@@ -48,6 +48,7 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 
 	funBackObjects[1] = function()
 		if (isBackScene == "back") then
+			plugins.physics.setDrawMode('normal')
 			funBack = oldFunBack
 			display.remove(groupScene)
 			arrayShape[2] = plugins.json.encode(tablePositions)

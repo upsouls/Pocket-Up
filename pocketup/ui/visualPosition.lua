@@ -4,7 +4,7 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 	local settings = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/options"))
 	local CENTER_X = CENTER_X
 	local CENTER_Y = CENTER_Y
-	if (settings.plugins.orientation=="horizontal") then
+	if (settings.orientation=="horizontal") then
 		plugins.orientation.lock('landscape')
 		CENTER_X, CENTER_Y = CENTER_Y, CENTER_X
 	end
@@ -24,7 +24,7 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 
 	local background = display.newImage(groupScene, app.idScene.."/icon.png", system.DocumentsDirectory)
 	if (background~=nil) then
-		background.width, background.height = (settings.plugins.orientation=="horizontal" and display.contentHeight or display.contentWidth), (settings.plugins.orientation=="horizontal" and display.contentWidth or display.contentHeight)
+		background.width, background.height = (settings.orientation=="horizontal" and display.contentHeight or display.contentWidth), (settings.orientation=="horizontal" and display.contentWidth or display.contentHeight)
 		background.x, background.y = CENTER_X, CENTER_Y
 		background:toBack()
 		background.fill.effect = "filter.brightness"
@@ -90,8 +90,8 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 		end
 
 		
-		image.xScale, image.yScale = image.xScale*(display.plugins.orientation=="horizontal" and yResize or xResize), image.yScale*(display.plugins.orientation=="horizontal" and xResize or yResize)
-		image.x, image.y = CENTER_X+x*(display.plugins.orientation=="horizontal" and yResize or xResize), CENTER_Y-y*(display.plugins.orientation=="horizontal" and xResize or yResize)
+		image.xScale, image.yScale = image.xScale*(display.orientation=="horizontal" and yResize or xResize), image.yScale*(display.orientation=="horizontal" and xResize or yResize)
+		image.x, image.y = CENTER_X+x*(display.orientation=="horizontal" and yResize or xResize), CENTER_Y-y*(display.orientation=="horizontal" and xResize or yResize)
 		groupScene:insert(image)
 
 		local xr, yr
@@ -107,7 +107,7 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 		end)
 	end
 	
-	local topBarArray = topBar(groupScene, app.words[272], funMenuObjects, nil, funBackObjects, settings.plugins.orientation=="horizontal")
+	local topBarArray = topBar(groupScene, app.words[272], funMenuObjects, nil, funBackObjects, settings.orientation=="horizontal")
 	topBarArray[1].alpha = 0.3
 	topBarArray[4].fill = {
 		type="image",
@@ -121,20 +121,20 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 				local cellsBlockObject = blocksObjects[idBlock].cells
 				if (event.isOk) then
 					if (block[1]=="setPosition") then
-						block[2][1] = {{"number", (image.x-CENTER_X)/(display.plugins.orientation=="horizontal" and yResize or xResize)}}
-						block[2][2] = {{"number", -(image.y-CENTER_Y)/(display.plugins.orientation=="horizontal" and xResize or yResize)}}
-						cellsBlockObject[1][4].text = (image.x-CENTER_X)/(display.plugins.orientation=="horizontal" and yResize or xResize)
-						cellsBlockObject[2][4].text = -(image.y-CENTER_Y)/(display.plugins.orientation=="horizontal" and xResize or yResize)
+						block[2][1] = {{"number", (image.x-CENTER_X)/(display.orientation=="horizontal" and yResize or xResize)}}
+						block[2][2] = {{"number", -(image.y-CENTER_Y)/(display.orientation=="horizontal" and xResize or yResize)}}
+						cellsBlockObject[1][4].text = (image.x-CENTER_X)/(display.orientation=="horizontal" and yResize or xResize)
+						cellsBlockObject[2][4].text = -(image.y-CENTER_Y)/(display.orientation=="horizontal" and xResize or yResize)
 					else
-						block[2][2] = {{"number", (image.x-CENTER_X)/(display.plugins.orientation=="horizontal" and yResize or xResize)}}
-						block[2][3] = {{"number", -(image.y-CENTER_Y)/(display.plugins.orientation=="horizontal" and xResize or yResize)}}
-						cellsBlockObject[2][4].text = (image.x-CENTER_X)/(display.plugins.orientation=="horizontal" and yResize or xResize)
-						cellsBlockObject[3][4].text = -(image.y-CENTER_Y)/(display.plugins.orientation=="horizontal" and xResize or yResize)
+						block[2][2] = {{"number", (image.x-CENTER_X)/(display.orientation=="horizontal" and yResize or xResize)}}
+						block[2][3] = {{"number", -(image.y-CENTER_Y)/(display.orientation=="horizontal" and xResize or yResize)}}
+						cellsBlockObject[2][4].text = (image.x-CENTER_X)/(display.orientation=="horizontal" and yResize or xResize)
+						cellsBlockObject[3][4].text = -(image.y-CENTER_Y)/(display.orientation=="horizontal" and xResize or yResize)
 					end
 					funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 				end
 				display.remove(groupScene)
-				if (settings.plugins.orientation=="horizontal") then
+				if (settings.orientation=="horizontal") then
 					plugins.orientation.lock('portrait')
 				end
 				funBack = oldSceneBack
@@ -148,19 +148,19 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 	funMenuObjects[1] = function()
 		local cellsBlockObject = blocksObjects[idBlock].cells
 		if (block[1]=="setPosition") then
-			block[2][1] = {{"number", (image.x-CENTER_X)/(display.plugins.orientation=="horizontal" and yResize or xResize)}}
-			block[2][2] = {{"number", -(image.y-CENTER_Y)/(display.plugins.orientation=="horizontal" and xResize or yResize)}}
-			cellsBlockObject[1][4].text = (image.x-CENTER_X)/(display.plugins.orientation=="horizontal" and yResize or xResize)
-			cellsBlockObject[2][4].text = -(image.y-CENTER_Y)/(display.plugins.orientation=="horizontal" and xResize or yResize)
+			block[2][1] = {{"number", (image.x-CENTER_X)/(display.orientation=="horizontal" and yResize or xResize)}}
+			block[2][2] = {{"number", -(image.y-CENTER_Y)/(display.orientation=="horizontal" and xResize or yResize)}}
+			cellsBlockObject[1][4].text = (image.x-CENTER_X)/(display.orientation=="horizontal" and yResize or xResize)
+			cellsBlockObject[2][4].text = -(image.y-CENTER_Y)/(display.orientation=="horizontal" and xResize or yResize)
 		else
-			block[2][2] = {{"number", (image.x-CENTER_X)/(display.plugins.orientation=="horizontal" and yResize or xResize)}}
-			block[2][3] = {{"number", -(image.y-CENTER_Y)/(display.plugins.orientation=="horizontal" and xResize or yResize)}}
-			cellsBlockObject[2][4].text = (image.x-CENTER_X)/(display.plugins.orientation=="horizontal" and yResize or xResize)
-			cellsBlockObject[3][4].text = -(image.y-CENTER_Y)/(display.plugins.orientation=="horizontal" and xResize or yResize)
+			block[2][2] = {{"number", (image.x-CENTER_X)/(display.orientation=="horizontal" and yResize or xResize)}}
+			block[2][3] = {{"number", -(image.y-CENTER_Y)/(display.orientation=="horizontal" and xResize or yResize)}}
+			cellsBlockObject[2][4].text = (image.x-CENTER_X)/(display.orientation=="horizontal" and yResize or xResize)
+			cellsBlockObject[3][4].text = -(image.y-CENTER_Y)/(display.orientation=="horizontal" and xResize or yResize)
 		end
 		funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
 		display.remove(groupScene)
-		if (settings.plugins.orientation=="horizontal") then
+		if (settings.orientation=="horizontal") then
 			plugins.orientation.lock('portrait')
 		end
 		funBack = oldSceneBack

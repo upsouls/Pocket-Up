@@ -37,7 +37,7 @@ function scene_categoriesScripts(funAddBlock)
 	scrollProjects.anchorY=0
 	scrollProjects.y = topBarArray[1].y+topBarArray[1].height
 
-	local categories = {{67,"used","orange"}, {68,"event","grown"},{69,"control","orange"},{70,"physic","blue"},{71,"sounds","violet"},{72,"images","green"},{427,"particles","green"},{73,"pen","darkgreen"},{74,"data","red"},{75,"device","gold"},{532,"textFields","green"},{531,"miniScenes","yellow"},{587, "elementInterface", "pink"}}
+	local categories = {{67,"used","orange"}, {68,"event","grown"},{69,"control","orange"},{614,"cycles","orange"},{70,"physic","blue"},{71,"sounds","violet"},{72,"images","green"},{427,"particles","green"},{73,"pen","darkgreen"},{74,"data","red"},{75,"device","gold"},{532,"textFields","green"},{531,"miniScenes","yellow"},{587, "elementInterface", "pink"}, {553, "purchase", "light"}}
 
 	for i=1, #categories do
 		local sheetOptions = {
@@ -55,7 +55,7 @@ function scene_categoriesScripts(funAddBlock)
 		}}
 
 		local sprite = display.newSprite(imageSheet, animates)
-		sprite.width, sprite.height = display.contentWidth, display.contentWidth/4
+		sprite.width, sprite.height = display.contentWidth, display.contentWidth/4/1.25
 		sprite.anchorX = 0
 		sprite.x, sprite.y = 0, sprite.height*(i-0.5)/1.0625
 		groupSceneScroll:insert(sprite)
@@ -64,6 +64,9 @@ function scene_categoriesScripts(funAddBlock)
 			sprite.fill.effect.intensity = 1
 		end
 		local header = display.newText(app.words[categories[i][1]], display.contentWidth/22, sprite.y, nil, app.fontSize0*1.25)
+		if (categories[i][3]=="light") then
+			header:setFillColor(0,0,0)
+		end
 		header.anchorX=0
 		header.alpha = 0.75
 		groupSceneScroll:insert(header)

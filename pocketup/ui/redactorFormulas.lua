@@ -168,7 +168,7 @@ local function touchButtonABC()
 	local input = native.newTextBox(CENTER_X, textPlaceholder.y+textPlaceholder.height, textHeader.width, textHeader.width/10)
 	input.isEditable = true
 	input.hasBackground = false
-	if isSim or utils.isWin then
+	if utils.isSim or utils.isWin then
 	    input:setTextColor(0,0,0)
 	    input.size = 25
 	else

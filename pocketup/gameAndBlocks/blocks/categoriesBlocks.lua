@@ -3,8 +3,11 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
+			{"repeat2",{ {{"number", 1},{"number",0}}, {"function", nameFunction} }},
+			{"repeatIsTrue2",{ {{"number", 1},{"function","<"},{"number",2}}, {"function", nameFunction} }},
+			{"timer2", {{{"number", 5}}, {{"number", 1}},{"function", nameFunction}}},
 			{"deleteWebView", {{{"text", app.words[589]}}}},
-			{"isSensor", {{{"onOrOff", "off"}}}}
+			{"isSensor", {{{"onOrOff", "off"}}}},
 		},
 		["event"]={
 			{"start"},
@@ -55,6 +58,17 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"startClone"},
 			{"clone",{{"objects",nil}}},
 			{"deleteClone"},
+		},
+		["cycles"]={
+			{"timer2", {{{"number", 5}}, {{"number", 1}},{"function", nameFunction}}},
+			{"repeat2",{ {{"number", 1},{"number",0}}, {"function", nameFunction} }},
+			{"repeatIsTrue2",{ {{"number", 1},{"function","<"},{"number",2}}, {"function", nameFunction} }},
+			{"timer", {{{"number", 5}}, {{"number", 1}}}},
+			{"cycleForever"},
+			{"repeat",{ {{"number", 1},{"number",0}} }},
+			{"repeatIsTrue",{ {{"number", 1},{"function","<"},{"number",2}} }},
+			{"for",{ {{"number", 1}}, {{"number",1},{"number",0}}, {localityVariable,nameVariable}}},
+			{"foreach",{ {localityArray, nameArray}, {localityVariable,nameVariable}}},
 		},
 		["physic"]={
 			{"setPosition",{ {{"number", 100}}, {{"number", 200}} }},
@@ -238,6 +252,9 @@ end
 
 
 premBlocks = {
+}
+paidBlocks = {
+	
 }
 
 

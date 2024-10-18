@@ -17,7 +17,7 @@ app.cerberus.newBannerQuestion = function(header, funEditingEnd, no, yes)
 	local CENTER_Y = CENTER_Y
 	if (app.scene=="visual_position") then
 	    local settings = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/options"))
-	    if (settings.plugins.orientation=="horizontal") then
+	    if (settings.orientation=="horizontal") then
 	        CENTER_X, CENTER_Y = CENTER_Y, CENTER_X
 	    end
 	    settings=nil

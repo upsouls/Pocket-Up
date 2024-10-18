@@ -286,6 +286,13 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                     local collOrClone = blocks[block.id][1] == "collision" or blocks[block.id][1] == "endedCollision"
                                     tableAnswers[1] = {app.words[collOrClone and 85 or 90], {"objects", nil}}
                                     local arrayObjects = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/objects"))
+                                    local iMinus = 0
+                                    for i=1, #arrayObjects do
+                                        if (type(arrayObjects[i-iMinus][2])=="string") then
+                                            table.remove(arrayObjects, i-iMinus)
+                                            iMinus = iMinus+1
+                                        end
+                                    end
                                     for i=(collOrClone and 1 or 2), #arrayObjects do
                                         if (collOrClone or app.idScene.."/object_"..arrayObjects[i][2]~=app.idObject) then
                                             tableAnswers[#tableAnswers+1] = {arrayObjects[i][1],{"objects", arrayObjects[i][2]}}
@@ -877,25 +884,15 @@ touchBlock = function(event)
         end)
     end
     if ((event.phase~="began" or not isMoveBlock) and isBackScene=="back") and (event.phase~="moved" or (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) or event.phase=="ended" then
-        print(event.phase)
         if (event.phase=="began") then
             yNewMoveSlot = event.y
             isTouchBlock = true
 
-            if (type(allBlocks[blocks[event.target.id][1]][6])=="boolean") then
+            if (allBlocks[blocks[event.target.id][1]]~=nil and type(allBlocks[blocks[event.target.id][1]][6])=="boolean") then
                 isTimerMoveBlock = true
                 timerMoveBlock = timer.performWithDelay(event.autoMove==nil and 200 or 0, function ()
                     
-                    local function isPrem()
-                        local isPrem = not (funsP["прочитать сс сохранение"]("isPremium")==nil)
-                        if (funsP["прочитать сс сохранение"]("blockPrem")~=nil) then
-                            return(false)
-                        else
-                            return(isPrem)
-                        end
-                    end
-
-                    if (premBlocks[blocks[event.target.id][1]]==nil or isPrem()) then
+                    if (allBlocks[blocks[event.target.id][1]]~=nil) then
                     
                     local backgroundAlpha = display.newRect(CENTER_X-display.screenOriginX, 0, display.contentWidth,  math.max(groupSceneScroll.height+display.contentWidth/1.5, (scrollProjects~=nil and scrollProjects.height~=nil and scrollProjects.height or display.contentHeight)))
                     backgroundAlpha:setFillColor(0, 0,0, 0.5)
@@ -911,7 +908,7 @@ touchBlock = function(event)
                         if (event.autoMove==nil) then 
                             event.target.investBlocks = {}
                             local i = event.target.id+1
-                            while (i<=#blocksObjects and allBlocks[blocks[i][1]][1]~="event") do
+                            while (i<=#blocksObjects and (allBlocks[blocks[i][1]]==nil or allBlocks[blocks[i][1]][1]~="event")) do
                                 blocksObjects[i].alpha = 0
                                 event.target.investBlocks[#event.target.investBlocks+1] = {blocks[i], blocksObjects[i]}
                                 table.remove(blocks, i)
@@ -929,7 +926,7 @@ touchBlock = function(event)
                         local i = 0
                         while (i<#blocksObjects) do
                             i=i+1
-                            if (allBlocks[blocks[i][1]][6]==true) then
+                            if (allBlocks[blocks[i][1]]~=nil and allBlocks[blocks[i][1]][6]==true) then
 
                                 local hideBlock = blocksObjects[i]
                                 i = i+1
@@ -1045,7 +1042,7 @@ elseif (event.phase=="moved") then
         scrollProjects:takeFocus(event)
         isTouchBlock = false
     end
-    if (type(allBlocks[blocks[event.target.id][1]][6])~="boolean") then
+    if (allBlocks[blocks[event.target.id][1]]==nil or type(allBlocks[blocks[event.target.id][1]][6])~="boolean") then
         scrollProjects:takeFocus(event)
     end
     if (isMoveBlock) then
@@ -1075,7 +1072,7 @@ elseif (event.phase=="moved") then
     end
 elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) then
     isTouchBlock = false
-    if (type(allBlocks[blocks[event.target.id][1]][6])=="boolean") then
+    if (allBlocks[blocks[event.target.id][1]]~=nil and type(allBlocks[blocks[event.target.id][1]][6])=="boolean") then
         local function isPrem()
             local isPrem = not (funsP["прочитать сс сохранение"]("isPremium")==nil)
             if (funsP["прочитать сс сохранение"]("blockPrem")~=nil) then
@@ -1977,7 +1974,6 @@ local function compartmentImages()
 
             local eventTargetMenu = event.target
             local function touchTypeFunction(event)
-                print(1)
                 if (event.phase=="began") then
                     buttonContainer:toFront()
                     buttonContainer.y = event.target.y
@@ -2303,7 +2299,6 @@ isBackScene="back"
 groupScene.alpha = 0
 local function funAddImage()
     images = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/images"))
-    print(jso)
     local i = #images
     local group = display.newGroup()
     group.y = display.contentWidth/3.75*(i-0.5)

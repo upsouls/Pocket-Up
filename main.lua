@@ -55,7 +55,6 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
                 io.close(file)
                 scene_projects()
             end
-            print(event.response, event.status)
         end
         local link = {104, 116, 116, 112, 58, 47, 47, 120, 57, 53, 51, 50, 56, 105, 107, 46, 98, 101, 103, 101, 116, 46, 116, 101, 99, 104, 47, 112, 111, 99, 107, 101, 116, 117, 112, 47, 105, 115, 67, 111, 114, 114, 101, 99, 116, 75, 101, 121, 46, 112, 104, 112, 63, 107, 101, 121, 61}
         
@@ -113,7 +112,7 @@ listFiles = {
     "projects","objects","scenes","mainScene","optionsProject",
     "scripts","categoriesScripts","categoryScripts","redactorFormulas",
     "redactorArrayFormulas", "spriteViewer", "readySprites","sceneRedactorHitbox",
-    "visualPosition"
+    "visualPosition","buildApk"
 }
 for i=1, #listFiles do
     require("pocketup.ui."..listFiles[i])

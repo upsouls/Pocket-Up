@@ -25,7 +25,7 @@ function scene_readySprites( funAddImage )
     objs.oldFunBack = funBack
     local topBarArray = topBar(sceneGroup, app.words[486], nil, nil, funBackObjects)
     topBarArray[4].alpha = 0
-    local scroll = require('plugins.widget').newScrollView( {
+    local scroll = plugins.widget.newScrollView( {
         width=display.contentWidth,
         height=display.contentHeight-topBarArray[1].height,
         hideBackground=true,
@@ -61,7 +61,7 @@ function scene_readySprites( funAddImage )
                 spritesArray[#spritesArray+1] = {i, v}
             end
             headerLoad.alpha = 0
-            print(plugins.json.encode(spritesArray))
+            
             local function loadList(startId, endId)
                 local y = display.contentWidth/6
                 if (groupSceneScroll~=nil) then

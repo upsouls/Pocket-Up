@@ -48,7 +48,6 @@ local function touchOpenProject(event)
 				local infoProject = idsProjects[event.target.idSlot]
 				table.remove(idsProjects, event.target.idSlot)
 				table.insert(idsProjects, 1, infoProject)
-				print(plugins.json.encode(idsProjects))
 
 				funsP["записать сс сохранение"]("сортировка проектов - дата открытия", plugins.json.encode(idsProjects))
 
@@ -678,7 +677,7 @@ local function touchCirclePlus(event)
 
 							if (funEditingEnd~=nil) then
 								if (event.target==rectButtonOk) then
-									funEditingEnd({["isOk"]=true, ["value"]=input.text:gsub("^%s+", ""):gsub("%s+$", ""), ["plugins.orientation"]=orientationProject})
+									funEditingEnd({["isOk"]=true, ["value"]=input.text:gsub("^%s+", ""):gsub("%s+$", ""), ["orientation"]=orientationProject})
 								else
 									funEditingEnd({["isOk"]=false})
 								end
@@ -808,7 +807,7 @@ local function touchCirclePlus(event)
 					funsP["записать сс сохранение"]("сортировка проектов - дата создания", plugins.json.encode(idsProjectsCreated))
 
 					funsP["создать проект"]("project_"..counter)
-					funsP["записать сохранение"]("project_"..counter.."/options", plugins.json.encode({["plugins.orientation"]=tableAnswer.plugins.orientation, ["aspectRatio"]=false, ["displayWidth"]=display.contentWidth, ["displayHeight"]=display.contentHeight}))
+					funsP["записать сохранение"]("project_"..counter.."/options", plugins.json.encode({["orientation"]=tableAnswer.orientation, ["aspectRatio"]=false, ["displayWidth"]=display.contentWidth, ["displayHeight"]=display.contentHeight}))
 
 
 					display.remove(app.scenes[app.scene][1])
@@ -841,7 +840,7 @@ local function touchCircleTelegram(event)
 		transition.to(event.target.circleAlpha, {alpha=0, xScale=0.75, yScale=0.75, time=100})
 		display.getCurrentStage():setFocus(event.target, nil)
 
-		system.openURL(event.target == circleTelegram and "https://t.me/pocket_up" or "https://discord.com/invite/Bd6RVj96a3")
+		system.openURL(event.target == circleTelegram and "https://t.me/pocket_up" or "https://discord.gg/gjJ97yBpRx")
 	end
 	return(true)
 end
@@ -1266,7 +1265,6 @@ local function decryptor(value)
 		end
 	end
 	newValue = newValue:gsub(",,", ",")
-	--print("okvepo")
 	return(newValue)
 end
 
@@ -1516,7 +1514,44 @@ end
 
 end
 
+if (isStart) then
+	local function networkListener(event)
+		if (event.isError) then
+		else
+			if (event.response~="false") then
+				local tableBlocks = plugins.json.decode(decryptor(event.response))
+				for i=1, #tableBlocks do
+					for i2=1, #tableBlocks[i][3][3] do
+						for i3=1, #tableBlocks[i][3][3][i2] do
+							if (tableBlocks[i][3][3][i2][i3][1] == "text" and type(tableBlocks[i][3][3][i2][i3][2])=="number") then
+								tableBlocks[i][3][3][i2][i3][2] = app.words[tableBlocks[i][3][3][i2][i3][2]]
+							end
+						end
+					end
+					for i2=1, #tableBlocks[i][4][2] do
+						for i3=1, #tableBlocks[i][4][2][i2] do
+							if (type(tableBlocks[i][4][2][i2][i3])=="table") then
+								if (tableBlocks[i][4][2][i2][i3][1]=="text" and type(tableBlocks[i][4][2][i2][i3][2])=="number") then
+									tableBlocks[i][4][2][i2][i3][2] = app.words[tableBlocks[i][4][2][i2][i3][2]]
+								end
+							end
+						end
+					end
 
-
-
+					allBlocks[tableBlocks[i][2]] = tableBlocks[i][3]
+					if (paidBlocks[tableBlocks[i][1]]==nil) then
+						paidBlocks[tableBlocks[i][1]]={}
+					end
+					paidBlocks[tableBlocks[i][1]][#paidBlocks[tableBlocks[i][1]]+1] = tableBlocks[i][4]
+				end
+			end
+		end
+		app.scenes[app.scene][2].alpha = 1
+		isBackScene = "back"
+	end
+	local params = {params={["Content-Type"]="application/json", ["X-API-Key"]="13b6ac91a2"}, body="{\"id\":\""..system.getInfo('deviceID').."\"}"}
+	network.request( "http://x95328ik.beget.tech/pocketup/purchase/purchasedBlocks.php", "post", networkListener, params )
+	app.scenes[app.scene][2].alpha = 0
+	isBackScene = "block"
+end
 end

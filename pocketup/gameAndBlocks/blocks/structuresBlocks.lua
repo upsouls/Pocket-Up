@@ -220,6 +220,9 @@ allBlocks = {
 	["reloadWebView"]={"block", "blocks/block_pink_2.png", {{{"text", app.words[604]}}, {{"text", app.words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["deleteWebView"]={"block", "blocks/block_pink_2.png", {{{"text", app.words[605]}}, {{"text", app.words[583]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["isSensor"]={"block", "blocks/block_blue_2.png", {{{"text", app.words[606]}}, {{"onOrOff"}}}, 109, 142, false},
+	["timer2"]={'block', 'blocks/block_orange_3.png',{{{"text", app.words[437]}, {"cell", nil, 1.5}, {"text", app.words[103]}}, {{"text", app.words[390]}, {"cell", nil, 1.5}, {"text", app.words[93]}}, {{"text", app.words[613]}}, {{"function"}}}, 109, 188, true},
+	["repeat2"]={"block", "blocks/block_orange_2.png", { {{"text",app.words[102]}, {"cell",nil,1.5}, {"text",app.words[103]}}, {{"text", app.words[613]}}, {{"function"}} }, 109, 142, true},
+	["repeatIsTrue2"]={"block", "blocks/block_orange_2.png", { {{"text",app.words[105]}, {"cell",nil,1.5}, {"text",app.words[101]}}, {{"text", app.words[613]}}, {{"function"}} }, 109, 142, true},
 }
 
 
@@ -233,5 +236,8 @@ additionallyBlocks = {
     ["for"]={ {"endFor",{},"on"} },
     ["foreach"]={ {"endForeach",{},"on"} },
     ["timer"]={ {"endTimer",{},"on"} },
-    ["waitIfTrue"]={ {"endWait",{},"on"} }
+    ["timer2"]={ {"endTimer",{},"on"} },
+    ["waitIfTrue"]={ {"endWait",{},"on"} },
+    ["repeat2"]={ {"endRepeat",{},"on"} },
+    ["repeatIsTrue2"]={ {"endRepeat",{},"on"} },
 }

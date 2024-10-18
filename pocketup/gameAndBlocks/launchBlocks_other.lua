@@ -3,6 +3,16 @@ timer.new = timer.performWithDelay
 timer.GameNew = function (time, rep, listener)
     return timer.new(time, listener, rep)
 end
+timer.GameNew2 = function (time, rep, onComplete, listener)
+    local i = 0
+    return timer.new(time, function()
+        listener()
+        i = i+1
+        if (i==rep) then
+            onComplete()
+        end
+    end, rep)
+end
 local max_fors = 0
 local nameBlock
 local lua
@@ -24,65 +34,105 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
     end
     nameBlock = infoBlock[1]--args[i] = make_all_formulas(infoBlock[2][i], object)
     lua = ''
-    if nameBlock == '' then
-    elseif nameBlock == 'wait' then
-        local time = make_all_formulas(infoBlock[2][1], object)
-if wait_type == 'wait' then
-    lua = lua ..
-    'local name = \'Timer'..index..'_'..obj_id..'\'..\'_\'..Timers_max\
-    if not Timers[name] then\
-    timer.new('..time..'*1000, function()\
-    Timers[name] = nil\
-    end)\
-    Timers[name] = timer.new('..time..'*1000, function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
-    elseif wait_type == 'repeat' then
-lua = lua ..
-'local name = \'Timer'..index..'_'..obj_id..'\'..\'_\'..Timers_max\
-if not Timers[name] then\
-pcall(function()timer.pause(_repeat)end)\
-timer.new('..time..'*1000, function()\
-Timers[name] = nil\
-pcall(function()timer.resume(_repeat)end)\
-end)\
-Timers[name] = timer.new('..
-time..'*1000, function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
-wait_type = 'wait'
-end
-local numbers = wait_table['block:'..index] or 1
-wait_end = true
-if level_blocks[scene_id][obj_id][index] == 1 then
-    wait_table.event = wait_table.event + 1
-else
-    for i = index+1, #blocks, 1 do
-        if blocks[i][3] ~= 'off' then
-            local block = blocks[i]
-            local nameBlock = block[1]
-            if block[3] == 'off' then
-                nameBlock = ''
-            end
-            if nameBlock == 'wait' and
-            level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
-                numbers = numbers + 1
-                wait_table['block:'..i] = numbers
-            end
-            local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
-            'endFor','endForeach','endCycleForever','else','endWait'}
-            local _break = false
-            for i2, value in ipairs(table_end) do
-                if nameBlock == value and level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
-                    wait_table['block:'..i] = numbers
-                    wait_end = false
-                    wait_table['_ends'] = wait_table['_ends'] + 1
+    local waitInsert = function (time)
+        local endWait = true
+        for i = index+1, #blocks, 1 do
+            if blocks[i][3] ~= 'off' then
+                local block = blocks[i]
+                local nameBlock = block[1]
+                if block[3] == 'off' then
+                    nameBlock = ''
+                end
+                local _break = false
+                if nameBlock == 'wait' or nameBlock == 'transitionPosition' and
+                level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
                     _break = true
+                    endWait = false
+                end
+                local table_end = {'endIf','endRepeat','ifElse (2)',
+                'endFor','endForeach','endCycleForever','else','endWait'}
+                local _break = false
+                for i2, value in ipairs(table_end) do
+                    if nameBlock == value and level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
+                        _break = true
+                        break
+                    end
+                end
+                if _break then
                     break
                 end
             end
-            if _break then
-                break
+        end
+        local oldType = wait_type
+        if wait_type == 'wait' then
+            lua = lua..
+            "local name = 'wait"..index.."_"..obj_id.."_"..scene_id.."_'.. Timers_max\
+            if not Timers[name] then\
+                timer.new("..time.."*1000, function()\
+                    Timers[name] = nil\
+                end)\
+            Timers[name] = timer.new("..time.."*1000, function()\
+                    if not (target ~= nil and target.x ~= nil) then\
+                        pcall(function() timer.cancel(Timers[name]) end)\
+                        return true\
+                    end"
+            elseif wait_type == 'repeat' then
+            lua = lua..
+            "local name = 'wait"..index.."_"..obj_id.."_"..scene_id.."_'.. Timers_max\
+            if not Timers[name] then\
+                pcall(function() timer.pause(_repeat) end)\
+                timer.new("..time.."*1000, function()\
+                    Timers[name] = nil\
+                    "..(endWait and "pcall(function() timer.resume(_repeat) end)" or "").."\
+                end)\
+            Timers[name] = timer.new("..time.."*1000, function()\
+                    if not (target ~= nil and target.x ~= nil) then\
+                        pcall(function() timer.cancel(Timers[name]) end)\
+                        return true\
+                    end"
+            wait_type = 'wait'
+        end
+        local numbers = wait_table['block:'..index] or 1
+        wait_end = true
+        if level_blocks[scene_id][obj_id][index] == 1 then
+            wait_table.event = wait_table.event + 1
+        else
+            for i = index+1, #blocks, 1 do
+                if blocks[i][3] ~= 'off' then
+                    local block = blocks[i]
+                    local nameBlock = block[1]
+                    if block[3] == 'off' then
+                        nameBlock = ''
+                    end
+                    if nameBlock == 'wait' or nameBlock == 'transitionPosition' and
+                    level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
+                        numbers = numbers + 1
+                        wait_table['block:'..i] = numbers
+                        wait_type = oldType
+                    end
+                    local table_end = {'endIf','endRepeat','ifElse (2)',
+                    'endFor','endForeach','endCycleForever','else','endWait'}
+                    local _break = false
+                    for i2, value in ipairs(table_end) do
+                        if nameBlock == value and level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
+                            wait_table['block:'..i] = numbers
+                            wait_end = false
+                            wait_table['_ends'] = wait_table['_ends'] + 1
+                            _break = true
+                            break
+                        end
+                    end
+                    if _break then
+                        break
+                    end
+                end
             end
         end
     end
-end
+    if nameBlock == '' then
+    elseif nameBlock == 'wait' then
+        local time = make_all_formulas(infoBlock[2][1], object)
+        waitInsert(time)
     elseif nameBlock == 'setSize' or nameBlock == 'editSize' then
         local formula = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
@@ -96,6 +146,18 @@ end
         add_pcall()
         lua = lua..'target.x = '..x..'\n'..'target.y = -('..y..')\n'
         end_pcall()
+    elseif nameBlock == 'transitionPosition' then
+        local time = make_all_formulas(infoBlock[2][1], object)
+        local x = make_all_formulas(infoBlock[2][2], object)
+        local y = make_all_formulas(infoBlock[2][3], object)
+
+        add_pcall()
+        lua = lua..
+        "transition.to(target, {time="..time.."*1000,\
+        x="..x..", y= -"..y.."})"
+        end_pcall()
+        lua = lua.."\n"
+        waitInsert(time)
     elseif nameBlock == 'setPositionX' then
         add_pcall()
         local x = make_all_formulas(infoBlock[2][1], object)
@@ -105,14 +167,6 @@ end
         add_pcall()
         local y = make_all_formulas(infoBlock[2][1], object)
         lua = lua..'target.y = -('..y..')'
-        end_pcall()
-    elseif nameBlock == 'transitionPosition' then
-        local time = make_all_formulas(infoBlock[2][1], object)
-        local x = make_all_formulas(infoBlock[2][2], object)
-        local y = make_all_formulas(infoBlock[2][3], object)
-    
-        add_pcall()
-        lua = lua..'transition.to(target, {time=('.. time .. ')*1000, x=('..x..'), y=-('..y..')})\n'
         end_pcall()
     -- elseif nameBlock == 'lua' then
     --     local code = make_all_formulas(infoBlock[2][1], object)
@@ -211,8 +265,6 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         add_pcall()
         lua = lua..'_repeat = timer.GameNew(0,'..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend\n'
     elseif nameBlock == 'endRepeat' then
-        print(wait_table['block:'..index])
-        print(99999)
                 if wait_table['block:'..index] then
             for i = 1, wait_table['block:'..index], 1 do
                 lua = lua .. 'end)\nend\n'
@@ -222,7 +274,7 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         end_pcall()
     elseif nameBlock == 'setVariable' and infoBlock[2][1][2]~=nil then
         local value = make_all_formulas(infoBlock[2][2], object)
-        --add_pcall()
+        add_pcall()
         if infoBlock[2][1][1] == 'globalVariable' then
             lua = lua..'var_'..infoBlock[2][1][2]..' = '..value..'\n'
             lua = lua..'if varText_'..infoBlock[2][1][2]..' then\n varText_'..infoBlock[2][1][2]..'.text = type(var_'..infoBlock[2][1][2]..')=="boolean" and (var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(var_'..infoBlock[2][1][2]..')=="table" and encodeList(var_'..infoBlock[2][1][2]..') or var_'..infoBlock[2][1][2]..'\nend'
@@ -230,7 +282,7 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
             lua = lua..'target.var_'..infoBlock[2][1][2]..' = '..value..'\n'
             lua = lua..'if target.varText_'..infoBlock[2][1][2]..' then\n target.varText_'..infoBlock[2][1][2]..'.text = type(target.var_'..infoBlock[2][1][2]..')=="boolean" and (target.var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(target.var_'..infoBlock[2][1][2]..')=="table" and encodeList(target.var_'..infoBlock[2][1][2]..') or target.var_'..infoBlock[2][1][2]..'\nend'
         end
-        --end_pcall()
+        end_pcall()
     elseif nameBlock == 'editVariable' and infoBlock[2][1][2]~=nil then
         local value = make_all_formulas(infoBlock[2][2], object)
         add_pcall()
@@ -319,10 +371,10 @@ end]]
         --end_pcall()
     elseif nameBlock == 'deleteClone' then
         add_pcall()
-        lua = lua..'if true then pcall(function() timer.cancel(_repeat) end) return true end'
+        lua = lua.."if (target) then\ntable.remove(target.parent_obj.clones, target.idClone)\nfor i=1, #target.parent_obj.clones do\ntarget.parent_obj.clones[i].idClone = i\nend\ndisplay.remove(target)\n\nend\n"
         end_pcall()
         add_pcall()
-        lua = lua.."if (target) then\ntable.remove(target.parent_obj.clones, target.idClone)\nfor i=1, #target.parent_obj.clones do\ntarget.parent_obj.clones[i].idClone = i\nend\ndisplay.remove(target)\n\nend\n"
+        lua = lua.."if true then pcall(function() timer.cancel(_repeat) end) return true end"
         end_pcall()
     elseif (nameBlock == 'broadcastFunction' and infoBlock[2][1][2]~=nil) then
         add_pcall()
@@ -633,7 +685,7 @@ end'
     elseif nameBlock == 'showVariable' and infoBlock[2][1][2]~=nil then
         local x = make_all_formulas(infoBlock[2][2], object)
         local y = make_all_formulas(infoBlock[2][3], object)
-        --add_pcall()
+        add_pcall()
         if infoBlock[2][1][1] == 'globalVariable' then
             lua = lua..'if (varText_'..infoBlock[2][1][2]..'~=nil and varText_'..infoBlock[2][1][2]..'.text~=nil) then\ndisplay.remove(varText_'..infoBlock[2][1][2]..')\nend\nvarText_'..infoBlock[2][1][2]..' = display.newText(type(var_'..infoBlock[2][1][2]..')=="boolean" and (var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(var_'..infoBlock[2][1][2]..')=="table" and encodeList(var_'..infoBlock[2][1][2]..') or var_'..infoBlock[2][1][2]..', '..x..', -'..y..', "fonts/font_1", 30)\n'
             lua = lua..'varText_'..infoBlock[2][1][2]..':setFillColor(0, 0, 0)'
@@ -643,7 +695,7 @@ end'
             lua = lua..'target.varText_'..infoBlock[2][1][2]..':setFillColor(0, 0, 0)'
             lua = lua.."\ncameraGroup:insert(target.varText_"..infoBlock[2][1][2]..")"
         end
-        --end_pcall()
+        end_pcall()
     elseif nameBlock == 'showVariable2' and infoBlock[2][1][2]~=nil then
         local x = make_all_formulas(infoBlock[2][2], object)
         local y = make_all_formulas(infoBlock[2][3], object)
@@ -729,13 +781,13 @@ end'
     elseif nameBlock=="saveArray" and infoBlock[2][1][2]~=nil then
         add_pcall()
         lua = lua..'local arrayArrays = plugins.json.decode(funsP["получить сохранение"]("'..(infoBlock[2][1][1]=="globalArray" and app.idProject or obj_path)..'/arrays"))'
-        lua = lua..'\nfor i=1, #arrayArrays do\nif (arrayArrays[i][1]=='..infoBlock[2][1][2]..') then\narrayArrays[i][3] = '..(infoBlock[2][1][1]=="globalArray" and '' or 'target.')..'list_'..infoBlock[2][1][2]..'\nfunsP["записать сохранение"]("'..(infoBlock[2][1][1]=="globalArray" and app.idProject or obj_path)..'/arrays", plugins.json.encode(arrayArrays))\nbreak\nend\nend\nprint(plugins.json.encode(list_1))'
+        lua = lua..'\nfor i=1, #arrayArrays do\nif (arrayArrays[i][1]=='..infoBlock[2][1][2]..') then\narrayArrays[i][3] = '..(infoBlock[2][1][1]=="globalArray" and '' or 'target.')..'list_'..infoBlock[2][1][2]..'\nfunsP["записать сохранение"]("'..(infoBlock[2][1][1]=="globalArray" and app.idProject or obj_path)..'/arrays", plugins.json.encode(arrayArrays))\nbreak\nend\nend\n'
         end_pcall()
     elseif nameBlock=="readArray" and infoBlock[2][1][2]~=nil then
-        --add_pcall()
+        add_pcall()
         lua = lua..'local arrayArrays = plugins.json.decode(funsP["получить сохранение"]("'..(infoBlock[2][1][1]=="globalArray" and app.idProject or obj_path)..'/arrays"))'
         lua = lua..'\nfor i=1, #arrayArrays do\nif (arrayArrays[i][1]=='..infoBlock[2][1][2]..') then\n'..(infoBlock[2][1][1]=="globalArray" and '' or 'target.')..'list_'..infoBlock[2][1][2]..'= arrayArrays[i][3]~=nil and arrayArrays[i][3] or {}\nbreak\nend\nend'
-        --end_pcall()
+        end_pcall()
     elseif nameBlock=="columnStorageToArray" and infoBlock[2][3][2]~=nil then
         add_pcall()
         lua = lua.."local allArraysValues = plugins.json.decode('[\"'.."..make_all_formulas(infoBlock[2][2], object)..":gsub('\"','\\\\\"'):gsub('\\r\\n','\",\"'):gsub('\\n','\",\"')..'\"]')"
@@ -780,12 +832,10 @@ end'
     -- tableFeathersOptions[3] - цвет g
     -- tableFeathersOptions[4] - цвет b
         add_pcall()
-        lua = lua.."if (target.isPen==nil) then\ntarget.isPen = true\nlocal line = display.newLine(target.x, target.y, target.x, target.y+1)\nline:setStrokeColor(tableFeathersOptions[2]/255,tableFeathersOptions[3]/255,tableFeathersOptions[4]/255,1)\nline.strokeWidth = tableFeathersOptions[1]\nstampsGroup:insert(line)\nlocal timerPen\ntimerPen = timer.new(50, function()\nif (target.isPen and line.x) then\nif (line.oldX~=target.x or line.oldY~=target.y) then\nline:append(target.x, target.y)\nline.oldX, line.oldY = target.x, target.y\nend\nelseif (line.x == nil) then\nprint('dddddddddddddddddddddddddddddddddd')\nline = display.newLine(target.x, target.y, target.x, target.y)\nline:setStrokeColor(tableFeathersOptions[2],tableFeathersOptions[3],tableFeathersOptions[4],1)\nline.strokeWidth = tableFeathersOptions[1]\ntable.insert(tableFeathers, #tableFeathers+1, line)\nstampsGroup:insert(line)\nelse\ntimer.cancel(timerPen)\nend\nend,0)\ntable.insert(tableFeathers, #tableFeathers+1, line)\nend"
+        lua = lua.."if (target.isPen==nil) then\ntarget.isPen = true\nlocal line = display.newLine(target.x, target.y, target.x, target.y+1)\nline:setStrokeColor(tableFeathersOptions[2]/255,tableFeathersOptions[3]/255,tableFeathersOptions[4]/255,1)\nline.strokeWidth = tableFeathersOptions[1]\nstampsGroup:insert(line)\nlocal timerPen\ntimerPen = timer.new(50, function()\nif (target.isPen and line.x) then\nif (line.oldX~=target.x or line.oldY~=target.y) then\nline:append(target.x, target.y)\nline.oldX, line.oldY = target.x, target.y\nend\nelseif (line.x == nil) then\nline = display.newLine(target.x, target.y, target.x, target.y)\nline:setStrokeColor(tableFeathersOptions[2],tableFeathersOptions[3],tableFeathersOptions[4],1)\nline.strokeWidth = tableFeathersOptions[1]\ntable.insert(tableFeathers, #tableFeathers+1, line)\nstampsGroup:insert(line)\nelse\ntimer.cancel(timerPen)\nend\nend,0)\ntable.insert(tableFeathers, #tableFeathers+1, line)\nend"
         end_pcall()
     elseif nameBlock == 'raisePen' then
-        add_pcall()
         lua = lua.."target.isPen=nil"
-        end_pcall()
     elseif nameBlock == 'broadcastFun>allObjects' and infoBlock[2][1][2]~=nil then
         add_pcall()
         lua = lua.."local function broadcastFunction(nameFunction)\nfor key, value in pairs(objects) do\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nend\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][1][2].."')"
@@ -903,7 +953,7 @@ end'
         end_pcall()
     elseif nameBlock == 'setGravityScale' then
         add_pcall()
-        lua = lua.."local v = "..make_all_formulas(infoBlock[2][1], object).."\ntarget.gravityScale = type(v)=='number' and v or 0"
+        lua = lua.."local v = "..make_all_formulas(infoBlock[2][1], object).."\ntarget.gravityScale = tonumber(v, 0)"
         end_pcall()
     elseif nameBlock == 'setAnchorVariable' and infoBlock[2][1][2]~=nil then
         add_pcall()

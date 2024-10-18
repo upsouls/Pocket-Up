@@ -29,7 +29,6 @@ function scene_scenes(idProject, nameProjectScenes)
 	utils.select_Scroll = scrollProjects
 
 	local scenes = plugins.json.decode(funsP["получить сохранение"](idProject.."/scenes"))
-	print("работает")
 	local arraySlots = {}
 
 	local isMoveSlot = false

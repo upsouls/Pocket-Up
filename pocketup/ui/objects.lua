@@ -533,7 +533,6 @@ if (#plugins.json.decode(funsP["получить сохранение"](pathObje
 	containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
 
 	local pathMyObjectImage = pathObject.."_"..scenes[1][2].."/image_"..plugins.json.decode(funsP["получить сохранение"](pathObject.."_"..scenes[1][2].."/images"))[1][2]..".png"
-	print(pathMyObjectImage)
 	local imageIcon = display.newImage(pathMyObjectImage, system.DocumentsDirectory)
 	containerIcon:insert(imageIcon)
 	strokeIcon:toFront()

@@ -335,24 +335,14 @@ local function funTouchOption(event)
 
         if (event.target==buttonPublicProject) then
 -- СДЕЛАТЬ ПУБЛИКАЦИЮ ПРОЕ
--- СДЕЛАТЬ ПУБЛИКАЦИЮ ПРОЕ
--- СДЕЛАТЬ ПУБЛИКАЦИЮ ПРОЕ
--- СДЕЛАТЬ ПУБЛИКАЦИЮ ПРОЕ
--- СДЕЛАТЬ ПУБЛИКАЦИЮ ПРОЕ
--- СДЕЛАТЬ ПУБЛИКАЦИЮ ПРОЕ
 funsP["вызвать уведомление"](app.words[51])
 elseif (event.target==buttonExportProject) then
     local function onCompleteExport()
         funsP["вызвать уведомление"](app.words[53])
     end
-    print(allProjects[idSlotProject][1])
     funsP["экспортировать проект"](idProject, allProjects[idSlotProject][1], onCompleteExport)
     funsP["вызвать уведомление"](app.words[52])
 elseif (event.target==buttonMoreDetails) then
---СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
---СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
---СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
---СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
 --СДЕЛАТЬ СЦЕНУ ПОДРОБНЕЕ
 funsP["вызвать уведомление"](app.words[51])
 end
