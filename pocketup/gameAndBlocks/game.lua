@@ -105,6 +105,9 @@ function scene_run_game(typeBack, paramsBack)
     wait_table = {_ends = 0, event = 0}
     local options = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/options'))
     
+    if utils.isWin or utils.isSim then
+        options.orientation = "vertical"
+    end
     renameFormulas.displayWidth, renameFormulas.displayHeight, renameFormulas.displayActualWidth, renameFormulas.displayActualHeight = "("..tostring(options.orientation == "vertical" and options.displayWidth or options.displayHeight)..")", "("..tostring(options.orientation == "vertical" and options.displayHeight or options.displayWidth)..")", "("..tostring(options.orientation == "vertical" and display.actualContentWidth or display.actualContentHeight)..")", "("..tostring(options.orientation == "vertical" and display.actualContentHeight or display.actualContentWidth)..")"
 
     local isScriptsBack = false
