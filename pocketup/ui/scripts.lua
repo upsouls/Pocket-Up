@@ -367,7 +367,6 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                     local myIdFunction = blocks[block.id][2][event.target.idParameter][2]
                                                     for i=1, #arrayFunctions do
                                                         if (arrayFunctions[i][1]==myIdFunction) then
-
                                                             arrayFunctions[i][2] = answer.value
                                                             break
                                                         end
@@ -400,9 +399,9 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                 for i=1, #arrayFunctions do
                                                     if (arrayFunctions[i][1]==oldIdFunction) then
                                                         arrayFunctions[i][3] = arrayFunctions[i][3]-1
-                                                        if (arrayFunctions[i][3]<1) then
-                                                            table.remove(arrayFunctions, i)
-                                                        end
+                                                        -- if (arrayFunctions[i][3]<1) then
+                                                        --     table.remove(arrayFunctions, i)
+                                                        -- end
                                                         break
                                                     end
                                                 end
@@ -932,11 +931,13 @@ touchBlock = function(event)
                                 i = i+1
                                 hideBlock.investBlocks = {}
                                 local counter = 1
-                                while (#hideBlock.investBlocks~=0 and allBlocks[hideBlock.investBlocks[#hideBlock.investBlocks][1][1]][6] ~= "end" or counter~=0) do
-                                    if (allBlocks[blocks[i][1]][6] == true) then
-                                        counter=counter+1
-                                    elseif (allBlocks[blocks[i][1]][6] == "end") then
-                                        counter=counter-1
+                                while (#hideBlock.investBlocks~=0 and (allBlocks[hideBlock.investBlocks[#hideBlock.investBlocks][1][1]]==nil or allBlocks[hideBlock.investBlocks[#hideBlock.investBlocks][1][1]][6] ~= "end") or counter~=0) do
+                                    if (allBlocks[blocks[i][1]]~=nil) then
+                                        if (allBlocks[blocks[i][1]][6] == true) then
+                                            counter=counter+1
+                                        elseif (allBlocks[blocks[i][1]][6] == "end") then
+                                            counter=counter-1
+                                        end
                                     end
                                     blocksObjects[i].alpha = 0
                                     hideBlock.investBlocks[#hideBlock.investBlocks+1] = {blocks[i], blocksObjects[i]}
@@ -965,11 +966,13 @@ touchBlock = function(event)
                         event.target.investBlocks = {}
                         local i = event.target.id+1
                         local counter = 1
-                        while (#event.target.investBlocks~=0 and allBlocks[event.target.investBlocks[#event.target.investBlocks][1][1]][6] ~= "end" or counter~=0) do
-                            if (allBlocks[blocks[i][1]][6] == true) then
-                                counter=counter+1
-                            elseif (allBlocks[blocks[i][1]][6] == "end") then
-                                counter=counter-1
+                        while (#event.target.investBlocks~=0 and (allBlocks[event.target.investBlocks[#event.target.investBlocks][1][1]]==nil or allBlocks[event.target.investBlocks[#event.target.investBlocks][1][1]][6] ~= "end") or counter~=0) do
+                            if (allBlocks[blocks[i][1]]~=nil) then
+                                if (allBlocks[blocks[i][1]][6] == true) then
+                                    counter=counter+1
+                                elseif (allBlocks[blocks[i][1]][6] == "end") then
+                                    counter=counter-1
+                                end
                             end
                             blocksObjects[i].alpha = 0
                             event.target.investBlocks[#event.target.investBlocks+1] = {blocks[i], blocksObjects[i]}
@@ -1160,12 +1163,14 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                         if (allBlocks[blocks[tBlock.id][1]][6]==true) then
                             local i = tBlock.id
                             local attachments = 1
-                            while (allBlocks[blocks[i][1]][6]~="end" or attachments~=0) do
+                            while ((allBlocks[blocks[i][1]]~=nil and allBlocks[blocks[i][1]][6]~="end") or attachments~=0) do
                                 i=i+1
-                                if (allBlocks[blocks[i][1]][6]==true) then
-                                    attachments = attachments+1
-                                elseif (allBlocks[blocks[i][1]][6]=="end") then
-                                    attachments = attachments-1
+                                if (allBlocks[blocks[i][1]]~=nil) then
+                                    if (allBlocks[blocks[i][1]][6]==true) then
+                                        attachments = attachments+1
+                                    elseif (allBlocks[blocks[i][1]][6]=="end") then
+                                        attachments = attachments-1
+                                    end
                                 end
                                 local tBlock = blocksObjects[i]
                                 local arBlock = blocks[i]
@@ -1204,10 +1209,12 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                             local i = idBlock
                             local attachments = 1
                             while (attachments~=0) do
-                                if (allBlocks[blocks[i][1]][6]==true) then
-                                    attachments = attachments+1
-                                elseif (allBlocks[blocks[i][1]][6]=="end") then
-                                    attachments = attachments-1
+                                if (allBlocks[blocks[i][1]]~=nil) then
+                                    if (allBlocks[blocks[i][1]][6]==true) then
+                                        attachments = attachments+1
+                                    elseif (allBlocks[blocks[i][1]][6]=="end") then
+                                        attachments = attachments-1
+                                    end
                                 end
                                 table.remove(blocks, i)
                                 local block = blocksObjects[i]
@@ -1298,10 +1305,12 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                             local i = idOldBlock+1
                             local attachments = 1
                             while (attachments~=0) do
-                                if (allBlocks[blocks[i][1]][6]==true) then
-                                    attachments = attachments+1
-                                elseif (allBlocks[blocks[i][1]][6]=="end") then
-                                    attachments = attachments-1
+                                if (allBlocks[blocks[i][1]]~=nil) then
+                                    if (allBlocks[blocks[i][1]][6]==true) then
+                                        attachments = attachments+1
+                                    elseif (allBlocks[blocks[i][1]][6]=="end") then
+                                        attachments = attachments-1
+                                    end
                                 end
                                 local mTableBlock = plugins.json.decode(plugins.json.encode(blocks[i]))
                                 local mBlock = createBlock(mTableBlock)
@@ -1591,10 +1600,10 @@ local function touchCheckboxBlock(event)
         if (allBlocks[blocks[block.id][1]][1]=="event") then
             local isCheck = event.target.block.isCheck
             local i = block.id+1
-            while (i<=#blocks and allBlocks[blocks[i][1]][1]~="event") do
+            while (i<=#blocks and (allBlocks[blocks[i][1]]==nil or allBlocks[blocks[i][1]][1]~="event")) do
                 local block = blocksObjects[i]
                 block.isCheck = isCheck
-                local isBoolean = type(allBlocks[blocks[i][1]][6])=="boolean"
+                local isBoolean = allBlocks[blocks[i][1]]~=nil and type(allBlocks[blocks[i][1]][6])=="boolean"
                 if (isCheck) then
                     block.alpha = 0.75
                     if (isBoolean) then
@@ -1622,16 +1631,18 @@ local function touchCheckboxBlock(event)
             local isCheck = event.target.block.isCheck
             local i = block.id
             local attachments = 1
-            while (allBlocks[blocks[i][1]][6]~="end" or attachments~=0) do
+            while ((allBlocks[blocks[i][1]]==nil or allBlocks[blocks[i][1]][6]~="end") or attachments~=0) do
                 i = i+1
-                if (allBlocks[blocks[i][1]][6]==true) then
-                    attachments = attachments+1
-                elseif (allBlocks[blocks[i][1]][6]=="end") then
-                    attachments = attachments-1
+                if (allBlocks[blocks[i][1]]~=nil) then
+                    if (allBlocks[blocks[i][1]][6]==true) then
+                        attachments = attachments+1
+                    elseif (allBlocks[blocks[i][1]][6]=="end") then
+                        attachments = attachments-1
+                    end
                 end
                 local block = blocksObjects[i]
                 block.isCheck = isCheck
-                local isBoolean = type(allBlocks[blocks[i][1]][6])=="boolean"
+                local isBoolean = allBlocks[blocks[i][1]]~=nil and type(allBlocks[blocks[i][1]][6])=="boolean"
                 if (isCheck) then
                     block.alpha = 0.75
                     if (isBoolean) then
@@ -1682,7 +1693,7 @@ else
     for i=1, #blocks do
         local block = blocksObjects[i]
         block.x = block.x+display.contentWidth/10
-        if (type(allBlocks[blocks[i][1]][6])=="boolean") then
+        if (allBlocks[blocks[i][1]]~=nil and type(allBlocks[blocks[i][1]][6])=="boolean") then
             block.checkbox = display.newImage("images/checkbox_1.png")
             block.checkbox.width, block.checkbox.height = display.contentWidth/20, display.contentWidth/20
             block.checkbox.x, block.checkbox.y = display.contentWidth/20, block.y
@@ -1893,10 +1904,12 @@ local xS, yS = scrollProjects:getContentPosition()
 local i = 1
 local countNesting = 0
 while (i<=#blocks and (blocksObjects[i].y<-yS+scrollProjects.height/2 or countNesting~=0)) do
-    if (allBlocks[blocks[i][1]][6]==true) then
-        countNesting = countNesting+1
-    elseif (allBlocks[blocks[i][1]][6]=="end") then
-        countNesting = countNesting-1
+    if (allBlocks[blocks[i][1]]~=nil) then
+        if (allBlocks[blocks[i][1]][6]==true) then
+            countNesting = countNesting+1
+        elseif (allBlocks[blocks[i][1]][6]=="end") then
+            countNesting = countNesting-1
+        end
     end
     i=i+1
 end

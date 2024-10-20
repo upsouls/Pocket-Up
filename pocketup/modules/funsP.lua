@@ -310,11 +310,12 @@ funsP["в буфер обмена"] = function(value)
 	pasteboard.copy("string", value)
 end
 
+local toaster
 if not utils.isWin then
-	local toaster = require 'plugin.toaster'
+	toaster = require 'plugin.toaster'
 end
 funsP["вызвать уведомление"] = function(value)
-	if (not utils.isSim and not utils.isWin) then
+	if (not utils.isSim and not utils.isWin and toaster~=nil) then
 		toaster.longToast(value)
 	end
 end
@@ -448,8 +449,9 @@ funsP["добавить звук в объект"] = function(path)
 end
 
 local export = require 'plugins.export'
+local zipAndroid
 if not utils.isWin then
-	local zipAndroid = require 'plugin.zipAndroid'
+	zipAndroid = require 'plugin.zipAndroid'
 end
 funsP["экспортировать проект"] = function (id , name , listener)
 

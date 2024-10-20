@@ -6,7 +6,7 @@ funEditingEnd - вызывает функцию когдда человек за
 yes - заменить "да" на другое слово. необязательный параметр ( nil ) ,
 no - заменить "отмена" на другое слово. необязательный параметр ( nil )
 ]]
-local dH = display.actualContentHeight
+local dH = display.actualContentHeight*2
 app.cerberus.newBannerQuestion = function(header, funEditingEnd, no, yes)
 	if (yes==nil) then
 		yes = app.words[56]

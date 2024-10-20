@@ -17,7 +17,11 @@ plugins.physics = require("physics")
 plugins.orientation = require('plugin.orientation')
 
 display.contentWidth = display.actualContentWidth
-display.contentHeight = display.safeActualContentHeight
+if (utils.isWin) then
+    display.contentHeight = display.safeActualContentHeight
+else
+    display.contentHeight = display.actualContentHeight
+end
 CENTER_X = display.contentCenterX
 CENTER_Y = display.screenOriginY+display.contentHeight/2
 

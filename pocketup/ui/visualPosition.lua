@@ -11,6 +11,12 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 
 	app.scenes["scripts"][1].alpha = 0
 	local groupScene = display.newGroup()
+	if (utils.isWin and settings.orientation=="horizontal") then
+		groupScene.xScale = display.contentWidth/display.contentHeight
+		--groupScene.yScale = display.contentHeight/display.contentWidth/2
+		groupScene.yScale = groupScene.xScale
+		groupScene.y = CENTER_X-display.contentWidth*groupScene.yScale/2
+	end
 	app.scene = "visual_position"
 	app.scenes[app.scene] = {groupScene}
 	local funBackObjects = {}
@@ -23,16 +29,14 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 
 
 	local background = display.newImage(groupScene, app.idScene.."/icon.png", system.DocumentsDirectory)
-	if background == nil then
-		background = display.newRect(groupScene, 0,0,0,0)
+	if (background==nil) then
+		background = display.newImage(groupScene, "images/notVisible.png")
 	end
-	if (background~=nil) then
-		background.width, background.height = (settings.orientation=="horizontal" and display.contentHeight or display.contentWidth), (settings.orientation=="horizontal" and display.contentWidth or display.contentHeight)
-		background.x, background.y = CENTER_X, CENTER_Y
-		background:toBack()
-		background.fill.effect = "filter.brightness"
-		background.fill.effect.intensity = -0.25
-	end
+	--background.width, background.height = (settings.orientation=="horizontal" and display.contentHeight or display.contentWidth), (settings.orientation=="horizontal" and display.contentWidth or display.contentHeight)
+	background.x, background.y = CENTER_X, CENTER_Y
+	background:toBack()
+	background.fill.effect = "filter.brightness"
+	background.fill.effect.intensity = -0.25
 	
 
 	local obj_id = app.idObject:gsub(app.idScene.."/object_", "")
