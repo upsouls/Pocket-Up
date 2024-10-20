@@ -32,7 +32,7 @@ function scene_setPosVisual(idBlock, idParameter, blocks, blocksObjects)
 	if (background==nil) then
 		background = display.newImage(groupScene, "images/notVisible.png")
 	end
-	--background.width, background.height = (settings.orientation=="horizontal" and display.contentHeight or display.contentWidth), (settings.orientation=="horizontal" and display.contentWidth or display.contentHeight)
+	background.width, background.height = (settings.orientation=="horizontal" and display.contentHeight or display.contentWidth), (settings.orientation=="horizontal" and display.contentWidth or display.contentHeight)
 	background.x, background.y = CENTER_X, CENTER_Y
 	background:toBack()
 	background.fill.effect = "filter.brightness"
