@@ -30,8 +30,8 @@ settings =
 
 	window = {
 		defaultViewWidth = 360,
-		defaultViewHeight = 640,
-		resizable=true,
+		defaultViewHeight = 720,
+		--resizable=true,
 	},
 
 	splashScreen = {

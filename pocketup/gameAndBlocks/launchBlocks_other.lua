@@ -49,8 +49,8 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
                     _break = true
                     endWait = false
                 end
-                local table_end = {'endIf','endRepeat','ifElse (2)',
-                'endFor','endForeach','endCycleForever','else','endWait'}
+                local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
+                    'endFor','endForeach','endCycleForever','endWait'}
                 local _break = false
                 for i2, value in ipairs(table_end) do
                     if nameBlock == value and level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
@@ -110,8 +110,8 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
                         wait_table['block:'..i] = numbers
                         wait_type = oldType
                     end
-                    local table_end = {'endIf','endRepeat','ifElse (2)',
-                    'endFor','endForeach','endCycleForever','else','endWait'}
+                    local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
+                    'endFor','endForeach','endCycleForever','endWait'}
                     local _break = false
                     for i2, value in ipairs(table_end) do
                         if nameBlock == value and level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then

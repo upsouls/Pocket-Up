@@ -310,7 +310,9 @@ funsP["в буфер обмена"] = function(value)
 	pasteboard.copy("string", value)
 end
 
-local toaster = require 'plugin.toaster'
+if not utils.isWin then
+	local toaster = require 'plugin.toaster'
+end
 funsP["вызвать уведомление"] = function(value)
 	if (not utils.isSim and not utils.isWin) then
 		toaster.longToast(value)
@@ -446,14 +448,16 @@ funsP["добавить звук в объект"] = function(path)
 end
 
 local export = require 'plugins.export'
-local zipAndroid = require 'plugin.zipAndroid'
+if not utils.isWin then
+	local zipAndroid = require 'plugin.zipAndroid'
+end
 funsP["экспортировать проект"] = function (id , name , listener)
 
 	local options = plugins.json.decode(os.read(id..'/options.txt' , '*a' , system.DocumentsDirectory))
 	options.name = name
 	os.write(plugins.json.encode(options) ,id..'/options.txt' , system.DocumentsDirectory )
 	if utils.isSim or utils.isWin then
-		local zip = require( "plugin.zip" ) 
+		local zip = require( "plugin.zip" )
  
 		local function zipListener( event )
  
@@ -467,20 +471,53 @@ funsP["экспортировать проект"] = function (id , name , liste
 						listener = listener
 					}
 					timer.performWithDelay(20 , function ()
-						os.remove(system.pathForFile('export.zip', system.TemporaryDirectory))
+						pcall(function ()
+							os.removeFolder(system.pathForFile('', system.TemporaryDirectory), true)
+						end)
 					end)
 				end)
     		end
 		end
 
-		local zipOptions = { 
-    		zipFile = "export.zip",
-    		zipBaseDir = system.TemporaryDirectory,
-    		srcBaseDir = system.DocumentsDirectory,
-    		srcFiles = {'project_1/scenes.txt','project_1/options.txt'},
-    		listener = zipListener
-		}
-		zip.compress( zipOptions )
+		pcall(function ()
+			os.removeFolder(system.pathForFile('', system.TemporaryDirectory), true)
+		end)
+
+		os.copy_folder(system.pathForFile(id, system.DocumentsDirectory), system.pathForFile('', system.TemporaryDirectory))
+		timer.performWithDelay(100, function ()
+			local files = {}
+			local insert_files
+	
+			function insert_files(path, origPath)
+			  for file in plugins.lfs.dir(path) do
+				if file ~= "." and file ~= ".." then
+				  local filePath = path .. "/" .. file
+				  local attr = plugins.lfs.attributes(filePath)
+				  if attr.mode == "directory" then
+					insert_files(filePath, origPath == '' and file or origPath .. '/' .. file)
+				  else
+					files[#files + 1] = origPath == '' and file or origPath .. '/' .. file
+				  end
+				end
+			  end
+			end
+	
+			insert_files(system.pathForFile('', system.TemporaryDirectory), '')
+			print(plugins.json.encode(files))
+	
+			--insert_files(system.pathForFile(id, system.DocumentsDirectory), id)
+			pcall(function ()
+				os.remove(system.pathForFile('export.zip', system.TemporaryDirectory))
+			end)
+			local zipOptions = { 
+				zipFile = "export.zip",
+				zipBaseDir = system.TemporaryDirectory,
+				srcBaseDir = system.TemporaryDirectory,
+				srcFiles = files,
+				listener = zipListener
+			}
+			zip.compress( zipOptions )
+		end)
 	else
 		zipAndroid.compress {
 			level = 0,
@@ -535,9 +572,41 @@ funsP["импортировать проект"] = function(onComplete)
 					end
 				}
 			else
-				-- РАСПАКОВКА ZIP НА ПК. файл зип в документах, называется importfile.zip
-				-- в переменной pathFolderProjcect. в переменной написано project_id
-				-- после распаковки вызови функцию onComplete(pathFolderProject)
+				pcall(function ()
+					os.removeFolder(system.pathForFile('', system.TemporaryDirectory), true)
+				end)
+
+				local zip = require( "plugin.zip" )
+				local zipListener = function (e)
+					if ( e.isError ) then
+						error('Error')
+					else
+
+						local counterProjects = funsP["прочитать сс сохранение"]('counter_projects')
+						counterProjects = counterProjects+1
+						funsP["записать сс сохранение"]('counter_projects', counterProjects)
+						local pathFolderProject = "project_"..counterProjects
+						plugins.lfs.mkdir(system.pathForFile(pathFolderProject, system.DocumentsDirectory))
+
+						os.copy_folder(system.pathForFile('', system.TemporaryDirectory), system.pathForFile(pathFolderProject, system.DocumentsDirectory))
+
+						timer.performWithDelay(20, function ()
+							onComplete(pathFolderProject)
+							pcall(function ()
+								os.removeFolder(system.pathForFile('', system.TemporaryDirectory), true)
+							end)
+						end)
+					end
+				end
+
+				local zipOptions =
+				{
+				    zipFile = "importfile.zip",
+				    zipBaseDir = system.DocumentsDirectory,
+				    dstBaseDir = system.TemporaryDirectory,
+				    listener = zipListener
+				}
+				zip.uncompress( zipOptions )
 			end
 		end
 	end

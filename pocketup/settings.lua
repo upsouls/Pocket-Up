@@ -17,7 +17,7 @@ plugins.physics = require("physics")
 plugins.orientation = require('plugin.orientation')
 
 display.contentWidth = display.actualContentWidth
---display.contentHeight = display.safeActualContentHeight
+display.contentHeight = display.safeActualContentHeight
 CENTER_X = display.contentCenterX
 CENTER_Y = display.screenOriginY+display.contentHeight/2
 
@@ -26,13 +26,15 @@ app.words = require("pocketup.modules.loadLanguage")
 display.setDefault( 'minTextureFilter', 'nearest' )
 display.setDefault( 'magTextureFilter', 'nearest' )
 
-os.removeFolder = function (path)
+os.removeFolder = function (path, isremove)
     for file in plugins.lfs.dir(path) do
         if file ~= "." and file ~= ".." then
             local filePath = path.."/"..file
             local attr = plugins.lfs.attributes(filePath)
             if (attr~=nil) then
                 if attr.mode == "directory" then
+                    filePath = path.."\\"..file
+                    print(filePath)
                     os.removeFolder(filePath)
                 else
                     os.remove(filePath)
@@ -40,7 +42,34 @@ os.removeFolder = function (path)
             end
         end
     end
+    if not isremove then
     plugins.lfs.rmdir(path)
+    end
+end
+
+os.copy = function(link, link2)
+    if utils.isWin or utils.isSim then
+        link = plugins.utf8.gsub(link, '/', '\\')
+        link2 = plugins.utf8.gsub(link2, '/', '\\')
+    end
+    os.execute('copy /y "' .. link .. '" "' .. link2 .. '"')
+end
+
+function os.copy_folder(path, path2, isCreate2)
+    if not isCreate2 then
+        plugins.lfs.mkdir(path2)
+    end
+    for file in plugins.lfs.dir(path) do
+        if file ~= "." and file ~= ".." then
+            local filePath = path.."/"..file
+            local attr = plugins.lfs.attributes(filePath)
+            if attr.mode == "directory" then
+                os.copy_folder(filePath, path2..'/'..file)
+            else
+                os.copy(filePath, path2..'/'..file)
+            end
+        end
+    end
 end
 
 utils.isWin = system.getInfo 'platform' ~= 'android'
@@ -126,16 +155,16 @@ app.roundedRect = app.fontSize1/8
 
 utils.select_Scroll = ''
 local function moveScroll(event)
-	if event.type == 'scroll' and type(utils.select_Scroll)~='string' then
-		local x, y = utils.select_Scroll:getContentPosition()
-		if (event.scrollY > 0 and (y + (event.scrollY /2)) <0) or (event.scrollY < 0)  then
-			utils.select_Scroll:scrollToPosition({
-				y = y + (event.scrollY),
-				time = 0
-			})
-		end
-		return true
-	end
+	-- if event.type == 'scroll' and type(utils.select_Scroll)~='string' then
+	-- 	local x, y = utils.select_Scroll:getContentPosition()
+	-- 	if (event.scrollY > 0 and (y + (event.scrollY /2)) <0) or (event.scrollY < 0)  then
+	-- 		utils.select_Scroll:scrollToPosition({
+	-- 			y = y + (event.scrollY),
+	-- 			time = 0
+	-- 		})
+	-- 	end
+	-- 	return true
+	-- end
 end
 Runtime:addEventListener("mouse", moveScroll)
 

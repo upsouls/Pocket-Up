@@ -1,7 +1,7 @@
 collectgarbage("setpause", 100)
 collectgarbage("setstepmul", 200)
 
-native.setProperty("windowMode", "maximized")
+native.setProperty("windowMode", "normal")
 
 display.setStatusBar(display.HiddenStatusBar)
 display.setStatusBar(display.TranslucentStatusBar)
@@ -21,7 +21,7 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
     display.setStatusBar(display.HiddenStatusBar)
 
     local file = io.open(system.pathForFile("acces.txt", system.DocumentsDirectory), "r")
-    if (file ~= nil or utils.isSim) then 
+    if (file ~= nil or utils.isSim or utils.isWin) then 
         if (file ~= nil) then
             io.close(file)
         end
