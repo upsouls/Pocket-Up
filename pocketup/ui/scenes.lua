@@ -43,8 +43,9 @@ function scene_scenes(idProject, nameProjectScenes)
 				timerMoveSlot = timer.performWithDelay(250, function()
 					isTimerMoveSlot = false
 					isMoveSlot = true
+					local xS, yS = scrollProjects:getContentPosition()
 					local groupSlot = event.target.myGroup
-					groupSlot.y = event.y-scrollProjects.y
+					groupSlot.y = event.y-scrollProjects.y-yS
 					groupSlot:toFront()
 				end)
 			end
@@ -61,8 +62,9 @@ function scene_scenes(idProject, nameProjectScenes)
 				scrollProjects:takeFocus(event)
 				event.target:setFillColor(0, 71/255, 93/255)
 			else
+				local xS, yS = scrollProjects:getContentPosition()
 				local groupSlot = event.target.myGroup
-				groupSlot.y = event.y-scrollProjects.y
+				groupSlot.y = event.y-scrollProjects.y-yS
 
 				local idNewSlot = math.max(math.min(math.round(groupSlot.y/event.target.height+1), #arraySlots), 1)
 				local idOldSlot = event.target.idSlot

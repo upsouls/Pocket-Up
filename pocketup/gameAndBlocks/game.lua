@@ -44,7 +44,7 @@ local function make_all_formulas(formulas, object)
     for i=1, #formulas do
         local formula = formulas[i]
         if (formula[1]=="number") then
-            if (type(formula[2])=="number") then
+            if (type(formula[2])=="number" or formula[2]==".") then
                 answer = answer..formula[2]
             else
                 answer = answer.."0"
