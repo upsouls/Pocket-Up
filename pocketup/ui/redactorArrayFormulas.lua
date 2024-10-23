@@ -102,14 +102,32 @@ function scene_arrayFormulas(headerFormulas, typeFormulas, updateFormulas, formu
 				end
 				scrollProjects:takeFocus(event)
 			else
-				local addFormulas = event.target.functions
-				for i=1, #addFormulas do
-					table.insert(formulas, cursor, addFormulas[i])
-					cursor = cursor+1
-				end
-				updateFormulas(cursor)
-				funBackObjects[1]()
 				display.getCurrentStage():setFocus(event.target, nil)
+				local addFormulas = event.target.functions
+				if (addFormulas[1][2]=="touchesObject2") then
+					local tableObjects = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/objects"))
+					local tableNames = {}
+					for i=1, #tableObjects do
+						tableNames[i] = tableObjects[i][1]
+					end
+					app.cerberus.newVatiants(tableNames, function(i)
+						if (i~=nil) then
+							addFormulas[1][3] = tableObjects[i][2]
+							table.insert(formulas, cursor, addFormulas[1])
+							cursor = cursor+1
+							updateFormulas(cursor)
+							funBackObjects[1]()
+						end
+					end)
+					event.target:setFillColor(0, 71/255, 93/255)
+				else
+					for i=1, #addFormulas do
+						table.insert(formulas, cursor, addFormulas[i])
+						cursor = cursor+1
+					end
+					updateFormulas(cursor)
+					funBackObjects[1]()
+				end
 			end
 			return(true)
 		end

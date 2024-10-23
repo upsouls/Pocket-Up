@@ -133,22 +133,14 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 				block.y = yTargetPos-block.height/2
 				groupSceneScroll:insert(block)
 				block:addEventListener("touch", function (event)
-					local function isPrem()
-						local isPrem = not (funsP["прочитать сс сохранение"]("isPremium")==nil)
-						if (funsP["прочитать сс сохранение"]("blockPrem")~=nil) then
-							return(false)
-						else
-							return(isPrem)
-						end
-					end
 					if (event.phase=="began") then
 						display.getCurrentStage():setFocus(event.target, event.id)
 					elseif (event.phase=="moved" and (math.abs(event.y-event.yStart)>20 or math.abs(event.x-event.xStart)>20)) then
 						scrollProjects:takeFocus(event)
 					elseif (event.phase~="moved") then
-						local infoBlock = event.target.infoBlock
 						display.getCurrentStage():setFocus(event.target, nil)
-						if ((premBlocks[infoBlock[1]]==nil or isPrem())) then
+						if (553~=nameCategory) then
+							local infoBlock = event.target.infoBlock
 							display.remove(app.scenes[app.scene][1])
 							display.remove(app.scenes[app.scene][2])
 							app.scene = "scripts"
@@ -158,7 +150,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 							oldBackScripts = nil
 							funAddBlock(infoBlock)
 						else
-							bannerPremium(groupScene)
+							app.cerberus.newBannerQuestion(app.words[616], nil, "", app.words[16])
 						end
 					end
 					return(true)

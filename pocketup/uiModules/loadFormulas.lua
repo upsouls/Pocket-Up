@@ -61,6 +61,20 @@ function loadFormula(event, posCursor)
 		elseif (typeFormula=="localArray" or typeFormula=="globalArray") then
 			local nameArr = allArrays[typeFormula.."_"..event[i][2]]
 			value = value..'*'..(nameArr==nil and app.words[381] or nameArr)..'*'
+		elseif (event[i][2]=="touchesObject2" and event[i][3]~=nil) then
+			local tableObjects = plugins.json.decode(funsP["получить сохранение"](app.idScene.."/objects"))
+			local idObject = event[i][3]
+			local nameObject
+			for i=1, #tableObjects do
+				if (tableObjects[i][2]==idObject) then
+					nameObject = tableObjects[i][1]
+					break
+				end
+			end
+			if (nameObject==nil) then
+				nameObject = app.words[618]
+			end
+			value = value..nameFormulas[event[i][2]].."("..nameObject..")"
 		else
 			value = value..nameFormulas[event[i][2]]
 		end
