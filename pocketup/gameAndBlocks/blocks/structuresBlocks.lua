@@ -33,6 +33,7 @@ allBlocks = {
 	["if"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[96]}, {"cell",nil,1.5}, {"text",app.words[97]}} }, 109, 88, true},
 	["else"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[98]}} }, 109, 88, "else"},
 	["endIf"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[99]}} }, 109, 88, "end"},
+	["waitIfTrue2"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[100]}, {"cell",nil,1.5}, {"text",app.words[101]}} }, 109, 88, false},
 	["if (2)"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[96]}, {"cell",nil,1.5}, {"text",app.words[97].." ..."}} }, 109, 88, false},
 	["waitIfTrue"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[100]}, {"cell",nil,1.5}, {"text",app.words[101]}} }, 109, 88, true},
 	["endWait"]={"block","blocks/block_orange_1.png", {{{"text", app.words[446]}}}, 109, 88, "end"},

@@ -156,62 +156,55 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         add_pcall()
         insert("WebViews["..name.."]:reload()")
         pcall_end()
-    elseif nameBlock == 'timer2' then -- 3 функция
-        local rep = make_all_formulas(infoBlock[2][1], object)
-        local time = make_all_formulas(infoBlock[2][2], object)
-        lua = lua .. 'local _repeat\n'
-        add_pcall()
-        lua = lua ..
-'local name = \'Timer'..index..'\'..\'_\'..Timers_max\
-if not Timers[name] then\
-local function onComplete()\
-Timers[name] = nil\
-local key = target.parent_obj.nameObject\
-for i=1, #events_function[key]["fun_'..infoBlock[2][3][2]..'"] do\
-events_function[key]["fun_'..infoBlock[2][3][2]..'"][i](target)\
-end\
-end\
-Timers[name] = timer.GameNew2(('..time..')*1000, '..rep..', onComplete, function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
-elseif nameBlock == 'repeat2' then -- 2 функция
-    wait_type = 'repeat'
-        local rep = make_all_formulas(infoBlock[2][1], object)
-        lua = lua .. 'local _repeat\n'
-        add_pcall()
-        lua = lua..'local function onComplete()\
-                local key = target.parent_obj.nameObject\
-                for i=1, #events_function[key]["fun_'..infoBlock[2][2][2]..'"] do\
-                events_function[key]["fun_'..infoBlock[2][2][2]..'"][i](target)\
-                end\
-                end\
-            _repeat = timer.GameNew2(0,'..rep..', onComplete, function()\
-            if not (target ~= nil and target.x ~= nil) then\
-                pcall(function() timer.cancel(_repeat) end)\
-                return true\
-            end\n'
-    elseif nameBlock == 'repeatIsTrue2' then -- второй функция
-        wait_type = 'repeat'
-        local condition = make_all_formulas(infoBlock[2][1], object)
-        lua = lua .. 'local _repeat\n'
-        add_pcall()
-        lua = lua..[[
-        local repeatIsTrue
-        local function onComplete()
-        local key = target.parent_obj.nameObject
-        for i=1, #events_function[key]["fun_]]..infoBlock[2][2][2]..[["] do
-        events_function[key]["fun_]]..infoBlock[2][2][2]..[["][i](target)
-        end
-        end
-        _repeat = repeatIsTrue
-        repeatIsTrue = timer.GameNew(0,0, function()
-        if not (]]..condition..[[) then
-        timer.cancel(repeatIsTrue)
-        onComplete()
-        return true
-        end
-        if not (target ~= nil and target.x ~= nil) then
-        pcall(function() timer.cancel(_repeat) end)
-        return true
-        end]]
+--     elseif nameBlock == 'timer2' then -- 3 функция
+--         local rep = make_all_formulas(infoBlock[2][1], object)
+--         local time = make_all_formulas(infoBlock[2][2], object)
+--         lua = lua..
+--         "for i=1, type("..rep..") == 'number' and "..rep.." or 0 do"
+-- --             local key = target.parent_obj.nameObject\
+-- -- for i=1, #events_function[key]["fun_'..infoBlock[2][3][2]..'"] do\
+-- -- events_function[key]["fun_'..infoBlock[2][3][2]..'"][i](target)\
+-- -- end\
+-- elseif nameBlock == 'repeat2' then -- 2 функция
+--     wait_type = 'repeat'
+--         local rep = make_all_formulas(infoBlock[2][1], object)
+--         lua = lua .. 'local _repeat\n'
+--         add_pcall()
+--         lua = lua..'local function onComplete()\
+--                 local key = target.parent_obj.nameObject\
+--                 for i=1, #events_function[key]["fun_'..infoBlock[2][2][2]..'"] do\
+--                 events_function[key]["fun_'..infoBlock[2][2][2]..'"][i](target)\
+--                 end\
+--                 end\
+--             _repeat = timer.GameNew2(0,'..rep..', onComplete, function()\
+--             if not (target ~= nil and target.x ~= nil) then\
+--                 pcall(function() timer.cancel(_repeat) end)\
+--                 return true\
+--             end\n'
+--     elseif nameBlock == 'repeatIsTrue2' then -- второй функция
+--         wait_type = 'repeat'
+--         local condition = make_all_formulas(infoBlock[2][1], object)
+--         lua = lua .. 'local _repeat\n'
+--         add_pcall()
+--         lua = lua..[[
+--         local repeatIsTrue
+--         local function onComplete()
+--         local key = target.parent_obj.nameObject
+--         for i=1, #events_function[key]["fun_]]..infoBlock[2][2][2]..[["] do
+--         events_function[key]["fun_]]..infoBlock[2][2][2]..[["][i](target)
+--         end
+--         end
+--         _repeat = repeatIsTrue
+--         repeatIsTrue = timer.GameNew(0,0, function()
+--         if not (]]..condition..[[) then
+--         timer.cancel(repeatIsTrue)
+--         onComplete()
+--         return true
+--         end
+--         if not (target ~= nil and target.x ~= nil) then
+--         pcall(function() timer.cancel(_repeat) end)
+--         return true
+--         end]]
 end
 
     return(lua)

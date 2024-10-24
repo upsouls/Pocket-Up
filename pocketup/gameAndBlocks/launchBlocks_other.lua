@@ -35,99 +35,7 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
     nameBlock = infoBlock[1]--args[i] = make_all_formulas(infoBlock[2][i], object)
     lua = ''
     local waitInsert = function (time)
-        local endWait = true
-        for i = index+1, #blocks, 1 do
-            if blocks[i][3] ~= 'off' then
-                local block = blocks[i]
-                local nameBlock = block[1]
-                if block[3] == 'off' then
-                    nameBlock = ''
-                end
-                local _break = false
-                if nameBlock == 'wait' or nameBlock == 'transitionPosition' and
-                level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
-                    _break = true
-                    endWait = false
-                end
-                local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
-                    'endFor','endForeach','endCycleForever','endWait'}
-                local _break = false
-                for i2, value in ipairs(table_end) do
-                    if nameBlock == value and level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
-                        _break = true
-                        break
-                    end
-                end
-                if _break then
-                    break
-                end
-            end
-        end
-        local oldType = wait_type
-        if wait_type == 'wait' then
-            lua = lua..
-            "local name = 'wait"..index.."_"..obj_id.."_"..scene_id.."_'.. Timers_max\
-            if not Timers[name] then\
-                timer.new("..time.."*1000, function()\
-                    Timers[name] = nil\
-                end)\
-            Timers[name] = timer.new("..time.."*1000, function()\
-                    if not (target ~= nil and target.x ~= nil) then\
-                        pcall(function() timer.cancel(Timers[name]) end)\
-                        return true\
-                    end"
-            elseif wait_type == 'repeat' then
-            lua = lua..
-            "local name = 'wait"..index.."_"..obj_id.."_"..scene_id.."_'.. Timers_max\
-            if not Timers[name] then\
-                pcall(function() timer.pause(_repeat) end)\
-                timer.new("..time.."*1000, function()\
-                    Timers[name] = nil\
-                    "..(endWait and "pcall(function() timer.resume(_repeat) end)" or "").."\
-                end)\
-            Timers[name] = timer.new("..time.."*1000, function()\
-                    if not (target ~= nil and target.x ~= nil) then\
-                        pcall(function() timer.cancel(Timers[name]) end)\
-                        return true\
-                    end"
-            wait_type = 'wait'
-        end
-        local numbers = wait_table['block:'..index] or 1
-        wait_end = true
-        if level_blocks[scene_id][obj_id][index] == 1 then
-            wait_table.event = wait_table.event + 1
-        else
-            for i = index+1, #blocks, 1 do
-                if blocks[i][3] ~= 'off' then
-                    local block = blocks[i]
-                    local nameBlock = block[1]
-                    if block[3] == 'off' then
-                        nameBlock = ''
-                    end
-                    if nameBlock == 'wait' or nameBlock == 'transitionPosition' and
-                    level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
-                        numbers = numbers + 1
-                        wait_table['block:'..i] = numbers
-                        wait_type = oldType
-                    end
-                    local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
-                    'endFor','endForeach','endCycleForever','endWait'}
-                    local _break = false
-                    for i2, value in ipairs(table_end) do
-                        if nameBlock == value and level_blocks[scene_id][obj_id][index] == level_blocks[scene_id][obj_id][i] then
-                            wait_table['block:'..i] = numbers
-                            wait_end = false
-                            wait_table['_ends'] = wait_table['_ends'] + 1
-                            _break = true
-                            break
-                        end
-                    end
-                    if _break then
-                        break
-                    end
-                end
-            end
-        end
+        lua = lua..'threadFun.wait('..time..'*1000)'
     end
     if nameBlock == '' then
     elseif nameBlock == 'wait' then
@@ -168,31 +76,26 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         local y = make_all_formulas(infoBlock[2][1], object)
         lua = lua..'target.y = -('..y..')'
         end_pcall()
-    -- elseif nameBlock == 'lua' then
-    --     local code = make_all_formulas(infoBlock[2][1], object)
-    --     add_pcall()
-    --     lua = lua..'loadstring('..code..')()'..'\n'
-    --     end_pcall()
-    elseif nameBlock == 'timer' then
-        local rep = make_all_formulas(infoBlock[2][1], object)
-        local time = make_all_formulas(infoBlock[2][2], object)
-        lua = lua .. 'local _repeat\n'
-        add_pcall()
-        lua = lua ..
-'local name = \'Timer'..index..'\'..\'_\'..Timers_max\
-if not Timers[name] then\
-timer.new(('..time..'*1000)*'..rep..', function()\
-Timers[name] = nil\
-end)\
-Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
-    elseif nameBlock == 'endTimer' then
-                if wait_table['block:'..index] then
-            for i = 1, wait_table['block:'..index], 1 do
-                lua = lua .. 'end)\nend\n'
-            end
-        end
-        lua = lua..'end)_repeat = Timers[name]\nend'
-        end_pcall()
+--     elseif nameBlock == 'timer' then
+--         local rep = make_all_formulas(infoBlock[2][1], object)
+--         local time = make_all_formulas(infoBlock[2][2], object)
+--         lua = lua .. 'local _repeat\n'
+--         add_pcall()
+--         lua = lua ..
+-- 'local name = \'Timer'..index..'\'..\'_\'..Timers_max\
+-- if not Timers[name] then\
+-- timer.new(('..time..'*1000)*'..rep..', function()\
+-- Timers[name] = nil\
+-- end)\
+-- Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
+--     elseif nameBlock == 'endTimer' then
+--                 if wait_table['block:'..index] then
+--             for i = 1, wait_table['block:'..index], 1 do
+--                 lua = lua .. 'end)\nend\n'
+--             end
+--         end
+--         lua = lua..'end)_repeat = Timers[name]\nend'
+--         end_pcall()
     elseif nameBlock == 'editRotateLeft' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
@@ -239,39 +142,21 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         lua = lua..'-- '..comment..'\n'
     elseif nameBlock == 'if' or nameBlock == 'ifElse (2)' then
         local condition = make_all_formulas(infoBlock[2][1], object)
-        add_pcall()
-        lua = lua..'if ('..condition..') then\n'
+        lua = lua..'if '..condition..' then'
     elseif nameBlock == 'else' then
-        if wait_table['block:'..index] then
-            for i = 1, wait_table['block:'..index], 1 do
-                wait_table['_ends'] = wait_table['_ends'] - 1
-                lua = lua .. 'end)\nend\n'
-            end
-        end
-        lua = lua..'else\n'
+        lua = lua..'else'
     elseif nameBlock == 'endIf' then
-        if wait_table['block:'..index] then
-            for i = 1, wait_table['block:'..index], 1 do
-                wait_table['_ends'] = wait_table['_ends'] - 1
-                lua = lua .. 'end)\nend\n'
-            end
-        end
-        lua = lua..'end\n'
-        end_pcall()
+        lua = lua..'end'
     elseif nameBlock == 'repeat' then
         wait_type = 'repeat'
         local rep = make_all_formulas(infoBlock[2][1], object)
-        lua = lua .. 'local _repeat\n'
-        add_pcall()
-        lua = lua..'_repeat = timer.GameNew(0,'..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend\n'
+        lua = lua..
+        "for i=1, type("..rep..") == 'number' and "..rep.." or 0, 1 do\
+        "
     elseif nameBlock == 'endRepeat' then
-                if wait_table['block:'..index] then
-            for i = 1, wait_table['block:'..index], 1 do
-                lua = lua .. 'end)\nend\n'
-            end
-        end
-        lua = lua..'end)\n'
-        end_pcall()
+        lua = lua..
+        "coroutine.yield()\
+        end"
     elseif nameBlock == 'setVariable' and infoBlock[2][1][2]~=nil then
         local value = make_all_formulas(infoBlock[2][2], object)
         add_pcall()
@@ -300,36 +185,16 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         lua = lua..'system.openURL('..link..')\n'
         end_pcall()
     elseif nameBlock == 'cycleForever' then
-        lua = lua .. 'local _repeat\n'
-        wait_type = 'repeat'
-        
-        add_pcall()
-        lua = lua..'_repeat = timer.new(0, function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend\n'
+        lua = lua..
+        "while true do"
     elseif nameBlock == 'endCycleForever' then
-        if wait_table['block:'..index] then
-            for i = 1, wait_table['block:'..index], 1 do
-                lua = lua .. 'end)\nend\n'
-            end
-        end
-        lua = lua..'end, 0)\n'
-        end_pcall()
+        lua = lua..
+        "coroutine.yield()\
+        end"
     elseif nameBlock == 'repeatIsTrue' then
-        wait_type = 'repeat'
         local condition = make_all_formulas(infoBlock[2][1], object)
-        lua = lua .. 'local _repeat\n'
-        add_pcall()
-        lua = lua..[[
-local repeatIsTrue
-_repeat = repeatIsTrue
-repeatIsTrue = timer.GameNew(0,0, function()
-if not (]]..condition..[[) then
-timer.cancel(repeatIsTrue)
-return true
-end
-if not (target ~= nil and target.x ~= nil) then
-pcall(function() timer.cancel(_repeat) end)
-return true
-end]]
+        lua = lua..
+        "while "..condition.." do"
     elseif nameBlock == 'setImageToId' and #images>0 then
         local image = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
@@ -444,25 +309,16 @@ end]]
         local one = make_all_formulas(infoBlock[2][1], object)
         local _end = make_all_formulas(infoBlock[2][2], object)
         max_fors = max_fors+1
-        add_pcall()
-        lua = lua..'for i'..max_fors..' = '..one..' , '.._end..', 1 do\n'
+        lua = lua.."for i"..max_fors.." = (type("..one..") == 'number' and "..one.." or 0) , type(".._end..") == 'number' and ".._end.." or 0, 1 do\n"
         if (infoBlock[2][3][2]~=nil) then
-            if infoBlock[2][3][1] == 'globalVariable' then
-                lua = lua..'var_'..infoBlock[2][3][2]..' = i'..max_fors..'\n'
+            if infoBlock[2][3][1] == "globalVariable" then
+                lua = lua.."var_"..infoBlock[2][3][2].." = i"..max_fors.."\n"
             else
-                lua = lua..'target.var_'..infoBlock[2][3][2]..' = i'..max_fors..'\n'
+                lua = lua.."target.var_"..infoBlock[2][3][2].." = i"..max_fors.."\n"
             end
         end
     elseif nameBlock == 'endFor' then
-        if wait_table['block:'..index] then
-            for i = 1, wait_table['block:'..index], 1 do
-                for i = 1, wait_table['block:'..index], 1 do
-                    lua = lua .. 'end)\nend\n'
-                end
-            end
-        end
-        lua = lua..'end'
-        end_pcall()
+        lua = lua.."end"
     elseif (nameBlock == "addBody") then
         add_pcall()
         if (infoBlock[2][1][2]~="noPhysic") then
@@ -807,7 +663,6 @@ end'
         lua = lua.."deleteScene()\nscene_"..infoBlock[2][1][2].."()"
         end_pcall()
     elseif nameBlock == 'foreach'then
-        add_pcall()
         max_fors = max_fors+1
         if (infoBlock[2][1][2]==nil or infoBlock[2][2][2]==nil ) then
             infoBlock[2][1][2] = "nil"
@@ -818,13 +673,7 @@ end'
         lua = lua..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..' = value'..max_fors..'\n'
         lua = lua..'if '..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..' then\n target.varText_'..infoBlock[2][1][2]..'.text = type('..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..")=='boolean' and ("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].." and app.words[373] or app.words[374]) or type("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..")=='table' and encodeList("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..") or "..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..'\nend'
     elseif nameBlock == 'endForeach' then
-        if wait_table['block:'..index] then
-            for i = 1, wait_table['block:'..index], 1 do
-                lua = lua .. 'end)\nend\n'
-            end
-        end
-        lua = lua..'end'
-        end_pcall()
+        lua = lua.."end"
     elseif nameBlock == 'lowerPen' then
     -- tableFeathers = {} сюда через table.insert(object) добавлять перья
     -- tableFeathersOptions[1] -размер пера
@@ -864,19 +713,12 @@ end'
         add_pcall()
         lua = lua.."local function broadcastFunction(nameFunction)\nlocal value = tableNamesClones["..make_all_formulas(infoBlock[2][1], object).."]\nlocal key = value.nameObject\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
         end_pcall()
-    elseif nameBlock == 'waitIfTrue' then
+    elseif nameBlock == 'waitIfTrue2' then
         local arg1 = make_all_formulas(infoBlock[2][1], object)
-        add_pcall()
-        lua = lua..'local _repeat\n_repeat = timer.GameNew(0, 0, function()\n'
-        lua = lua..'if '..arg1..' then\ntimer.cancel(_repeat)\nend\nif not '..arg1..' then return true end\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(_repeat) end)\nreturn true\nend'
-    elseif nameBlock == 'endWait' then
-        if wait_table['block:'..index] then
-            for i = 1, wait_table['block:'..index], 1 do
-                lua = lua .. 'end)\nend\n'
-            end
-        end
-        lua = lua..'end)'
-        end_pcall()
+        lua = lua..
+        "while not "..arg1.." do\
+        coroutine.yield()\
+        end"
     elseif nameBlock == 'setBackgroundColor' then
         add_pcall()
         local arg1 = make_all_formulas(infoBlock[2][1], object)
@@ -888,15 +730,14 @@ end'
         add_pcall()
         local arg1 = make_all_formulas(infoBlock[2][1], object)
         lua = lua..'local _hex_rgb = utils.hexToRgb('..arg1..')\ndisplay.setDefault("background", _hex_rgb[1], _hex_rgb[2], _hex_rgb[3])\n_hex_rgb = nil\n'
-        --native.showAlert('Monsler', arg1, {'OK'})
         end_pcall()
-    elseif nameBlock == 'cancelAllTimers' then
-        add_pcall()
-        lua = lua..
-'for key, value in pairs(Timers) do\
-    timer.cancel(Timers[key])\nTimers[key] = nil\
-end'
-        end_pcall()
+--     elseif nameBlock == 'cancelAllTimers' then
+--         add_pcall()
+--         lua = lua..
+-- 'for key, value in pairs(Timers) do\
+--     timer.cancel(Timers[key])\nTimers[key] = nil\
+-- end'
+        -- end_pcall()
     elseif nameBlock == 'showToast' then
         add_pcall()
         local arg1 = make_all_formulas(infoBlock[2][1], object)
@@ -972,7 +813,9 @@ end'
         lua = lua.."mainGroup.xScale, mainGroup.yScale = 1, 1"
         end_pcall()
     elseif nameBlock == 'stopScript' then
-        lua = lua..'if true then pcall(function() timer.cancel(_repeat) end) return true end'
+        lua = lua..
+        "removeTheard()\
+        coroutine.yield()"
     end
     return lua
 end
