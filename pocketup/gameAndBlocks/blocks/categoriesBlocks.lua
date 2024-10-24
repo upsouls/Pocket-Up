@@ -84,7 +84,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"setRotate",{ {{"number", 90}} }},
 			{"setRotateToObject",{{"objects",nameObject}}},
 			{"setTypeRotate",{{"typeRotate","false"}}},
-			{"transitionPosition",{ {{"number",1}}, {{"number",100}}, {{"number",200}} }},
+			{"transitionPosition2",{ {{"number",1}}, {{"number",100}}, {{"number",200}} }},
 			{"setLayer", {{{"number", 2}}}},
 			{"toFrontLayer"},
 			{"toBackLayer"},

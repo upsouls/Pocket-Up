@@ -60,6 +60,7 @@ allBlocks = {
 	["setRotate"]={"block", "blocks/block_blue_1.png", { {{"text",app.words[130]},{"cell",nil,1.25},{"text",app.words[128]}} }, 109, 88, false},
 	["setRotateToObject"]={"block", "blocks/block_blue_2.png", { {{"text",app.words[131]}},{{"objects",nil,1.25}} }, 109, 142, false},
 	["setTypeRotate"]={"block", "blocks/block_blue_2.png", { {{"text",app.words[132]}},{{"typeRotate",nil,1.25}} }, 109, 142, false},
+	["transitionPosition2"]={"block", "blocks/block_blue_2.png", { {{"text",app.words[63]}, {"cell", nil, 1.5}, {"text", app.words[64]}}, {{"text",app.words[65]..":"}, {"cell",nil, 1.5}, {"text",app.words[60]..":"}, {"cell",nil, 1.5}} }, 109, 142, false},
 	["transitionPosition"]={"block", "blocks/block_blue_2.png", { {{"text",app.words[63]}, {"cell", nil, 1.5}, {"text", app.words[64]}}, {{"text",app.words[65]..":"}, {"cell",nil, 1.5}, {"text",app.words[60]..":"}, {"cell",nil, 1.5}} }, 109, 142, false},
 	["vibration"]={"block", "blocks/block_blue_1.png", { {{"text",app.words[136]}, {"cell", nil, 1.5}, {"text", app.words[64]}} }, 109, 88, false},
 	["speedStepsToSecoond"]={"block", "blocks/block_blue_2.png", { {{"text",app.words[137]}}, {{"text",app.words[59]..":"}, {"cell", nil, 1.5}, {"text", app.words[60]..":"}, {"cell", nil, 1.5},{"text",app.words[138]}} }, 109, 142, false},

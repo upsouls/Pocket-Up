@@ -64,6 +64,15 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         "transition.to(target, {time="..time.."*1000,\
         x="..x..", y= -"..y.."})"
         end_pcall()
+    elseif nameBlock == 'transitionPosition2' then
+        local time = make_all_formulas(infoBlock[2][1], object)
+        local x = make_all_formulas(infoBlock[2][2], object)
+        local y = make_all_formulas(infoBlock[2][3], object)
+        add_pcall()
+        lua = lua..
+        "transition.to(target, {time="..time.."*1000,\
+        x="..x..", y= -"..y.."})"
+        end_pcall()
         lua = lua.."\n"
         waitInsert(time)
     elseif nameBlock == 'setPositionX' then
@@ -76,26 +85,22 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         local y = make_all_formulas(infoBlock[2][1], object)
         lua = lua..'target.y = -('..y..')'
         end_pcall()
---     elseif nameBlock == 'timer' then
---         local rep = make_all_formulas(infoBlock[2][1], object)
---         local time = make_all_formulas(infoBlock[2][2], object)
---         lua = lua .. 'local _repeat\n'
---         add_pcall()
---         lua = lua ..
--- 'local name = \'Timer'..index..'\'..\'_\'..Timers_max\
--- if not Timers[name] then\
--- timer.new(('..time..'*1000)*'..rep..', function()\
--- Timers[name] = nil\
--- end)\
--- Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
---     elseif nameBlock == 'endTimer' then
---                 if wait_table['block:'..index] then
---             for i = 1, wait_table['block:'..index], 1 do
---                 lua = lua .. 'end)\nend\n'
---             end
---         end
---         lua = lua..'end)_repeat = Timers[name]\nend'
---         end_pcall()
+    elseif nameBlock == 'timer' then
+        local rep = make_all_formulas(infoBlock[2][1], object)
+        local time = make_all_formulas(infoBlock[2][2], object)
+        lua = lua .. 'local _repeat\n'
+        add_pcall()
+        lua = lua ..
+'local timer = require(\'timer\')\
+local name = \'Timer'..index..'\'..\'_\'..Timers_max\
+if not Timers[name] then\
+timer.new(('..time..'*1000)*'..rep..', function()\
+Timers[name] = nil\
+end)\
+Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
+    elseif nameBlock == 'endTimer' then
+        lua = lua..'end)_repeat = Timers[name]\nend'
+        end_pcall()
     elseif nameBlock == 'editRotateLeft' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
@@ -318,7 +323,8 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
             end
         end
     elseif nameBlock == 'endFor' then
-        lua = lua.."end"
+        lua = lua.."coroutine.yield()\
+    end"
     elseif (nameBlock == "addBody") then
         add_pcall()
         if (infoBlock[2][1][2]~="noPhysic") then
