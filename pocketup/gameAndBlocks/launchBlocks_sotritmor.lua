@@ -205,6 +205,28 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
 --         pcall(function() timer.cancel(_repeat) end)
 --         return true
 --         end]]
+elseif nameBlock == 'playSoundAndWait' then
+    add_pcall()
+    lua = lua..
+    "if not playSounds["..infoBlock[2][1][2].."] then\
+        playSounds["..infoBlock[2][1][2].."] = audio.loadSound('"..obj_path.."/sound_"..infoBlock[2][1][2]..".mp3', system.DocumentsDirectory)\
+    end\
+    pcall(function()\
+        audio.stop(playingSounds["..infoBlock[2][1][2].."])\
+    end)\
+    playingSounds["..infoBlock[2][1][2].."] = audio.play(playSounds[".. infoBlock[2][1][2].."])"
+    pcall_end()
+    lua = lua.."\
+    local time = audio.getDuration(playSounds["..infoBlock[2][1][2].."])\
+    threadFun.wait(time)"
+    elseif nameBlock == 'timer3' then
+        local rep = make_all_formulas(infoBlock[2][1], object)
+        local time = make_all_formulas(infoBlock[2][2], object)
+        lua = lua.."for i=1, type("..rep..") == 'number' and "..rep.." or 0 do\
+            threadFun.wait(type("..time..") == 'number' and ("..time.."*1000) or 0)"
+    elseif nameBlock == 'endTimer2' then
+        lua = lua.."coroutine.yield()\
+    end"
 end
 
     return(lua)

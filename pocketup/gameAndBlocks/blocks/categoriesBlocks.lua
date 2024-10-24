@@ -3,9 +3,9 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
-			{"repeat2",{ {{"number", 1},{"number",0}}, {"function", nameFunction} }},
-			{"repeatIsTrue2",{ {{"number", 1},{"function","<"},{"number",2}}, {"function", nameFunction} }},
-			{"timer2", {{{"number", 5}}, {{"number", 1}},{"function", nameFunction}}},
+			-- {"repeat2",{ {{"number", 1},{"number",0}}, {"function", nameFunction} }},
+			-- {"repeatIsTrue2",{ {{"number", 1},{"function","<"},{"number",2}}, {"function", nameFunction} }},
+			-- {"timer2", {{{"number", 5}}, {{"number", 1}},{"function", nameFunction}}},
 			{"deleteWebView", {{{"text", app.words[589]}}}},
 			{"isSensor", {{{"onOrOff", "off"}}}},
 		},
@@ -37,7 +37,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"deleteClone"},
 		},
 		["control"]={
-			-- {"timer", {{{"number", 5}}, {{"number", 1}}}},
+			{"timer3", {{{"number", 5}}, {{"number", 1}}}},
 			{"wait", {{{"number", 1}}}},
 			--{"wait",{ {{"number", 1}} }},
 			{"commentary",{ {{"text", app.words[95]}} }},
@@ -111,6 +111,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 		},
 		["sounds"]={
 			{"playSound", {{"sounds",nameSound}}},
+			{"playSoundAndWait", {{"sounds",nameSound}}},
 			--{"playSoundAndWait", {{"sounds",nameSound}}},
 			{"stopSound", {{"sounds",nameSound}}},
 			{"stopAllSounds"},

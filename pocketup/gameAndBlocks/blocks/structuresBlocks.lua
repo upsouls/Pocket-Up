@@ -145,7 +145,9 @@ allBlocks = {
 	--["touchAndSwipe"]={"block","blocks/block_gold_3_5.png", { {{"text",app.words[247]}},{{"text",app.words[248]..":"},{"cell",nil,1.5},{"text",app.words[60]..":"}, {"cell",nil,1.5}},{{"text",app.words[65]..":"},{"cell",nil,1.5},{"text",app.words[60]..":"}, {"cell",nil,1.5}}, {{"text",app.words[178]},{"cell",nil,1.5},{"text",app.words[166]}} }, 109, 250, false},
 	["lua"]={"block", "blocks/block_gold_2.png",  {{{"text", app.words[387]}}, {{"cell", nil, 8}}}, 109, 142, false},
 	["timer"]={'block', 'blocks/block_orange_2.png',{{{"text", app.words[437]}, {"cell", nil, 1.5}, {"text", app.words[103]}}, {{"text", app.words[390]}, {"cell", nil, 1.5}, {"text", app.words[93]}}}, 109, 142, true},
+	["timer3"]={'block', 'blocks/block_orange_2.png',{{{"text", app.words[437]}, {"cell", nil, 1.5}, {"text", app.words[103]}}, {{"text", app.words[390]}, {"cell", nil, 1.5}, {"text", app.words[93]}}}, 109, 142, true},
 	["endTimer"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[391]}} }, 109, 88, "end"},
+	["endTimer2"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[391]}} }, 109, 88, "end"},
 	["addBody"]={"block", "blocks/block_blue_2.png", { {{"text",app.words[392]}}, {{"typeBody"}} }, 109, 142, false},
 	["exitGame"]={"block","blocks/block_orange_1.png",{ {{"text",app.words[396]}} }, 109,88, false},
 	["toFrontLayer"]={"block", "blocks/block_blue_1.png", { {{"text",app.words[397]}} }, 109, 88, false},
@@ -225,6 +227,7 @@ allBlocks = {
 	["timer2"]={'block', 'blocks/block_orange_3.png',{{{"text", app.words[437]}, {"cell", nil, 1.5}, {"text", app.words[103]}}, {{"text", app.words[390]}, {"cell", nil, 1.5}, {"text", app.words[93]}}, {{"text", app.words[613]}}, {{"function"}}}, 109, 188, true},
 	["repeat2"]={"block", "blocks/block_orange_2.png", { {{"text",app.words[102]}, {"cell",nil,1.5}, {"text",app.words[103]}}, {{"text", app.words[613]}}, {{"function"}} }, 109, 142, true},
 	["repeatIsTrue2"]={"block", "blocks/block_orange_2.png", { {{"text",app.words[105]}, {"cell",nil,1.5}, {"text",app.words[101]}}, {{"text", app.words[613]}}, {{"function"}} }, 109, 142, true},
+	["playSoundAndWait"]={"block", "blocks/block_violet_2.png", { {{"text",app.words[618]}}, {{"sounds", nil, 1.5}}}, 109,142, false},
 }
 
 
@@ -242,4 +245,5 @@ additionallyBlocks = {
     ["waitIfTrue"]={ {"endWait",{},"on"} },
     ["repeat2"]={ {"endRepeat",{},"on"} },
     ["repeatIsTrue2"]={ {"endRepeat",{},"on"} },
+	["timer3"]={ {"endTimer2",{},"on"} },
 }
