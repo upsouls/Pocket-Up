@@ -3,6 +3,7 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
+			{"playSoundAndWait", {{"sounds",nameSound}}},
 			-- {"repeat2",{ {{"number", 1},{"number",0}}, {"function", nameFunction} }},
 			-- {"repeatIsTrue2",{ {{"number", 1},{"function","<"},{"number",2}}, {"function", nameFunction} }},
 			-- {"timer2", {{{"number", 5}}, {{"number", 1}},{"function", nameFunction}}},
