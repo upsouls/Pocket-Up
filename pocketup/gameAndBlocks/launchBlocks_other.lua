@@ -699,21 +699,21 @@ end'
         add_pcall()
         lua = lua.."local function broadcastFunction(nameFunction)\nfor key, value in pairs(objects) do\nfor i=1, #events_function[key][nameFunction] do\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][1][2].."')"
         end_pcall()
-    elseif nameBlock=='broadcastFun>objectAndClones' and infoBlock[2][1][2]~=nil and infoBlock[2][2][2]~=nil then
+    elseif nameBlock=='broadcastFun>objectAndClones' and infoBlock[2][2][2]~=nil then
         add_pcall()
         lua = lua.."local function broadcastFunction(nameFunction)\nlocal key = 'object_"..(infoBlock[2][1][2]==nil and obj_id or infoBlock[2][1][2]).."'\nlocal value = objects[key]\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
         end_pcall()
-    elseif nameBlock=='broadcastFun>object' and infoBlock[2][1][2]~=nil and infoBlock[2][2][2]~=nil then
+    elseif nameBlock=='broadcastFun>object' and infoBlock[2][2][2]~=nil then
         add_pcall()
         lua = lua.."local function broadcastFunction(nameFunction)\nlocal key = 'object_"..(infoBlock[2][1][2]==nil and obj_id or infoBlock[2][1][2]).."'\nlocal value = objects[key]\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
         end_pcall()
-    elseif nameBlock=='broadcastFun>clones' and infoBlock[2][1][2]~=nil and infoBlock[2][2][2]~=nil then
+    elseif nameBlock=='broadcastFun>clones' and infoBlock[2][2][2]~=nil then
         add_pcall()
         lua = lua.."local function broadcastFunction(nameFunction)\nlocal key = 'object_"..(infoBlock[2][1][2]==nil and obj_id or infoBlock[2][1][2]).."'\nlocal value = objects[key]\nfor i=1, #events_function[key][nameFunction] do\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
         end_pcall()
     elseif nameBlock=='addNameClone' then
         add_pcall()
-        lua = lua.."tableNamesClones["..make_all_formulas(infoBlock[2][1], object).."] = target\ntarget.nameObject = 'object_"..obj_id.."'"
+        lua = lua.."target.myName = "..make_all_formulas(infoBlock[2][1], object).."\ntableNamesClones[target.myName] = target\ntarget.nameObject = 'object_"..obj_id.."'"
         end_pcall()
     elseif nameBlock=='broadcastFun>nameClone' and infoBlock[2][2][2]~=nil then
         add_pcall()

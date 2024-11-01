@@ -1107,7 +1107,7 @@ end
 functionsMenu["startdelete"] = functionsMenu["startcopy"]
 
 local arrayAllButtonsFunctions = {
-	["back"]={"back","startmenu",{{36, "import"},{4,"copy"},{5,"delete"},{6,"rename"},{41,"isSort"},{615, "language"}}},
+	["back"]={"back","startmenu",{{36, "import"},{4,"copy"},{5,"delete"},{6,"rename"},{41,"isSort"},{621, "userAgreement"},{615, "language"}}},
 
 	["copy"]={"copy","copyAll",{{10,"copyAll"}}},
 	["delete"]={"delete","deleteAll",{{10,"deleteAll"}}},
@@ -1121,6 +1121,12 @@ functionsMenu["startlanguage"] = function ()
 	print(app.words[615])
 	funsP['записать сохранение']('selectLanguage', app.words[615])
 	os.exit()
+end
+
+functionsMenu['startuserAgreement'] = function()
+	display.remove(app.scenes[app.scene][1])
+	display.remove(app.scenes[app.scene][2])
+	scene_userAgreement()
 end
 
 functionsMenu["checkcopy"] = function ()

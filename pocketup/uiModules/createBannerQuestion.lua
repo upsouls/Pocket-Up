@@ -25,9 +25,9 @@ app.cerberus.newBannerQuestion = function(header, funEditingEnd, no, yes)
 
 	local backgroundBlackAlpha = display.newRect(CENTER_X, CENTER_Y, dH, dH)
 	backgroundBlackAlpha:setFillColor(0,0,0,0.6)
-	app.scenes[app.scene][(app.scene=="scripts" and 1 or #app.scenes[app.scene])]:insert(backgroundBlackAlpha)
+	app.scenes[app.scene][((app.scene=="scripts" or app.scene == 'categoryScripts') and 1 or #app.scenes[app.scene])]:insert(backgroundBlackAlpha)
 	local group = display.newGroup()
-	app.scenes[app.scene][(app.scene=="scripts" and 1 or #app.scenes[app.scene])]:insert(group)
+	app.scenes[app.scene][((app.scene=="scripts" or app.scene == 'categoryScripts') and 1 or #app.scenes[app.scene])]:insert(group)
 	local rect = display.newRoundedRect(CENTER_X, CENTER_Y, display.contentWidth/1.16, 0, app.roundedRect)
 	rect.anchorY=0,
 	rect:setFillColor(66/255, 66/255, 66/255)

@@ -61,7 +61,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
         local yScrollDepos = -((CENTER_Y-display.contentHeight/2)-scrollProjects.y)
         local isMoveBlock = false
         local function touchParameter(event)
-            if (event.target.text == nil) then
+            if (event.target.text == nil and isBackScene=="back") then
                 if (not isMoveBlock) then
                     local block = event.target.block
                     local objectsParameter = block.cells[event.target.idParameter]
@@ -1075,18 +1075,14 @@ elseif (event.phase=="moved") then
     end
 elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) then
     isTouchBlock = false
-    if (allBlocks[blocks[event.target.id][1]]~=nil and type(allBlocks[blocks[event.target.id][1]][6])=="boolean") then
-        local function isPrem()
-            local isPrem = not (funsP["прочитать сс сохранение"]("isPremium")==nil)
-            if (funsP["прочитать сс сохранение"]("blockPrem")~=nil) then
-                return(false)
-            else
-                return(isPrem)
+    local isNilBlock = allBlocks[blocks[event.target.id][1]]==nil
+    if (isNilBlock or type(allBlocks[blocks[event.target.id][1]][6])=="boolean") then
+        if (isTimerMoveBlock or isNilBlock) then
+            
+            if (not isNilBlock) then
+                isTimerMoveBlock = false
+                timer.cancel(timerMoveBlock)
             end
-        end
-        if (isTimerMoveBlock and (premBlocks[blocks[event.target.id][1]]==nil or isPrem())) then
-            isTimerMoveBlock = false
-            timer.cancel(timerMoveBlock)
 
             local backgroundNoTouch = display.newRect(CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight )
             backgroundNoTouch:setFillColor(0,0,0,0.5)
@@ -1115,6 +1111,10 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                 {app.words[262],"delete"},
                 {app.words[blocks[event.target.id][3]=="on" and 263 or 264], "off"},
             }
+            if (isNilBlock) then
+                table.remove(arrayButtons, 3)
+                table.remove(arrayButtons, 1)
+            end
             local buttons = {}
             local tBlock = event.target
             local funTouchNoTouch = nil
@@ -1191,8 +1191,8 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                         funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
                     elseif (event.target.nameFunction == "delete") then
                         local idBlock = tBlock.id
-                        local isEvent = allBlocks[blocks[idBlock][1]][1]=="event"
-                        local isAttachments = allBlocks[blocks[idBlock][1]][6]==true
+                        local isEvent = allBlocks[blocks[idBlock][1]]~=nil and allBlocks[blocks[idBlock][1]][1]=="event"
+                        local isAttachments = allBlocks[blocks[idBlock][1]]~=nil and allBlocks[blocks[idBlock][1]][6]==true
                         table.remove(blocks, idBlock)
                         table.remove(blocksObjects, idBlock)
 
@@ -1270,7 +1270,7 @@ elseif ((event.phase=="ended" or event.phase=="cancelled") and isTouchBlock) the
                         if (allBlocks[blocks[idOldBlock][1]][1]=="event") then
                             block.investBlocks = {}
                             local i = idOldBlock+1
-                            while (i<=#blocks and allBlocks[blocks[i][1]][1]~="event") do
+                            while (i<=#blocks and (allBlocks[blocks[i][1]]==nil or allBlocks[blocks[i][1]][1]~="event")) do
                                 local mTableBlock = plugins.json.decode(plugins.json.encode(blocks[i]))
                                 local mBlock = createBlock(mTableBlock)
                                 if (mTableBlock[3]=="off") then

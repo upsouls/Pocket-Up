@@ -122,7 +122,7 @@ listFiles = {
     "projects","objects","scenes","mainScene","optionsProject",
     "scripts","categoriesScripts","categoryScripts","redactorFormulas",
     "redactorArrayFormulas", "spriteViewer", "readySprites","sceneRedactorHitbox",
-    "visualPosition","buildApk"
+    "visualPosition","buildApk","userAgreement"
 }
 for i=1, #listFiles do
     require("pocketup.ui."..listFiles[i])

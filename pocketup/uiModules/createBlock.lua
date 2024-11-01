@@ -61,54 +61,15 @@ function createBlock(block)
 		image:setFillColor(0.85,0.85,0.75)
 	end
 
-local function isPrem()
-	local isPrem = not (funsP["прочитать сс сохранение"]("isPremium")==nil)
-	if (funsP["прочитать сс сохранение"]("blockPrem")~=nil) then
-		return(false)
-	else
-		return(isPrem)
-	end
-end
-
-	if (premBlocks[block[1]] and not isPrem()) then
-		local emitter = display.newEmitter({
-			maxParticles = 2,
-			textureFileName = "images/starPremium.png",
-			angle = 0,
-			angleVariance = 360,
-			emitterType=0,
-			duration = -1,
-			speed = 200,
-			speedVariance = 100,
-			radialAcceleration=100,
-			startParticleSize = 50.95,
-			startParticleSizeVariance = 10,
-			finishParticleSize = 5,
-			startColorAlpha=1,
-			startColorRed=1,
-			startColorBlue=1,
-			startColorGreen=1,
-		    yCoordFlipped = -1,
-		    blendFuncSource = 770,
-		    rotatePerSecondVariance = 153.95,
-		    particleLifespan = 0.7237,
-		    tangentialAcceleration = -144.74,
-		    blendFuncDestination = 1,
-		    finishColorRed = 1,
-		    maxRadiusVariance = 72.63,
-		    finishParticleSizeVariance = 64,
-		    tangentialAccelVariance = -92.11,
-		})
-		local star = display.newImage(group, "images/starPremium.png", image.x+image.width*image.xScale/2, image.y-image.height*image.yScale/2+image.width*image.xScale/1.75)
-		emitter.x, emitter.y = star.x, star.y
-		star.xScale, star.yScale = image.xScale/1.5, image.xScale/1.5
-		local transitionStar
-		transitionStar = function()
-			local rand = math.random(0, 100)/1000
-			--transition.to(star, {time=200, xScale=image.xScale/1.25+rand, yScale=image.xScale/1.25+rand, alpha=0.5+rand*10/2, onComplete=transitionStar})
-		end
-		transitionStar()
-		group:insert(emitter)
+	if (block[1]:gsub("paidBlock_", "") ~= block[1]) then
+		local rect = display.newRoundedRect(-display.contentWidth/2.4, -sprite.height/2+display.contentWidth/17, 0, display.contentWidth/16, display.contentWidth/32)
+		group:insert(rect)
+		rect:setFillColor(0.25,0.75,0.4)
+		rect.strokeWidth = 2
+		rect:setStrokeColor(0.2, 0.6, 0.3)
+		local text = display.newText("20₽", rect.x, rect.y, fontSize1)
+		group:insert(text)
+		rect.width = text.width+rect.height
 	end
 
 	for i=1, #formulas do

@@ -67,7 +67,6 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 
 	local groupScene = display.newGroup()
 	local groupSceneScroll = display.newGroup()
-
 	app.scene = "categoryScripts"
 	app.scenes[app.scene] = {groupScene, groupSceneScroll}
 	local touchBackMenu = {function ()
