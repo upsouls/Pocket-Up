@@ -104,43 +104,43 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
     elseif nameBlock == 'editRotateLeft' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:rotate(-'..rotate..')\n'
+        lua = lua..'target:rotate(-'..rotate..')'
         lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'editRotateRight' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:rotate('..rotate..')\n'
+        lua = lua..'target:rotate('..rotate..')'
         lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'editPositionX'  then
         local x = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:translate('..x..', 0)\n'
+        lua = lua..'target:translate('..x..', 0)'
         end_pcall()
     elseif nameBlock == 'editPositionY'  then
         local y = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:translate(0,-('..y..'))\n'
+        lua = lua..'target:translate(0,-('..y..'))'
         end_pcall()
     elseif nameBlock == 'setRotate' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target.rotation = '..rotate..'\n'
+        lua = lua..'target.rotation = '..rotate
         lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'hide' then
         add_pcall()
-        lua = lua..'target.isVisible = false\n'
+        lua = lua..'target.isVisible = false'
         end_pcall()
     elseif nameBlock == 'show' then
         add_pcall()
-        lua = lua..'target.isVisible = true\n'
+        lua = lua..'target.isVisible = true'
         end_pcall()
     elseif nameBlock == 'setAlpha' then
         local alpha = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target.alpha = math.min(math.max(100-('..alpha..'),0),100)/100\n'
+        lua = lua..'target.alpha = math.min(math.max(100-('..alpha..'),0),100)/100'
         end_pcall()
     elseif nameBlock == 'commentary' then
         local comment = make_all_formulas(infoBlock[2][1], object)
@@ -295,9 +295,9 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
     elseif nameBlock == 'stopSound' and infoBlock[2][1][2]~=nil then
         add_pcall()
         lua = lua..'audio.stop(playingSounds['..infoBlock[2][1][2]..'])\naudio.dispose(playSounds['.. infoBlock[2][1][2]..'])\nplaySounds['.. infoBlock[2][1][2]..'] = nil'
-        end_pcall() --проверен
+        end_pcall()
     elseif nameBlock == 'stopAllSounds' then
-        add_pcall() -- работает
+        add_pcall()
         lua = lua..'audio.stop()\naudio.dispose()\nplaySounds = {}'
         end_pcall()
     elseif nameBlock == 'setVolumeSound' then
@@ -359,7 +359,7 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         add_pcall()
         lua = lua..'target.physicsTable.friction = '..friction..'/100\ntarget:physicsReload()'
         end_pcall()
-    elseif nameBlock == 'setTypeRotate' then -- ["setTypeRotate",[["typeRotate","true"]],"on"]
+    elseif nameBlock == 'setTypeRotate' then
         add_pcall()
         if infoBlock[2][1][2] == 'true' then
             lua = lua..'target.isFixedRotation = false'
@@ -367,7 +367,7 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
             lua = lua..'target.isFixedRotation = true'
         end
         end_pcall()
-    elseif nameBlock == 'goTo' then -- ["goTo",[["goTo","touch"]],"on"] -- ["goTo",[["goTo",6]],"on"] -- ["goTo",[["goTo","random"]],"on"]
+    elseif nameBlock == 'goTo' then
         add_pcall()
         if infoBlock[2][1][2] == 'touch' then
             lua = lua..'target.x , target.y = globalConstants.touchX, -globalConstants.touchY'
@@ -377,24 +377,18 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
             lua = lua..'local object = objects[\'object_'..infoBlock[2][1][2]..'\']\ntarget.x, target.y = object.x, object.y'
         end
         end_pcall()
-    elseif nameBlock == 'setRotateToObject' and infoBlock[2][1][2]~=nil then -- ["setRotateToObject",[["objects",7]],"on"]
+    elseif nameBlock == 'setRotateToObject' and infoBlock[2][1][2]~=nil then
         add_pcall()
         lua = lua..'if ( objects[\'object_'..infoBlock[2][1][2]..'\']~=nil) then\ntarget.rotation = pocketupFuns.atan2(objects[\'object_'..infoBlock[2][1][2]..'\'].x - target.x, target.y - objects[\'object_'..infoBlock[2][1][2]..'\'].y)\nend'
         lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'toFrontLayer' then
-        add_pcall()
         lua = lua..'target:toFront()'
-        end_pcall()
     elseif nameBlock == 'toBackLayer' then
-        add_pcall()
         lua = lua..'target:toBack()'
-        end_pcall()
-
-
     elseif nameBlock == 'setImageToName' and #images>0 and infoBlock[2][1][2]~=nil then
         local image = infoBlock[2][1][2]
-        
+
         if (image~=nil) then
             add_pcall()
             lua = lua.."local newIdImage = nil\nfor i=1, #listImages do\nif (listImages[i]=="..image..") then\nnewIdImage=i\nbreak\nend\nend\nif (newIdImage ~= nil) then"
