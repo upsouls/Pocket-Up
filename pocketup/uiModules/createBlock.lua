@@ -67,7 +67,7 @@ function createBlock(block)
 		rect:setFillColor(0.25,0.75,0.4)
 		rect.strokeWidth = 2
 		rect:setStrokeColor(0.2, 0.6, 0.3)
-		local text = display.newText("20₽", rect.x, rect.y, fontSize1)
+		local text = display.newText("50₽", rect.x, rect.y, fontSize1)
 		group:insert(text)
 		rect.width = text.width+rect.height
 	end
