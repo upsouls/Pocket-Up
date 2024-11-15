@@ -82,7 +82,7 @@ function createBlock(block)
 			end
 
 			if (formula[1]=="text") then
-				local header = display.newText(formula[2], xF, yF, "fonts/font_1.ttf", app.fontSize1)
+				local header = display.newText(formula[2], xF, yF, "fonts/font_1.ttf", app.fontSizeBlock)
 				if (infoBlock[2]:gsub("light_", "")~=infoBlock[2]) then
 					header:setFillColor(0, 0, 0)
 				end

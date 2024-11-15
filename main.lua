@@ -61,7 +61,7 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
         local header = {headers={["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"}}
         network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, header)
     end
-    --
+
     if utils.isSim then
         local text = display.newText('',70, 30, nil, 30)
         Runtime:addEventListener('enterFrame', function ()
