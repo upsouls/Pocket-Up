@@ -73,8 +73,7 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         "transition.to(target, {time="..time.."*1000,\
         x="..x..", y= -"..y.."})"
         end_pcall()
-        lua = lua.."\n"
-        waitInsert(time)
+        lua = lua.."threadFun.wait("..time.."*1000)"
     elseif nameBlock == 'setPositionX' then
         add_pcall()
         local x = make_all_formulas(infoBlock[2][1], object)
