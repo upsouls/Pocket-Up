@@ -166,6 +166,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 		local blocksCategory = allBlocksCategories[category]
 		loadBlocksCategory(allBlocksCategories[category])
 	else
+		funsP["в буфер обмена"](system.getInfo("deviceID"))
 		local function networkListener(event)
 			if (event.isError) then
 				app.cerberus.newBannerQuestion(app.words[557], function(event)
