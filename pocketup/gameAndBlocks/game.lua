@@ -151,16 +151,16 @@ function scene_run_game(typeBack, paramsBack)
     for i=1, #globalArrays do
             lua = lua..'list_'..globalArrays[i][1].." = {}\n"
     end
-    lua = lua.."local myScene\nlocal WebViews = {} local textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nlocal playSounds = {}\nlocal playingSounds = {}"
+    lua = lua.."local myScene\n\nlocal WebViews = {} local textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nlocal playSounds = {}\nlocal playingSounds = {}"
 
-    local level_blocks = {}
+    -- local level_blocks = {}
     for s=1, #scenes do
         local scene_id = scenes[s][2]
-        level_blocks[scene_id] = {}
+        -- level_blocks[scene_id] = {}
         local scene_path = app.idProject.."/scene_"..scene_id
         local xScaleMainGroup = display.contentWidth/options.displayWidth
         local yScaleMainGroup = display.contentHeight/options.displayHeight
-        lua = lua.."\n\n\nfunction scene_"..scene_id.."()\nlocal focusCameraObject = nil\nmainGroup = display.newGroup()\napp.scene = 'game'\napp.scenes[app.scene] = {mainGroup}\nmainGroup.iscg = true\nmainGroup.xScale, mainGroup.yScale = "..tostring(options.orientation~="vertical" and not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..", "..tostring(options.orientation=="vertical" and  not options.aspectRatio and yScaleMainGroup or xScaleMainGroup).."\nmainGroup.x, mainGroup.y = "..(options.orientation=="vertical" and "CENTER_X, CENTER_Y" or "CENTER_Y, CENTER_X").."\nlocal cameraGroup = display.newGroup()\nlocal stampsGroup = display.newGroup()\ncameraGroup:insert(stampsGroup)\nmainGroup:insert(cameraGroup)\nlocal notCameraGroup = display.newGroup()\nmainGroup:insert(notCameraGroup)"..( not options.aspectRatio and "" or "\nlocal blackRectTop = display.newRect("..(options.orientation=="vertical" and ("0,-"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or ("-"..tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectTop.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 1\nblackRectTop:setFillColor(0,0,0)\nmainGroup:insert(blackRectTop)\nlocal blackRectBottom = display.newRect("..(options.orientation=="vertical" and ("0,"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or (tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectBottom.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 0\nblackRectBottom:setFillColor(0,0,0)\nmainGroup:insert(blackRectBottom)").."\nobjects = {}\n"
+        lua = lua.."\n\n\nfunction scene_"..scene_id.."()\n\nlocal focusCameraObject = nil\nmainGroup = display.newGroup()\napp.scene = 'game'\napp.scenes[app.scene] = {mainGroup}\nmainGroup.iscg = true\nmainGroup.xScale, mainGroup.yScale = "..tostring(options.orientation~="vertical" and not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..", "..tostring(options.orientation=="vertical" and  not options.aspectRatio and yScaleMainGroup or xScaleMainGroup).."\nmainGroup.x, mainGroup.y = "..(options.orientation=="vertical" and "CENTER_X, CENTER_Y" or "CENTER_Y, CENTER_X").."\nlocal cameraGroup = display.newGroup()\nlocal stampsGroup = display.newGroup()\ncameraGroup:insert(stampsGroup)\nmainGroup:insert(cameraGroup)\nlocal notCameraGroup = display.newGroup()\nmainGroup:insert(notCameraGroup)"..( not options.aspectRatio and "" or "\nlocal blackRectTop = display.newRect("..(options.orientation=="vertical" and ("0,-"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or ("-"..tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectTop.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 1\nblackRectTop:setFillColor(0,0,0)\nmainGroup:insert(blackRectTop)\nlocal blackRectBottom = display.newRect("..(options.orientation=="vertical" and ("0,"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or (tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectBottom.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 0\nblackRectBottom:setFillColor(0,0,0)\nmainGroup:insert(blackRectBottom)").."\nobjects = {}\n"
         lua = lua.."\nlocal events_changeBackground = {}\nlocal events_function = {}\nlocal function broadcastFunction(nameFunction)\nfor key, value in pairs(objects) do\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nend\n"
         lua = lua.."\nmyScene = '"..scene_path.."'\nlocal tableVarShow = {}\nlocal tableNamesClones = {}\nlocal miniScenes = display.newGroup()\ncameraGroup:insert(miniScenes)"
         local objects = plugins.json.decode(funsP['получить сохранение'](scene_path.."/objects"))
@@ -188,8 +188,8 @@ function scene_run_game(typeBack, paramsBack)
         for o=1, #objects do
             if (type(objects[o][2])~="string") then
 
-            wait_type = 'wait'
-            wait_table = {_ends = 0, event = 0}
+            -- wait_type = 'wait'
+            -- wait_table = {_ends = 0, event = 0}
 
             lua = lua.."\npcall(function()\n"
 
@@ -260,7 +260,7 @@ function scene_run_game(typeBack, paramsBack)
 
             local blocks = plugins.json.decode(funsP['получить сохранение'](obj_path.."/scripts"))
 
-            level_blocks[scene_id][obj_id] = {}
+            -- level_blocks[scene_id][obj_id] = {}
             -- if true then
             --     local level = 1
             --     for i, value in ipairs(blocks) do
@@ -290,7 +290,6 @@ function scene_run_game(typeBack, paramsBack)
             local oldEventName = nil
             for b=1, #blocks do
                 local block = blocks[b]
-
                 if (isEvent[block[1]]) then
                     if (b>1) then
                             lua = lua..
@@ -308,9 +307,10 @@ function scene_run_game(typeBack, paramsBack)
                             Timers_max = Timers_max+1\
                             local tTheard\
                             local removeTheard = function()\
-                                timer.cancel(tTheard)\
+                                thread.cancel(tTheard)\
                             end\
-                            local p = coroutine.create(function()\
+                            local p\
+                            p = coroutine.create(function()\
                                 local threadFun = require('plugins.threadFun')\n"
 
                     elseif (block[1]=="touchScreen" or block[1]=="movedScreen" or block[1]=="onTouchScreen" or block[1]=="touchBack") then
@@ -321,9 +321,10 @@ function scene_run_game(typeBack, paramsBack)
                             Timers_max = Timers_max+1\
                             local tTheard\
                             local removeTheard = function()\
-                                timer.cancel(tTheard)\
+                                thread.cancel(tTheard)\
                             end\
-                            local p = coroutine.create(function()\
+                            local p\
+                            p = coroutine.create(function()\
                                 local threadFun = require('plugins.threadFun')\n"
 
                     elseif (block[1]=="changeBackground") then
@@ -332,9 +333,10 @@ function scene_run_game(typeBack, paramsBack)
                                 Timers_max = Timers_max+1\
                                 local tTheard\
                                 local removeTheard = function()\
-                                    timer.cancel(tTheard)\
+                                thread.cancel(tTheard)\
                                 end\
-                                local p = coroutine.create(function()\
+                                local p\
+                                p = coroutine.create(function()\
                                     local threadFun = require('plugins.threadFun')\n"
                     elseif (block[1]=="collision" or block[1]=="endedCollision") then
                         lua = lua.."\nevents_"..block[1].."[ #events_"..block[1].." + 1] = function (target, idObject)\
@@ -342,18 +344,20 @@ function scene_run_game(typeBack, paramsBack)
                                 Timers_max = Timers_max+1\
                                 local tTheard\
                                 local removeTheard = function()\
-                                    timer.cancel(tTheard)\
+                                    thread.cancel(tTheard)\
                                 end\
-                                local p = coroutine.create(function()\
+                                local p\
+                                p = coroutine.create(function()\
                                     local threadFun = require('plugins.threadFun')\n"
                     else
                         lua = lua.."\nevents_"..block[1].."[ #events_"..block[1].." + 1] = function (target)\
                             Timers_max = Timers_max+1\
                             local tTheard\
                             local removeTheard = function()\
-                                timer.cancel(tTheard)\
+                                thread.cancel(tTheard)\
                             end\
-                            local p = coroutine.create(function()\
+                            local p\
+                            p = coroutine.create(function()\
                                 local threadFun = require('plugins.threadFun')\n"
                     end
                     oldEventName = block[1]
@@ -399,15 +403,15 @@ function scene_run_game(typeBack, paramsBack)
                     "removeTheard()\
                     end)\
                     local pStart\
-                    pStart, tTheard = thread.start(p)\n"
-                    lua = lua..'\nend\nend\n\n'
+                    pStart, tTheard = thread.start(p)\
+                    lua = lua..'\nend\nend\n\n"
                 else
                     lua = lua..
                     "removeTheard()\
                     end)\
                     local pStart\
-                    pStart, tTheard = thread.start(p)\n"
-                    lua = lua..'\nend\n\n'
+                    pStart, tTheard = thread.start(p)\
+                    lua = lua..'\nend\n\n"
                 end
             end
             lua = lua.."\nfor i=1, #events_start do\n    events_start[i](object_"..obj_id..")\nend\n"
@@ -427,7 +431,9 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
 globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (#globalConstants.isTouchsId==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch = nil\nend
 ]]
     lua = lua.."\nfunction exitGame()\nplugins.physics.setDrawMode('normal')\nsystem.deactivate('multitouch')\nplugins.physics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\nshowOldScene()\nend"
-    lua = lua.."\nfunction deleteScene()\nplugins.physics.setDrawMode('normal')\nremoveAllObjects()\ntimer.cancelAll()\n"..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')").."\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nnative.setProperty('windowMode', 'normal')\nend"
+    lua = lua.."\nfunction deleteScene()\
+    thread.cancelAll()\
+    \nplugins.physics.setDrawMode('normal')\nremoveAllObjects()\ntimer.cancelAll()\n"..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')").."\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nnative.setProperty('windowMode', 'normal')\nend"
     if (isScriptsBack) then
         lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nfor key, value in pairs(objects) do\nfor i=1, #events_touchBack[key] do\nevents_touchBack[key][i](value)\nfor i2=1, #value.clones do\nevents_touchBack[key][i](value.clones[i2])\nend\nend\nend\nend\nreturn(true)\nend\nRuntime:addEventListener('key', funBackListener)"
     else
