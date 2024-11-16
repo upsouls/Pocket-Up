@@ -403,15 +403,15 @@ function scene_run_game(typeBack, paramsBack)
                     "removeTheard()\
                     end)\
                     local pStart\
-                    pStart, tTheard = thread.start(p)\
-                    lua = lua..'\nend\nend\n\n"
+                    pStart, tTheard = thread.start(p)"
+                    lua = lua..'\nend\nend\n\n'
                 else
                     lua = lua..
                     "removeTheard()\
                     end)\
                     local pStart\
-                    pStart, tTheard = thread.start(p)\
-                    lua = lua..'\nend\n\n"
+                    pStart, tTheard = thread.start(p)"
+                    lua = lua..'\nend\n\n'
                 end
             end
             lua = lua.."\nfor i=1, #events_start do\n    events_start[i](object_"..obj_id..")\nend\n"
