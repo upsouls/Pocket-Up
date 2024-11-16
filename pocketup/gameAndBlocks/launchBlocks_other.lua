@@ -740,7 +740,9 @@ end'
     elseif nameBlock == 'showToast' then
         add_pcall()
         local arg1 = make_all_formulas(infoBlock[2][1], object)
-        lua = lua..'if not utils.isSim and not utils.isWin then require \'plugin.toaster\'.shortToast('..arg1..') end\n'
+        lua = lua..'if not utils.isSim and not utils.isWin then \
+            require \'plugin.toaster\'.shortToast('..arg1..')\
+        end\n'
         end_pcall()
     elseif nameBlock == 'showHitboxes' then
         add_pcall()
