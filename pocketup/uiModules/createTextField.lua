@@ -70,7 +70,7 @@ local textPlaceholder = display.newText({
     fontSize=app.fontSize2,
 })
 miniGroupTop:insert(textPlaceholder)
-local input = native.newTextBox(-display.contentWidth, textPlaceholder.y--[[+textPlaceholder.height]], textHeader.width, textHeader.width/10)
+local input = native.newTextBox(-display.contentWidth, textPlaceholder.y+textPlaceholder.height, textHeader.width, textHeader.width/10)
 input.isEditable = true
 input.hasBackground = false
 if utils.isSim or utils.isWin then

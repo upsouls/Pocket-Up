@@ -1,22 +1,14 @@
 local m = {}
 
 local timer = require('timer')
-local running = {}
 
 m.cancelAll = function ()
-    for index, value in ipairs(running) do
-        pcall(function ()
-            timer.cancel(value)
-        end)
-    end
-    running = {}
+    timer.cancelAll()
 end
 
 m.cancel = function (t)
-    pcall(function ()
-        timer.cancel(t)
-        t = nil
-    end)
+    timer.cancel(t)
+    t = nil
 end
 
 m.start = function (p)
@@ -24,7 +16,6 @@ m.start = function (p)
         coroutine.resume(p)
     end
     local t = timer.performWithDelay(0, listener, 0)
-    table.insert(running, t)
     return listener, t
 end
 

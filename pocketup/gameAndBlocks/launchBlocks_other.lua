@@ -45,7 +45,7 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         local formula = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
         lua = lua..'target.property_size = ('..(nameBlock=='setSize' and '' or 'target.property_size)+(')..formula..')\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)'
-        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].size = target.property_size/100\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
+        --lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].size = target.property_size/100\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         lua = lua.."\ntarget:physicsReload()"
         end_pcall()
     elseif nameBlock == 'setPosition' then
@@ -104,13 +104,13 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
         lua = lua..'target:rotate(-'..rotate..')'
-        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
+        --lua = lua.."\nif (target.parent_obj==target) then\local objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'editRotateRight' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
         lua = lua..'target:rotate('..rotate..')'
-        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
+        --lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'editPositionX'  then
         local x = make_all_formulas(infoBlock[2][1], object)
@@ -126,7 +126,7 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
         lua = lua..'target.rotation = '..rotate
-        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
+        --lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'hide' then
         add_pcall()
@@ -214,20 +214,95 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].path = target.image_path\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'clone' then
-        --add_pcall()
+        add_pcall()
         if (infoBlock[2][1][2]~=nil) then
             lua = lua.."\nlocal target = objects['object_"..infoBlock[2][1][2].."']"
         end
-        lua = lua.."\nlocal myClone\nif (target.parent_obj.countImages>0) then"
+        lua = lua.."\nlocal myClone\
+        if (target.parent_obj.countImages>0) then"
         lua = lua.."\nmyClone = display.newImage(target.image_path, system.DocumentsDirectory, target.x, target.y)"
-        lua = lua.."\nmyClone.image_path = target.image_path\nfor k, v in pairs(target.parent_obj.namesVars) do\nmyClone[v] = 0\nend\nfor k, v in pairs(target.parent_obj.namesLists) do\nmyClone[v] = {}\nend"
+        lua = lua.."\nmyClone.image_path = target.image_path\
+        for k, v in pairs(target.parent_obj.namesVars) do\
+            myClone[v] = 0\
+        end\
+        for k, v in pairs(target.parent_obj.namesLists) do\
+            myClone[v] = {}\
+        end"
         lua = lua.."\nelse"
         lua = lua.."\nmyClone = display.newImage('images/notVisible.png', target.x, target.y)"
         lua = lua.."\nend"
-        lua = lua.."\ntarget.group:insert(myClone)\nmyClone.group = target.group"
-        lua = lua.."\nmyClone:addEventListener('touch', function(event)\nif (event.phase=='began') then\nlocal newIdTouch=globalConstants.touchId+1\nglobalConstants.touchId = newIdTouch\nglobalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true\nglobalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\ndisplay.getCurrentStage():setFocus(event.target, event.id)\nevent.target.isTouch = true\nfor key, value in pairs(objects) do\nfor i=1, #events_touchScreen[key] do\nevents_touchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_touchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #myClone.parent_obj.events_touchObject do\nmyClone.parent_obj.events_touchObject[i](event.target)\nend\nelseif (event.phase=='moved') then\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_movedScreen[key] do\nevents_movedScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_movedScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #myClone.parent_obj.events_movedObject do\nmyClone.parent_obj.events_movedObject[i](event.target)\nend\nelse\ndisplay.getCurrentStage():setFocus(event.target, nil)\nevent.target.isTouch = nil\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (pocketupFuns.getCountTouch(globalConstants.isTouchsId)==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch = false\nend\nfor key, value in pairs(objects) do\nfor i=1, #events_onTouchScreen[key] do\nevents_onTouchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_onTouchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #myClone.parent_obj.events_onTouchObject do\nmyClone.parent_obj.events_onTouchObject[i](event.target)\nend\nend\nreturn(true)\nend)"
+        lua = lua.."\ntarget.group:insert(myClone)\
+        myClone.group = target.group"
+        lua = lua.."\nmyClone:addEventListener('touch', function(event)\
+        if (event.phase=='began') then\
+            local newIdTouch=globalConstants.touchId+1\
+            globalConstants.touchId = newIdTouch\
+            globalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true\
+            globalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\
+            display.getCurrentStage():setFocus(event.target, event.id)\
+            event.target.isTouch = true\
+            for key, value in pairs(objects) do\
+                pcall(function()\
+                for i=1, #events_touchScreen[key] do\
+                    events_touchScreen[key][i](value)\
+                    for i2=1, #value.clones do\
+                        events_touchScreen[key][i](value.clones[i2])\
+                    end\
+                end\
+            end)\
+            end\
+            pcall(function()\
+            for i=1, #myClone.parent_obj.events_touchObject do\
+                myClone.parent_obj.events_touchObject[i](event.target)\
+            end\
+        end)\
+        elseif (event.phase=='moved') then\
+            globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\
+            for key, value in pairs(objects) do\
+                pcall(function()\
+                for i=1, #events_movedScreen[key] do\
+                    events_movedScreen[key][i](value)\
+                    for i2=1, #value.clones do\
+                        events_movedScreen[key][i](value.clones[i2])\
+                    end\
+                end\
+            end)\
+            end\
+            pcall(function()\
+            for i=1, #myClone.parent_obj.events_movedObject do\
+                myClone.parent_obj.events_movedObject[i](event.target)\
+            end\
+        end)\
+        else\
+            display.getCurrentStage():setFocus(event.target, nil)\
+            event.target.isTouch = nil\
+            globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\
+            if (pocketupFuns.getCountTouch(globalConstants.isTouchsId)==0) then\
+                globalConstants.keysTouch = {}\
+                globalConstants.isTouch = false\
+            end\
+            for key, value in pairs(objects) do\
+                pcall(function()\
+                for i=1, #events_onTouchScreen[key] do\
+                    events_onTouchScreen[key][i](value)\
+                    for i2=1, #value.clones do\
+                        events_onTouchScreen[key][i](value.clones[i2])\
+                    end\
+                end\
+            end)\
+            end\
+            pcall(function()\
+            for i=1, #myClone.parent_obj.events_onTouchObject do\
+                myClone.parent_obj.events_onTouchObject[i](event.target)\
+            end\
+        end)\
+        end\
+        return(true)\
+    end)"
         lua = lua.."\nmyClone.xScale, myClone.yScale, myClone.alpha, myClone.rotation, myClone.numberImage, myClone.parent_obj = target.xScale, target.yScale, target.alpha, target.rotation, target.numberImage, target.parent_obj"
-        lua = lua.."\nmyClone.fill.effect = 'filter.brightness'\nmyClone.property_brightness = target.property_brightness\nmyClone.fill.effect.intensity = (target.property_brightness)/100-1"
+        lua = lua.."\nmyClone.fill.effect = 'filter.brightness'\
+        myClone.property_brightness = target.property_brightness\
+        myClone.fill.effect.intensity = (target.property_brightness)/100-1"
 
 
         lua = lua.."\nmyClone.parent_obj = target\ntarget.parent_obj.clones[#target.parent_obj.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
@@ -237,7 +312,7 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         lua = lua.."\nmyClone.gravityScale, myClone.isSensor = target.gravityScale, target.isSensor"
         lua = lua.."\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_startClone do\nmyClone.parent_obj.events_startClone[i](myClone)\nend\n"
         lua = lua.."\nend) end)"
-        --end_pcall()
+        end_pcall()
     elseif nameBlock == 'deleteClone' then
         add_pcall()
         lua = lua.."if (target) then\ntable.remove(target.parent_obj.clones, target.idClone)\nfor i=1, #target.parent_obj.clones do\ntarget.parent_obj.clones[i].idClone = i\nend\ndisplay.remove(target)\n\nend\n"
@@ -379,7 +454,7 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
     elseif nameBlock == 'setRotateToObject' and infoBlock[2][1][2]~=nil then
         add_pcall()
         lua = lua..'if ( objects[\'object_'..infoBlock[2][1][2]..'\']~=nil) then\ntarget.rotation = pocketupFuns.atan2(objects[\'object_'..infoBlock[2][1][2]..'\'].x - target.x, target.y - objects[\'object_'..infoBlock[2][1][2]..'\'].y)\nend'
-        lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
+        --lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
         end_pcall()
     elseif nameBlock == 'toFrontLayer' then
         lua = lua..'target:toFront()'
@@ -740,9 +815,9 @@ end'
     elseif nameBlock == 'showToast' then
         add_pcall()
         local arg1 = make_all_formulas(infoBlock[2][1], object)
-        lua = lua..'if not utils.isSim and not utils.isWin then \
-            require \'plugin.toaster\'.shortToast('..arg1..')\
-        end\n'
+        lua = lua.."if not utils.isSim and not utils.isWin then\
+            require('plugin.toaster').shortToast("..arg1..")\
+        end\n"
         end_pcall()
     elseif nameBlock == 'showHitboxes' then
         add_pcall()

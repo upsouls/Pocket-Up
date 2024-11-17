@@ -433,7 +433,24 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
     lua = lua.."\nfunction exitGame()\nplugins.physics.setDrawMode('normal')\nsystem.deactivate('multitouch')\nplugins.physics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\nshowOldScene()\nend"
     lua = lua.."\nfunction deleteScene()\
     thread.cancelAll()\
-    \nplugins.physics.setDrawMode('normal')\nremoveAllObjects()\ntimer.cancelAll()\n"..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')").."\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nnative.setProperty('windowMode', 'normal')\nend"
+    for key, value in pairs(objects) do\
+        local target = value\
+        pcall(function()\
+            \nif (target.parent_obj==target) then\
+                local objectsTable = plugins.json.decode(funsP['получить сохранение'](myScene..'/objects'))\
+                if (objectsTable[target.infoSaveVisPos][3]==nil) then\
+                    objectsTable[target.infoSaveVisPos][3] = {}\
+                end\
+                objectsTable[target.infoSaveVisPos][3].size = target.property_size/100\
+                objectsTable[target.infoSaveVisPos][3].rotation = target.rotation\
+                funsP['записать сохранение'](myScene..'/objects', plugins.json.encode(objectsTable))\
+            end\
+        end)\
+    end\
+    plugins.physics.setDrawMode('normal')\
+    removeAllObjects()\
+    timer.cancelAll()\
+    "..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')").."\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nnative.setProperty('windowMode', 'normal')\nend"
     if (isScriptsBack) then
         lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nfor key, value in pairs(objects) do\nfor i=1, #events_touchBack[key] do\nevents_touchBack[key][i](value)\nfor i2=1, #value.clones do\nevents_touchBack[key][i](value.clones[i2])\nend\nend\nend\nend\nreturn(true)\nend\nRuntime:addEventListener('key', funBackListener)"
     else

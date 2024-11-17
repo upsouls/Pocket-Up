@@ -363,6 +363,9 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 	textFieldXPos.x = CENTER_X
 	textFieldXPos.inputType = "no-emoji"
 	textFieldXPos.hasBackground = false
+	if not utils.isSim and not utils.isSim then
+		textFieldXPos:setFillColor(1,1,1,1)
+	end
 	textFieldXPos.anchorX, textFieldXPos.anchorY = 1, 1
 	groupInterface:insert(textFieldXPos)
 	local line = display.newRect(CENTER_X-display.contentWidth/50, textFieldXPos.y, textFieldXPos.width, display.contentWidth/150)
@@ -386,6 +389,9 @@ function scene_redactorShapeHitbox(arrayShape, textParameter, images, blocks)
 	textFieldYPos.inputType = "no-emoji"
 	textFieldYPos.hasBackground = false
 	textFieldYPos.anchorX, textFieldYPos.anchorY = 1, 1
+	if not utils.isSim and not utils.isSim then
+		textFieldYPos:setFillColor(1,1,1,1)
+	end
 	groupInterface:insert(textFieldYPos)
 	local line = display.newRect(CENTER_X+display.contentWidth/3, textFieldXPos.y, textFieldXPos.width, display.contentWidth/150)
 	line.anchorX = 1
