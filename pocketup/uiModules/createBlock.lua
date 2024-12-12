@@ -268,6 +268,7 @@ function createBlock(block)
 						["email"] = app.words[503],
 						["no-emoji"] = app.words[504],
 					}
+					print(plugins.json.encode(formula))
 					nameFunction = types[formula[2][2]]
 				end
 

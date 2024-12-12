@@ -76,7 +76,7 @@ function loadFormula(event, posCursor)
 			end
 			value = value..nameFormulas[event[i][2]].."("..nameObject..")"
 		else
-			value = value..nameFormulas[event[i][2]]
+			value = value..(nameFormulas[event[i][2]] or "error")
 		end
 	end
 	if (posCursor==#event+1) then

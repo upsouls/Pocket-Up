@@ -229,6 +229,22 @@ allBlocks = {
 	["repeat2"]={"block", "blocks/block_orange_2.png", { {{"text",app.words[102]}, {"cell",nil,1.5}, {"text",app.words[103]}}, {{"text", app.words[613]}}, {{"function"}} }, 109, 142, true},
 	["repeatIsTrue2"]={"block", "blocks/block_orange_2.png", { {{"text",app.words[105]}, {"cell",nil,1.5}, {"text",app.words[101]}}, {{"text", app.words[613]}}, {{"function"}} }, 109, 142, true},
 	["playSoundAndWait"]={"block", "blocks/block_violet_2.png", { {{"text",app.words[619]}}, {{"sounds", nil, 1.5}}}, 109,142, false},
+	
+	["removeCameraTextField"] = {"block", "blocks/block_green_2.png", { {{"text", app.words[518]},}, {{"text", app.words[492]}, {"cell", nil, 3}} }, 109, 142, false},
+	["insertCameraTextField"] = {"block", "blocks/block_green_2.png", { {{"text", app.words[517]},}, {{"text", app.words[492]}, {"cell", nil, 3}} }, 109, 142, false},
+	["setPositionTextField"] = {"block", "blocks/block_green_3.png", { {{"text", app.words[494]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"text", app.words[59]}, {"cell", nil, 3}, {"text", app.words[60]}, {"cell", nil, 3}} }, 109, 188, false},
+	["editPositionTextField"] = {"block", "blocks/block_green_3.png", { {{"text", app.words[495]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"text", app.words[59]}, {"cell", nil, 3}, {"text", app.words[60]}, {"cell", nil, 3}} }, 109, 188, false},
+	["setFontSizeTextField"] = {"block", "blocks/block_green_2.png", { {{"text", app.words[496]},}, {{"text", app.words[492]}, {"cell", nil, 1.5}, {"text", app.words[337]}, {"cell", nil, 1.5}} }, 109, 142, false},
+	["setTypeInputTextField"] = {"block", "blocks/block_green_3.png", {{{"text", app.words[497]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"inputType"}}}, 109, 188, false},
+	["setAlignTextField"] = {"block", "blocks/block_green_3.png", {{{"text", app.words[505]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"alignText"}}}, 109, 188, false},
+	["isSecureTextField"] = {"block", "blocks/block_green_3.png", {{{"text", app.words[507]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"onOrOff"}}}, 109, 188, false},
+	["placeholderTextField"] = {"block", "blocks/block_green_3.png", {{{"text", app.words[508]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"text", app.words[170]}, {"cell", nil, 3}}}, 109, 188, false},
+	["valueTextField"] = {"block", "blocks/block_green_3.png", {{{"text", app.words[509]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"text", app.words[170]}, {"cell", nil, 3}}}, 109, 188, false},
+	["setColorTextField"] = {"block", "blocks/block_green_3.png", {{{"text", app.words[510]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"text", app.words[330]}, {"cell", nil, 3}}}, 109, 188, false},
+	["setSelectionTextField"] = {"block", "blocks/block_green_3.png", {{{"text", app.words[511]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"text", app.words[512]}, {"cell", nil, 3}}, {{"text", app.words[513]}, {"cell", nil, 3}}}, 109, 188, false},
+	["getSelectionTextField"] = {"block", "blocks/block_green_3.png", {{{"text", app.words[514]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"variables"}}}, 109, 188, false},
+	["setKeyboardToTextField"] = {"block", "blocks/block_green_2.png", {{{"text", app.words[515]},}, {{"text", app.words[492]}, {"cell", nil, 3}}}, 109, 142, false},
+	["removeKeyboardToTextField"] = {"block", "blocks/block_green_1.png", {{{"text", app.words[516]},}}, 109, 88, false},
 }
 
 
