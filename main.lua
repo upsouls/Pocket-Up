@@ -1,4 +1,4 @@
-collectgarbage("setpause", 100)
+collectgarbage("setpause", 1000)
 collectgarbage("setstepmul", 200)
 
 native.setProperty("windowMode", "normal")

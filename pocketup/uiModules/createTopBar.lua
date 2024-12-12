@@ -12,7 +12,7 @@ onTouchBack - функция, вызываемая при нажатии на к
 
 funBack = nil
 local function funBackListener(event)
-	if ((event.keyName=="back" or event.keyName=="deleteBack") and funBack~=nil and event.phase=="up") then
+	if ((event.keyName=="back" or event.keyName=="deleteBack" or event.keyName=="escape") and funBack~=nil and event.phase=="up") then
 		funBack[1]("systemBack")
 		return(true)
 	end

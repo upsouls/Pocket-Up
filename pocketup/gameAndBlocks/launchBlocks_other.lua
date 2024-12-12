@@ -85,21 +85,27 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         lua = lua..'target.y = -('..y..')'
         end_pcall()
     elseif nameBlock == 'timer' then
+        -- local rep = make_all_formulas(infoBlock[2][1], object)
+        -- local time = make_all_formulas(infoBlock[2][2], object)
         local rep = make_all_formulas(infoBlock[2][1], object)
         local time = make_all_formulas(infoBlock[2][2], object)
-        lua = lua .. 'local _repeat\n'
-        add_pcall()
-        lua = lua ..
-'local timer = require(\'timer\')\
-local name = \'Timer'..index..'\'..\'_\'..Timers_max\
-if not Timers[name] then\
-timer.new(('..time..'*1000)*'..rep..', function()\
-Timers[name] = nil\
-end)\
-Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
+        lua = lua.."for i=1, type("..rep..") == 'number' and "..rep.." or 0 do\
+            threadFun.wait(type("..time..") == 'number' and ("..time.."*1000) or 0)"
+--         lua = lua .. 'local _repeat\n'
+--         add_pcall()
+--         lua = lua ..
+-- 'local timer = require(\'timer\')\
+-- local name = \'Timer'..index..'\'..\'_\'..Timers_max\
+-- if not Timers[name] then\
+-- timer.new(('..time..'*1000)*'..rep..', function()\
+-- Timers[name] = nil\
+-- end)\
+-- Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
     elseif nameBlock == 'endTimer' then
-        lua = lua..'end)_repeat = Timers[name]\nend'
-        end_pcall()
+                lua = lua.."coroutine.yield()\
+    end"
+        -- lua = lua..'end)_repeat = Timers[name]\nend'
+        -- end_pcall()
     elseif nameBlock == 'editRotateLeft' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
@@ -305,11 +311,16 @@ Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (t
         myClone.fill.effect.intensity = (target.property_brightness)/100-1"
 
 
-        lua = lua.."\nmyClone.parent_obj = target\ntarget.parent_obj.clones[#target.parent_obj.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
+        lua = lua.."\nmyClone.parent_obj = target\
+        myClone.parent_obj.idObject = myClone.parent_obj.idObject or "..obj_id.."\n"
+        lua = lua.."myClone.parent_obj.events_collision = myClone.parent_obj.events_collision or {}\n"
+        lua = lua.."myClone.parent_obj.events_endedCollision = myClone.parent_obj.events_endedCollision or {}\n"
+
+        lua = lua.."\ntarget.parent_obj.clones[#target.parent_obj.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
         lua = lua.."\nmyClone.isVisible = target.isVisible\nmyClone.physicsReload, myClone.physicsType , myClone.physicsTable = target.physicsReload or function(ob) end, target.physicsType or 'static' , plugins.json.decode(plugins.json.encode(target.physicsTable)) or {}\nmyClone:physicsReload()"
         lua = lua.."\nmyClone.property_color = target.property_color\nlocal r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\nmyClone:setFillColor(r,g,b)\nmyClone.touchesObjects = {}"
         lua = lua.."\ntimer.new(0, function()\nmyClone:addEventListener('collision', function(event)\nif (event.phase=='began') then\nevent.target.touchesObjects['obj_'..event.other.parent_obj.idObject] = true\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_collision do\nmyClone.parent_obj.events_collision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nelseif (event.phase=='ended') then\nevent.target.touchesObjects['obj_'..event.other.parent_obj.idObject] = nil\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_endedCollision do\nmyClone.parent_obj.events_endedCollision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nend\nend)"
-        lua = lua.."\nmyClone.gravityScale, myClone.isSensor = target.gravityScale, target.isSensor"
+        lua = lua.."\nmyClone.gravityScale, myClone.isSensor = target.gravityScale, target.isSensor\n myClone.parent_obj.events_startClone = myClone.parent_obj.events_startClone or (events_startClone or {})"
         lua = lua.."\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_startClone do\nmyClone.parent_obj.events_startClone[i](myClone)\nend\n"
         lua = lua.."\nend) end)"
         end_pcall()

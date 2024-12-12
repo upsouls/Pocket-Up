@@ -117,6 +117,7 @@ function scene_run_game(typeBack, paramsBack)
 
     native.setProperty("windowMode", "fullscreen")
     function showOldScene()
+        native.setProperty("windowMode", "normal")
         display.setDefault("background", 4/255, 34/255, 44/255)
         plugins.orientation.lock('portrait')
         display.screenOriginX, display.screenOriginY = sOX, sOY
@@ -450,7 +451,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
     plugins.physics.setDrawMode('normal')\
     removeAllObjects()\
     timer.cancelAll()\
-    "..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')").."\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nnative.setProperty('windowMode', 'normal')\nend"
+    "..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')").."\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nnative.setProperty('windowMode', 'fullscreen')\nend"
     if (isScriptsBack) then
         lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nfor key, value in pairs(objects) do\nfor i=1, #events_touchBack[key] do\nevents_touchBack[key][i](value)\nfor i2=1, #value.clones do\nevents_touchBack[key][i](value.clones[i2])\nend\nend\nend\nend\nreturn(true)\nend\nRuntime:addEventListener('key', funBackListener)"
     else
