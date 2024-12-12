@@ -1,6 +1,5 @@
-collectgarbage("setpause", 1000)
+collectgarbage("setpause", 2000)
 collectgarbage("setstepmul", 200)
-
 native.setProperty("windowMode", "normal")
 
 display.setStatusBar(display.HiddenStatusBar)
@@ -25,6 +24,7 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
         if (file ~= nil) then
             io.close(file)
         end
+        collectgarbage('collect')
         scene_projects()
     else
         local function networkListener(event)

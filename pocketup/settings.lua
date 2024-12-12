@@ -38,7 +38,7 @@ os.removeFolder = function (path, isremove)
             if (attr~=nil) then
                 if attr.mode == "directory" then
                     filePath = path.."\\"..file
-                    print(filePath)
+                    --print(filePath)
                     os.removeFolder(filePath)
                 else
                     os.remove(filePath)
@@ -82,6 +82,10 @@ utils.isSim = system.getInfo 'environment' == 'simulator'
 _G.display = display
 _G.system = system
 _G.os = os
+_G.timer = timer
+_G.Runtime = Runtime
+_G.graphics = graphics
+_G.audio = audio
 
 os.write = function (value , path , basedir)
     if type(path) ~= 'string' or value == nil then

@@ -3,12 +3,13 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
-			{"playSoundAndWait", {{"sounds",nameSound}}},
+			{"runLua",{ {{"text", 'local a = display.newRect(100, 100, 50, 50)'}} }}
+			--{"playSoundAndWait", {{"sounds",nameSound}}},
 			-- {"repeat2",{ {{"number", 1},{"number",0}}, {"function", nameFunction} }},
 			-- {"repeatIsTrue2",{ {{"number", 1},{"function","<"},{"number",2}}, {"function", nameFunction} }},
 			-- {"timer2", {{{"number", 5}}, {{"number", 1}},{"function", nameFunction}}},
-			{"deleteWebView", {{{"text", app.words[589]}}}},
-			{"isSensor", {{{"onOrOff", "off"}}}},
+			--{"deleteWebView", {{{"text", app.words[589]}}}},
+			--{"isSensor", {{{"onOrOff", "off"}}}},
 		},
 		["event"]={
 			{"start"},
@@ -207,6 +208,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"blockTouchScreen"},
 			--{"touchAndSwipe",{{{"function","-"},{"number",1},{"number",0},{"number",0}},{{"function","-"},{"number",2},{"number",0},{"number",0}},{{"number",1},{"number",0},{"number",0}},{{"number",2},{"number",0},{"number",0}}, {{"number",0},{"number","."},{"number",3}}}},
 			{"showToast", {{{"text", app.words[164]}}}},
+			{"runLua",{ {{"text", 'local a = display.newRect(100, 100, 50, 50); a:setFillColor(1, 0, 0)'}} }},
 			--{"lua", {{{"text", "native.showAlert(\""..app.words[388].."\", \""..app.words[389].."\", {\"OK\"})"}}}},
 			{"setHorizontalOrientation"},
 			{"setVerticalOrientation"},

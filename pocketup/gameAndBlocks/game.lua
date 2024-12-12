@@ -125,6 +125,7 @@ function scene_run_game(typeBack, paramsBack)
         display.contentCenterX = dCX
         CENTER_X = dCX
         CENTER_Y = dCY
+        collectgarbage('collect')
         if (typeBack=="scripts") then
             scene_scripts(paramsBack[1], paramsBack[2], paramsBack[3])
         elseif (typeBack=="objects") then
@@ -451,6 +452,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
     plugins.physics.setDrawMode('normal')\
     removeAllObjects()\
     timer.cancelAll()\
+    collectgarbage('collect')\
     "..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')").."\ndisplay.remove(mainGroup)\nfor key, value in pairs(playingSounds) do\naudio.stop(playingSounds[key])\naudio.dispose(playSounds[key])\nend\nplaySounds = {}\nplayingSounds = {}\nnative.setProperty('windowMode', 'fullscreen')\nend"
     if (isScriptsBack) then
         lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nfor key, value in pairs(objects) do\nfor i=1, #events_touchBack[key] do\nevents_touchBack[key][i](value)\nfor i2=1, #value.clones do\nevents_touchBack[key][i](value.clones[i2])\nend\nend\nend\nend\nreturn(true)\nend\nRuntime:addEventListener('key', funBackListener)"
@@ -462,6 +464,7 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
     --lua = lua.."\ntimer.new(100,function()\nif (mainGroup~=nil and mainGroup.x~=nil) then\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nend\nend)\n"
     --lua = lua:gsub("prem", "prеm"):gsub("Prem", "Prеm")
     noremoveAllObjects()
+    collectgarbage('collect')
     local f, error_msg = loadstring(lua)
     print(lua)
     if f then

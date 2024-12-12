@@ -197,7 +197,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 					categoryPaidBlocks[i] = {"paidBlock_"..i, {}, "on"}
 				end
 				loadBlocksCategory(categoryPaidBlocks)
-				print(plugins.json.encode(paidBlocks))
+				--print(plugins.json.encode(paidBlocks))
 			end
 			app.scenes[app.scene][1].alpha = 1
 			isBackScene = "back"

@@ -1118,7 +1118,7 @@ arrayAllButtonsFunctions["copyAll"] = arrayAllButtonsFunctions["copy"]
 arrayAllButtonsFunctions["deleteAll"] = arrayAllButtonsFunctions["delete"]
 
 functionsMenu["startlanguage"] = function ()
-	print(app.words[615])
+	--print(app.words[615])
 	funsP['записать сохранение']('selectLanguage', app.words[615])
 	os.exit()
 end

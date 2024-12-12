@@ -505,7 +505,7 @@ funsP["экспортировать проект"] = function (id , name , liste
 			end
 	
 			insert_files(system.pathForFile('', system.TemporaryDirectory), '')
-			print(plugins.json.encode(files))
+			--print(plugins.json.encode(files))
 	
 			--insert_files(system.pathForFile(id, system.DocumentsDirectory), id)
 			pcall(function ()

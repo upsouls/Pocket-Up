@@ -13,6 +13,7 @@
 ]]
 
 allBlocks = {
+	["runLua"]={"block", "blocks/block_gold_2.png",  {{{"text", app.words[387]}}, {{"cell", nil, 8}}}, 109, 142, false},
 	["start"]={"event","blocks/event_brown_1.png",{ {{"text",app.words[57]}} }, 412,154, false},
 	["touchObject"]={"event","blocks/event_brown_1.png",{ {{"text",app.words[76]}} }, 412,154, false},
 	["touchScreen"]={"event","blocks/event_brown_1.png",{ {{"text",app.words[77]}} }, 412,154, false},
@@ -143,7 +144,7 @@ allBlocks = {
 	["blockTouch"]={"block","blocks/block_gold_1.png", { {{"text",app.words[245]}} }, 109, 88, false},
 	["blockTouchScreen"]={"block","blocks/block_gold_1.png", { {{"text",app.words[246]}} }, 109, 88, false},
 	--["touchAndSwipe"]={"block","blocks/block_gold_3_5.png", { {{"text",app.words[247]}},{{"text",app.words[248]..":"},{"cell",nil,1.5},{"text",app.words[60]..":"}, {"cell",nil,1.5}},{{"text",app.words[65]..":"},{"cell",nil,1.5},{"text",app.words[60]..":"}, {"cell",nil,1.5}}, {{"text",app.words[178]},{"cell",nil,1.5},{"text",app.words[166]}} }, 109, 250, false},
-	["lua"]={"block", "blocks/block_gold_2.png",  {{{"text", app.words[387]}}, {{"cell", nil, 8}}}, 109, 142, false},
+	--["lua"]={"block", "blocks/block_gold_2.png",  {{{"text", app.words[387]}}, {{"cell", nil, 8}}}, 109, 142, false},
 	["timer"]={'block', 'blocks/block_orange_2.png',{{{"text", app.words[437]}, {"cell", nil, 1.5}, {"text", app.words[103]}}, {{"text", app.words[390]}, {"cell", nil, 1.5}, {"text", app.words[93]}}}, 109, 142, true},
 	["timer3"]={'block', 'blocks/block_orange_2.png',{{{"text", app.words[437]}, {"cell", nil, 1.5}, {"text", app.words[103]}}, {{"text", app.words[390]}, {"cell", nil, 1.5}, {"text", app.words[93]}}}, 109, 142, true},
 	["endTimer"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[391]}} }, 109, 88, "end"},

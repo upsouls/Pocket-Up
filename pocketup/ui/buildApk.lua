@@ -105,7 +105,7 @@ function scene_optionsApk(idProject, nameProject)
                     packageJava = inputPackageName.text
                 }
                 funsP["экспортировать проект apk"](app.idProject, app.nmProject, function(val)
-                    print(1)
+                    --print(1)
                 end, options)
             else
                 funsP["вызвать уведомление"](app.words[557])

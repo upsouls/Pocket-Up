@@ -227,6 +227,32 @@ elseif nameBlock == 'playSoundAndWait' then
     elseif nameBlock == 'endTimer2' then
         lua = lua.."coroutine.yield()\
     end"
+    elseif nameBlock == 'runLua' then
+    local code = make_all_formulas(infoBlock[2][1], object)
+    add_pcall()
+    lua = lua .. 'local p1 = '..code..'\
+    p1 = plugins.utf8.gsub(p1, \'setfenv\', \'print\'); p1 = plugins.utf8.gsub(p1, \'loadstring\', \'print\')\
+    p1 = plugins.utf8.gsub(p1, \'currentStage\', \'fps\');p1 = plugins.utf8.gsub(p1, \'getCurrentStage\', \'getDefault\')\
+    p1 = plugins.utf8.gsub(p1, \'setFocus\', \'display.getCurrentStage():setFocus\'); p1 = plugins.utf8.gsub(p1, \'settingsSave.txt\', \'\')\
+    \
+    __GetGlobalData = function()\
+        return {\
+        math = math, os = os, io = io, transition = transition, tostring = tostring, tonumber = tonumber,\
+        assert = assert, debug = debug, collectgarbage = collectgarbage, display = display, module = module,\
+        native = native, coroutine = coroutine, ipairs = ipairs, network = network, pcall = pcall, print = print,\
+        string = string, xpcall = xpcall, package = package, table = table, unpack = unpack, setmetatable = setmetatable, next = next,\
+        graphics = graphics, system = system, rawequal = rawequal,  getmetatable = getmetatable, timer = timer,\
+        newproxy = newproxy, metatable = metatable, rawset = rawset, coronabaselib = coronabaselib, type = type,\
+        audio = audio, pairs = pairs, select = select, rawget = rawget, Runtime = Runtime, error = error,\
+        utf8 = require("plugin.utf8"), pasteboard = require("plugin.pasteboard"), androidFilePicker = require("plugin.androidFilePicker"),\
+        tinyfiledialogs = require("plugin.tinyfiledialogs"), exportFile = require("plugin.exportFile"), zip = require("plugin.zip"),\
+        orientation = require("plugin.orientation"), app = app, utils = utils, object = target\
+        \
+        }\
+    end\
+    loadstring("\\nlocal G = {};\\nfor key, value in pairs(__GetGlobalData()) do\\nG[key] = value\\nend\\nsetfenv(1, G)\\n"..p1)()\
+    '
+    pcall_end()
 end
 
     return(lua)
