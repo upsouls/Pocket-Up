@@ -3,7 +3,22 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
-			{"runLua",{ {{"text", 'local a = display.newRect(100, 100, 50, 50)'}} }}
+			{"runLua",{ {{"text", 'local a = display.newRect(100, 100, 50, 50)'}} }},
+			{"removeCameraTextField", {{{"text", app.words[493]}}}},
+			{"insertCameraTextField", {{{"text", app.words[493]}}}},
+			{"setPositionTextField", {{{"text", app.words[493]}}, {{"number", 100}}, {{"number", 200}}}},
+			{"editPositionTextField", {{{"text", app.words[493]}}, {{"number", 10}}, {{"number", 20}}}},
+			{"setFontSizeTextField", {{{"text", app.words[493]}}, {{"number", 16}}}},
+			{"setTypeInputTextField", {{{"text", app.words[493]}}, {"inputType", "phone"}}},
+			{"setAlignTextField", {{{"text", app.words[493]}}, {"alignText", "center"}}},
+			{"isSecureTextField", {{{"text", app.words[493]}}, {{"onOrOff", "on"}}}},
+			{"placeholderTextField", {{{"text", app.words[493]}}, {{"text", app.words[164]}}}},
+			{"valueTextField", {{{"text", app.words[493]}}, {{"text", app.words[164]}}}},
+			{"setColorTextField", {{{"text", app.words[493]}}, {{"text", "#FF0000"}}}},
+			{"setSelectionTextField", {{{"text", app.words[493]}}, {{"number", 2}}, {{"number", 4}}}},
+			{"getSelectionTextField", {{{"text", app.words[493]}}, {{"globalVariable"}}, {{"globalVariable"}}}},
+			{"setKeyboardToTextField", {{{"text", app.words[493]}}}},
+			{"removeKeyboardToTextField", {{{"text", app.words[493]}}}}
 			--{"playSoundAndWait", {{"sounds",nameSound}}},
 			-- {"repeat2",{ {{"number", 1},{"number",0}}, {"function", nameFunction} }},
 			-- {"repeatIsTrue2",{ {{"number", 1},{"function","<"},{"number",2}}, {"function", nameFunction} }},
