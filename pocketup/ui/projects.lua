@@ -4,6 +4,10 @@ function scene_projects()
 	local isStart = app.scenes["projects"]==nil
 	local groupScene = display.newGroup()
 	local groupSceneScroll = display.newGroup()
+	if IsBuild then
+		groupScene.isVisible = false
+		groupSceneScroll.isVisible = false
+	end
 	app.scene = "projects"
 	app.scenes[app.scene] = {groupSceneScroll, groupScene}
 	local funMenuObjects={}

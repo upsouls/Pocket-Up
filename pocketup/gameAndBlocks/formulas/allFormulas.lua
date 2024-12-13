@@ -87,6 +87,7 @@ allCategotiesAndFormulas = {
 		{{"function","touchDisplayId"},{"function","("},{"number",1},{"function",")"}},
 		{{"function","countTouchDisplay"}},{{"function","countTouch"}},
 		{{"function","positionCameraX"}},{{"function","positionCameraY"}},
+		
 		--[[{{"function","indexThisTouch"},{"function","("},{"number",1},{"function",")"}}]] }},
 		{app.words[360], { {{"function","timer"}},{{"function","year"}},
 		{{"function","month"}},{{"function","day"}},{{"function","dayWeek"}},

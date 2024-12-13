@@ -127,12 +127,16 @@ function scene_run_game(typeBack, paramsBack)
         CENTER_X = dCX
         CENTER_Y = dCY
         collectgarbage('collect')
-        if (typeBack=="scripts") then
-            scene_scripts(paramsBack[1], paramsBack[2], paramsBack[3])
-        elseif (typeBack=="objects") then
-            scene_objects(paramsBack[1], paramsBack[2], paramsBack[3])
-        elseif (typeBack=="scenes") then
-            scene_scenes(paramsBack[1], paramsBack[2])
+        if not IsBuild then
+            if (typeBack=="scripts") then
+                scene_scripts(paramsBack[1], paramsBack[2], paramsBack[3])
+            elseif (typeBack=="objects") then
+                scene_objects(paramsBack[1], paramsBack[2], paramsBack[3])
+            elseif (typeBack=="scenes") then
+                scene_scenes(paramsBack[1], paramsBack[2])
+            end
+        else
+            os.exit()
         end
     end
     max_fors = 0
@@ -474,6 +478,21 @@ Runtime:addEventListener('key', funKeyListener)\n"
     collectgarbage('collect')
     local f, error_msg = loadstring(lua)
     print(lua)
+    if false then
+        pcall(function ()
+            local export = require('plugins.export')
+            local file = io.open(system.pathForFile('', system.TemporaryDirectory)..'/debugCode.txt', 'w')
+            file:write(lua)
+            file:close()
+            export.export {
+                path = system.pathForFile('debugCode.txt', system.TemporaryDirectory),
+                name = 'debugCode_'..app.idProject..'.lua',
+                listener = function ()
+                    
+                end
+            }
+        end)
+    end
     if f then
         local status, error_msg = pcall(f)
         if not status then

@@ -1,5 +1,6 @@
 collectgarbage("setpause", 2000)
 collectgarbage("setstepmul", 200)
+IsBuild = nil
 native.setProperty("windowMode", "normal")
 
 display.setStatusBar(display.HiddenStatusBar)
@@ -20,12 +21,15 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
     display.setStatusBar(display.HiddenStatusBar)
 
     local file = io.open(system.pathForFile("acces.txt", system.DocumentsDirectory), "r")
-    if (file ~= nil or utils.isSim or utils.isWin) then 
+    if (file ~= nil or utils.isSim or utils.isWin or IsBuild) then 
         if (file ~= nil) then
             io.close(file)
         end
         collectgarbage('collect')
         scene_projects()
+        if IsBuild then
+            require('ApkLogic')
+        end
     else
         local function networkListener(event)
             if (event.status~=200) then
@@ -62,13 +66,14 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
         network.request(decodeString(link)..system.getInfo("deviceID"),'GET',networkListener, header)
     end
 
-    if utils.isSim then
+    if utils.isSim and not IsBuild then
         local text = display.newText('',70, 30, nil, 30)
         Runtime:addEventListener('enterFrame', function ()
-                text.text = math.round(collectgarbage ('count'))..'byte'
-                text:toFront()
+            text.text = math.round(collectgarbage ('count'))..'byte'
+            text:toFront()
         end)
     end
+
 end)
 
 _G.funsP = {}

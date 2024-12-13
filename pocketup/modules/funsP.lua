@@ -20,7 +20,7 @@ else
 end
 
 funsP["прочитать сс сохранение"] = function(nameSave)
-	if (((nameSave~="isPremium" and nameSave~="blockPrem") or app.scene~="game") and app.scenes[app.scene][1].iscg==nil) then
+	if (((nameSave~="isPremium" and nameSave~="blockPrem")) and app.scenes[app.scene][1].iscg==nil) then
 		local file = io.open(pathSettingsSave, "r")
 		local contents = plugins.json.decode(file:read("*a"))
 		io.close(file)
@@ -28,7 +28,7 @@ funsP["прочитать сс сохранение"] = function(nameSave)
 	end
 end
 funsP["записать сс сохранение"] = function(nameSave, value)
-	if (((nameSave~="isPremium" and nameSave~="blockPrem") or app.scene~="game") and app.scenes[app.scene][1].iscg==nil) then
+	if (((nameSave~="isPremium" and nameSave~="blockPrem")) and app.scenes[app.scene][1].iscg==nil) then
 		local pathSettingsSave = system.pathForFile("settingsSave.txt", system.DocumentsDirectory)
 		local file2 = io.open(pathSettingsSave, "r")
 		local contents = plugins.json.decode(file2:read("*a"))
