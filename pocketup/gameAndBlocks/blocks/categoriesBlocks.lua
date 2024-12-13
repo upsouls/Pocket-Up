@@ -27,6 +27,8 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			--{"isSensor", {{{"onOrOff", "off"}}}},
 		},
 		["event"]={
+			{"keypressed",{{localityVariable, nameVariable}}},
+			{"endKeypressed",{{localityVariable, nameVariable}}},
 			{"start"},
 			{"touchBack"},
 			{"touchObject"},

@@ -248,37 +248,29 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
             display.getCurrentStage():setFocus(event.target, event.id)\
             event.target.isTouch = true\
             for key, value in pairs(objects) do\
-                pcall(function()\
                 for i=1, #events_touchScreen[key] do\
                     events_touchScreen[key][i](value)\
                     for i2=1, #value.clones do\
                         events_touchScreen[key][i](value.clones[i2])\
                     end\
                 end\
-            end)\
             end\
-            pcall(function()\
             for i=1, #myClone.parent_obj.events_touchObject do\
                 myClone.parent_obj.events_touchObject[i](event.target)\
             end\
-        end)\
         elseif (event.phase=='moved') then\
             globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\
             for key, value in pairs(objects) do\
-                pcall(function()\
                 for i=1, #events_movedScreen[key] do\
                     events_movedScreen[key][i](value)\
                     for i2=1, #value.clones do\
                         events_movedScreen[key][i](value.clones[i2])\
                     end\
                 end\
-            end)\
             end\
-            pcall(function()\
             for i=1, #myClone.parent_obj.events_movedObject do\
                 myClone.parent_obj.events_movedObject[i](event.target)\
             end\
-        end)\
         else\
             display.getCurrentStage():setFocus(event.target, nil)\
             event.target.isTouch = nil\
@@ -288,20 +280,16 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
                 globalConstants.isTouch = false\
             end\
             for key, value in pairs(objects) do\
-                pcall(function()\
                 for i=1, #events_onTouchScreen[key] do\
                     events_onTouchScreen[key][i](value)\
                     for i2=1, #value.clones do\
                         events_onTouchScreen[key][i](value.clones[i2])\
                     end\
                 end\
-            end)\
             end\
-            pcall(function()\
             for i=1, #myClone.parent_obj.events_onTouchObject do\
                 myClone.parent_obj.events_onTouchObject[i](event.target)\
             end\
-        end)\
         end\
         return(true)\
     end)"
@@ -311,10 +299,7 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         myClone.fill.effect.intensity = (target.property_brightness)/100-1"
 
 
-        lua = lua.."\nmyClone.parent_obj = target\
-        myClone.parent_obj.idObject = myClone.parent_obj.idObject or "..obj_id.."\n"
-        lua = lua.."myClone.parent_obj.events_collision = myClone.parent_obj.events_collision or {}\n"
-        lua = lua.."myClone.parent_obj.events_endedCollision = myClone.parent_obj.events_endedCollision or {}\n"
+        lua = lua.."\nmyClone.parent_obj = target.parent_obj or target"
 
         lua = lua.."\ntarget.parent_obj.clones[#target.parent_obj.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
         lua = lua.."\nmyClone.isVisible = target.isVisible\nmyClone.physicsReload, myClone.physicsType , myClone.physicsTable = target.physicsReload or function(ob) end, target.physicsType or 'static' , plugins.json.decode(plugins.json.encode(target.physicsTable)) or {}\nmyClone:physicsReload()"

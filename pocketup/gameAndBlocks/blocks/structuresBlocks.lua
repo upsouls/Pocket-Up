@@ -245,6 +245,9 @@ allBlocks = {
 	["getSelectionTextField"] = {"block", "blocks/block_green_3.png", {{{"text", app.words[514]},}, {{"text", app.words[492]}, {"cell", nil, 3}}, {{"variables"}}}, 109, 188, false},
 	["setKeyboardToTextField"] = {"block", "blocks/block_green_2.png", {{{"text", app.words[515]},}, {{"text", app.words[492]}, {"cell", nil, 3}}}, 109, 142, false},
 	["removeKeyboardToTextField"] = {"block", "blocks/block_green_1.png", {{{"text", app.words[516]},}}, 109, 88, false},
+
+	["keypressed"] = {"event", "blocks/event_brown_2.png", {{{"text",app.words[623]}},{{"variables",nil}}},411,206, false},
+	["endKeypressed"] = {"event", "blocks/event_brown_2.png", {{{"text",app.words[624]}},{{"variables",nil}}},411,206, false},
 }
 
 

@@ -14,7 +14,18 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
 
     if (nameBlock == 'ask' and infoBlock[2][2][2]~=nil and infoBlock[2][3][2]~=nil) then
         add_pcall()
-    	lua = lua.."local function funEditingEnd(event)\n"..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].." = event.isOk and event.value or ''\nif ("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2].." ~= nil and "..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2]..".x ~= nil) then\n"..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2]..".text = event.isOk and event.value or ''\nend\nlocal key = target.parent_obj.nameObject\nlocal value = target\nfor i=1, #events_function[key]['fun_"..infoBlock[2][3][2].."'] do\nevents_function[key]['fun_"..infoBlock[2][3][2].."'][i](value)\nend\nend\ncerberus.newInputLine(("..make_all_formulas(infoBlock[2][1], object).."), '', nil, '', funEditingEnd)"
+    	lua = lua.."local function funEditingEnd(event)\
+            "..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].." = event.isOk and event.value or ''\
+            if ("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2].." ~= nil and "..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2]..".x ~= nil) then\
+                "..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2]..".text = event.isOk and event.value or ''\
+            end\
+            local key = target.parent_obj.nameObject\
+            local value = target\
+            for i=1, #events_function[key]['fun_"..infoBlock[2][3][2].."'] do\
+                events_function[key]['fun_"..infoBlock[2][3][2].."'][i](value)\
+            end\
+        end\
+        app.cerberus.newInputLine(("..make_all_formulas(infoBlock[2][1], object).."), '', nil, '', funEditingEnd)"
         end_pcall()
     elseif (nameBlock == "createTextField" and infoBlock[2][5][2]~=nil) then
         add_pcall()

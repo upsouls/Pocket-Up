@@ -72,6 +72,7 @@ end
 local isEvent = {
     start=true, touchObject=true, touchScreen=true, ["function"]=true, whenTheTruth=true, collision=true, changeBackground=true, startClone=true,
     movedObject=true, onTouchObject=true, movedScreen=true, onTouchScreen=true, touchBack=true, endedCollision=true,
+    keypressed=true, endKeypressed = true
 }
 
 
@@ -153,7 +154,7 @@ function scene_run_game(typeBack, paramsBack)
     for i=1, #globalArrays do
             lua = lua..'list_'..globalArrays[i][1].." = {}\n"
     end
-    lua = lua.."local myScene\n\nlocal WebViews = {} local textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nlocal playSounds = {}\nlocal playingSounds = {}"
+    lua = lua.."local myScene\n\nlocal WebViews = {}\nlocal textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nlocal playSounds = {}\nlocal playingSounds = {}"
 
     -- local level_blocks = {}
     for s=1, #scenes do
@@ -163,7 +164,7 @@ function scene_run_game(typeBack, paramsBack)
         local xScaleMainGroup = display.contentWidth/options.displayWidth
         local yScaleMainGroup = display.contentHeight/options.displayHeight
         lua = lua.."\n\n\nfunction scene_"..scene_id.."()\n\nlocal focusCameraObject = nil\nmainGroup = display.newGroup()\napp.scene = 'game'\napp.scenes[app.scene] = {mainGroup}\nmainGroup.iscg = true\nmainGroup.xScale, mainGroup.yScale = "..tostring(options.orientation~="vertical" and not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..", "..tostring(options.orientation=="vertical" and  not options.aspectRatio and yScaleMainGroup or xScaleMainGroup).."\nmainGroup.x, mainGroup.y = "..(options.orientation=="vertical" and "CENTER_X, CENTER_Y" or "CENTER_Y, CENTER_X").."\nlocal cameraGroup = display.newGroup()\nlocal stampsGroup = display.newGroup()\ncameraGroup:insert(stampsGroup)\nmainGroup:insert(cameraGroup)\nlocal notCameraGroup = display.newGroup()\nmainGroup:insert(notCameraGroup)"..( not options.aspectRatio and "" or "\nlocal blackRectTop = display.newRect("..(options.orientation=="vertical" and ("0,-"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or ("-"..tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectTop.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 1\nblackRectTop:setFillColor(0,0,0)\nmainGroup:insert(blackRectTop)\nlocal blackRectBottom = display.newRect("..(options.orientation=="vertical" and ("0,"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or (tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectBottom.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 0\nblackRectBottom:setFillColor(0,0,0)\nmainGroup:insert(blackRectBottom)").."\nobjects = {}\n"
-        lua = lua.."\nlocal events_changeBackground = {}\nlocal events_function = {}\nlocal function broadcastFunction(nameFunction)\nfor key, value in pairs(objects) do\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nend\n"
+        lua = lua.."\nlocal events_changeBackground = {}\nlocal events_function = {}\n\nlocal function broadcastFunction(nameFunction)\nfor key, value in pairs(objects) do\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nend\n"
         lua = lua.."\nmyScene = '"..scene_path.."'\nlocal tableVarShow = {}\nlocal tableNamesClones = {}\nlocal miniScenes = display.newGroup()\ncameraGroup:insert(miniScenes)"
         local objects = plugins.json.decode(funsP['получить сохранение'](scene_path.."/objects"))
         local functions = plugins.json.decode(funsP['получить сохранение'](scene_path.."/functions"))
@@ -183,6 +184,8 @@ function scene_run_game(typeBack, paramsBack)
                 lua = lua.."\nevents_movedScreen['object_"..objects[i][2].."'] = {}"
                 lua = lua.."\nevents_onTouchScreen['object_"..objects[i][2].."'] = {}"
                 lua = lua.."\nevents_changeBackground['object_"..objects[i][2].."'] = {}"
+                -- lua = lua.."\nevents_keypressed['object_"..objects[i][2].."'] = {}"
+                -- lua = lua.."\nevents_endKeypressed['object_"..objects[i][2].."'] = {}"
             end
         end
         lua = lua.."\nlocal function broadcastChangeBackground(numberImage)\nfor key, value in pairs(objects) do\nfor i=1, #events_changeBackground[key] do\nevents_changeBackground[key][i](value, numberImage)\nfor i2=1, #value.clones do\nevents_changeBackground[key][i](value.clones[i2], numberImage)\nend\nend\nend\nend"
@@ -251,8 +254,7 @@ function scene_run_game(typeBack, paramsBack)
                 lua = lua.."object_"..obj_id..".namesLists["..i.."] = 'list_"..localArrays[i][1].."'\n"
             end
 
-            lua = lua.."\n\nlocal events_start = {}\nlocal events_touchObject = {} object_"..obj_id..".events_touchObject = events_touchObject\nlocal events_movedObject = {} object_"..obj_id..".events_movedObject = events_movedObject\nlocal events_onTouchObject = {} object_"..obj_id..".events_onTouchObject = events_onTouchObject\nlocal events_collision = {} object_"..obj_id..".events_collision = events_collision\nlocal events_endedCollision = {}  object_"..obj_id..".events_endedCollision = events_endedCollision\nlocal events_startClone = {}\n object_"..obj_id..".events_startClone = events_startClone"
-            
+            lua = lua.."\n\nlocal events_start = {}\nlocal events_touchObject = {} object_"..obj_id..".events_touchObject = events_touchObject\n\nlocal events_movedObject = {} object_"..obj_id..".events_movedObject = events_movedObject\nlocal events_onTouchObject = {} object_"..obj_id..".events_onTouchObject = events_onTouchObject\nlocal events_collision = {} object_"..obj_id..".events_collision = events_collision\nlocal events_endedCollision = {}  object_"..obj_id..".events_endedCollision = events_endedCollision\nlocal events_startClone = {}\n object_"..obj_id..".events_startClone = events_startClone"
             lua = lua.."\nobject_"..obj_id..".group = cameraGroup"
             lua = lua.."\nobject_"..obj_id..":addEventListener('touch', function(event)\nif (event.phase=='began') then\nlocal newIdTouch=globalConstants.touchId+1\nglobalConstants.touchId = newIdTouch\nglobalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true\nglobalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\ndisplay.getCurrentStage():setFocus(event.target, event.id)\nevent.target.isTouch = true\nfor key, value in pairs(objects) do\nfor i=1, #events_touchScreen[key] do\nevents_touchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_touchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #events_touchObject do\nevents_touchObject[i](event.target)\nend\nelseif (event.phase=='moved') then\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_movedScreen[key] do\nevents_movedScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_movedScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #events_movedObject do\nevents_movedObject[i](event.target)\nend\nelse\ndisplay.getCurrentStage():setFocus(event.target, nil)\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (pocketupFuns.getCountTouch(globalConstants.isTouchsId)==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch = false\nend\nevent.target.isTouch = nil\nfor key, value in pairs(objects) do\nfor i=1, #events_onTouchScreen[key] do\nevents_onTouchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_onTouchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #events_onTouchObject do\nevents_onTouchObject[i](event.target)\nend\nend\nreturn(true)\nend)"
 
@@ -407,6 +409,7 @@ function scene_run_game(typeBack, paramsBack)
                     local pStart\
                     pStart, tTheard = thread.start(p)"
                     lua = lua..'\nend\nend\n\n'
+                
                 else
                     lua = lua..
                     "removeTheard()\
@@ -417,11 +420,11 @@ function scene_run_game(typeBack, paramsBack)
                 end
             end
             lua = lua.."\nfor i=1, #events_start do\n    events_start[i](object_"..obj_id..")\nend\n"
-                lua = lua.."\nend)\n"
+            lua = lua.."\nend)\n"
             end
         end
+
         lua = lua.."\nend"
-        
     end
     lua = lua.."\nscene_"..scenes[1][2].."()\n"
     lua = lua.."local function touchScreenGame(event)\nif (event.phase=='began') then\nlocal newIdTouch=globalConstants.touchId+1\nglobalConstants.touchId = newIdTouch\nglobalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true\nglobalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_touchScreen[key] do\nevents_touchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_touchScreen[key][i](value.clones[i2])\nend\nend\nend\nelseif (event.phase=='moved') then\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_movedScreen[key] do\nevents_movedScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_movedScreen[key][i](value.clones[i2])\nend\nend\nend\nelse\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (pocketupFuns.getCountTouch(globalConstants.touchsXId)==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch=false\nend\nfor key, value in pairs(objects) do\nfor i=1, #events_onTouchScreen[key] do\nevents_onTouchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_onTouchScreen[key][i](value.clones[i2])\nend\nend\nend\nend\nend"
@@ -461,6 +464,32 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
     end
         lua = lua.."\nfunction funBackListener2(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\nplugins.orientation.lock('portrait')\nend\nend"
 
+            -- lua = lua..
+            -- "\nlocal funKeyListener = function(e)\
+            --     if e.phase == 'down' then\
+            --         for key, value in pairs(objects) do\
+            --             print(key)\
+            --             print(plugins.json.encode(events_keypressed))\
+            --             for i=1, #events_keypressed[key] do\
+            --                 events_keypressed[key][i](value)\
+            --                 for i2=1, #value.clones do\
+            --                     events_keypressed[key][i](value.clones[i2])\
+            --                 end\
+            --             end\
+            --         end\
+            --     else\
+            --         for key, value in pairs(objects) do\
+            --             for i=1, #events_endKeypressed[key] do\
+            --                 events_endKeypressed[key][i](value)\
+            --                 for i2=1, #value.clones do\
+            --                     events_endKeypressed[key][i](value.clones[i2])\
+            --                 end\
+            --             end\
+            --         end\
+            --     end\
+            --     return(true)\
+            -- end\
+            -- Runtime:addEventListener('key', funKeyListener)\n"
     --lua = lua.."\ntimer.new(100,function()\nif (mainGroup~=nil and mainGroup.x~=nil) then\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nend\nend)\n"
     --lua = lua:gsub("prem", "prеm"):gsub("Prem", "Prеm")
     noremoveAllObjects()
