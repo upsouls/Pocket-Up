@@ -154,7 +154,7 @@ function scene_run_game(typeBack, paramsBack)
     for i=1, #globalArrays do
             lua = lua..'list_'..globalArrays[i][1].." = {}\n"
     end
-    lua = lua.."local myScene\n\nlocal WebViews = {}\nlocal textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nlocal playSounds = {}\nlocal playingSounds = {}"
+    lua = lua.."local myScene\n\nlocal WebViews = {}\nlocal textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_keypressed = {}\nlocal events_endKeypressed = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nlocal playSounds = {}\nlocal playingSounds = {}"
 
     -- local level_blocks = {}
     for s=1, #scenes do
@@ -184,8 +184,6 @@ function scene_run_game(typeBack, paramsBack)
                 lua = lua.."\nevents_movedScreen['object_"..objects[i][2].."'] = {}"
                 lua = lua.."\nevents_onTouchScreen['object_"..objects[i][2].."'] = {}"
                 lua = lua.."\nevents_changeBackground['object_"..objects[i][2].."'] = {}"
-                -- lua = lua.."\nevents_keypressed['object_"..objects[i][2].."'] = {}"
-                -- lua = lua.."\nevents_endKeypressed['object_"..objects[i][2].."'] = {}"
             end
         end
         lua = lua.."\nlocal function broadcastChangeBackground(numberImage)\nfor key, value in pairs(objects) do\nfor i=1, #events_changeBackground[key] do\nevents_changeBackground[key][i](value, numberImage)\nfor i2=1, #value.clones do\nevents_changeBackground[key][i](value.clones[i2], numberImage)\nend\nend\nend\nend"
@@ -264,33 +262,6 @@ function scene_run_game(typeBack, paramsBack)
 
             local blocks = plugins.json.decode(funsP['получить сохранение'](obj_path.."/scripts"))
 
-            -- level_blocks[scene_id][obj_id] = {}
-            -- if true then
-            --     local level = 1
-            --     for i, value in ipairs(blocks) do
-            --         if blocks[i][3] ~= 'off' then
-            --         local block = blocks[i]
-            --         local nameBlock = block[1]
-            --         local table = {'if','timer','repeat','ifElse (2)','waitIfTrue',
-            --         'foreach','cycleForever','for','repeatIsTrue','timer2','repeat2','repeatIsTrue2'}
-
-            --         local table_end = {'endIf','endTimer','endRepeat','ifElse (2)',
-            --         'endFor','endForeach','endCycleForever','endWait'}
-            --         for _, value in ipairs(table) do
-            --             if nameBlock == value then
-            --                 level = level+1
-            --             end
-            --         end
-            --         level_blocks[scene_id][obj_id][i] = level
-            --         for _, value in ipairs(table_end) do
-            --             if nameBlock == value then
-            --                 level = level-1
-            --             end
-            --         end                          
-            --         end
-            --     end    
-            -- end
-
             local oldEventName = nil
             for b=1, #blocks do
                 local block = blocks[b]
@@ -316,7 +287,24 @@ function scene_run_game(typeBack, paramsBack)
                             local p\
                             p = coroutine.create(function()\
                                 local threadFun = require('plugins.threadFun')\n"
-
+                    elseif block[1]=="keypressed" or block[1]=="endKeypressed" then
+                        lua = lua.."\nevents_"..block[1].."[ #events_"..block[1].." + 1] = function (e)\
+                            local value = e.keyName\n"
+                            if block[2][1][1] == 'globalVariable' then
+                                lua = lua..'var_'..block[2][1][2]..' = value\n'
+                                lua = lua..'if varText_'..block[2][1][2]..' then\n varText_'..block[2][1][2]..'.text = type(var_'..block[2][1][2]..')=="boolean" and (var_'..block[2][1][2]..' and app.words[373] or app.words[374]) or type(var_'..block[2][1][2]..')=="table" and encodeList(var_'..block[2][1][2]..') or var_'..block[2][1][2]..'\nend\n'
+                            else
+                                lua = lua..'target.var_'..block[2][1][2]..' = value\n'
+                                lua = lua..'if target.varText_'..block[2][1][2]..' then\n target.varText_'..block[2][1][2]..'.text = type(target.var_'..block[2][1][2]..')=="boolean" and (target.var_'..block[2][1][2]..' and app.words[373] or app.words[374]) or type(target.var_'..block[2][1][2]..')=="table" and encodeList(target.var_'..block[2][1][2]..') or target.var_'..block[2][1][2]..'\nend\n'
+                            end
+                            lua = lua.."Timers_max = Timers_max+1\
+                            local tTheard\
+                            local removeTheard = function()\
+                                thread.cancel(tTheard)\
+                            end\
+                            local p\
+                            p = coroutine.create(function()\
+                                local threadFun = require('plugins.threadFun')\n"
                     elseif (block[1]=="touchScreen" or block[1]=="movedScreen" or block[1]=="onTouchScreen" or block[1]=="touchBack") then
                         if (block[1]=="touchBack" and block[3]=="on") then
                             isScriptsBack = true
@@ -435,7 +423,22 @@ local newIdTouch=globalConstants.touchId+1\nglobalConstants.touchId = newIdTouch
 globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.x, event.y
 globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (#globalConstants.isTouchsId==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch = nil\nend
 ]]
-    lua = lua.."\nfunction exitGame()\nplugins.physics.setDrawMode('normal')\nsystem.deactivate('multitouch')\nplugins.physics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\nshowOldScene()\nend"
+lua = lua..
+"\nlocal funKeyListener = function(e)\
+    if e.phase == 'down' then\
+        for i=1, #events_keypressed, 1 do\
+            events_keypressed[i](e)\
+        end\
+    else\
+        for i=1, #events_endKeypressed, 1 do\
+            events_endKeypressed[i](e)\
+        end\
+    end\
+    return(true)\
+end\
+Runtime:addEventListener('key', funKeyListener)\n"
+
+    lua = lua.."\nfunction exitGame()\nRuntime:removeEventListener('key', funKeyListener)\nplugins.physics.setDrawMode('normal')\nsystem.deactivate('multitouch')\nplugins.physics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\nshowOldScene()\nend"
     lua = lua.."\nfunction deleteScene()\
     thread.cancelAll()\
     for key, value in pairs(objects) do\
@@ -452,6 +455,8 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
             end\
         end)\
     end\
+    local events_keypressed = {}\
+    local events_endKeypressed = {}\
     plugins.physics.setDrawMode('normal')\
     removeAllObjects()\
     timer.cancelAll()\
@@ -463,33 +468,6 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
         lua = lua.."\nfunction funBackListener(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nlocal rect = display.newImage('images/notVisible.png')\nmainGroup:insert(rect)\nrect.width, rect.height = "..(options.orientation == "vertical" and display.contentWidth or display.contentHeight)..", "..(options.orientation == "vertical" and display.contentHeight or display.contentWidth).."\nrect:toBack()\nrect.alpha = 0.004\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\nplugins.orientation.lock('portrait')\nend\nreturn(true)\nend\nRuntime:addEventListener('key', funBackListener)"
     end
         lua = lua.."\nfunction funBackListener2(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\nplugins.orientation.lock('portrait')\nend\nend"
-
-            -- lua = lua..
-            -- "\nlocal funKeyListener = function(e)\
-            --     if e.phase == 'down' then\
-            --         for key, value in pairs(objects) do\
-            --             print(key)\
-            --             print(plugins.json.encode(events_keypressed))\
-            --             for i=1, #events_keypressed[key] do\
-            --                 events_keypressed[key][i](value)\
-            --                 for i2=1, #value.clones do\
-            --                     events_keypressed[key][i](value.clones[i2])\
-            --                 end\
-            --             end\
-            --         end\
-            --     else\
-            --         for key, value in pairs(objects) do\
-            --             for i=1, #events_endKeypressed[key] do\
-            --                 events_endKeypressed[key][i](value)\
-            --                 for i2=1, #value.clones do\
-            --                     events_endKeypressed[key][i](value.clones[i2])\
-            --                 end\
-            --             end\
-            --         end\
-            --     end\
-            --     return(true)\
-            -- end\
-            -- Runtime:addEventListener('key', funKeyListener)\n"
     --lua = lua.."\ntimer.new(100,function()\nif (mainGroup~=nil and mainGroup.x~=nil) then\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nend\nend)\n"
     --lua = lua:gsub("prem", "prеm"):gsub("Prem", "Prеm")
     noremoveAllObjects()
