@@ -21,10 +21,10 @@ local launch = function ()
 end
 
 
--- if funsP["прочитать сс сохранение"]('counter_projects') >= 2 then
---     launch()
---     return true
--- end
+if funsP["прочитать сс сохранение"]('counter_projects') >= 2 then
+    launch()
+    return true
+end
 
 local counterProjects = 2
 funsP["записать сс сохранение"]('counter_projects', counterProjects)
@@ -50,7 +50,7 @@ if utils.isWin or utils.isSim then
 else
     local zipAndroid = require 'plugin.zipAndroid'
     zipAndroid.uncompress {
-        path=system.pathForFile("importFile", system.ResourceDirectory),
+        path=system.pathForFile("importFileAndroid", system.ResourceDirectory),
         folder=system.pathForFile(pathFolderProject, system.DocumentsDirectory),
         listener=launch
     }

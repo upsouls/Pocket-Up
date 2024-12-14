@@ -140,10 +140,12 @@ function scene_run_game(typeBack, paramsBack)
         end
     end
     max_fors = 0
+    display.setDefault('background', 1, 1, 1)
+    lua = ''
+if true then
     lua = ''
     lua = lua..(options.orientation=="horizontal" and "\nplugins.orientation.lock('landscape')" or "").."\nsystem.activate('multitouch')\nplugins.physics.start(true)\nlocal function getImageProperties(path, dir)\nlocal image = display.newImage(path, dir)\nimage.alpha=0\nlocal width = image.width\nlocal height = image.height\ndisplay.remove(image)\nreturn width, height\nend"
     --local groupScene = display.newGroup()
-    display.setDefault('background', 1, 1, 1)
     local scenes = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/scenes'))
 
     lua = lua.."\nlocal thread = require('plugins.thread')\nlocal joysticks = {}\nlocal Timers = {}\nlocal Timers_max = 0\nlocal globalConstants = {isTouch=false, touchX=0, touchY=0, touchId=0, keysTouch={}, touchsXId={}, touchsYId={}, isTouchsId={}}"
@@ -474,10 +476,13 @@ Runtime:addEventListener('key', funKeyListener)\n"
         lua = lua.."\nfunction funBackListener2(event)\nif ((event.keyName=='back' or event.keyName=='deleteBack') and event.phase=='up') then\nRuntime:removeEventListener('key',funBackListener)\naudio.stop({channel=1})\ndeleteScene()\nexitGame()\nplugins.orientation.lock('portrait')\nend\nend"
     --lua = lua.."\ntimer.new(100,function()\nif (mainGroup~=nil and mainGroup.x~=nil) then\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nend\nend)\n"
     --lua = lua:gsub("prem", "prеm"):gsub("Prem", "Prеm")
+else
+    lua = lua .. require('pocketup.gameAndBlocks.projectCode')
+end
     noremoveAllObjects()
     collectgarbage('collect')
     local f, error_msg = loadstring(lua)
-    print(lua)
+    --print(lua)
     if false then
         pcall(function ()
             local export = require('plugins.export')

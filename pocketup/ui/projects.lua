@@ -1529,7 +1529,7 @@ end
 
 end
 
-if (isStart) then
+if (isStart) and not IsBuild then
 	local function networkListener(event)
 		if (event.isError) then
 		else

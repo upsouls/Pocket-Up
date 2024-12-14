@@ -1,6 +1,6 @@
 collectgarbage("setpause", 2000)
 collectgarbage("setstepmul", 200)
-IsBuild = nil
+IsBuild = false
 native.setProperty("windowMode", "normal")
 
 display.setStatusBar(display.HiddenStatusBar)
@@ -26,10 +26,12 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
             io.close(file)
         end
         collectgarbage('collect')
-        scene_projects()
-        if IsBuild then
-            require('ApkLogic')
-        end
+        timer.performWithDelay(1, function ()
+            scene_projects()
+            if IsBuild then
+                require('ApkLogic')
+            end
+        end)
     else
         local function networkListener(event)
             if (event.status~=200) then
@@ -129,6 +131,9 @@ listFiles = {
     "redactorArrayFormulas", "spriteViewer", "readySprites","sceneRedactorHitbox",
     "visualPosition","buildApk","userAgreement"
 }
+-- if IsBuild then
+--     listFiles = {"projects", "mainScene"}
+-- end
 for i=1, #listFiles do
     require("pocketup.ui."..listFiles[i])
 end
