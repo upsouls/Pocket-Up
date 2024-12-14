@@ -3,13 +3,10 @@ local makeBlock_other = require("pocketup.gameAndBlocks.launchBlocks_other")
 local makeBlock_cerberus = require("pocketup.gameAndBlocks.launchBlocks_cerberus")
 local makeBlock_sotritmor = require("pocketup.gameAndBlocks.launchBlocks_sotritmor")
 local makeBlock_terra = require("pocketup.gameAndBlocks.launchBlocks_terra")
-
 local _Vars = {}
 
--- принимает все формулы одного из параметров.
 local lang = system.getPreference( "locale", "language" )
 local renameFormulas = calculateGameFormulas
-
 
 function encodeList(event)
     local answer = ""
@@ -28,7 +25,6 @@ end
 
 
 local function make_all_formulas(formulas, object)
-
     local tableInfoObject = {
         {'size',"("..object..".property_size)"},{'direction',"("..object..".rotation)"},{'directionView',"("..object..".rotation/2)"},{'positionX',object..".x"},
         {'positionY',"(-("..object..".y))"},{'speedX', 'pocketupFuns.getLinearVelocity('..object..',"x")'},{'speedY', 'pocketupFuns.getLinearVelocity('..object..',"y")'},
@@ -75,7 +71,6 @@ local isEvent = {
     keypressed=true, endKeypressed = true
 }
 
-
 function noremoveAllObjects()
     local stage = display.getCurrentStage()
 
@@ -104,20 +99,27 @@ end
 
 function scene_run_game(typeBack, paramsBack)
     app.scene="game"
-    wait_type = 'wait'
-    wait_table = {_ends = 0, event = 0}
+    app.words = {}
+
+    native.setProperty("windowMode", "fullscreen")
+    display.setDefault('background', 1, 1, 1)
+
     local options = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/options'))
-    
     if utils.isWin or utils.isSim then
         options.orientation = "vertical"
     end
-    renameFormulas.displayWidth, renameFormulas.displayHeight, renameFormulas.displayActualWidth, renameFormulas.displayActualHeight = "("..tostring(options.orientation == "vertical" and options.displayWidth or options.displayHeight)..")", "("..tostring(options.orientation == "vertical" and options.displayHeight or options.displayWidth)..")", "("..tostring(options.orientation == "vertical" and display.actualContentWidth or display.actualContentHeight)..")", "("..tostring(options.orientation == "vertical" and display.actualContentHeight or display.actualContentWidth)..")"
+
+    renameFormulas.displayWidth = "("..tostring(options.orientation == "vertical" and options.displayWidth or options.displayHeight)..")"
+    renameFormulas.displayHeight = "("..tostring(options.orientation == "vertical" and options.displayHeight or options.displayWidth)..")"
+    renameFormulas.displayActualWidth = "("..tostring(options.orientation == "vertical" and display.actualContentWidth or display.actualContentHeight)..")"
+    renameFormulas.displayActualHeight = "("..tostring(options.orientation == "vertical" and display.actualContentHeight or display.actualContentWidth)..")"
 
     local isScriptsBack = false
     local dW, dH, dCX, dCY, sOX, sOY = display.actualContentWidth, display.contentHeight, CENTER_X, CENTER_Y, display.screenOriginX, display.screenOriginY
 
-    native.setProperty("windowMode", "fullscreen")
+
     function showOldScene()
+        app.words = require("pocketup.modules.loadLanguage")
         native.setProperty("windowMode", "normal")
         display.setDefault("background", 4/255, 34/255, 44/255)
         plugins.orientation.lock('portrait')
@@ -139,66 +141,292 @@ function scene_run_game(typeBack, paramsBack)
             os.exit()
         end
     end
+
     max_fors = 0
-    display.setDefault('background', 1, 1, 1)
-    lua = ''
+
+-- Запуск
+lua = ''
 if true then
-    lua = ''
-    lua = lua..(options.orientation=="horizontal" and "\nplugins.orientation.lock('landscape')" or "").."\nsystem.activate('multitouch')\nplugins.physics.start(true)\nlocal function getImageProperties(path, dir)\nlocal image = display.newImage(path, dir)\nimage.alpha=0\nlocal width = image.width\nlocal height = image.height\ndisplay.remove(image)\nreturn width, height\nend"
-    --local groupScene = display.newGroup()
-    local scenes = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/scenes'))
+-- Генерация lua кода
+local scenes = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/scenes'))
 
-    lua = lua.."\nlocal thread = require('plugins.thread')\nlocal joysticks = {}\nlocal Timers = {}\nlocal Timers_max = 0\nlocal globalConstants = {isTouch=false, touchX=0, touchY=0, touchId=0, keysTouch={}, touchsXId={}, touchsYId={}, isTouchsId={}}"
-    lua = lua.."\nlocal pocketupFuns = {} pocketupFuns.sin = function(v) return(math.sin(math.rad(v))) end pocketupFuns.cos = function(v) return(math.cos(math.rad(v))) end pocketupFuns.tan = function(v) return(math.tan(math.rad(v))) end pocketupFuns.asin = function(v) return(math.deg(math.asin(v))) end pocketupFuns.acos = function(v) return(math.deg(math.acos(v))) end pocketupFuns.atan = function(v) return(math.deg(math.atan(v))) end pocketupFuns.atan2 = function(v, v2) return(math.deg(math.atan2(v, v2))) end pocketupFuns.roundUp = function(v) return(math.floor(v)+1) end pocketupFuns.connect = function(v,v2,v3) return(v..v2..(v3==nil and '' or v3)) end pocketupFuns.ternaryExpression = function(condition, answer1, answer2) return(condition and answer1 or answer2) end pocketupFuns.regularExpression = function(regular, expression) return(string.match(expression, regular)) end pocketupFuns.characterFromText = function(pos, value) return(plugins.utf8.sub(value,pos,pos)) end\npocketupFuns.getLinearVelocity = function(object, xOrY)\nif (object.physicsReload == nil) then\nreturn(0)\nelse\nlocal vx, vy = object:getLinearVelocity()\nreturn(xOrY=='x' and vx or vy)\nend\nend\npocketupFuns.getEllementArray = function(element, array) return(array[element]==nil and '' or array[element]) end pocketupFuns.containsElementArray = function(array, value)\nlocal isElement = false\nfor i=1, #array do\nif (array[i]==value) then\nisElement = true\nbreak\nend\nend\nreturn(isElement)\nend\npocketupFuns.getIndexElementArray = function(array, value)\n local index = 0\nfor i=1, #array do\nif (array[i]==value) then\nindex = i\nbreak\nend\nend\nreturn(index)\nend\npocketupFuns.levelingArray = function(array)\nreturn(array)\nend\npocketupFuns.displayPositionColor = function(x,y)\nlocal hexColor\nlocal function onColorSample(event)\nhexColor = utils.rgbToHex({event.r, event.g, event.b})\nreturn(hexColor)\nend\ndisplay.colorSample(CENTER_X+x, CENTER_Y-y, onColorSample)\nreturn(hexColor)\nend"
-    lua = lua.."\nglobalConstants.getTouchXId = function(id)\nlocal answer = globalConstants.touchsXId[globalConstants.keysTouch['touch_'..id]]\nreturn(answer==nil and 0 or answer)\nend\nglobalConstants.getTouchYId = function(id)\nlocal answer = globalConstants.touchsYId[globalConstants.keysTouch['touch_'..id]]\nreturn(answer==nil and 0 or answer)\nend\npocketupFuns.getIsTouchId = function(id)\nreturn(globalConstants.isTouchsId[globalConstants.keysTouch['touch_'..id]]==true)\nend\npocketupFuns.getCountTouch = function ()\nlocal count = 0\nfor k, v in pairs(globalConstants.isTouchsId) do\ncount = count + 1\nend\nreturn(count)\nend\npocketupFuns.jsonEncode = function(table2)\nlocal table = nil pcall(function()\ntable = plugins.json.decode(table2)\nend)\nif (table==nil) then\nreturn('')\nelse\nlocal array = ''\nfor k, v in pairs(table) do\narray = array..(array=='' and '' or '\\n')..v\nend\nreturn(array)\nend\nend\npocketupFuns.isTouchObject2 = function(target, id)\nreturn(target.touchesObjects['obj_'..id]==true)\nend\npocketupFuns.countTouchesObjects = function(target)\nlocal isTouch = false\nfor v, k in pairs(target.touchesObjects) do\nisTouch = true\nbreak\nend\nreturn(isTouch)\nend\n\n\n"
-    --lua = lua.."\nfunction hex2rgb(hexCode)\nif (utils.isCorrectHex(hexCode)) then\nhexCode = string.upper(hexCode)\nassert((#hexCode == 7) or (#hexCode == 9), \"The hex value must be passed in the form of #RRGGBB or #AARRGGBB\" )\nlocal hexCode = hexCode:gsub(\"#\",\"\")\nif (#hexCode == 6) then\nhexCode = \"FF\"..hexCode\nendlocal a, r, g, b = tonumber(\"0x\"..hexCode:sub(1,2))/255, tonumber(\"0x\"..hexCode:sub(3,4))/255, tonumber(\"0x\"..hexCode:sub(5,6))/255, tonumber(\"0x\"..hexCode:sub(7,8))/255\nreturn {r, g, b, a}\nelse\nreturn {0,0,0,1}\nend\nend\n"
-    local globalVariables = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/variables'))
-    for i=1, #globalVariables do
-            lua = lua..'var_'..globalVariables[i][1].." = 0\n"
-    end
-    local globalArrays = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/arrays'))
-    for i=1, #globalArrays do
-            lua = lua..'list_'..globalArrays[i][1].." = {}\n"
-    end
-    lua = lua.."local myScene\n\nlocal WebViews = {}\nlocal textFields = {} local objects = {}\nlocal events_touchBack = {}\nlocal events_keypressed = {}\nlocal events_endKeypressed = {}\nlocal events_touchScreen = {}\nlocal events_movedScreen = {}\nlocal events_onTouchScreen = {}\nlocal mainGroup\nlocal playSounds = {}\nlocal playingSounds = {}"
+lua = lua..options.orientation=="horizontal" and "plugins.orientation.lock('landscape')" or ""
+lua = lua..[==[
+system.activate('multitouch')
+plugins.physics.start(true)
 
-    -- local level_blocks = {}
-    for s=1, #scenes do
-        local scene_id = scenes[s][2]
-        -- level_blocks[scene_id] = {}
-        local scene_path = app.idProject.."/scene_"..scene_id
-        local xScaleMainGroup = display.contentWidth/options.displayWidth
-        local yScaleMainGroup = display.contentHeight/options.displayHeight
-        lua = lua.."\n\n\nfunction scene_"..scene_id.."()\n\nlocal focusCameraObject = nil\nmainGroup = display.newGroup()\napp.scene = 'game'\napp.scenes[app.scene] = {mainGroup}\nmainGroup.iscg = true\nmainGroup.xScale, mainGroup.yScale = "..tostring(options.orientation~="vertical" and not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..", "..tostring(options.orientation=="vertical" and  not options.aspectRatio and yScaleMainGroup or xScaleMainGroup).."\nmainGroup.x, mainGroup.y = "..(options.orientation=="vertical" and "CENTER_X, CENTER_Y" or "CENTER_Y, CENTER_X").."\nlocal cameraGroup = display.newGroup()\nlocal stampsGroup = display.newGroup()\ncameraGroup:insert(stampsGroup)\nmainGroup:insert(cameraGroup)\nlocal notCameraGroup = display.newGroup()\nmainGroup:insert(notCameraGroup)"..( not options.aspectRatio and "" or "\nlocal blackRectTop = display.newRect("..(options.orientation=="vertical" and ("0,-"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or ("-"..tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectTop.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 1\nblackRectTop:setFillColor(0,0,0)\nmainGroup:insert(blackRectTop)\nlocal blackRectBottom = display.newRect("..(options.orientation=="vertical" and ("0,"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or (tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectBottom.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 0\nblackRectBottom:setFillColor(0,0,0)\nmainGroup:insert(blackRectBottom)").."\nobjects = {}\n"
-        lua = lua.."\nlocal events_changeBackground = {}\nlocal events_function = {}\n\nlocal function broadcastFunction(nameFunction)\nfor key, value in pairs(objects) do\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nend\n"
-        lua = lua.."\nmyScene = '"..scene_path.."'\nlocal tableVarShow = {}\nlocal tableNamesClones = {}\nlocal miniScenes = display.newGroup()\ncameraGroup:insert(miniScenes)"
-        local objects = plugins.json.decode(funsP['получить сохранение'](scene_path.."/objects"))
-        local functions = plugins.json.decode(funsP['получить сохранение'](scene_path.."/functions"))
-        for i=1, #objects do
-            if (type(objects[i][2])~="string") then
-                lua = lua.."\nevents_function['object_"..objects[i][2].."'] = {}"
-                for i2=1, #functions do
-                    lua = lua.."\nevents_function['object_"..objects[i][2].."']['fun_"..functions[i2][1].."'] = {}"
-                end
-            end
-            
+local function getImageProperties(path, dir)
+    local image = display.newImage(path, dir)
+    image.alpha=0
+
+    local width = image.width
+    local height = image.height
+    display.remove(image)
+
+    return width, height
+end
+]==]
+
+lua = lua..
+[==[
+local thread = require('plugins.thread')
+local joysticks = {}
+local Timers = {}
+local Timers_max = 0
+local globalConstants = {
+    isTouch=false,
+    touchX=0,
+    touchY=0,
+    touchId=0,
+    keysTouch={},
+    touchsXId={},
+    touchsYId={},
+    isTouchsId={}
+}
+]==]
+
+lua = lua..
+[==[
+-- Функции покет апа
+local pocketupFuns = {}
+pocketupFuns.sin = function(v)
+    return(math.sin(math.rad(v)))
+end
+pocketupFuns.cos = function(v)
+    return(math.cos(math.rad(v)))
+end
+pocketupFuns.tan = function(v)
+    return(math.tan(math.rad(v)))
+end
+pocketupFuns.asin = function(v)
+    return(math.deg(math.asin(v)))
+end
+pocketupFuns.acos = function(v)
+    return(math.deg(math.acos(v)))
+end
+pocketupFuns.atan = function(v)
+    return(math.deg(math.atan(v)))
+end
+pocketupFuns.atan2 = function(v, v2)
+    return(math.deg(math.atan2(v, v2)))
+end
+pocketupFuns.roundUp = function(v)
+    return(math.floor(v)+1)
+end
+pocketupFuns.connect = function(v,v2,v3)
+    return(v..v2..(v3==nil and '' or v3))
+end
+pocketupFuns.ternaryExpression = function(condition, answer1, answer2)
+    return(condition and answer1 or answer2)
+end
+pocketupFuns.regularExpression = function(regular, expression)
+    return(string.match(expression, regular))
+end
+pocketupFuns.characterFromText = function(pos, value)
+    return(plugins.utf8.sub(value,pos,pos))
+end
+
+pocketupFuns.getLinearVelocity = function(object, xOrY)
+    if (object.physicsReload == nil) then
+        return(0)
+    else
+        local vx, vy = object:getLinearVelocity()
+        return(xOrY=='x' and vx or vy)
+    end
+end
+pocketupFuns.getEllementArray = function(element, array)
+    return(array[element]==nil and '' or array[element])
+end
+pocketupFuns.containsElementArray = function(array, value)
+    local isElement = false
+    for i=1, #array do
+        if (array[i]==value) then
+            isElement = true
+            break
         end
-        for i=1, #objects do
-            if (type(objects[i][2])~="string") then
-                lua = lua.."\nevents_touchBack['object_"..objects[i][2].."'] = {}"
-                lua = lua.."\nevents_touchScreen['object_"..objects[i][2].."'] = {}"
-                lua = lua.."\nevents_movedScreen['object_"..objects[i][2].."'] = {}"
-                lua = lua.."\nevents_onTouchScreen['object_"..objects[i][2].."'] = {}"
-                lua = lua.."\nevents_changeBackground['object_"..objects[i][2].."'] = {}"
+    end
+    return(isElement)
+end
+pocketupFuns.getIndexElementArray = function(array, value)
+    local index = 0
+    for i=1, #array do
+        if (array[i]==value) then
+            index = i
+            break
+        end
+    end
+    return(index)
+end
+pocketupFuns.levelingArray = function(array)
+    return(array)
+end
+pocketupFuns.displayPositionColor = function(x,y)
+    local hexColor
+    local function onColorSample(event)
+        hexColor = utils.rgbToHex({event.r, event.g, event.b})
+        return(hexColor)
+    end
+    display.colorSample(CENTER_X+x, CENTER_Y-y, onColorSample)
+    return(hexColor)
+end
+]==]
+
+
+lua = lua..
+[==[
+globalConstants.getTouchXId = function(id)
+    local answer = globalConstants.touchsXId[globalConstants.keysTouch['touch_'..id]]
+    return(answer==nil and 0 or answer)
+end
+globalConstants.getTouchYId = function(id)
+    local answer = globalConstants.touchsYId[globalConstants.keysTouch['touch_'..id]]
+    return(answer==nil and 0 or answer)
+end
+pocketupFuns.getIsTouchId = function(id)
+    return(globalConstants.isTouchsId[globalConstants.keysTouch['touch_'..id]]==true)
+end
+pocketupFuns.getCountTouch = function ()
+    local count = 0
+    for k, v in pairs(globalConstants.isTouchsId) do
+        count = count + 1
+    end
+    return(count)
+end
+pocketupFuns.jsonEncode = function(table2)
+    local table = nil
+    pcall(function()
+        table = plugins.json.decode(table2)
+    end)
+    if (table==nil) then
+        return('')
+    else
+        local array = ''
+        for k, v in pairs(table) do
+            array = array..(array=='' and '' or '\\n')..v
+        end
+        return(array)
+    end
+end
+pocketupFuns.isTouchObject2 = function(target, id)
+    return(target.touchesObjects['obj_'..id]==true)
+end
+pocketupFuns.countTouchesObjects = function(target)
+    local isTouch = false
+    for v, k in pairs(target.touchesObjects) do
+        isTouch = true
+        break
+    end
+    return(isTouch)
+end
+
+]==]
+
+-- Глобальные переменные
+local globalVariables = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/variables'))
+for i=1, #globalVariables do
+    lua = lua.."var_"..globalVariables[i][1].." = 0\n"
+end
+
+-- Глобальные массивы
+local globalArrays = plugins.json.decode(funsP['получить сохранение'](app.idProject..'/arrays'))
+for i=1, #globalArrays do
+    lua = lua.."list_"..globalArrays[i][1].." = {}\n"
+end
+
+lua = lua..
+[==[
+local myScene
+
+local WebViews = {}
+local textFields = {}
+local objects = {}
+
+local events_touchBack = {}
+local events_keypressed = {}
+local events_endKeypressed = {}
+local events_touchScreen = {}
+local events_movedScreen = {}
+local events_onTouchScreen = {}
+
+local mainGroup
+
+local playSounds = {}
+local playingSounds = {}
+]==]
+
+lua = lua..
+[==[
+local mouseX, mouseY = 0, 0
+local mouseListener = function(event)
+    mouseX, mouseY = (event.x - mainGroup.x) / mainGroup.xScale, -(event.y - mainGroup.y) / mainGroup.yScale
+end
+Runtime:addEventListener('mouse', mouseListener)
+]==]
+
+-- Сцены
+for s=1, #scenes do
+    local scene_id = scenes[s][2]
+    local scene_path = app.idProject.."/scene_"..scene_id
+    local xScaleMainGroup = display.contentWidth / options.displayWidth
+    local yScaleMainGroup = display.contentHeight / options.displayHeight
+
+    lua = lua..
+    [[
+
+
+-- Сцена
+function scene_]]..scene_id..[[()
+    mainGroup = display.newGroup()
+    mainGroup.iscg = true
+
+    mainGroup.xScale = ]]..tostring(options.orientation~="vertical" and not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..[[
+    mainGroup.yScale = ]]..tostring(options.orientation=="vertical" and  not options.aspectRatio and yScaleMainGroup or xScaleMainGroup)..[[
+    mainGroup.x, mainGroup.y = ]]..(options.orientation=="vertical" and "CENTER_X, CENTER_Y" or "CENTER_Y, CENTER_X")..[[
+    
+
+    app.scene = 'game'
+    app.scenes[app.scene] = {mainGroup}
+
+    local cameraGroup = display.newGroup()
+    mainGroup:insert(cameraGroup)
+
+    local stampsGroup = display.newGroup()
+    cameraGroup:insert(stampsGroup)
+
+    local notCameraGroup = display.newGroup()
+    mainGroup:insert(notCameraGroup)
+
+    local focusCameraObject = nil
+    ]]
+    lua = lua..(not options.aspectRatio and "" or "\nlocal blackRectTop = display.newRect("..(options.orientation=="vertical" and ("0,-"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or ("-"..tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectTop.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 1\nblackRectTop:setFillColor(0,0,0)\nmainGroup:insert(blackRectTop)\nlocal blackRectBottom = display.newRect("..(options.orientation=="vertical" and ("0,"..tostring(options.displayHeight/2)..","..tostring(options.displayWidth)..",display.contentHeight") or (tostring(options.displayHeight/2)..",0,display.contentHeight,"..tostring(options.displayWidth) ))..")\nblackRectBottom.anchor"..(options.orientation=="vertical" and "Y" or "X").." = 0\nblackRectBottom:setFillColor(0,0,0)\nmainGroup:insert(blackRectBottom)").."\nobjects = {}\n"
+    lua = lua.."\nlocal events_changeBackground = {}\nlocal events_function = {}\n\nlocal function broadcastFunction(nameFunction)\nfor key, value in pairs(objects) do\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nend\n"
+    lua = lua.."\nmyScene = '"..scene_path.."'\nlocal tableVarShow = {}\nlocal tableNamesClones = {}\nlocal miniScenes = display.newGroup()\ncameraGroup:insert(miniScenes)"
+    
+    -- Объекты из сцены
+    local objects = plugins.json.decode(funsP['получить сохранение'](scene_path.."/objects"))
+    local functions = plugins.json.decode(funsP['получить сохранение'](scene_path.."/functions"))
+    for i=1, #objects do
+        if (type(objects[i][2])~="string") then
+            lua = lua.."\nevents_function['object_"..objects[i][2].."'] = {}"
+            for i2=1, #functions do
+                lua = lua.."\nevents_function['object_"..objects[i][2].."']['fun_"..functions[i2][1].."'] = {}"
             end
         end
-        lua = lua.."\nlocal function broadcastChangeBackground(numberImage)\nfor key, value in pairs(objects) do\nfor i=1, #events_changeBackground[key] do\nevents_changeBackground[key][i](value, numberImage)\nfor i2=1, #value.clones do\nevents_changeBackground[key][i](value.clones[i2], numberImage)\nend\nend\nend\nend"
+    end
+
+    for i=1, #objects do
+        if (type(objects[i][2])~="string") then
+            lua = lua.."\nevents_touchBack['object_"..objects[i][2].."'] = {}"
+            lua = lua.."\nevents_touchScreen['object_"..objects[i][2].."'] = {}"
+            lua = lua.."\nevents_movedScreen['object_"..objects[i][2].."'] = {}"
+            lua = lua.."\nevents_onTouchScreen['object_"..objects[i][2].."'] = {}"
+            lua = lua.."\nevents_changeBackground['object_"..objects[i][2].."'] = {}"
+        end
+    end
+    lua = lua.."\nlocal function broadcastChangeBackground(numberImage)\nfor key, value in pairs(objects) do\nfor i=1, #events_changeBackground[key] do\nevents_changeBackground[key][i](value, numberImage)\nfor i2=1, #value.clones do\nevents_changeBackground[key][i](value.clones[i2], numberImage)\nend\nend\nend\nend"
 
         for o=1, #objects do
             if (type(objects[o][2])~="string") then
-
-            -- wait_type = 'wait'
-            -- wait_table = {_ends = 0, event = 0}
 
             lua = lua.."\npcall(function()\n"
 
@@ -444,7 +672,7 @@ lua = lua..
 end\
 Runtime:addEventListener('key', funKeyListener)\n"
 
-    lua = lua.."\nfunction exitGame()\nRuntime:removeEventListener('key', funKeyListener)\nplugins.physics.setDrawMode('normal')\nsystem.deactivate('multitouch')\nplugins.physics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\nshowOldScene()\nend"
+    lua = lua.."\nfunction exitGame()\nRuntime:removeEventListener('mouse', mouseListener)\nRuntime:removeEventListener('key', funKeyListener)\nplugins.physics.setDrawMode('normal')\nsystem.deactivate('multitouch')\nplugins.physics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\nshowOldScene()\nend"
     lua = lua.."\nfunction deleteScene()\
     thread.cancelAll()\
     for key, value in pairs(objects) do\

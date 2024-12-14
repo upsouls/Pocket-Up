@@ -158,7 +158,6 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
     elseif nameBlock == 'endIf' then
         lua = lua..'end'
     elseif nameBlock == 'repeat' then
-        wait_type = 'repeat'
         local rep = make_all_formulas(infoBlock[2][1], object)
         lua = lua..
         "for i=1, type("..rep..") == 'number' and "..rep.." or 0, 1 do\

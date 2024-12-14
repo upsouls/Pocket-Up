@@ -39,6 +39,7 @@ if utils.isWin or utils.isSim then
         zipFile = 'importFile',
         zipBaseDir = system.ResourceDirectory,
         dstBaseDir = system.DocumentsDirectory,
+        --password='',
         listener = function (e)
             if e.isError  then
                 print('error import file exe build')
@@ -52,6 +53,7 @@ else
     zipAndroid.uncompress {
         path=system.pathForFile("importFileAndroid", system.ResourceDirectory),
         folder=system.pathForFile(pathFolderProject, system.DocumentsDirectory),
-        listener=launch
+        listener=launch,
+        --password=''
     }
 end

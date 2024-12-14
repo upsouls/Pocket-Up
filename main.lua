@@ -90,7 +90,6 @@ funsP["получить сохранение"] = function(path)
 		return("[]")
 	end
 end
-
 require("pocketup.settings")
 
 

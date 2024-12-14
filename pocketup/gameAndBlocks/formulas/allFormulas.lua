@@ -87,6 +87,8 @@ allCategotiesAndFormulas = {
 		{{"function","touchDisplayId"},{"function","("},{"number",1},{"function",")"}},
 		{{"function","countTouchDisplay"}},{{"function","countTouch"}},
 		{{"function","positionCameraX"}},{{"function","positionCameraY"}},
+		{{"function","mouseX"}},
+		{{"function","mouseY"}},
 		
 		--[[{{"function","indexThisTouch"},{"function","("},{"number",1},{"function",")"}}]] }},
 		{app.words[360], { {{"function","timer"}},{{"function","year"}},
@@ -130,7 +132,7 @@ nameFormulas = {
 	day=app.words[364],dayWeek=app.words[365],hour=app.words[366],minute=app.words[367],second=app.words[368],
 	displayWidth=app.words[477],displayHeight=app.words[478],displayActualWidth=app.words[479],displayActualHeight=app.words[480],
 	array2json=app.words[482],json2array=app.words[483],positionCameraX=app.words[484],positionCameraY=app.words[485],
-	touchesObject2=app.words[617],myName=app.words[620]
+	touchesObject2=app.words[617],myName=app.words[620],mouseX=app.words[625],mouseY=app.words[626]
 }
 
 
@@ -182,7 +184,7 @@ calculateRedactorFormulas = {
 	touchDisplayId="allFunsRedRorms.getFalse",
 	displayWidth="(720)",displayHeight="(1280)",displayActualWidth="("..tostring(display.actualContentWidth)..")",
 	displayActualHeight="("..tostring(display.actualContentHeight)..")",array2json="allFunsRedRorms.getJson",json2array="allFunsRedRorms.getNil",
-	touchesObject2="false",myName='"'..app.words[444]..'"'
+	touchesObject2="false",myName='"'..app.words[444]..'"',mouseX="(0)",mouseY="(0)"
 }
 
 
@@ -212,5 +214,5 @@ calculateGameFormulas = {
         dayWeek="tonumber(os.date('%w', os.time()))",day="tonumber(os.date('%d', os.time()))",hour="tonumber(os.date('%H', os.time()))",
         minute="tonumber(os.date('%M', os.time()))",second="tonumber(os.date('%S', os.time()))",
         json2array="pocketupFuns.jsonEncode", array2json="plugins.json.encode",positionCameraX="(cameraGroup.x)",
-        positionCameraY="(-cameraGroup.x)",myName="(target.myName==nil and 0 or target.myName)"
+        positionCameraY="(-cameraGroup.x)",myName="(target.myName==nil and 0 or target.myName)",mouseX="mouseX",mouseY="mouseY"
 }

@@ -86,6 +86,7 @@ _G.timer = timer
 _G.Runtime = Runtime
 _G.graphics = graphics
 _G.audio = audio
+_G.native = native
 
 os.write = function (value , path , basedir)
     if type(path) ~= 'string' or value == nil then
