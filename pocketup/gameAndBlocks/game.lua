@@ -122,7 +122,9 @@ function scene_run_game(typeBack, paramsBack)
         app.words = require("pocketup.modules.loadLanguage")
         native.setProperty("windowMode", "normal")
         display.setDefault("background", 4/255, 34/255, 44/255)
+
         plugins.orientation.lock('portrait')
+    
         display.screenOriginX, display.screenOriginY = sOX, sOY
         display.contentWidth, display.contentHeight = dW, dH
         display.contentCenterX = dCX
@@ -269,11 +271,7 @@ pocketupFuns.displayPositionColor = function(x,y)
     display.colorSample(CENTER_X+x, CENTER_Y-y, onColorSample)
     return(hexColor)
 end
-]==]
 
-
-lua = lua..
-[==[
 globalConstants.getTouchXId = function(id)
     local answer = globalConstants.touchsXId[globalConstants.keysTouch['touch_'..id]]
     return(answer==nil and 0 or answer)
@@ -318,7 +316,6 @@ pocketupFuns.countTouchesObjects = function(target)
     end
     return(isTouch)
 end
-
 ]==]
 
 -- Глобальные переменные
@@ -352,10 +349,7 @@ local mainGroup
 
 local playSounds = {}
 local playingSounds = {}
-]==]
 
-lua = lua..
-[==[
 local mouseX, mouseY = 0, 0
 local mouseListener = function(event)
     mouseX, mouseY = (event.x - mainGroup.x) / mainGroup.xScale, -(event.y - mainGroup.y) / mainGroup.yScale
@@ -424,85 +418,121 @@ function scene_]]..scene_id..[[()
     cameraGroup:insert(miniScenes)
 
     myScene = ']]..scene_path..[['
+    
     ]]
     
     -- Объекты из сцены
     local objects = plugins.json.decode(funsP['получить сохранение'](scene_path.."/objects"))
     local functions = plugins.json.decode(funsP['получить сохранение'](scene_path.."/functions"))
+
     for i=1, #objects do
-        if (type(objects[i][2])~="string") then
+        if type(objects[i][2]) ~= "string" then
+
             lua = lua.."\nevents_function['object_"..objects[i][2].."'] = {}"
             for i2=1, #functions do
+
                 lua = lua.."\nevents_function['object_"..objects[i][2].."']['fun_"..functions[i2][1].."'] = {}"
             end
         end
+
+        lua = lua..
+        "\nevents_touchBack['object_"..objects[i][2].."'] = {}"..
+        "\nevents_touchScreen['object_"..objects[i][2].."'] = {}"..
+        "\nevents_movedScreen['object_"..objects[i][2].."'] = {}"..
+        "\nevents_onTouchScreen['object_"..objects[i][2].."'] = {}"..
+        "\nevents_changeBackground['object_"..objects[i][2].."'] = {}"
     end
 
-    for i=1, #objects do
-        if (type(objects[i][2])~="string") then
-            lua = lua.."\nevents_touchBack['object_"..objects[i][2].."'] = {}"
-            lua = lua.."\nevents_touchScreen['object_"..objects[i][2].."'] = {}"
-            lua = lua.."\nevents_movedScreen['object_"..objects[i][2].."'] = {}"
-            lua = lua.."\nevents_onTouchScreen['object_"..objects[i][2].."'] = {}"
-            lua = lua.."\nevents_changeBackground['object_"..objects[i][2].."'] = {}"
+    lua = lua..
+    [==[
+    local function broadcastChangeBackground(numberImage)
+        for key, value in pairs(objects) do
+            for i = 1, #events_changeBackground[key] do
+                events_changeBackground[key][i](value, numberImage)
+                for i2 = 1, #value.clones do
+                    events_changeBackground[key][i](value.clones[i2], numberImage)
+                end
+            end
         end
     end
-    lua = lua.."\nlocal function broadcastChangeBackground(numberImage)\nfor key, value in pairs(objects) do\nfor i=1, #events_changeBackground[key] do\nevents_changeBackground[key][i](value, numberImage)\nfor i2=1, #value.clones do\nevents_changeBackground[key][i](value.clones[i2], numberImage)\nend\nend\nend\nend"
+    ]==]
 
-        for o=1, #objects do
-            if (type(objects[o][2])~="string") then
-
-            lua = lua.."\npcall(function()\n"
+        for o = 1, #objects do
+            if type(objects[o][2]) ~= "string" then
 
             local obj_id = objects[o][2]
             local obj_path = scene_path.."/object_"..obj_id
             local obj_images = plugins.json.decode(funsP['получить сохранение'](obj_path.."/images"))
             local obj_sounds = plugins.json.decode(funsP['получить сохранение'](obj_path.."/sounds"))
-            lua = lua.."\nlocal objectsParticles = {}"
-            lua = lua.."\nlocal listImages = {"
+        
+            lua = lua..
+            [=[
+            pcall(function()
+                local objectsParticles = {}
+                local listImages = {
+            ]=]
+
             for i=1, #obj_images do
-                lua = lua..(i==1 and "" or ",")..obj_images[i][2]
+                lua = lua..(i == 1 and "" or ",")..obj_images[i][2]
             end
             lua = lua.."}\nlocal listNamesImages = {"
             for i=1, #obj_images do
-                lua = lua..(i==1 and "'" or "','")..obj_images[i][1]:gsub("'","\\'"):gsub(( utils.isWin and "\r\n" or "\n"),"\\n")
+                lua = lua..(i == 1 and "'" or "','")..obj_images[i][1]:gsub("'","\\'"):gsub(( utils.isWin and "\r\n" or "\n"),"\\n")
             end
-            if (#obj_images==0) then
-                lua = lua.."}\nlocal listSounds = {"
-                else
-                lua = lua.."'}\nlocal listSounds = {"
-                end
+            if (#obj_images==0) then lua = lua.."}\nlocal listSounds = {" else lua = lua.."'}\nlocal listSounds = {" end
             for i=1, #obj_sounds do
-                lua = lua..(i==1 and "" or ",")..obj_sounds[i][2]
+                lua = lua..(i == 1 and "" or ",")..obj_sounds[i][2]
             end
-            lua = lua.."}\n"
+            lua = lua..
+            [==[
+            }
 
-            lua = lua..'tableFeathers = {}\n'
-            lua = lua..'tableFeathersOptions = {3.5, 0, 0, 255}\n'
+            tableFeathers = {}
+            tableFeathersOptions = {3.5, 0, 0, 255}
+            ]==]
 
             if (#obj_images>0) then
-                lua = lua.."\n\nlocal object_"..obj_id.." = display.newImage('"..obj_path.."/image_"..obj_images[1][2]..".png', system.DocumentsDirectory)"
+                lua = lua.."\nlocal object_"..obj_id.." = display.newImage('"..obj_path.."/image_"..obj_images[1][2]..".png', system.DocumentsDirectory)"
                 lua = lua.."\nobject_"..obj_id..".image_path = '"..obj_path.."/image_"..obj_images[1][2]..".png'"
-                lua = lua.."\nobject_"..obj_id..".timers = {}"
+                --lua = lua.."\nobject_"..obj_id..".timers = {}"
             else
                 lua = lua.."\n\nlocal object_"..obj_id.." = display.newImage('images/notVisible.png')"
             end
-            lua = lua.."\nobject_"..obj_id..".infoSaveVisPos = "..tostring(o).."\n"
-            lua = lua.."\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nobjectsTable[object_"..obj_id..".infoSaveVisPos][3] = nil\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\n"
-            lua = lua.."cameraGroup:insert(object_"..obj_id..")\nobject_"..obj_id..".touchesObjects = {}"
-            if (o==1) then
-                lua = lua.."\nlocal background = object_"..obj_id.."\nbackground.listImagesBack, background.listNamesImagesBack, background.obj_pathBack = listImages, listNamesImages, '"..obj_path.."'"
+
+            lua = lua..
+            [[
+            object_]]..obj_id..[[.infoSaveVisPos = ]]..tostring(o)..[[
+
+            local objectsTable = plugins.json.decode(funsP['получить сохранение'](']]..scene_path..[[/objects'))
+            objectsTable[object_]]..obj_id..[[.infoSaveVisPos][3] = nil
+
+            funsP['записать сохранение'](']]..scene_path..[[/objects', plugins.json.encode(objectsTable))
+            cameraGroup:insert(object_]]..obj_id..[[)
+            object_]]..obj_id..[[.touchesObjects = {}
+            ]]
+            if o == 1 then
+                lua = lua..
+                "local background = object_"..obj_id.."\
+                background.listImagesBack, background.listNamesImagesBack, background.obj_pathBack = listImages, listNamesImages, '"..obj_path.."'"
             end
-            lua = lua.."\nobject_"..obj_id..".parent_obj = object_"..obj_id.."\nobject_"..obj_id..".clones = {}\nobjects['object_"..obj_id.."'], object_"..obj_id..".idObject = object_"..obj_id..", "..obj_id.."\nobject_"..obj_id..".numberImage = 1\n\n"
+
+            lua = lua..
+            "\nobject_"..obj_id..".parent_obj = object_"..obj_id.."\
+            object_"..obj_id..".clones = {}\
+            objects['object_"..obj_id.."'], object_"..obj_id..".idObject = object_"..obj_id..", "..obj_id.."\
+            object_"..obj_id..".numberImage = 1\n\n"
             lua = lua.."object_"..obj_id..".tableVarShow, object_"..obj_id..".origWidth, object_"..obj_id..".origHeight, object_"..obj_id..".nameObject, object_"..obj_id..".property_size, object_"..obj_id..".property_brightness, object_"..obj_id..".property_color = {}, object_"..obj_id..".width, object_"..obj_id..".height, 'object_"..obj_id.."', 100, 100, 0\n"
             lua = lua.."object_"..obj_id..".countImages = "..tostring(#obj_images).."\n"
 
+            -- Локальные переменные
             local localVariables = plugins.json.decode(funsP['получить сохранение'](obj_path.."/variables"))
             lua = lua.."object_"..obj_id..".namesVars = {}\n"
-            for i=1, #localVariables do
+            for i = 1, #localVariables do
                 lua = lua.."object_"..obj_id..".var_"..localVariables[i][1].." = 0\n"
                 lua = lua.."object_"..obj_id..".namesVars["..i.."] = 'var_"..localVariables[i][1].."'\n"
             end
+
+            -- Локальные массивы
             local localArrays = plugins.json.decode(funsP['получить сохранение'](obj_path.."/arrays"))
             lua = lua.."object_"..obj_id..".namesLists = {}\n"
             for i=1, #localArrays do
@@ -512,14 +542,67 @@ function scene_]]..scene_id..[[()
 
             lua = lua.."\n\nlocal events_start = {}\nlocal events_touchObject = {} object_"..obj_id..".events_touchObject = events_touchObject\n\nlocal events_movedObject = {} object_"..obj_id..".events_movedObject = events_movedObject\nlocal events_onTouchObject = {} object_"..obj_id..".events_onTouchObject = events_onTouchObject\nlocal events_collision = {} object_"..obj_id..".events_collision = events_collision\nlocal events_endedCollision = {}  object_"..obj_id..".events_endedCollision = events_endedCollision\nlocal events_startClone = {}\n object_"..obj_id..".events_startClone = events_startClone"
             lua = lua.."\nobject_"..obj_id..".group = cameraGroup"
-            lua = lua.."\nobject_"..obj_id..":addEventListener('touch', function(event)\nif (event.phase=='began') then\nlocal newIdTouch=globalConstants.touchId+1\nglobalConstants.touchId = newIdTouch\nglobalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true\nglobalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\ndisplay.getCurrentStage():setFocus(event.target, event.id)\nevent.target.isTouch = true\nfor key, value in pairs(objects) do\nfor i=1, #events_touchScreen[key] do\nevents_touchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_touchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #events_touchObject do\nevents_touchObject[i](event.target)\nend\nelseif (event.phase=='moved') then\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_movedScreen[key] do\nevents_movedScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_movedScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #events_movedObject do\nevents_movedObject[i](event.target)\nend\nelse\ndisplay.getCurrentStage():setFocus(event.target, nil)\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (pocketupFuns.getCountTouch(globalConstants.isTouchsId)==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch = false\nend\nevent.target.isTouch = nil\nfor key, value in pairs(objects) do\nfor i=1, #events_onTouchScreen[key] do\nevents_onTouchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_onTouchScreen[key][i](value.clones[i2])\nend\nend\nend\nfor i=1, #events_onTouchObject do\nevents_onTouchObject[i](event.target)\nend\nend\nreturn(true)\nend)"
+            lua = lua..
+            [[
+            object_]]..obj_id..[[:addEventListener('touch', function(event)
+                if (event.phase=='began') then
+                    local newIdTouch=globalConstants.touchId+1
+                    globalConstants.touchId = newIdTouch
+                    globalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true
+                    globalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale
+                    display.getCurrentStage():setFocus(event.target, event.id)
+                    event.target.isTouch = true
+                    for key, value in pairs(objects) do
+                        for i=1, #events_touchScreen[key] do
+                            events_touchScreen[key][i](value)
+                            for i2=1, #value.clones do
+                                events_touchScreen[key][i](value.clones[i2])
+                            end
+                        end
+                    end
+                    for i=1, #events_touchObject do
+                        events_touchObject[i](event.target)
+                    end
+                elseif (event.phase=='moved') then
+                    globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale
+                    globalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale
+                    for key, value in pairs(objects) do
+                        for i=1, #events_movedScreen[key] do
+                            events_movedScreen[key][i](value)
+                            for i2=1, #value.clones do
+                                events_movedScreen[key][i](value.clones[i2])
+                            end
+                        end
+                    end
+                    for i=1, #events_movedObject do
+                        events_movedObject[i](event.target)
+                    end
+                else
+                    display.getCurrentStage():setFocus(event.target, nil)
+                    globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil
+                    if (pocketupFuns.getCountTouch(globalConstants.isTouchsId)==0) then
+                        globalConstants.keysTouch = {}
+                        globalConstants.isTouch = false
+                    end
+                    event.target.isTouch = nil
+                    for key, value in pairs(objects) do
+                        for i=1, #events_onTouchScreen[key] do
+                            events_onTouchScreen[key][i](value)
+                            for i2=1, #value.clones do
+                                events_onTouchScreen[key][i](value.clones[i2])
+                            end
+                        end
+                    end
+                    for i=1, #events_onTouchObject do
+                        events_onTouchObject[i](event.target)
+                    end
+                end
+                return true
+            end)
+            ]]
 
-
---"for key, value in pairs(objects) do\nfor i=1, #events_onTouchScreen[key] do\nevents_onTouchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_onTouchScreen[key][i](value.clones[i2])\nend\nend\nend"
-
-
+            -- Блоки
             local blocks = plugins.json.decode(funsP['получить сохранение'](obj_path.."/scripts"))
-
             local oldEventName = nil
             for b=1, #blocks do
                 local block = blocks[b]
