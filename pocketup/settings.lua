@@ -17,6 +17,7 @@ plugins.physics = require("physics")
 plugins.orientation = require('plugin.orientation')
 
 display.contentWidth = display.actualContentWidth
+--display.contentHeight = display.safeActualContentHeight
 if (utils.isWin) then
     display.contentHeight = display.safeActualContentHeight
 else

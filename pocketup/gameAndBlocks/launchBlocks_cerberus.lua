@@ -12,22 +12,7 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
     local nameBlock = infoBlock[1]
     lua = ''
 
-    if (nameBlock == 'ask' and infoBlock[2][2][2]~=nil and infoBlock[2][3][2]~=nil) then
-        add_pcall()
-    	lua = lua.."local function funEditingEnd(event)\
-            "..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].." = event.isOk and event.value or ''\
-            if ("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2].." ~= nil and "..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2]..".x ~= nil) then\
-                "..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2]..".text = event.isOk and event.value or ''\
-            end\
-            local key = target.parent_obj.nameObject\
-            local value = target\
-            for i=1, #events_function[key]['fun_"..infoBlock[2][3][2].."'] do\
-                events_function[key]['fun_"..infoBlock[2][3][2].."'][i](value)\
-            end\
-        end\
-        app.cerberus.newInputLine(("..make_all_formulas(infoBlock[2][1], object).."), '', nil, '', funEditingEnd)"
-        end_pcall()
-    elseif (nameBlock == "createTextField" and infoBlock[2][5][2]~=nil) then
+    if (nameBlock == "createTextField" and infoBlock[2][5][2]~=nil) then
         add_pcall()
         lua = lua.."if (textFields["..make_all_formulas(infoBlock[2][1], object).."] ~= nil) then\ndisplay.remove(textFields["..make_all_formulas(infoBlock[2][1], object).."])\nend\nlocal myTextField = native.newTextField(0, 0, "..make_all_formulas(infoBlock[2][3], object)..", "..make_all_formulas(infoBlock[2][4], object)..")\nmyTextField.hasBackground = "..(infoBlock[2][2][2]=="off" and "true" or "false").."\ntextFields["..make_all_formulas(infoBlock[2][1], object).."] = myTextField\ncameraGroup:insert(myTextField)\nmyTextField:addEventListener('userInput', function(event)\nif (event.phase=='editing') then\n"..(infoBlock[2][5][1]=="localVariable" and "target." or "").."var_"..(infoBlock[2][5][2]).."=myTextField.text\nif ("..(infoBlock[2][5][1]=="localVariable" and "target." or "").."varText_"..(infoBlock[2][5][2]).."~=nil and "..(infoBlock[2][5][1]=="localVariable" and "target." or "").."varText_"..(infoBlock[2][5][2])..".x~=nil) then\n"..(infoBlock[2][5][1]=="localVariable" and "target." or "").."varText_"..(infoBlock[2][5][2])..".text=myTextField.text\nend\nend\nend)"
         end_pcall()
@@ -95,18 +80,6 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         add_pcall()
         lua = lua.."notCameraGroup:insert(textFields["..make_all_formulas(infoBlock[2][1], object).."])"
         end_pcall()
-    elseif (nameBlock=='setQuareHitbox') then
-        add_pcall()
-        lua = lua.."target.physicsTable.outline, target.physicsTable.shape, target.physicsTable.radius = nil, nil, nil\ntarget:physicsReload()"
-        end_pcall()
-    elseif (nameBlock=='setQuareWHHitbox') then
-        add_pcall()
-        lua = lua.."local w = "..make_all_formulas(infoBlock[2][1], object).."/2\nlocal h = "..make_all_formulas(infoBlock[2][2], object).."/2\ntarget.physicsTable.outline, target.physicsTable.radius, target.physicsTable.shape = nil, nil, {-w, -h, -w, h, w, h, w, -h}\ntarget:physicsReload()"
-        end_pcall()
-    elseif (nameBlock=='setCircleHitbox') then
-        add_pcall()
-        lua = lua.."target.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = "..make_all_formulas(infoBlock[2][1], object)..", nil, nil\ntarget:physicsReload()"
-        end_pcall()
     elseif (nameBlock=='setShapeHitbox') then
         add_pcall()
         lua = lua.."local tableShape = plugins.json.decode('"..infoBlock[2][1][2].."')\nlocal tableResizeShape = {}\nlocal size = target.property_size/100\nfor i=1, #tableShape/2 do\ntableResizeShape[i*2-1], tableResizeShape[i*2] = tableShape[i*2-1]*size, tableShape[i*2]*size\nend\ntarget.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = nil, nil, tableResizeShape\ntarget:physicsReload()"
@@ -142,14 +115,6 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
     elseif (nameBlock=='editAlphaMiniScene') then
         add_pcall()
         lua = lua.."local miniScene = miniScenes["..make_all_formulas(infoBlock[2][1], object).."]\nminiScene.alpha = miniScene.alpha-("..make_all_formulas(infoBlock[2][2], object)..")/100"
-        end_pcall()
-    elseif (nameBlock=='setLayer') then
-        add_pcall()
-        lua = lua.."target.group:insert("..make_all_formulas(infoBlock[2][1], object).."+3, target)"
-        end_pcall()
-    elseif (nameBlock=='setAnchor') then
-        add_pcall()
-        lua = lua.."target.anchorX, target.anchorY = "..make_all_formulas(infoBlock[2][1], object).."/100, "..make_all_formulas(infoBlock[2][2], object).."/100"
         end_pcall()
     elseif (nameBlock=='createJoystick' and infoBlock[2][2][2]~=nil and infoBlock[2][3][2]~=nil and infoBlock[2][4][2]~=nil and infoBlock[2][4][2]~=nil and infoBlock[2][5][2]~=nil and infoBlock[2][6][2]~=nil) then
         add_pcall()

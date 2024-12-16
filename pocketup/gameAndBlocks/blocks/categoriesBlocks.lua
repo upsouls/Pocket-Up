@@ -19,12 +19,6 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"getSelectionTextField", {{{"text", app.words[493]}}, {{"globalVariable"}}, {{"globalVariable"}}}},
 			{"setKeyboardToTextField", {{{"text", app.words[493]}}}},
 			{"removeKeyboardToTextField", {{{"text", app.words[493]}}}}
-			--{"playSoundAndWait", {{"sounds",nameSound}}},
-			-- {"repeat2",{ {{"number", 1},{"number",0}}, {"function", nameFunction} }},
-			-- {"repeatIsTrue2",{ {{"number", 1},{"function","<"},{"number",2}}, {"function", nameFunction} }},
-			-- {"timer2", {{{"number", 5}}, {{"number", 1}},{"function", nameFunction}}},
-			--{"deleteWebView", {{{"text", app.words[589]}}}},
-			--{"isSensor", {{{"onOrOff", "off"}}}},
 		},
 		["event"]={
 			{"keypressed",{{localityVariable, nameVariable}}},
