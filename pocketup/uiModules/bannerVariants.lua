@@ -10,14 +10,17 @@ app.cerberus.newVatiants = function (variants, onComplete)
 	rect.anchorY=0,
 	rect:setFillColor(66/255, 66/255, 66/255)
 	group:insert(rect)
-
+	
+	local scroll = nil
 	local buttons = {}
+	local buttonsText = {}
 	local touchBackground
 	local function touchVariant(event)
 		if (event.phase=="began") then
 			event.target:setFillColor(72/255, 72/255, 72/255)
 		elseif (event.phase=="moved" and (math.abs(event.x-event.xStart)>20 or math.abs(event.y-event.yStart)>20)) then
 			event.target:setFillColor(66/255, 66/255, 66/255)
+			scroll:takeFocus(event)
 		elseif (event.phase~="moved") then
 			event.target:setFillColor(66/255, 66/255, 66/255)
 
@@ -42,7 +45,7 @@ app.cerberus.newVatiants = function (variants, onComplete)
 	end
 
 	for i=1, #variants do
-		local button = display.newRect(group, CENTER_X, CENTER_Y+(i-0.5)*display.contentWidth/8+display.contentWidth/50, display.contentWidth/1.16, display.contentWidth/8)
+		local button = display.newRect(group, CENTER_X, (i-0.5)*display.contentWidth/8+display.contentWidth/50, display.contentWidth/1.16, display.contentWidth/8)
 		button:setFillColor(66/255, 66/255, 66/255)
 		local text = display.newText({
 			text=variants[i],
@@ -53,6 +56,7 @@ app.cerberus.newVatiants = function (variants, onComplete)
 		})
 		group:insert(text)
 		buttons[i] = button
+		buttonsText[i] = text
 
 		button.id = i
 		button:addEventListener("touch", touchVariant)
@@ -87,4 +91,19 @@ app.cerberus.newVatiants = function (variants, onComplete)
 	group.alpha = 0
 	transition.to(backgroundBlackAlpha, {time=150, alpha=1})
 	transition.to(group, {time=150, alpha=1})
+
+	scroll = plugins.widget.newScrollView({
+		x = rect.x,
+		y = rect.y + rect.height/2,
+		width = display.contentWidth,
+		height = rect.height,
+		horizontalScrollDisabled = true,
+		hideBackground = true,
+		hideScrollBar = false,
+	})
+	group:insert(scroll)
+	for i = 1, #buttons, 1 do
+		scroll:insert(buttons[i])
+		scroll:insert(buttonsText[i])
+	end
 end

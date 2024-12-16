@@ -2,7 +2,6 @@ lua = nil
 local makeBlock_other = require("pocketup.gameAndBlocks.launchBlocks_other")
 local makeBlock_cerberus = require("pocketup.gameAndBlocks.launchBlocks_cerberus")
 local makeBlock_sotritmor = require("pocketup.gameAndBlocks.launchBlocks_sotritmor")
-local makeBlock_terra = require("pocketup.gameAndBlocks.launchBlocks_terra")
 local _Vars = {}
 
 local lang = system.getPreference( "locale", "language" )
@@ -98,6 +97,7 @@ end
 
 
 function scene_run_game(typeBack, paramsBack)
+    --utils.isSim = false
     app.scene="game"
     app.words = {}
 
@@ -698,6 +698,10 @@ function scene_]]..scene_id..[[()
                     --     lua = lua.."\ntimer.new(0, function ()"
                     -- end
                 else
+                    local luaBlock = makeBlock_other(block, 'target', obj_images, obj_sounds, b, blocks, level_blocks, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)..'\n'
+                    if (luaBlock~=nil and luaBlock~="") then
+                        lua = lua.."\n"..luaBlock..'\n'
+                    else
                     local luaBlock = makeBlock_cerberus(block, 'target', make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
@@ -706,15 +710,6 @@ function scene_]]..scene_id..[[()
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
                     else
-                    local luaBlock = makeBlock_terra(block, 'target', make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)
-                    if (luaBlock~=nil and luaBlock~="") then
-                        lua = lua.."\n"..luaBlock..'\n'
-                    else
-                    local luaBlock = makeBlock_other(block, 'target', obj_images, obj_sounds, b, blocks, level_blocks, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)..'\n'
-                    if (luaBlock~=nil and luaBlock~="") then
-                        lua = lua.."\n"..luaBlock..'\n'
-                    else
-                    end
                     end
                     end
                     end

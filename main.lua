@@ -1,6 +1,6 @@
 collectgarbage("setpause", 2000)
 collectgarbage("setstepmul", 200)
-IsBuild = false
+IsBuild = nil
 native.setProperty("windowMode", "normal")
 
 display.setStatusBar(display.HiddenStatusBar)

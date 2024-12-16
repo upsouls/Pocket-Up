@@ -21,10 +21,10 @@ local launch = function ()
 end
 
 
-if funsP["прочитать сс сохранение"]('counter_projects') >= 2 then
-    launch()
-    return true
-end
+-- if funsP["прочитать сс сохранение"]('counter_projects') >= 2 then
+--     launch()
+--     return true
+-- end
 
 local counterProjects = 2
 funsP["записать сс сохранение"]('counter_projects', counterProjects)
@@ -35,6 +35,7 @@ plugins.lfs.mkdir(system.pathForFile(pathFolderProject, system.DocumentsDirector
 
 if utils.isWin or utils.isSim then
     local zip = require 'plugin.zip'
+    timer.performWithDelay(10, function ()
     zip.uncompress({
         zipFile = 'importFile',
         zipBaseDir = system.ResourceDirectory,
@@ -44,10 +45,13 @@ if utils.isWin or utils.isSim then
             if e.isError  then
                 print('error import file exe build')
             else
-                launch()
+                timer.performWithDelay(10, function ()
+                    launch()
+                end)
             end
         end
     })
+    end)
 else
     local zipAndroid = require 'plugin.zipAndroid'
     zipAndroid.uncompress {

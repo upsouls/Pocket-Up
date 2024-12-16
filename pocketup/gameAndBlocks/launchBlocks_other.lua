@@ -44,15 +44,18 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
     elseif nameBlock == 'setSize' or nameBlock == 'editSize' then
         local formula = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target.property_size = ('..(nameBlock=='setSize' and '' or 'target.property_size)+(')..formula..')\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)'
-        --lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].size = target.property_size/100\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
-        lua = lua.."\ntarget:physicsReload()"
+        lua = lua..
+        "target.property_size = ("..(nameBlock=="setSize" and "" or "target.property_size)+(")..formula..")\
+        target.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)\
+        target:physicsReload()"
         end_pcall()
     elseif nameBlock == 'setPosition' then
         local x = make_all_formulas(infoBlock[2][1], object)
         local y = make_all_formulas(infoBlock[2][2], object)
         add_pcall()
-        lua = lua..'target.x = '..x..'\n'..'target.y = -('..y..')\n'
+        lua = lua..
+        "target.x = "..x.."\
+        target.y = -"..y..""
         end_pcall()
     elseif nameBlock == 'transitionPosition' then
         local time = make_all_formulas(infoBlock[2][1], object)
@@ -77,91 +80,74 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
     elseif nameBlock == 'setPositionX' then
         add_pcall()
         local x = make_all_formulas(infoBlock[2][1], object)
-        lua = lua..'target.x = '..x
+        lua = lua.."target.x = "..x
         end_pcall()
     elseif nameBlock == 'setPositionY' then
         add_pcall()
         local y = make_all_formulas(infoBlock[2][1], object)
-        lua = lua..'target.y = -('..y..')'
+        lua = lua.."target.y = -"..y..""
         end_pcall()
     elseif nameBlock == 'timer' then
-        -- local rep = make_all_formulas(infoBlock[2][1], object)
-        -- local time = make_all_formulas(infoBlock[2][2], object)
         local rep = make_all_formulas(infoBlock[2][1], object)
         local time = make_all_formulas(infoBlock[2][2], object)
-        lua = lua.."for i=1, type("..rep..") == 'number' and "..rep.." or 0 do\
-            threadFun.wait(type("..time..") == 'number' and ("..time.."*1000) or 0)"
---         lua = lua .. 'local _repeat\n'
---         add_pcall()
---         lua = lua ..
--- 'local timer = require(\'timer\')\
--- local name = \'Timer'..index..'\'..\'_\'..Timers_max\
--- if not Timers[name] then\
--- timer.new(('..time..'*1000)*'..rep..', function()\
--- Timers[name] = nil\
--- end)\
--- Timers[name] = timer.GameNew(('..time..')*1000, '..rep..', function()\nif not (target ~= nil and target.x ~= nil) then\npcall(function() timer.cancel(Timers[name]) end)\nreturn true\nend\n'
+        lua = lua..
+        "for i=1, type("..rep..") == 'number' and "..rep.." or 0 do\
+        threadFun.wait(type("..time..") == 'number' and ("..time.."*1000) or 0)"
     elseif nameBlock == 'endTimer' then
-                lua = lua.."coroutine.yield()\
-    end"
-        -- lua = lua..'end)_repeat = Timers[name]\nend'
-        -- end_pcall()
+        lua = lua.."coroutine.yield()\
+        end"
     elseif nameBlock == 'editRotateLeft' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:rotate(-'..rotate..')'
-        --lua = lua.."\nif (target.parent_obj==target) then\local objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
+        lua = lua.."target:rotate(-"..rotate..")"
         end_pcall()
     elseif nameBlock == 'editRotateRight' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:rotate('..rotate..')'
-        --lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
+        lua = lua.."target:rotate("..rotate..")"
         end_pcall()
     elseif nameBlock == 'editPositionX'  then
         local x = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:translate('..x..', 0)'
+        lua = lua.."target:translate("..x..", 0)"
         end_pcall()
     elseif nameBlock == 'editPositionY'  then
         local y = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:translate(0,-('..y..'))'
+        lua = lua.."target:translate(0,-"..y..")"
         end_pcall()
     elseif nameBlock == 'setRotate' then
         local rotate = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target.rotation = '..rotate
-        --lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].rotation = target.rotation\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
+        lua = lua.."target.rotation = "..rotate
         end_pcall()
     elseif nameBlock == 'hide' then
         add_pcall()
-        lua = lua..'target.isVisible = false'
+        lua = lua.."target.isVisible = false"
         end_pcall()
     elseif nameBlock == 'show' then
         add_pcall()
-        lua = lua..'target.isVisible = true'
+        lua = lua.."target.isVisible = true"
         end_pcall()
     elseif nameBlock == 'setAlpha' then
         local alpha = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target.alpha = math.min(math.max(100-('..alpha..'),0),100)/100'
+        lua = lua.."target.alpha = math.min(math.max(100-("..alpha.."),0),100)/100"
         end_pcall()
     elseif nameBlock == 'commentary' then
         local comment = make_all_formulas(infoBlock[2][1], object)
-        lua = lua..'-- '..comment..'\n'
+        lua = lua.."-- "..comment.."\n"
     elseif nameBlock == 'if' or nameBlock == 'ifElse (2)' then
         local condition = make_all_formulas(infoBlock[2][1], object)
-        lua = lua..'if '..condition..' then'
+        lua = lua.."if "..condition.." then"
     elseif nameBlock == 'else' then
-        lua = lua..'else'
+        lua = lua.."else"
     elseif nameBlock == 'endIf' then
-        lua = lua..'end'
+        lua = lua.."end"
     elseif nameBlock == 'repeat' then
         local rep = make_all_formulas(infoBlock[2][1], object)
         lua = lua..
-        "for i=1, type("..rep..") == 'number' and "..rep.." or 0, 1 do\
-        "
+        "for i=1, type("..rep..") == 'number' and "..rep.." or 0, 1 do"
     elseif nameBlock == 'endRepeat' then
         lua = lua..
         "coroutine.yield()\
@@ -171,10 +157,16 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         add_pcall()
         if infoBlock[2][1][1] == 'globalVariable' then
             lua = lua..'var_'..infoBlock[2][1][2]..' = '..value..'\n'
-            lua = lua..'if varText_'..infoBlock[2][1][2]..' then\n varText_'..infoBlock[2][1][2]..'.text = type(var_'..infoBlock[2][1][2]..')=="boolean" and (var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(var_'..infoBlock[2][1][2]..')=="table" and encodeList(var_'..infoBlock[2][1][2]..') or var_'..infoBlock[2][1][2]..'\nend'
+            lua = lua..
+            'if varText_'..infoBlock[2][1][2]..' then\
+            varText_'..infoBlock[2][1][2]..'.text = type(var_'..infoBlock[2][1][2]..')=="boolean" and (var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(var_'..infoBlock[2][1][2]..')=="table" and encodeList(var_'..infoBlock[2][1][2]..') or var_'..infoBlock[2][1][2]..'\
+            end'
         else
             lua = lua..'target.var_'..infoBlock[2][1][2]..' = '..value..'\n'
-            lua = lua..'if target.varText_'..infoBlock[2][1][2]..' then\n target.varText_'..infoBlock[2][1][2]..'.text = type(target.var_'..infoBlock[2][1][2]..')=="boolean" and (target.var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(target.var_'..infoBlock[2][1][2]..')=="table" and encodeList(target.var_'..infoBlock[2][1][2]..') or target.var_'..infoBlock[2][1][2]..'\nend'
+            lua = lua..
+            'if target.varText_'..infoBlock[2][1][2]..' then\
+            target.varText_'..infoBlock[2][1][2]..'.text = type(target.var_'..infoBlock[2][1][2]..')=="boolean" and (target.var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(target.var_'..infoBlock[2][1][2]..')=="table" and encodeList(target.var_'..infoBlock[2][1][2]..') or target.var_'..infoBlock[2][1][2]..'\
+            end'
         end
         end_pcall()
     elseif nameBlock == 'editVariable' and infoBlock[2][1][2]~=nil then
@@ -182,16 +174,22 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         add_pcall()
         if infoBlock[2][1][1] == 'globalVariable' then
             lua = lua..'var_'..infoBlock[2][1][2]..' = type(var_'..infoBlock[2][1][2]..')=="boolean" and (var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(var_'..infoBlock[2][1][2]..')=="table" and encodeList(var_'..infoBlock[2][1][2]..') or var_'..infoBlock[2][1][2]..'+('..make_all_formulas(infoBlock[2][2], object)..')\n'
-            lua = lua..'if varText_'..infoBlock[2][1][2]..' then\n varText_'..infoBlock[2][1][2]..'.text = var_'..infoBlock[2][1][2]..'\nend'
+            lua = lua..
+            'if varText_'..infoBlock[2][1][2]..' then\
+            varText_'..infoBlock[2][1][2]..'.text = var_'..infoBlock[2][1][2]..'\
+            end'
         else
             lua = lua..'target.var_'..infoBlock[2][1][2]..' = target.var_'..infoBlock[2][1][2]..' + '..value..'\n'
-            lua = lua..'if target.varText_'..infoBlock[2][1][2]..' then\n target.varText_'..infoBlock[2][1][2]..'.text = type(target.var_'..infoBlock[2][1][2]..')=="boolean" and (target.var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(target.var_'..infoBlock[2][1][2]..')=="table" and encodeList(target.var_'..infoBlock[2][1][2]..') or target.var_'..infoBlock[2][1][2]..'\nend'
+            lua = lua..
+            'if target.varText_'..infoBlock[2][1][2]..' then\
+            target.varText_'..infoBlock[2][1][2]..'.text = type(target.var_'..infoBlock[2][1][2]..')=="boolean" and (target.var_'..infoBlock[2][1][2]..' and app.words[373] or app.words[374]) or type(target.var_'..infoBlock[2][1][2]..')=="table" and encodeList(target.var_'..infoBlock[2][1][2]..') or target.var_'..infoBlock[2][1][2]..'\
+            end'
         end
         end_pcall()
     elseif nameBlock == 'openLink' then
         local link = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'system.openURL('..link..')\n'
+        lua = lua.."system.openURL("..link..")"
         end_pcall()
     elseif nameBlock == 'cycleForever' then
         lua = lua..
@@ -310,7 +308,14 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
         end_pcall()
     elseif nameBlock == 'deleteClone' then
         add_pcall()
-        lua = lua.."if (target) then\ntable.remove(target.parent_obj.clones, target.idClone)\nfor i=1, #target.parent_obj.clones do\ntarget.parent_obj.clones[i].idClone = i\nend\ndisplay.remove(target)\n\nend\n"
+        lua = lua..
+        "if (target) then\
+            table.remove(target.parent_obj.clones, target.idClone)\
+            for i=1, #target.parent_obj.clones do\
+                target.parent_obj.clones[i].idClone = i\
+            end\
+            display.remove(target)\
+        end"
         end_pcall()
         add_pcall()
         lua = lua.."if true then pcall(function() timer.cancel(_repeat) end) return true end"
@@ -326,33 +331,36 @@ local function make_block(infoBlock, object, images, sounds, index, blocks, leve
     elseif nameBlock == 'vibration' then
         local time = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'timer.new(100,function() system.vibrate("impact") end , (('..time..')*1000)/100)'
+        lua = lua.."timer.new(100,function() system.vibrate('impact') end , ("..time.."*1000)/100)"
         end_pcall()
     elseif nameBlock == 'goSteps' then
         local steps = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:translate(pocketupFuns.sin(target.rotation)*('..steps..'),- (pocketupFuns.cos(target.rotation)*('..steps..')))'
+        lua = lua.."target:translate(pocketupFuns.sin(target.rotation)*"..steps..",- (pocketupFuns.cos(target.rotation)*"..steps.."))"
         end_pcall()
     elseif nameBlock == 'speedStepsToSecoond' then
         local x = make_all_formulas(infoBlock[2][1], object)
         local y = make_all_formulas(infoBlock[2][2], object)
         add_pcall()
-        lua = lua..'target:setLinearVelocity('..x..',- ('..y..'))'
+        lua = lua.."target:setLinearVelocity("..x..",- ("..y.."))"
         end_pcall()
     elseif nameBlock == 'rotateLeftForever' then
         local force = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:applyTorque(-('..force..')*100)'
+        lua = lua.."target:applyTorque(-("..force..")*100)"
         end_pcall()
     elseif nameBlock == 'rotateRightForever' then
         local force = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua..'target:applyTorque(('..force..')*100)'
+        lua = lua.."target:applyTorque("..force.."*100)"
         end_pcall()
     elseif nameBlock == 'setBrightness' or nameBlock=='editBrightness' then
         local brig = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
-        lua = lua.."target.fill.effect = \'filter.brightness\'\ntarget.property_brightness = math.max(math.min(("..(nameBlock=="setBrightness" and '' or 'target.property_brightness)+(')..brig.."), 200),0)\ntarget.fill.effect.intensity = (target.property_brightness)/100-1\n"
+        lua = lua..
+        "target.fill.effect = 'filter.brightness'\
+        target.property_brightness = math.max(math.min("..(nameBlock=="setBrightness" and '' or 'target.property_brightness').."+("..brig.."), 200),0)\
+        target.fill.effect.intensity = (target.property_brightness)/100-1"
         end_pcall()
     elseif nameBlock == 'playSound' and infoBlock[2][1][2]~=nil then
         add_pcall()
