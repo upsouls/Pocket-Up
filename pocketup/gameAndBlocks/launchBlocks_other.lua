@@ -28,13 +28,13 @@ end
 --     movedObject=true, onTouchObject=true, movedScreen=true, onTouchScreen=true, touchBack=true, endedCollision=true,
 -- }
 
-local blockHandlers = {}
-local moduleHandlers = {'data', 'control', 'textFields', 'sounds', 'physics', 'pen', 'particles', 'miniScenes', 'images', 'elementInterface', 'device'}
-for _, module in ipairs(moduleHandlers) do
-    for key, value in pairs(require('pocketup.gameAndBlocks.launchBlocks.'..module)) do
-        blockHandlers[key] = value
-    end
-end
+-- BlocksAllHandlers = {}
+-- local moduleHandlers = {'data', 'control', 'textFields', 'sounds', 'physics', 'pen', 'particles', 'miniScenes', 'images', 'elementInterface', 'device'}
+-- for _, module in ipairs(moduleHandlers) do
+--     for key, value in pairs(require('pocketup.gameAndBlocks.launchBlocks.'..module)) do
+--         BlocksAllHandlers[key] = value
+--     end
+-- end
 
 local function make_block(infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
     if infoBlock[3] == 'off' then
@@ -45,8 +45,8 @@ local function make_block(infoBlock, object, images, sounds, make_all_formulas, 
     -- local waitInsert = function (time)
     --     lua = lua..'threadFun.wait('..time..'*1000)'
     -- end
-    if blockHandlers[nameBlock] then
-        lua = lua..(blockHandlers[nameBlock](infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o) or '')
+    if BlocksAllHandlers[nameBlock] then
+        lua = lua..(BlocksAllHandlers[nameBlock](infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o) or '')
     elseif nameBlock == 'transitionPosition' then
         local time = make_all_formulas(infoBlock[2][1], object)
         local x = make_all_formulas(infoBlock[2][2], object)
@@ -101,29 +101,6 @@ local function make_block(infoBlock, object, images, sounds, make_all_formulas, 
         local link = make_all_formulas(infoBlock[2][1], object)
         add_pcall()
         lua = lua.."system.openURL("..link..")"
-        end_pcall()
-    elseif nameBlock == 'stamp' then
-        add_pcall()
-        lua = lua..'local obj = #tableFeathers+1\nlocal myObj = display.newImage(target.image_path, system.DocumentsDirectory, target.x, target.y)\ntableFeathers[obj] = myObj\nstampsGroup:insert(myObj)\n'
-        lua = lua..'myObj.width, myObj.height, myObj.alpha, myObj.rotation, myObj.xScale, myObj.yScale = target.width, target.height, target.alpha, target.rotation, target.xScale, target.yScale\n'
-        lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\nmyObj:setFillColor(r,g,b)\n"
-        lua = lua.."if (target.property_color~=100) then\nmyObj.fill.effect = 'filter.brightness'\nmyObj.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
-        end_pcall()
-    elseif nameBlock == 'clearPen' then
-        add_pcall()
-        lua = lua..'for i = 1, #tableFeathers, 1 do\ndisplay.remove(tableFeathers[i])\nend\ntableFeathers = {}'
-        end_pcall()
-    elseif nameBlock == 'setColorPen' then
-        local r = make_all_formulas(infoBlock[2][1], object)
-        local g = make_all_formulas(infoBlock[2][2], object)
-        local b = make_all_formulas(infoBlock[2][3], object)
-        add_pcall()
-        lua = lua..'tableFeathersOptions[2] = '..r..'\ntableFeathersOptions[3] = '..g..'\ntableFeathersOptions[4] = '..b
-        end_pcall()
-    elseif nameBlock == 'setSizePen' then
-        local size = make_all_formulas(infoBlock[2][1], object)
-        add_pcall()
-        lua = lua..'tableFeathersOptions[1] = '..size
         end_pcall()
     elseif nameBlock == 'blockTouch' then
         lua = lua..
@@ -240,17 +217,6 @@ end'
         add_pcall()
         lua = lua.."local function networkListener(event)\nif (mainGroup~=nil and mainGroup.x~=nil) then\n"..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].." = event.response\nif ("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2]..") then\n"..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."varText_"..infoBlock[2][2][2]..".text = type("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..")=='boolean' and ("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].." and app.words[373] or app.words[374]) or type("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..")=='table' and encodeList("..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2]..") or "..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].."\nend\nend\nend\nlocal header = {headers={[\"User-Agent\"] = \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36\"}}\n\nnetwork.request("..make_all_formulas(infoBlock[2][1],object)..",'GET',networkListener, header)"
         end_pcall()
-    elseif nameBlock == 'lowerPen' then
-    -- tableFeathers = {} сюда через table.insert(object) добавлять перья
-    -- tableFeathersOptions[1] -размер пера
-    -- tableFeathersOptions[2] - цвет r
-    -- tableFeathersOptions[3] - цвет g
-    -- tableFeathersOptions[4] - цвет b
-        add_pcall()
-        lua = lua.."if (target.isPen==nil) then\ntarget.isPen = true\nlocal line = display.newLine(target.x, target.y, target.x, target.y+1)\nline:setStrokeColor(tableFeathersOptions[2]/255,tableFeathersOptions[3]/255,tableFeathersOptions[4]/255,1)\nline.strokeWidth = tableFeathersOptions[1]\nstampsGroup:insert(line)\nline.oldX, line.oldY = target.x, target.y\nlocal timerPen\ntimerPen = timer.new(50, function()\nif (target.isPen and line.x) then\nif (math.sqrt(math.pow(target.x-line.oldX, 2) + math.pow(target.y-line.oldY, 2))>3) then\nline:append(target.x, target.y)\nline.oldX, line.oldY = target.x, target.y\nend\nelseif (line.x == nil) then\nline = display.newLine(target.x, target.y, target.x, target.y)\nline:setStrokeColor(tableFeathersOptions[2],tableFeathersOptions[3],tableFeathersOptions[4],1)\nline.strokeWidth = tableFeathersOptions[1]\ntable.insert(tableFeathers, #tableFeathers+1, line)\nstampsGroup:insert(line)\nelse\ntimer.cancel(timerPen)\nend\nend,0)\ntable.insert(tableFeathers, #tableFeathers+1, line)\nend"
-        end_pcall()
-    elseif nameBlock == 'raisePen' then
-        lua = lua.."target.isPen=nil"
     elseif nameBlock == 'showToast' then
         add_pcall()
         local arg1 = make_all_formulas(infoBlock[2][1], object)

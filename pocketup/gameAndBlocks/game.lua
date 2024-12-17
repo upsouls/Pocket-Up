@@ -97,6 +97,13 @@ end
 
 
 function scene_run_game(typeBack, paramsBack)
+    BlocksAllHandlers = {}
+    local moduleHandlers = {'data', 'control', 'textFields', 'sounds', 'physics', 'pen', 'particles', 'miniScenes', 'images', 'elementInterface', 'device'}
+    for _, module in ipairs(moduleHandlers) do
+        for key, value in pairs(require('pocketup.gameAndBlocks.launchBlocks.'..module)) do
+            BlocksAllHandlers[key] = value
+        end
+    end
     --utils.isSim = false
     app.scene="game"
     app.words = {}
@@ -837,6 +844,7 @@ else
 end
     noremoveAllObjects()
     collectgarbage('collect')
+    BlocksAllHandlers = {}
     local f, error_msg = loadstring(lua)
     --print(lua)
     if false then
