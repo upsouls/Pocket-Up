@@ -440,7 +440,9 @@ function scene_]]..scene_id..[[()
         "\nevents_touchScreen['object_"..objects[i][2].."'] = {}"..
         "\nevents_movedScreen['object_"..objects[i][2].."'] = {}"..
         "\nevents_onTouchScreen['object_"..objects[i][2].."'] = {}"..
-        "\nevents_changeBackground['object_"..objects[i][2].."'] = {}"
+        "\nevents_changeBackground['object_"..objects[i][2].."'] = {}"..
+        "\nevents_keypressed['object_"..objects[i][2].."'] = {}"..
+        "\nevents_endKeypressed['object_"..objects[i][2].."'] = {}"
     end
 
     lua = lua..
@@ -629,7 +631,7 @@ function scene_]]..scene_id..[[()
                             p = coroutine.create(function()\
                                 local threadFun = require('plugins.threadFun')\n"
                     elseif block[1]=="keypressed" or block[1]=="endKeypressed" then
-                        lua = lua.."\nevents_"..block[1].."[ #events_"..block[1].." + 1] = function (e)\
+                        lua = lua.."\nevents_"..block[1].."['object_"..obj_id.."'][ #events_"..block[1].."['object_"..obj_id.."'] + 1] = function (e, target)\
                             local value = e.keyName\n"
                             if block[2][1][1] == 'globalVariable' then
                                 lua = lua..'var_'..block[2][1][2]..' = value\n'
@@ -751,7 +753,21 @@ function scene_]]..scene_id..[[()
         lua = lua.."\nend"
     end
     lua = lua.."\nscene_"..scenes[1][2].."()\n"
-    lua = lua.."local function touchScreenGame(event)\nif (event.phase=='began') then\nlocal newIdTouch=globalConstants.touchId+1\nglobalConstants.touchId = newIdTouch\nglobalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true\nglobalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_touchScreen[key] do\nevents_touchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_touchScreen[key][i](value.clones[i2])\nend\nend\nend\nelseif (event.phase=='moved') then\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_movedScreen[key] do\nevents_movedScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_movedScreen[key][i](value.clones[i2])\nend\nend\nend\nelse\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (pocketupFuns.getCountTouch(globalConstants.touchsXId)==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch=false\nend\nfor key, value in pairs(objects) do\nfor i=1, #events_onTouchScreen[key] do\nevents_onTouchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_onTouchScreen[key][i](value.clones[i2])\nend\nend\nend\nend\nend"
+    lua = lua.."local function touchScreenGame(event)\
+        if (event.phase=='began') then\
+            local newIdTouch=globalConstants.touchId+1\
+            globalConstants.touchId = newIdTouch\
+            globalConstants.keysTouch['touch_'..newIdTouch], globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = event.id, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale, true\
+            globalConstants.isTouch, globalConstants.touchX, globalConstants.touchY = true, (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\
+            for key, value in pairs(objects) do\
+                for i=1, #events_touchScreen[key] do\
+                    events_touchScreen[key][i](value)\
+                    for i2=1, #value.clones do\
+                        events_touchScreen[key][i](value.clones[i2])\
+                    end\
+                end\
+            end\
+        elseif (event.phase=='moved') then\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id] = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nglobalConstants.touchX, globalConstants.touchY = (event.x-mainGroup.x)/mainGroup.xScale, -(event.y-mainGroup.y)/mainGroup.yScale\nfor key, value in pairs(objects) do\nfor i=1, #events_movedScreen[key] do\nevents_movedScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_movedScreen[key][i](value.clones[i2])\nend\nend\nend\nelse\nglobalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], globalConstants.isTouchsId[event.id] = nil, nil, nil\nif (pocketupFuns.getCountTouch(globalConstants.touchsXId)==0) then\nglobalConstants.keysTouch = {}\nglobalConstants.isTouch=false\nend\nfor key, value in pairs(objects) do\nfor i=1, #events_onTouchScreen[key] do\nevents_onTouchScreen[key][i](value)\nfor i2=1, #value.clones do\nevents_onTouchScreen[key][i](value.clones[i2])\nend\nend\nend\nend\nend"
     lua = lua.."\nRuntime:addEventListener('touch', touchScreenGame)\n\n"
 
 --[[
@@ -762,12 +778,22 @@ globalConstants.touchsXId[event.id], globalConstants.touchsYId[event.id], global
 lua = lua..
 "\nlocal funKeyListener = function(e)\
     if e.phase == 'down' then\
-        for i=1, #events_keypressed, 1 do\
-            events_keypressed[i](e)\
+        for key, value in pairs(objects) do\
+            for i=1, #events_keypressed[key] do\
+                events_keypressed[key][i](e, value)\
+                for i2=1, #value.clones do\
+                    events_keypressed[key][i](e, value.clones[i2])\
+                end\
+            end\
         end\
     else\
-        for i=1, #events_endKeypressed, 1 do\
-            events_endKeypressed[i](e)\
+        for key, value in pairs(objects) do\
+            for i=1, #events_endKeypressed[key] do\
+                events_endKeypressed[key][i](e, value)\
+                for i2=1, #value.clones do\
+                    events_endKeypressed[key][i](e, value.clones[i2])\
+                end\
+            end\
         end\
     end\
     return(true)\
@@ -813,7 +839,7 @@ end
     collectgarbage('collect')
     local f, error_msg = loadstring(lua)
     --print(lua)
-    if true then
+    if false then
         pcall(function ()
             local export = require('plugins.export')
             local file = io.open(system.pathForFile('', system.TemporaryDirectory)..'/debugCode.txt', 'w')
