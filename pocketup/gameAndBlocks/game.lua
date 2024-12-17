@@ -813,7 +813,7 @@ end
     collectgarbage('collect')
     local f, error_msg = loadstring(lua)
     --print(lua)
-    if false then
+    if true then
         pcall(function ()
             local export = require('plugins.export')
             local file = io.open(system.pathForFile('', system.TemporaryDirectory)..'/debugCode.txt', 'w')

@@ -405,7 +405,9 @@ for iSort=1, #idsProjects do
 	groupScene:insert(containerIcon)
 	containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
 	local imageIcon = display.newImage(projects[i][2].."/icon.png", system.DocumentsDirectory)
-	containerIcon:insert(imageIcon)
+	pcall(function ()
+		containerIcon:insert(imageIcon)
+	end)
 	strokeIcon:toFront()
 
 	local sizeIconProject = containerIcon.height/imageIcon.height

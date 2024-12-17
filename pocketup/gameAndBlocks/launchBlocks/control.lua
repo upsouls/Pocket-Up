@@ -121,15 +121,14 @@ return {
     ["exitGame"] = function ()
         local lua = "pcall(function()\n"
         lua = lua.."timer.new(0, function()\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nfunBackListener2({keyName='deleteBack', phase='up'})\nend)"
-        lua = lua.."\nend)"
-        return lua
+        return lua.."\nend)"
     end,
 
     ["stopScript"] = function ()
         return "removeTheard()\ncoroutine.yield()"
     end,
 
-    ["clone"] = function (infoBlock, object, images, sounds, make_all_formulas)
+    ["clone"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
         local lua = "pcall(function()\n"
         if (infoBlock[2][1][2]~=nil) then
             lua = lua.."\nlocal target = objects['object_"..infoBlock[2][1][2].."']"
@@ -270,40 +269,48 @@ return {
         end
     end,
 
-    ["broadcastFun>objectAndClones"] = function (infoBlock, object, images, sounds, make_all_formulas)
-        if infoBlock[2][1][2]~=nil then
+    ["broadcastFun>objectAndClones"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        if infoBlock[2][2][2]~=nil then
             local lua = "pcall(function()\n"
             lua = lua.."local function broadcastFunction(nameFunction)\nlocal key = 'object_"..(infoBlock[2][1][2]==nil and obj_id or infoBlock[2][1][2]).."'\nlocal value = objects[key]\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
             return lua.."\nend)"
         end
     end,
 
-    ["broadcastFun>object"] = function (infoBlock, object, images, sounds, make_all_formulas)
-        if infoBlock[2][1][2]~=nil then
+    ["broadcastFun>object"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        if infoBlock[2][2][2]~=nil then
             local lua = "pcall(function()\n"
             lua = lua.."local function broadcastFunction(nameFunction)\nlocal key = 'object_"..(infoBlock[2][1][2]==nil and obj_id or infoBlock[2][1][2]).."'\nlocal value = objects[key]\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
             return lua.."\nend)"
         end
     end,
 
-    ["broadcastFun>clones"] = function (infoBlock, object, images, sounds, make_all_formulas)
-        if infoBlock[2][1][2]~=nil then
+    ["broadcastFun>clones"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        if infoBlock[2][2][2]~=nil then
             local lua = "pcall(function()\n"
             lua = lua.."local function broadcastFunction(nameFunction)\nlocal key = 'object_"..(infoBlock[2][1][2]==nil and obj_id or infoBlock[2][1][2]).."'\nlocal value = objects[key]\nfor i=1, #events_function[key][nameFunction] do\nfor i2=1, #value.clones do\nevents_function[key][nameFunction][i](value.clones[i2])\nend\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
             return lua.."\nend)"
         end
     end,
 
-    ["addNameClone"] = function (infoBlock, object, images, sounds, make_all_formulas)
+    ["addNameClone"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
         local lua = "pcall(function()\n"
         lua = lua.."target.myName = "..make_all_formulas(infoBlock[2][1], object).."\ntableNamesClones[target.myName] = target\ntarget.nameObject = 'object_"..obj_id.."'"
         return lua.."\nend)"
     end,
 
     ["broadcastFun>nameClone"] = function (infoBlock, object, images, sounds, make_all_formulas)
-        if infoBlock[2][1][2]~=nil then
+        if infoBlock[2][2][2]~=nil then
             local lua = "pcall(function()\n"
-            lua = lua.."local function broadcastFunction(nameFunction)\nlocal value = tableNamesClones["..make_all_formulas(infoBlock[2][1], object).."]\nlocal key = value.nameObject\nfor i=1, #events_function[key][nameFunction] do\nevents_function[key][nameFunction][i](value)\nend\nend\nbroadcastFunction('fun_"..infoBlock[2][2][2].."')"
+            lua = lua..
+            "local function broadcastFunction(nameFunction)\
+                local value = tableNamesClones["..make_all_formulas(infoBlock[2][1], object).."]\
+                local key = value.nameObject\
+                for i=1, #events_function[key][nameFunction] do\
+                    events_function[key][nameFunction][i](value)\
+                end\
+            end\
+            broadcastFunction('fun_"..infoBlock[2][2][2].."')"
             return lua.."\nend)"
         end
     end,

@@ -1,5 +1,5 @@
 return {
-    playSound = function (infoBlock, object, images, sounds, make_all_formulas)
+    playSound = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
         if infoBlock[2][1][2]~=nil then
             local lua = "pcall(function()\n"
             lua = lua..'if not playSounds['..infoBlock[2][1][2]..'] then\n'
@@ -10,7 +10,7 @@ return {
         end
     end,
 
-    playSoundAndWait = function (infoBlock, object, images, sounds, make_all_formulas)
+    playSoundAndWait = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
         local lua = "pcall(function()\n"
         lua = lua..
         "if not playSounds["..infoBlock[2][1][2].."] then\
