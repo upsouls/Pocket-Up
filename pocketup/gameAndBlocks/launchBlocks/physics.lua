@@ -201,6 +201,13 @@ return {
         return "plugins.physics.setDrawMode('normal')\n"
     end,
 
+    setTextelCoarseness = function (infoBlock, object, images, sounds, make_all_formulas)
+        local lua = "pcall(function()\n"
+        local arg1 = make_all_formulas(infoBlock[2][1], object)
+        lua = lua.."target.physicsTable.outline = graphics.newOutline("..arg1..", target.image_path, system.DocumentsDirectory)\ntarget:physicsReload()\n"
+        return lua .. "\nend)"
+    end,
+
     jump = function (infoBlock, object, images, sounds, make_all_formulas)
         local lua = "pcall(function()\n"
         lua = lua.."target:setLinearVelocity("..make_all_formulas(infoBlock[2][1], object)..", -"..make_all_formulas(infoBlock[2][2], object)..")"

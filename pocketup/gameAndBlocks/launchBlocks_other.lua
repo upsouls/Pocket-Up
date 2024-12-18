@@ -63,11 +63,6 @@ local function make_block(infoBlock, object, images, sounds, make_all_formulas, 
         lua = lua..
         "for i=1, type("..rep..") == 'number' and "..rep.." or 0 do\
         threadFun.wait(type("..time..") == 'number' and ("..time.."*1000) or 0)"
-    elseif nameBlock == 'setTextelCoarseness' then
-        add_pcall()
-        local arg1 = make_all_formulas(infoBlock[2][1], object)
-        lua = lua.."target.physicsTable.outline = graphics.newOutline("..arg1..", target.image_path, system.DocumentsDirectory)\ntarget:physicsReload()\n"
-        end_pcall()
     end
     return lua
 end

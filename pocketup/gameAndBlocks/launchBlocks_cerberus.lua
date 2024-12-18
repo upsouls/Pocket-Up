@@ -12,75 +12,7 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
     local nameBlock = infoBlock[1]
     lua = ''
 
-    if (nameBlock == "createTextField" and infoBlock[2][5][2]~=nil) then
-        add_pcall()
-        lua = lua.."if (textFields["..make_all_formulas(infoBlock[2][1], object).."] ~= nil) then\ndisplay.remove(textFields["..make_all_formulas(infoBlock[2][1], object).."])\nend\nlocal myTextField = native.newTextField(0, 0, "..make_all_formulas(infoBlock[2][3], object)..", "..make_all_formulas(infoBlock[2][4], object)..")\nmyTextField.hasBackground = "..(infoBlock[2][2][2]=="off" and "true" or "false").."\ntextFields["..make_all_formulas(infoBlock[2][1], object).."] = myTextField\ncameraGroup:insert(myTextField)\nmyTextField:addEventListener('userInput', function(event)\nif (event.phase=='editing') then\n"..(infoBlock[2][5][1]=="localVariable" and "target." or "").."var_"..(infoBlock[2][5][2]).."=myTextField.text\nif ("..(infoBlock[2][5][1]=="localVariable" and "target." or "").."varText_"..(infoBlock[2][5][2]).."~=nil and "..(infoBlock[2][5][1]=="localVariable" and "target." or "").."varText_"..(infoBlock[2][5][2])..".x~=nil) then\n"..(infoBlock[2][5][1]=="localVariable" and "target." or "").."varText_"..(infoBlock[2][5][2])..".text=myTextField.text\nend\nend\nend)"
-        end_pcall()
-    elseif (nameBlock == "setPositionTextField") then
-        add_pcall()
-        lua = lua.."textFields["..make_all_formulas(infoBlock[2][1], object).."].x, textFields["..make_all_formulas(infoBlock[2][1], object).."].y = "..make_all_formulas(infoBlock[2][2], object)..", -"..make_all_formulas(infoBlock[2][3], object)
-        end_pcall()
-    elseif (nameBlock == "editPositionTextField") then
-        add_pcall()
-        lua = lua.."textFields["..make_all_formulas(infoBlock[2][1], object).."]:translate("..make_all_formulas(infoBlock[2][2], object)..", -"..make_all_formulas(infoBlock[2][3], object)..")"
-        end_pcall()
-    elseif (nameBlock=='setFontSizeTextField') then
-        add_pcall()
-        lua = lua.."textFields["..make_all_formulas(infoBlock[2][1], object).."].size = "..make_all_formulas(infoBlock[2][2], object)
-        end_pcall()
-    elseif (nameBlock=='setTypeInputTextField') then
-        add_pcall()
-        lua = lua.."textFields["..make_all_formulas(infoBlock[2][1], object).."].inputType = '"..infoBlock[2][2][2].."'"
-        end_pcall()
-    elseif (nameBlock=='setAlignTextField') then
-        add_pcall()
-        lua = lua.."textFields["..make_all_formulas(infoBlock[2][1], object).."].align = '"..infoBlock[2][2][2].."'"
-        end_pcall()
-    elseif (nameBlock=='deleteTextField') then
-        add_pcall()
-        lua = lua.."display.remove(textFields["..make_all_formulas(infoBlock[2][1], object).."])"
-        end_pcall()
-    elseif (nameBlock=='isSecureTextField') then
-        add_pcall()
-        lua = lua.."textFields["..make_all_formulas(infoBlock[2][1], object).."].isSecure = "..(infoBlock[2][2][2]=="on" and "true" or "false")
-        end_pcall()
-    elseif (nameBlock=='placeholderTextField') then
-        add_pcall()
-        lua = lua.."textFields["..make_all_formulas(infoBlock[2][1], object).."].placeholder = "..make_all_formulas(infoBlock[2][2], object)
-        end_pcall()
-    elseif (nameBlock=='valueTextField') then
-        add_pcall()
-        lua = lua.."textFields["..make_all_formulas(infoBlock[2][1], object).."].text = "..make_all_formulas(infoBlock[2][2], object)
-        end_pcall()
-    elseif (nameBlock=='setColorTextField') then
-        add_pcall()
-        lua = lua.."local rgb = utils.hexToRgb("..make_all_formulas(infoBlock[2][2], object)..")\ntextFields["..make_all_formulas(infoBlock[2][1], object).."]:setTextColor(rgb[1], rgb[2], rgb[3])"
-        end_pcall()
-    elseif (nameBlock=='setSelectionTextField') then
-        add_pcall()
-        lua = lua.."native.setKeyboardFocus( textFields["..make_all_formulas(infoBlock[2][1], object).."] )\ntextFields["..make_all_formulas(infoBlock[2][1], object).."]:setSelection("..make_all_formulas(infoBlock[2][2], object).."-1, "..make_all_formulas(infoBlock[2][3], object)..")"
-        end_pcall()
-    elseif (nameBlock=='getSelectionTextField') then
-        add_pcall()
-        lua = lua.."local startPos, endPos = textFields["..make_all_formulas(infoBlock[2][1], object).."]:getSelection()\n"..(infoBlock[2][2][1]=="globalVariable" and "" or "target.").."var_"..infoBlock[2][2][2].." = plugins.utf8.sub(textFields["..make_all_formulas(infoBlock[2][1], object).."].text, startPos+1, endPos)"
-        end_pcall()
-    elseif (nameBlock=='setKeyboardToTextField') then
-        add_pcall()
-        lua = lua.."native.setKeyboardFocus( textFields["..make_all_formulas(infoBlock[2][1], object).."] )"
-        end_pcall()
-    elseif (nameBlock=='removeKeyboardToTextField') then
-        add_pcall()
-        lua = lua.."native.setKeyboardFocus( nil )"
-        end_pcall()
-    elseif (nameBlock=='insertCameraTextField') then
-        add_pcall()
-        lua = lua.."cameraGroup:insert(textFields["..make_all_formulas(infoBlock[2][1], object).."])"
-        end_pcall()
-    elseif (nameBlock=='removeCameraTextField') then
-        add_pcall()
-        lua = lua.."notCameraGroup:insert(textFields["..make_all_formulas(infoBlock[2][1], object).."])"
-        end_pcall()
-    elseif (nameBlock=='setShapeHitbox') then
+    if (nameBlock=='setShapeHitbox') then
         add_pcall()
         lua = lua.."local tableShape = plugins.json.decode('"..infoBlock[2][1][2].."')\nlocal tableResizeShape = {}\nlocal size = target.property_size/100\nfor i=1, #tableShape/2 do\ntableResizeShape[i*2-1], tableResizeShape[i*2] = tableShape[i*2-1]*size, tableShape[i*2]*size\nend\ntarget.physicsTable.radius, target.physicsTable.outline, target.physicsTable.shape = nil, nil, tableResizeShape\ntarget:physicsReload()"
         end_pcall()
