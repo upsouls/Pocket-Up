@@ -98,8 +98,8 @@ return {
     end,
 
     removeKeyboardToTextField = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
-        local lua = "pcall(function()\n"
+        local lua = ""
         lua = lua.."native.setKeyboardFocus( nil )"
-        return lua.."\nend)"
+        return lua
     end,
 }

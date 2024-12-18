@@ -24,70 +24,7 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         return make_all_formulas(infoBlock, object)
     end
 
-    if nameBlock == 'newAnimation' then --[[1: Картинка, 2: Имя анимации, 3: Первый фрейм, 4: Последний фрейм, 5: Время, 6: Выполнить раз ]]
-        -- local image = infoBlock[2][1][2]
-        -- local name = F(infoBlock[2][2])
-        -- local start = F(infoBlock[2][3])
-        -- local max = F(infoBlock[2][4])
-        -- local time = F(infoBlock[2][5])
-        -- local rep = F(infoBlock[2][6])
-        -- add_pcall()
-    	-- insert([[
-        --     local newIdImage = nil
-        --     for i=1, #listImages do
-        --         if (listImages[i]=="]]..image..[[") then
-        --             newIdImage=i
-        --             break
-        --         end
-        --     end
-        --     if (newIdImage ~= nil) then
-        --         local image_path = ]]..app.idProject..[['/scene_']]..scene_id..[['/object_']]..obj_id..[['/image_']]..image..[['.png\'
-        --         Animations[name] = {}
-        --     end
-        -- ]]) --[[Animations - таблицу надо создать вначале кода]]
-        -- pcall_end()
-    elseif nameBlock == 'createMiniScene' then -- Создать мини сцену (имя сцены)
-        local name = F(infoBlock[2][1])
-        add_pcall()
-        insert("if miniScenes["..name.."] then display.remove(miniScenes[name]) end miniScenes["..name.."] = display.newGroup()\nnotCameraGroup:insert(miniScenes["..name.."])")
-        pcall_end()
-    elseif nameBlock == 'deleteMiniScene' then -- Удалить мини сцену (имя сцены)
-        local name = F(infoBlock[2][1])
-        add_pcall()
-        insert("if miniScenes["..name.."] then display.remove(miniScenes[name]) end miniScenes["..name.."] = nil")
-        pcall_end()
-    elseif nameBlock == 'miniSceneInsert' then -- Добавить в мини сцену (имя сцены)
-        local name = F(infoBlock[2][1])
-        add_pcall()
-        insert("miniScenes["..name.."]:insert(target)\ntarget.group = miniScenes["..name.."]")
-        pcall_end()
-    elseif nameBlock == 'miniSceneHide' then -- Скрыть мини сцену (имя сцены)
-        local name = F(infoBlock[2][1])
-        add_pcall()
-        insert("miniScenes["..name.."].isVisible = false")
-        pcall_end()
-    elseif nameBlock == 'miniSceneShow' then -- показать мини сцену (имя сцены)
-        local name = F(infoBlock[2][1])
-        add_pcall()
-        insert("miniScenes["..name.."].isVisible = true")
-        pcall_end()
-    elseif nameBlock == 'miniSceneInsertCamera' then -- Привязать мини сцену к камере (имя сцены)
-        local name = F(infoBlock[2][1])
-        add_pcall()
-        insert("cameraGroup:insert(miniScenes["..name.."])")
-        pcall_end()
-    elseif nameBlock == 'miniSceneInsertMiniScene' then -- Добавить в мини сцену мини сцену (имя сцены, имя добавляемой сцены)
-        local name = F(infoBlock[2][1])
-        local name2 = F(infoBlock[2][2])
-        add_pcall()
-        insert("miniScenes["..name.."]:insert(miniScenes["..name2.."])")
-        pcall_end()
-    elseif nameBlock == 'miniSceneRemoveCamera' then -- Отвязать мини сцену от камеры (имя сцены)
-        local name = F(infoBlock[2][1])
-        add_pcall()
-        insert("notCameraGroup:insert(miniScenes["..name.."])")
-        pcall_end()
-    elseif nameBlock == 'newWebView' then -- имя ссылка х у ширина высота
+    if nameBlock == 'newWebView' then -- имя ссылка х у ширина высота
         local name = F(infoBlock[2][1])
         local link = F(infoBlock[2][2])
         local x = F(infoBlock[2][3])
@@ -156,55 +93,6 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         add_pcall()
         insert("WebViews["..name.."]:reload()")
         pcall_end()
---     elseif nameBlock == 'timer2' then -- 3 функция
---         local rep = make_all_formulas(infoBlock[2][1], object)
---         local time = make_all_formulas(infoBlock[2][2], object)
---         lua = lua..
---         "for i=1, type("..rep..") == 'number' and "..rep.." or 0 do"
--- --             local key = target.parent_obj.nameObject\
--- -- for i=1, #events_function[key]["fun_'..infoBlock[2][3][2]..'"] do\
--- -- events_function[key]["fun_'..infoBlock[2][3][2]..'"][i](target)\
--- -- end\
--- elseif nameBlock == 'repeat2' then -- 2 функция
---     wait_type = 'repeat'
---         local rep = make_all_formulas(infoBlock[2][1], object)
---         lua = lua .. 'local _repeat\n'
---         add_pcall()
---         lua = lua..'local function onComplete()\
---                 local key = target.parent_obj.nameObject\
---                 for i=1, #events_function[key]["fun_'..infoBlock[2][2][2]..'"] do\
---                 events_function[key]["fun_'..infoBlock[2][2][2]..'"][i](target)\
---                 end\
---                 end\
---             _repeat = timer.GameNew2(0,'..rep..', onComplete, function()\
---             if not (target ~= nil and target.x ~= nil) then\
---                 pcall(function() timer.cancel(_repeat) end)\
---                 return true\
---             end\n'
---     elseif nameBlock == 'repeatIsTrue2' then -- второй функция
---         wait_type = 'repeat'
---         local condition = make_all_formulas(infoBlock[2][1], object)
---         lua = lua .. 'local _repeat\n'
---         add_pcall()
---         lua = lua..[[
---         local repeatIsTrue
---         local function onComplete()
---         local key = target.parent_obj.nameObject
---         for i=1, #events_function[key]["fun_]]..infoBlock[2][2][2]..[["] do
---         events_function[key]["fun_]]..infoBlock[2][2][2]..[["][i](target)
---         end
---         end
---         _repeat = repeatIsTrue
---         repeatIsTrue = timer.GameNew(0,0, function()
---         if not (]]..condition..[[) then
---         timer.cancel(repeatIsTrue)
---         onComplete()
---         return true
---         end
---         if not (target ~= nil and target.x ~= nil) then
---         pcall(function() timer.cancel(_repeat) end)
---         return true
---         end]]
     elseif nameBlock == 'endTimer' then
         lua = lua.."end)"
 end
