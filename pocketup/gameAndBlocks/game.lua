@@ -1,7 +1,6 @@
 lua = nil
 local makeBlock_other = require("pocketup.gameAndBlocks.launchBlocks_other")
 local makeBlock_cerberus = require("pocketup.gameAndBlocks.launchBlocks_cerberus")
-local makeBlock_sotritmor = require("pocketup.gameAndBlocks.launchBlocks_sotritmor")
 local _Vars = {}
 
 local lang = system.getPreference( "locale", "language" )
@@ -711,16 +710,10 @@ function scene_]]..scene_id..[[()
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
                     else
-                    local luaBlock = makeBlock_cerberus(block, 'target', make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)
-                    if (luaBlock~=nil and luaBlock~="") then
-                        lua = lua.."\n"..luaBlock..'\n'
-                    else
-                    local luaBlock = makeBlock_sotritmor(block, 'target', make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, b)
-                    if (luaBlock~=nil and luaBlock~="") then
-                        lua = lua.."\n"..luaBlock..'\n'
-                    else
-                    end
-                    end
+                        local luaBlock = makeBlock_cerberus(block, 'target', make_all_formulas, obj_id, obj_path, scene_id, scene_path, options)
+                        if (luaBlock~=nil and luaBlock~="") then
+                            lua = lua.."\n"..luaBlock..'\n'
+                        end
                     end
                 end
 
@@ -845,6 +838,11 @@ end
     noremoveAllObjects()
     collectgarbage('collect')
     BlocksAllHandlers = {}
+    if not utils.isSim then
+        _G.print = function (...)
+            
+        end
+    end
     local f, error_msg = loadstring(lua)
     --print(lua)
     if false then

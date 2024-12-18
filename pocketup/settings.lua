@@ -155,7 +155,7 @@ function utils.printC(event)
 end
 utils.printText.alpha=0
 ---------------------------------------------------
-app.fontSizeBlock = math.min(display.contentWidth/15, 40)
+app.fontSizeBlock = math.min(display.contentWidth/15, 32.5)
 app.fontSize1 = math.min(display.contentWidth/20, 32.5)
 app.fontSize2 = math.min(display.contentWidth/24, 25)
 app.fontSize0 = app.fontSize1*1.125

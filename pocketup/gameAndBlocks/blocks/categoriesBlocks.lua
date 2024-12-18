@@ -73,17 +73,6 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"clone",{{"objects",nil}}},
 			{"deleteClone"},
 		},
-		-- ["cycles"]={
-		-- 	{"timer2", {{{"number", 5}}, {{"number", 1}},{"function", nameFunction}}},
-		-- 	{"repeat2",{ {{"number", 1},{"number",0}}, {"function", nameFunction} }},
-		-- 	{"repeatIsTrue2",{ {{"number", 1},{"function","<"},{"number",2}}, {"function", nameFunction} }},
-		-- 	{"timer", {{{"number", 5}}, {{"number", 1}}}},
-		-- 	{"cycleForever"},
-		-- 	{"repeat",{ {{"number", 1},{"number",0}} }},
-		-- 	{"repeatIsTrue",{ {{"number", 1},{"function","<"},{"number",2}} }},
-		-- 	{"for",{ {{"number", 1}}, {{"number",1},{"number",0}}, {localityVariable,nameVariable}}},
-		-- 	{"foreach",{ {localityArray, nameArray}, {localityVariable,nameVariable}}},
-		-- },
 		["physic"]={
 			{"setPosition",{ {{"number", 100}}, {{"number", 200}} }},
 			{"setPositionX",{ {{"number", 100}} }},
@@ -100,6 +89,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"transitionPosition2",{ {{"number",1}}, {{"number",100}}, {{"number",200}} }},
 			{"setLayer", {{{"number", 2}}}},
 			{"toFrontLayer"},
+			{"isSensor", {{{"onOrOff", "off"}}}},
 			{"toBackLayer"},
 			{"vibration",{{{"number", 1}}}},
 			{"addBody", {{"typeBody", "dynamic"}}},
@@ -265,6 +255,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 		},
 		["elementInterface"] = {
 			{"newWebView", {{{"text", app.words[589]}}, {{"text", "https://example.com"}}, {{"number", 100}}, {{"number", 200}}, {{"number", 400}}, {{"number", 800}}}},
+			{"deleteWebView", {{{"text", app.words[589]}}}},
 			{"setWebViewX", {{{"text", app.words[589]}}, {{"number", -100}}}},
 			{"setWebViewY", {{{"text", app.words[589]}}, {{"number", -200}}}},
 			{"insertWebInMiniScene", {{{"text", app.words[589]}}, {{"text", app.words[530]}}}},

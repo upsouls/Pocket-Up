@@ -63,6 +63,8 @@ local function make_block(infoBlock, object, images, sounds, make_all_formulas, 
         lua = lua..
         "for i=1, type("..rep..") == 'number' and "..rep.." or 0 do\
         threadFun.wait(type("..time..") == 'number' and ("..time.."*1000) or 0)"
+    elseif nameBlock == 'endTimer' then
+        lua = lua.."coroutine.yield()\nend"
     end
     return lua
 end

@@ -103,4 +103,12 @@ return {
         lua = lua.."notCameraGroup:insert(miniScenes["..name.."])"
         return lua.."\nend)"
     end,
+
+    insertWebInMiniScene = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        local lua = "pcall(function()\n"
+        local name = make_all_formulas(infoBlock[2][1], object)
+        local name2 = make_all_formulas(infoBlock[2][2], object)
+        lua = lua.."miniScenes["..name.."]:insert(WebViews["..name2.."])"
+        return lua.."\nend)"
+    end,
 }

@@ -172,6 +172,12 @@ return {
         return lua .. "\nend)"
     end,
 
+    isSensor = function (infoBlock, object, images, sounds, make_all_formulas)
+        local lua = "pcall(function()\n"
+        lua = lua.."\ntarget.isSensor = "..(infoBlock[2][1][2]=="on" and "false" or "true")
+        return lua .. "\nend)"
+    end,
+
     setWeight = function (infoBlock, object, images, sounds, make_all_formulas)
         local lua = "pcall(function()\n"
         local mass = make_all_formulas(infoBlock[2][1], object)

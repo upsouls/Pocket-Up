@@ -49,14 +49,6 @@ local function make_block(infoBlock, object, make_all_formulas, obj_id, obj_path
         add_pcall()
         lua = lua..'\nnotCameraGroup:insert(joysticks['..make_all_formulas(infoBlock[2][1], object)..'])'
         end_pcall()
-    elseif (nameBlock == 'deleteWebView') then
-        add_pcall()
-        lua = lua.."\nlocal answer = "..make_all_formulas(infoBlock[2][1], object).."\ndisplay.remove(WebViews[answer])\nWebViews[answer] = nil"
-        end_pcall()
-    elseif (nameBlock=='isSensor') then
-        add_pcall()
-        lua = lua.."\ntarget.isSensor = "..(infoBlock[2][1][2]=="on" and "false" or "true")
-        end_pcall()
     end
     return(lua)
 end
