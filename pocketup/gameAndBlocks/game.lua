@@ -707,7 +707,7 @@ function scene_]]..scene_id..[[()
                     --     lua = lua.."\ntimer.new(0, function ()"
                     -- end
                 else
-                    local luaBlock = makeBlock_other(block, 'target', obj_images, obj_sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)..'\n'
+                    local luaBlock = makeBlock_other(block, 'target', obj_images, obj_sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, {xScaleMainGroup, yScaleMainGroup})..'\n'
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
                     else
