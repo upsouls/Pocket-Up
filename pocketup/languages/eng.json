@@ -624,5 +624,6 @@
     "Key pressed and save its name in",
     "Key released and save its name in",
     "mouse X",
-    "mouse Y"
+    "mouse Y",
+    "removeScene"
 ]

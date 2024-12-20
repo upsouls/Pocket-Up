@@ -64,6 +64,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"for",{ {{"number", 1}}, {{"number",1},{"number",0}}, {localityVariable,nameVariable}}},
 			{"foreach",{ {localityArray, nameArray}, {localityVariable,nameVariable}}},
 			{"continueScene",{ {"scenes", nameScene} }},
+			{"deleteScene",{ {"scenes", nameScene} }},
 			{"runScene",{ {"scenes", nameScene} }},
 			{"exitGame"},
 			{"stopScript"},

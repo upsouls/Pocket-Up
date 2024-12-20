@@ -46,6 +46,7 @@ allBlocks = {
 	["foreach"]={"block", "blocks/block_orange_3.png", { {{"text",app.words[109]}}, {{"arrays",nil}}, {{"text",app.words[110]}}, {{"variables",nil}} }, 109, 188, true},
 	["endForeach"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[108]}} }, 109, 88, "end"},
 	["continueScene"]={"block", "blocks/block_orange_2.png", { {{"text",app.words[111]}}, {{"scenes",nil}} }, 109, 142, false},
+	["deleteScene"]={"block", "blocks/block_orange_2.png", { {{"text",app.words[627]}}, {{"scenes",nil}} }, 109, 142, false},
 	["runScene"]={"block", "blocks/block_orange_2.png", { {{"text",app.words[112]}}, {{"scenes",nil}} }, 109, 142, false},
 	["stopScript"]={"block", "blocks/block_orange_1.png", { {{"text",app.words[113]}} }, 109, 88, false},
 	--["waitStopScripts"]={"block", "blocks/block_orange_1.png", {{{"text", app.words[117]}}}, 109, 88, false},

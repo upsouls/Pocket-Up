@@ -432,7 +432,6 @@ function scene_]]..scene_id..[[()
     Scenes[]]..scene_id..[[] = {
         objects = objects,
         myScene = myScene,
-        globalConstants = globalConstants,
         objects = objects,
 
         events_keypressed = events_keypressed,
@@ -842,7 +841,7 @@ Runtime:addEventListener('key', funKeyListener)\n"
     end\
     local scene = Scenes[id]\
     local timers = scene.threads\
-    for i = 1 , timers do\
+    for i = 1 , #timers do\
         timer.cancel(timers[i])\
         timers[i] = nil\
     end\
@@ -852,6 +851,7 @@ Runtime:addEventListener('key', funKeyListener)\n"
         audio.dispose(scene.playSounds[key])\
     end\
     Scenes[id] = nil\
+    scene = nil\
     collectgarbage('collect')\
     end"
     lua = lua..
@@ -870,6 +870,10 @@ Runtime:addEventListener('key', funKeyListener)\n"
     lua = lua.."\nfunction moveScene()\
     --thread.cancelAll()\
     transition.pauseAll()\
+    Scenes.select.globalConstants = {}\
+    Scenes.select.globalConstants.touchX = globalConstants.touchX\
+    Scenes.select.globalConstants.touchY = globalConstants.touchY\
+    \
     Scenes.select.threads = {}\
     for i = 1, #thread.timers do\
         if thread.timers[i] then\
@@ -894,11 +898,9 @@ Runtime:addEventListener('key', funKeyListener)\n"
     end\
     plugins.physics.setDrawMode('normal')\
 \
-    -- removeAllObjects()\
     timer.pauseAll()\
     "..(options.orientation=="vertical" and "plugins.orientation.lock('portrait')" or "plugins.orientation.lock('landscape')")..
     "\
-    --display.remove(mainGroup)\
     for key, value in pairs(playingSounds) do\
         audio.pause(playingSounds[key])\
         --audio.dispose(playSounds[key])\
@@ -920,16 +922,6 @@ Runtime:addEventListener('key', funKeyListener)\n"
     joysticks = {}\
     Timers = {}\
     Timers_max = 0\
-    globalConstants = {\
-        isTouch=false,\
-        touchX=0,\
-        touchY=0,\
-        touchId=0,\
-        keysTouch={},\
-        touchsXId={},\
-        touchsYId={},\
-        isTouchsId={}\
-    }\
     native.setProperty('windowMode', 'fullscreen')\
     collectgarbage('collect')\
     end"

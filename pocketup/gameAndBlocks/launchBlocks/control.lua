@@ -108,17 +108,37 @@ return {
         return "end"
     end,
 
+    ["deleteScene"] = function (infoBlock, object, images, sounds, make_all_formulas)
+        if infoBlock[2][1][2]==nil then
+            return ''
+        end
+        local lua = "pcall(function()\n"
+        lua = lua.."deleteScene("..infoBlock[2][1][2]..")"
+        lua = lua.."\nend)"
+        return lua
+    end,
+
     ["continueScene"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
         if infoBlock[2][1][2]==nil then
             return ''
         end
         local id = infoBlock[2][1][2]
 
-        local lua = ""
+        local lua = "pcall(function()\n"
         lua = lua..
         "moveScene()\
+        if not Scenes["..id.."] then\
+            scene_"..infoBlock[2][1][2].."()\
+            return true\
+        end\
+        \
         local scene = Scenes["..id.."]\
         Scenes.select = scene\
+        \
+        globalConstants.touchX = scene.globalConstants.touchX\
+        globalConstants.touchY = scene.globalConstants.touchY\
+        globalConstants.isTouch = false\
+        \
         thread.timers = scene.threads\
         for i = 1 , #thread.timers do\
             timer.resume(thread.timers[i])\
@@ -143,7 +163,6 @@ return {
         joysticks = scene.joysticks\
         Timers = {}\
         Timers_max = 0\
-        globalConstants = scene.globalConstants\
         \
         \
         for key, value in pairs(objects) do\
@@ -155,7 +174,7 @@ return {
             audio.resume(playingSounds[key])\
         end\
         "
-        return lua
+        return lua.."\nend)"
     end,
 
     ["runScene"] = function (infoBlock, object, images, sounds, make_all_formulas)
