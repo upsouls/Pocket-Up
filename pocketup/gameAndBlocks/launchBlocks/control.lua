@@ -182,7 +182,12 @@ return {
             return ''
         end
         local lua = "pcall(function()\n"
-        lua = lua.."moveScene()\nscene_"..infoBlock[2][1][2].."()"
+        lua = lua..
+        "moveScene()\
+        if Scenes["..infoBlock[2][1][2].."] then\
+            deleteScene("..infoBlock[2][1][2]..")\
+        end\
+        scene_"..infoBlock[2][1][2].."()"
         lua = lua.."\nend)"
         return lua
     end,
