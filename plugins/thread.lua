@@ -1,6 +1,8 @@
 local m = {}
+m.timers = {}
 
 local timer = require('timer')
+m.timer = timer
 timer.allowInteratonsWithinFrame = true
 
 m.cancelAll = function ()

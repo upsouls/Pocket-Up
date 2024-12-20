@@ -108,12 +108,62 @@ return {
         return "end"
     end,
 
+    ["continueScene"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        if infoBlock[2][1][2]==nil then
+            return ''
+        end
+        local id = infoBlock[2][1][2]
+
+        local lua = ""
+        lua = lua..
+        "moveScene()\
+        local scene = Scenes["..id.."]\
+        Scenes.select = scene\
+        thread.timers = scene.threads\
+        for i = 1 , #thread.timers do\
+            timer.resume(thread.timers[i])\
+        end\
+        mainGroup = scene.mainGroup\
+        mainGroup.isVisible = true\
+        \
+        \
+        WebViews = scene.WebViews\
+        textFields = scene.textFields\
+        objects = scene.objects\
+        \
+        events_touchBack = scene.events_touchBack\
+        events_keypressed = scene.events_keypressed\
+        events_endKeypressed = scene.events_endKeypressed\
+        events_touchScreen = scene.events_touchScreen\
+        events_movedScreen = scene.events_movedScreen\
+        events_onTouchScreen = scene.events_onTouchScreen\
+        playSounds = scene.playSounds\
+        playingSounds = scene.playingSounds\
+        \
+        joysticks = scene.joysticks\
+        Timers = {}\
+        Timers_max = 0\
+        globalConstants = scene.globalConstants\
+        \
+        \
+        for key, value in pairs(objects) do\
+            pcall(function()\
+                transition.resume(value)\
+            end)\
+        end\
+        for key, value in pairs(playingSounds) do\
+            audio.resume(playingSounds[key])\
+        end\
+        "
+        return lua
+    end,
+
     ["runScene"] = function (infoBlock, object, images, sounds, make_all_formulas)
         if infoBlock[2][1][2]==nil then
             return ''
         end
         local lua = "pcall(function()\n"
-        lua = lua.."deleteScene()\nscene_"..infoBlock[2][1][2].."()"
+        lua = lua.."moveScene()\nscene_"..infoBlock[2][1][2].."()"
         lua = lua.."\nend)"
         return lua
     end,

@@ -63,7 +63,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"repeatIsTrue",{ {{"number", 1},{"function","<"},{"number",2}} }},
 			{"for",{ {{"number", 1}}, {{"number",1},{"number",0}}, {localityVariable,nameVariable}}},
 			{"foreach",{ {localityArray, nameArray}, {localityVariable,nameVariable}}},
-			--{"continueScene",{ {"scenes", nameScene} }},
+			{"continueScene",{ {"scenes", nameScene} }},
 			{"runScene",{ {"scenes", nameScene} }},
 			{"exitGame"},
 			{"stopScript"},
