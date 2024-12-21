@@ -132,8 +132,12 @@ return {
         local lua = "pcall(function()\n"
         if (infoBlock[2][1][2]~="noPhysic") then
             lua = lua..'target.physicsTable = {outline = graphics.newOutline(10, target.image_path, system.DocumentsDirectory), density=3, friction=0.3, bounce=0.3}\ntarget.physicsType = \''..infoBlock[2][1][2]..'\'\n'
-            lua = lua..'target.physicsReload = function(target)\nlocal oldTypeRotation = target.isFixedRotation\nplugins.physics.removeBody(target)\n'
-            lua = lua.."plugins.physics.addBody(target, target.physicsType , target.physicsTable)\ntarget.isFixedRotation = oldTypeRotation\nend"
+            lua = lua..'target.physicsReload = function(target)\
+            local oldTypeRotation = target.isFixedRotation\
+            plugins.physics.removeBody(target)\n'
+            lua = lua.."plugins.physics.addBody(target, target.physicsType , target.physicsTable)\
+            target.isFixedRotation = oldTypeRotation\
+            end"
             lua = lua..'\ntarget:physicsReload()'
             lua = lua.."\ntarget:addEventListener('collision', function(event)\nif (event.phase=='began') then\nevent.target.touchesObjects['obj_'..event.other.parent_obj.idObject] = true\ntimer.new(0, function()\nfor i=1, #events_collision do\nevents_collision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nelseif (event.phase=='ended') then\nevent.target.touchesObjects['obj_'..event.other.parent_obj.idObject] = nil\ntimer.new(0, function()\nfor i=1, #events_endedCollision do\nevents_endedCollision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nend\nend)"
         else

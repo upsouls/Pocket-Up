@@ -169,12 +169,18 @@ return {
             pcall(function()\
                 transition.resume(value)\
             end)\
+            pcall(function()\
+                if value.physicsReload then\
+                    value:physicsReload()\
+                end\
+            end)\
         end\
         for key, value in pairs(playingSounds) do\
             audio.resume(playingSounds[key])\
         end\
         "
-        return lua.."\nend)"
+        return lua.."\nend)\
+        removeTheard()\ncoroutine.yield()"
     end,
 
     ["runScene"] = function (infoBlock, object, images, sounds, make_all_formulas)
@@ -188,7 +194,8 @@ return {
             deleteScene("..infoBlock[2][1][2]..")\
         end\
         scene_"..infoBlock[2][1][2].."()"
-        lua = lua.."\nend)"
+        lua = lua.."\nend)\
+        removeTheard()\ncoroutine.yield()"
         return lua
     end,
 

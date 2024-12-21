@@ -895,6 +895,9 @@ Runtime:addEventListener('key', funKeyListener)\n"
                 funsP['записать сохранение'](myScene..'/objects', plugins.json.encode(objectsTable))\
             end\
         end)\
+        pcall(function()\
+            physics.removeBody(target)\
+        end)\
     end\
     plugins.physics.setDrawMode('normal')\
 \
