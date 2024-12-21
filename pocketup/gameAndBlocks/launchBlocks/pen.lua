@@ -1,7 +1,33 @@
 return {
     lowerPen = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
         local lua = "pcall(function()\n"
-        lua = lua.."if (target.isPen==nil) then\ntarget.isPen = true\nlocal line = display.newLine(target.x, target.y, target.x, target.y+1)\nline:setStrokeColor(tableFeathersOptions[2]/255,tableFeathersOptions[3]/255,tableFeathersOptions[4]/255,1)\nline.strokeWidth = tableFeathersOptions[1]\nstampsGroup:insert(line)\nline.oldX, line.oldY = target.x, target.y\nlocal timerPen\ntimerPen = timer.new(50, function()\nif (target.isPen and line.x) then\nif (math.sqrt(math.pow(target.x-line.oldX, 2) + math.pow(target.y-line.oldY, 2))>3) then\nline:append(target.x, target.y)\nline.oldX, line.oldY = target.x, target.y\nend\nelseif (line.x == nil) then\nline = display.newLine(target.x, target.y, target.x, target.y)\nline:setStrokeColor(tableFeathersOptions[2],tableFeathersOptions[3],tableFeathersOptions[4],1)\nline.strokeWidth = tableFeathersOptions[1]\ntable.insert(tableFeathers, #tableFeathers+1, line)\nstampsGroup:insert(line)\nelse\ntimer.cancel(timerPen)\nend\nend,0)\ntable.insert(tableFeathers, #tableFeathers+1, line)\nend"
+        lua = lua.."if (target.isPen==nil) then\
+            target.isPen = true\
+            local line = display.newLine(target.x, target.y, target.x, target.y+1)\
+            line:setStrokeColor(tableFeathersOptions[2]/255,tableFeathersOptions[3]/255,tableFeathersOptions[4]/255,1)\
+            line.strokeWidth = tableFeathersOptions[1]\
+            stampsGroup:insert(line)\
+            line.oldX, line.oldY = target.x, target.y\
+            local timerPen\
+            timerPen = timer.new(50, function()\
+                if target.isPen and line.append then\
+                    if (math.sqrt(math.pow(target.x-line.oldX, 2) + math.pow(target.y-line.oldY, 2))>3) then\
+                        line:append(target.x, target.y)\
+                        line.oldX, line.oldY = target.x, target.y\
+                    end\
+                elseif (line.append == nil) then\
+                    line = display.newLine(target.x, target.y, target.x, target.y+1)\
+                    line:setStrokeColor(tableFeathersOptions[2],tableFeathersOptions[3],tableFeathersOptions[4],1)\
+                    line.strokeWidth = tableFeathersOptions[1]\
+                    table.insert(tableFeathers, line)\
+                    line.oldX, line.oldY = target.x, target.y\
+                    stampsGroup:insert(line)\
+                else\
+                    timer.cancel(timerPen)\
+                end\
+            end,0)\
+            table.insert(tableFeathers, line)\
+        end"
         return lua.."\nend)"
     end,
 
@@ -36,7 +62,13 @@ return {
 
     clearPen = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
         local lua = "pcall(function()\n"
-        lua = lua..'for i = 1, #tableFeathers, 1 do\ndisplay.remove(tableFeathers[i])\nend\ntableFeathers = {}'
+        lua = lua..
+        '\
+        for i = 1, #tableFeathers, 1 do\
+            display.remove(tableFeathers[i])\
+            tableFeathers[i] = nil\
+        end\
+        tableFeathers = {}'
         return lua.."\nend)"
     end,
 }

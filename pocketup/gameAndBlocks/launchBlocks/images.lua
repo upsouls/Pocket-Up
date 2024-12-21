@@ -14,7 +14,6 @@ return {
                     lua = lua.."broadcastChangeBackground(listImages[numberImage])\n"
                 end
                 lua = lua.."end\n"
-                lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].path = target.image_path\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
                 return lua.."\nend)"
             end
         end
@@ -33,7 +32,6 @@ return {
             if (o==1) then
                 lua = lua.."broadcastChangeBackground(listImages[numberImage])\n"
             end
-            lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].path = target.image_path\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
             return lua.."\nend)"
         end
     end,
@@ -46,7 +44,6 @@ return {
             lua = lua.."target.origWidth, target.origHeight = getImageProperties(target.image_path, system.DocumentsDirectory)\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)\n"
             lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\ntarget:setFillColor(r,g,b)\n"
             lua = lua.."if (target.property_color~=100) then\ntarget.fill.effect = 'filter.brightness'\ntarget.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
-            lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].path = target.image_path\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
             return lua.."\nend)"
         end
     end,
@@ -59,7 +56,6 @@ return {
             lua = lua.."target.origWidth, target.origHeight = getImageProperties(target.image_path, system.DocumentsDirectory)\ntarget.width, target.height = target.origWidth*(target.property_size/100), target.origHeight*(target.property_size/100)\n"
             lua = lua.."local r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\ntarget:setFillColor(r,g,b)\n"
             lua = lua.."if (target.property_color~=100) then\ntarget.fill.effect = 'filter.brightness'\ntarget.fill.effect.intensity = (target.property_brightness)/100-1\nend\n"
-            lua = lua.."\nif (target.parent_obj==target) then\nlocal objectsTable = plugins.json.decode(funsP['получить сохранение']('"..scene_path.."/objects'))\nif (objectsTable[target.infoSaveVisPos][3]==nil) then\nobjectsTable[target.infoSaveVisPos][3] = {}\nend\nobjectsTable[target.infoSaveVisPos][3].path = target.image_path\nfunsP['записать сохранение']('"..scene_path.."/objects', plugins.json.encode(objectsTable))\nend"
             return lua.."\nend)"
         end
     end,

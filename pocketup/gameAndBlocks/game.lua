@@ -833,7 +833,15 @@ lua = lua..
 end\
 Runtime:addEventListener('key', funKeyListener)\n"
 
-    lua = lua.."\nfunction exitGame()\nRuntime:removeEventListener('mouse', mouseListener)\nRuntime:removeEventListener('key', funKeyListener)\nplugins.physics.setDrawMode('normal')\nsystem.deactivate('multitouch')\nplugins.physics.stop()\nRuntime:removeEventListener('touch', touchScreenGame)\nshowOldScene()\nend"
+    lua = lua.."\nfunction exitGame()\
+    Runtime:removeEventListener('mouse', mouseListener)\
+    Runtime:removeEventListener('key', funKeyListener)\
+    plugins.physics.setDrawMode('normal')\
+    system.deactivate('multitouch')\
+    plugins.physics.stop()\
+    Runtime:removeEventListener('touch', touchScreenGame)\
+    showOldScene()\
+end"
     lua = lua..
     "\nfunction deleteScene(id)\
     if not Scenes[id] then\
@@ -892,6 +900,7 @@ Runtime:addEventListener('key', funKeyListener)\n"
                 end\
                 objectsTable[target.infoSaveVisPos][3].size = target.property_size/100\
                 objectsTable[target.infoSaveVisPos][3].rotation = target.rotation\
+                objectsTable[target.infoSaveVisPos][3].path = target.image_path\
                 funsP['записать сохранение'](myScene..'/objects', plugins.json.encode(objectsTable))\
             end\
         end)\
