@@ -259,6 +259,9 @@ allBlocks = {
 	["deleteVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[638]}}, {{"videos", nil, 1.5}}}, 109, 88, false},
 	["editPositionXVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[639]},{"cell", nil, 1}}, {{"videos", nil, 1.5}}}, 109, 88, false},
 	["editPositionYVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[640]},{"cell", nil, 1}}, {{"videos", nil, 1.5}}}, 109, 88, false},
+	["insertVideoToCamera"] = {"block", "blocks/block_green_1.png", {{{"text", app.words[642]}}, {{"videos", nil, 1.5}}}, 109, 88, false},
+	["removeVideoToCamera"] = {"block", "blocks/block_green_1.png", {{{"text", app.words[641]}}, {{"videos", nil, 1.5}}}, 109, 88, false},
+	["insertVideoToMiniScene"] = {"block", "blocks/block_yellow_2.png", {{{"text", app.words[643]}}, {{"videos", nil, 1.5}}, {{"text", app.words[529]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 }
 
 

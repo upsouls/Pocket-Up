@@ -36,7 +36,7 @@ end
 --     end
 -- end
 
-local function make_block(infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, mainGroup)
+local function make_block(infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, mainGroup, videos)
     if infoBlock[3] == 'off' then
         return ''
     end
@@ -46,7 +46,7 @@ local function make_block(infoBlock, object, images, sounds, make_all_formulas, 
     --     lua = lua..'threadFun.wait('..time..'*1000)'
     -- end
     if BlocksAllHandlers[nameBlock] then
-        lua = lua..(BlocksAllHandlers[nameBlock](infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, mainGroup) or '')
+        lua = lua..(BlocksAllHandlers[nameBlock](infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, mainGroup, videos) or '')
     elseif nameBlock == 'transitionPosition' then
         local time = make_all_formulas(infoBlock[2][1], object)
         local x = make_all_formulas(infoBlock[2][2], object)

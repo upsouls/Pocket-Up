@@ -97,7 +97,7 @@ end
 
 function scene_run_game(typeBack, paramsBack)
     BlocksAllHandlers = {}
-    local moduleHandlers = {'data', 'control', 'textFields', 'sounds', 'physics', 'pen', 'particles', 'miniScenes', 'images', 'elementInterface', 'device'}
+    local moduleHandlers = {'data', 'control', 'textFields', 'sounds', 'physics', 'pen', 'particles', 'miniScenes', 'images', 'elementInterface', 'device','videos'}
     for _, module in ipairs(moduleHandlers) do
         for key, value in pairs(require('pocketup.gameAndBlocks.launchBlocks.'..module)) do
             BlocksAllHandlers[key] = value
@@ -500,6 +500,7 @@ function scene_]]..scene_id..[[()
             local obj_path = scene_path.."/object_"..obj_id
             local obj_images = plugins.json.decode(funsP['получить сохранение'](obj_path.."/images"))
             local obj_sounds = plugins.json.decode(funsP['получить сохранение'](obj_path.."/sounds"))
+            local obj_videos = plugins.json.decode(funsP['получить сохранение'](obj_path.."/videos"))
         
             lua = lua..
             [=[
@@ -524,6 +525,7 @@ function scene_]]..scene_id..[[()
             }
 
             tableFeathers = {}
+            local listVideos = {}
             tableFeathersOptions = {3.5, 0, 0, 255}
             ]==]
 
@@ -736,7 +738,7 @@ function scene_]]..scene_id..[[()
                     --     lua = lua.."\ntimer.new(0, function ()"
                     -- end
                 else
-                    local luaBlock = makeBlock_other(block, 'target', obj_images, obj_sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, {xScaleMainGroup, yScaleMainGroup})..'\n'
+                    local luaBlock = makeBlock_other(block, 'target', obj_images, obj_sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, {xScaleMainGroup, yScaleMainGroup}, obj_videos)..'\n'
                     if (luaBlock~=nil and luaBlock~="") then
                         lua = lua.."\n"..luaBlock..'\n'
                     else

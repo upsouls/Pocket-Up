@@ -62,6 +62,8 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 	local nameSound = #namesSounds>0 and namesSounds[1][2] or nil
 	local namesImages = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/images"))
 	local nameImage = #namesImages>0 and namesImages[1][2] or nil
+	local namesVideos = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/videos"))
+	local nameVideo = #namesVideos>0 and namesVideos[1][2] or nil
 
 
 
@@ -162,7 +164,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 
 
 	if (553~=nameCategory) then
-		local allBlocksCategories = getCategoriesBlocks(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
+		local allBlocksCategories = getCategoriesBlocks(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage, nameVideo )
 		local blocksCategory = allBlocksCategories[category]
 		loadBlocksCategory(allBlocksCategories[category])
 	else

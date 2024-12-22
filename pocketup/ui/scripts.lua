@@ -96,7 +96,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                 objectsParameter[3].yScale = 1
                                 local nameBlock = blocks[block.id][1]
                                 
-                                if (nameBlock=="setPosition" or (nameBlock=="transitionPosition" and event.target.idParameter~=1)) then
+                                if (nameBlock=="setPosition" or ((nameBlock=="transitionPosition" or nameBlock=="transitionPosition2") and event.target.idParameter~=1)) then
                                     app.cerberus.newVatiants({app.words[607], app.words[608]}, function(answer)
                                         if (answer==1) then
                                             scene_setPosVisual(event.target.block.id, event.target.idParameter,blocks, blocksObjects)
@@ -3266,7 +3266,7 @@ local function compartmentVideos()
             buttonRect.imageIcon = imageIcon
 
 
-            -- buttonRect:addEventListener("touch", touchOpenImage)
+            buttonRect:addEventListener("touch", touchVideo)
             scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
         end
     end
