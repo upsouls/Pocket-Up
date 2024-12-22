@@ -249,8 +249,17 @@ allBlocks = {
 
 	["keypressed"] = {"event", "blocks/event_brown_2.png", {{{"text",app.words[623]}},{{"variables",nil}}},411,206, false},
 	["endKeypressed"] = {"event", "blocks/event_brown_2.png", {{{"text",app.words[624]}},{{"variables",nil}}},411,206, false},
+	["createVideo"] = {"block", "blocks/block_violet_3.png", {{{"text", app.words[630]}}, {{"videos", nil, 1.5}}, {{"text", app.words[490]..":"}, {"cell", nil, 0.75}, {"text", app.words[491]..":"}, {"cell", nil, 0.75}}, {{"text", app.words[59]..':'}, {"cell", nil, 2.25}, {"text", app.words[60]..':'}, {"cell", nil, 2.25} }}, 109, 188, false},
+	["setPositionVideo"] = {"block", "blocks/block_violet_2.png", {{{"text", app.words[631]}}, {{"videos", nil, 1.5}}, {{"text", app.words[59]..':'}, {"cell", nil, 2.25}, {"text", app.words[60]..':'}, {"cell", nil, 2.25} }}, 109, 142, false},
+	["setPositionXVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[632]..":"},{"cell", nil, 1}}, {{"videos", nil, 1.5}}}, 109, 88, false},
+	["setPositionYVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[633]..":"},{"cell", nil, 1}}, {{"videos", nil, 1.5}}}, 109, 88, false},
+	["playVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[634]}}, {{"videos", nil, 1.5}}}, 109, 88, false},
+	["pauseVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[635]}}, {{"videos", nil, 1.5}}}, 109, 88, false},
+	["seekVideo"] = {"block", "blocks/block_violet_2.png", {{{"text", app.words[636]}}, {{"videos", nil, 1.5}}, {{"text", app.words[637]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
+	["deleteVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[638]}}, {{"videos", nil, 1.5}}}, 109, 88, false},
+	["editPositionXVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[639]},{"cell", nil, 1}}, {{"videos", nil, 1.5}}}, 109, 88, false},
+	["editPositionYVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[640]},{"cell", nil, 1}}, {{"videos", nil, 1.5}}}, 109, 88, false},
 }
-
 
 
 additionallyBlocks = {

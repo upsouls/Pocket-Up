@@ -114,7 +114,7 @@ function createBlock(block)
 				button.block = group
 				button.typeParameter = "cell"
 				xF = button.x+button.width+display.contentWidth/30
-			elseif (formula[1]=="function" or formula[1]=="objects" or formula[1]=="backgrounds" or formula[1]=="variables" or formula[1]=="arrays" or formula[1]=="scenes" or formula[1]=="scripts" or formula[1]=="goTo" or formula[1]=="typeRotate" or formula[1]=="sounds" or formula[1]=="images" or formula[1]=="effectParticle" or formula[1]=="onOrOff" or formula[1]=="alignText" or formula[1]=="isDeleteFile" or formula[1]=="typeBody" or formula[1]=="GL" or formula[1]=="inputType") then
+			elseif (formula[1]=="function" or formula[1]=="objects" or formula[1]=="backgrounds" or formula[1]=="variables" or formula[1]=="arrays" or formula[1]=="scenes" or formula[1]=="scripts" or formula[1]=="goTo" or formula[1]=="typeRotate" or formula[1]=="sounds" or formula[1]=="images" or formula[1]=="effectParticle" or formula[1]=="onOrOff" or formula[1]=="alignText" or formula[1]=="isDeleteFile" or formula[1]=="typeBody" or formula[1]=="GL" or formula[1]=="inputType" or formula[1]=="videos") then
 				yF = yF-display.contentWidth/40
 				local button = display.newImage("images/notVisible.png")
 				button.x, button.y, button.width, button.height = -display.screenOriginX+display.contentWidth/25, yF, display.contentWidth/2.625*2, display.contentWidth/15
@@ -270,6 +270,15 @@ function createBlock(block)
 					}
 					print(plugins.json.encode(formula))
 					nameFunction = types[formula[2][2]]
+				elseif (formula[1]=="videos") then
+					nameFunction = app.words[87]
+					local namesVideos = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/videos"))
+					for i=1, #namesVideos do
+						if (formula[2][2]==namesVideos[i][2]) then
+							nameFunction = namesVideos[i][1]
+							break
+						end
+					end
 				end
 
 				local header = display.newText(nameFunction, button.x-button.width/2, yF, nil, app.fontSize1)
@@ -303,6 +312,7 @@ function createBlock(block)
 				button.block = group
 				button.typeParameter = "shapeHitbox"
 				yF = yF-display.contentWidth/40
+			
 			end -- elseif
 		end
 		yF = yF + display.contentWidth/10

@@ -618,3 +618,26 @@ funsP["импортировать проект"] = function(onComplete)
 	end
     import.show("*/*",system.pathForFile('importfile.zip' , system.DocumentsDirectory), isAndroid and onCompleteImportImage or debugOnCompleteImportImage)
 end
+
+
+funsP["импортировать видео"] = function(onComplete)
+	local isAndroid = utils.isSim or  utils.isWin
+	
+	timer.performWithDelay(20, function()
+		local function debugOnComplete(event)
+			local answer = {done=(event.isError and "error" or "ok"), isError=true, origFileName=event.filename}
+			onComplete(answer)
+		end
+		import.show("video/*",system.pathForFile('fileimport.mp4' , system.DocumentsDirectory), isAndroid and onComplete or debugOnComplete)
+	end)
+end
+
+funsP["добавить видео в объект"] = function(path)
+	local file = io.open(system.pathForFile("fileimport.mp4", system.DocumentsDirectory), "rb")
+	local contents = file:read("*a")
+	io.close(file)
+	local file = io.open(system.pathForFile(path, system.DocumentsDirectory), "wb")
+	file:write(contents)
+	io.close(file)
+	--os.remove(system.pathForFile("fileimport.mp3", system.DocumentsDirectory))
+end

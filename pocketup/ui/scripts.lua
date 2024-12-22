@@ -11,7 +11,6 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
         }
     end
 
-
     local groupScene = display.newGroup()
 
     app.scene = "scripts"
@@ -23,14 +22,12 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
     local topBarArray = topBar(groupScene, headerBar, funMenuObjects, funCheckObjects, funBackObjects)
     local switchBar = display.newImage("images/barSwitch.png")
     switchBar.width = display.contentWidth
-    switchBar.height = 97*(switchBar.width/720)
     switchBar.x, switchBar.y, switchBar.anchorY = CENTER_X, topBarArray[1].y+topBarArray[1].height, 0
     groupScene:insert(switchBar)
-    local switchBarRect = display.newRect(CENTER_X-display.contentWidth/3, switchBar.y+switchBar.height, switchBar.width/3, switchBar.height/20)
+    local switchBarRect = display.newRect(CENTER_X-display.contentWidth/2+display.contentWidth/8, switchBar.y+switchBar.height, switchBar.width/4, switchBar.height/20)
     switchBarRect:setFillColor(171/255, 219/255, 241/255)
     switchBarRect.anchorY = 1
     groupScene:insert(switchBarRect)
-
 
     local scrollProjects = plugins.widget.newScrollView({
         width=display.contentWidth,
@@ -47,6 +44,8 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
 
     local funAddImage = nil
     local funAddBlock = nil
+    local funAddSound = nil
+    local funAddVideo = nil
     local touchBlock = nil
     local isBlockTouchBlock = false
     local function compartmentScripts()
@@ -108,7 +107,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                 else
                                     scene_formula_editor(objectsParameter, event.target.block.id, event.target.idParameter,blocks)
                                 end
-                            elseif (idParameter=="variables" or idParameter=="arrays" or idParameter=="function" or idParameter=="objects" or idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds" or idParameter=="scenes" or idParameter=="scripts" or idParameter == "goTo" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL" or idParameter=="inputType") then
+                            elseif (idParameter=="variables" or idParameter=="arrays" or idParameter=="function" or idParameter=="objects" or idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds" or idParameter=="scenes" or idParameter=="scripts" or idParameter == "goTo" or idParameter == "typeRotate" or idParameter == "effectParticle" or idParameter == "onOrOff" or idParameter == "alignText" or idParameter == "isDeleteFile" or idParameter == "typeBody" or idParameter=="GL" or idParameter=="inputType" or idParameter=="videos") then
                                 local tableAnswers = {}
                                 -- {вызуальный ответ, {тип функции, значение}}
                                 local functionOnComplete = nil
@@ -221,24 +220,24 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                         end
                                     end
 
-                                elseif (idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds") then
+                                elseif (idParameter=="backgrounds" or idParameter=="images" or idParameter=="sounds" or idParameter=="videos") then
                                     tableAnswers[1] = {app.words[87], {idParameter, nil}}
                                     local idBackground = idParameter=="backgrounds" and (app.idScene.."/object_"..plugins.json.decode(funsP["получить сохранение"](app.idScene.."/objects"))[1][2]) or app.idObject
-                                    local arrayBackgrounds = plugins.json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
+                                    local arrayBackgrounds = plugins.json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="backgrounds" and "images" or idParameter) ))
                                     for i=1, #arrayBackgrounds do
                                         tableAnswers[#tableAnswers+1] = {arrayBackgrounds[i][1], {idParameter, arrayBackgrounds[i][2]}}
                                     end
                                     functionOnComplete = function(answer)
                                         if (answer[2]==nil) then
-                                            funsP[(idParameter=="sounds" and "импортировать звук" or "импортировать изображение")](function (answer)
+                                            funsP[(idParameter=="sounds" and "импортировать звук" or idParameter=="videos" and "импортировать видео" or "импортировать изображение")](function (answer)
                                                 if (answer.done=="ok") then
                                                     local fileName = answer.origFileName:match("(.+)%.") or answer.origFileName
                                                     local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
-                                                    local idCounter = idParameter=="sounds" and 4 or 3
+                                                    local idCounter = idParameter=="sounds" and 4 or idParameter=="videos" and 5 or 3
                                                     counter[idCounter] = counter[idCounter]+1
                                                     funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter))
-                                                    funsP[(idParameter=="sounds" and "добавить звук в объект" or "добавить изображение в объект")](idBackground.."/"..(idParameter=="sounds" and "sound" or "image").."_"..counter[idCounter].."."..(idParameter=="sounds" and "mp3" or "png") )
-                                                    local arrayImages = plugins.json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images") ))
+                                                    funsP[(idParameter=="sounds" and "добавить звук в объект" or idParameter=="videos" and "добавить видео в объект" or "добавить изображение в объект")](idBackground.."/"..(idParameter=="sounds" and "sound" or idParameter=="videos" and "video" or "image").."_"..counter[idCounter].."."..(idParameter=="sounds" and "mp3" or idParameter=="videos" and "mp4" or "png") )
+                                                    local arrayImages = plugins.json.decode(funsP["получить сохранение"](idBackground.."/"..(idParameter=="backgrounds" and "images" or idParameter) ))
                                                     local function correctValue(value)
                                                         local function isCorrect(value)
                                                             local isCorrect = true
@@ -263,7 +262,7 @@ function scene_scripts(headerBar, pathObject, infoSceneObjects)
                                                     end
                                                     objectsParameter[3].text = correctValue(fileName)
                                                     arrayImages[#arrayImages+1] = {correctValue(fileName), counter[idCounter]}
-                                                    funsP["записать сохранение"](idBackground.."/"..(idParameter=="sounds" and "sounds" or "images"), plugins.json.encode(arrayImages))
+                                                    funsP["записать сохранение"](idBackground.."/"..(idParameter=="backgrounds" and "images" or idParameter), plugins.json.encode(arrayImages))
 
                                                     blocks[block.id][2][event.target.idParameter][2] = counter[idCounter]
                                                     funsP["записать сохранение"](app.idObject.."/scripts", plugins.json.encode(blocks))
@@ -2094,7 +2093,7 @@ local function compartmentImages()
                 isMoveSlot = true
                 event.target.myGroup:toFront()
             end)
-        elseif (event.phase=="moved") then
+        elseif (event.phase=="moved" and (math.abs(event.xStart-event.x)>20 or math.abs(event.yStart-event.y)>20)) then
             if (isTimerMoveSlot) then
                 isTimerMoveSlot = false
                 timer.cancel(timerMoveSlot)
@@ -2126,7 +2125,7 @@ local function compartmentImages()
                     button.yGoalPos = button.yGoalPos+button.height*newId
                 end
             end
-        else
+        elseif (event.phase~="moved") then
             event.target:setFillColor(0, 71/255, 93/255)
             display.getCurrentStage():setFocus(event.target, nil)
             if (isTimerMoveSlot) then
@@ -2461,11 +2460,11 @@ local function compartmentSounds()
     local sounds = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/sounds"))
     local arraySlots = {}
 
---BBBBBBBBBBBBBBBBBBBBBBB
---BBBBBBBBBBBBBBBBBBBBBBB
---BBBBBBBBBBBBBBBBBBBBBBB
---BBBBBBBBBBBBBBBBBBBBBBB
---BBBBBBBBBBBBBBBBBBBBBBB
+    --BBBBBBBBBBBBBBBBBBBBBBB
+    --BBBBBBBBBBBBBBBBBBBBBBB
+    --BBBBBBBBBBBBBBBBBBBBBBB
+    --BBBBBBBBBBBBBBBBBBBBBBB
+    --BBBBBBBBBBBBBBBBBBBBBBB
 touchPlaySound = function(event)
     if (event.phase=="began") then
         display.getCurrentStage():setFocus(event.target, event.id)
@@ -2701,62 +2700,60 @@ return(true)
 end
 
 for i=1, #sounds do
---
-local group = display.newGroup()
-group.y = display.contentWidth/3.75*(i-0.5)
-groupSceneScroll:insert(group)
-local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
-arraySlots[i] = buttonRect
-buttonRect.idSlot = i
-buttonRect.yGoalPos = group.y
-buttonRect.anchorX = 0
-buttonRect:setFillColor(0, 71/255, 93/255)
-group:insert(buttonRect)
-local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.55, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
-strokeIcon.strokeWidth = 3
-strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
-strokeIcon:setFillColor(0,0,0,0)
-group:insert(strokeIcon)
-local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
-group:insert(containerIcon)
-containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
-local imageIcon = display.newImage("images/play.png")
-containerIcon:insert(imageIcon)
-strokeIcon:toFront()
-imageIcon.pathSound = app.idObject.."/sound_"..sounds[i][2]..".mp3"
-imageIcon:addEventListener("touch", touchPlaySound)
-imageIcon.slot = buttonRect
+    local group = display.newGroup()
+    group.y = display.contentWidth/3.75*(i-0.5)
+    groupSceneScroll:insert(group)
+    local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
+    arraySlots[i] = buttonRect
+    buttonRect.idSlot = i
+    buttonRect.yGoalPos = group.y
+    buttonRect.anchorX = 0
+    buttonRect:setFillColor(0, 71/255, 93/255)
+    group:insert(buttonRect)
+    local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.55, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
+    strokeIcon.strokeWidth = 3
+    strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
+    strokeIcon:setFillColor(0,0,0,0)
+    group:insert(strokeIcon)
+    local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
+    group:insert(containerIcon)
+    containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
+    local imageIcon = display.newImage("images/play.png")
+    containerIcon:insert(imageIcon)
+    strokeIcon:toFront()
+    imageIcon.pathSound = app.idObject.."/sound_"..sounds[i][2]..".mp3"
+    imageIcon:addEventListener("touch", touchPlaySound)
+    imageIcon.slot = buttonRect
 
-local sizeIconProject = containerIcon.height/imageIcon.height
-if (imageIcon.width*sizeIconProject<containerIcon.width) then
-    sizeIconProject = containerIcon.width/imageIcon.width
-end
-imageIcon.xScale, imageIcon.yScale = sizeIconProject, sizeIconProject
+    local sizeIconProject = containerIcon.height/imageIcon.height
+    if (imageIcon.width*sizeIconProject<containerIcon.width) then
+        sizeIconProject = containerIcon.width/imageIcon.width
+    end
+    imageIcon.xScale, imageIcon.yScale = sizeIconProject, sizeIconProject
 
-local nameProject = display.newText({
-    text = sounds[i][1],
-    x = strokeIcon.x+strokeIcon.width/1.5,
-    y = strokeIcon.y,
-    width = display.contentWidth/1.75,
-    height = app.fontSize0*1.15,
-    fontSize = app.fontSize0
-})
-nameProject.anchorX = 0
-nameProject:setFillColor(171/255, 219/255, 241/255)
-group:insert(nameProject)
+    local nameProject = display.newText({
+        text = sounds[i][1],
+        x = strokeIcon.x+strokeIcon.width/1.5,
+        y = strokeIcon.y,
+        width = display.contentWidth/1.75,
+        height = app.fontSize0*1.15,
+        fontSize = app.fontSize0
+    })
+    nameProject.anchorX = 0
+    nameProject:setFillColor(171/255, 219/255, 241/255)
+    group:insert(nameProject)
 
-local menuProject = display.newImage("images/menu.png")
-menuProject:addEventListener("touch", touchMenuSlot)
-menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
-menuProject:setFillColor(171/255, 219/255, 241/255)
-group:insert(menuProject)
-buttonRect.myGroup = group
-menuProject.slot = buttonRect
-buttonRect.nameProject = nameProject
+    local menuProject = display.newImage("images/menu.png")
+    menuProject:addEventListener("touch", touchMenuSlot)
+    menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
+    menuProject:setFillColor(171/255, 219/255, 241/255)
+    group:insert(menuProject)
+    buttonRect.myGroup = group
+    menuProject.slot = buttonRect
+    buttonRect.nameProject = nameProject
 
 
-buttonRect:addEventListener("touch", touchOpenImage)
---
+    buttonRect:addEventListener("touch", touchOpenImage)
 end
 scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
 
@@ -2866,12 +2863,422 @@ end
 
 end
 
+local arraySlots
+local function compartmentVideos()
+    local groupSceneScroll = display.newGroup()
+    scrollProjects:insert(groupSceneScroll)
+    app.scenes[app.scene][2] = groupSceneScroll
+    local videos = plugins.json.decode(funsP["получить сохранение"](app.idObject.."/videos"))
+    arraySlots = {}
+
+    
+    local function touchMenuSlot(event)
+        if (event.phase=="began") then
+            display.getCurrentStage():setFocus(event.target, event.id)
+        elseif (event.phase=="moved") then
+            scrollProjects:takeFocus(event)
+        else
+            display.getCurrentStage():setFocus(event.target, nil)
+
+            isBackScene="block"
+
+            local notVisibleRect = display.newImage("images/notVisible.png")
+            notVisibleRect.x, notVisibleRect.y, notVisibleRect.width, notVisibleRect.height = CENTER_X, CENTER_Y, display.contentWidth, display.contentHeight
+
+            local xPosScroll, yPosScroll = scrollProjects:getContentPosition()
+            local groupMenu = display.newGroup()
+            groupMenu.x, groupMenu.y = display.contentWidth, event.target.slot.myGroup.y+event.target.height/1.25+yPosScroll+switchBar.height
+
+            groupMenu.xScale, groupMenu.yScale, groupMenu.alpha = 0.3, 0.3, 0
+
+            local arrayButtonsFunctions = {{5, "delete"}, {6, "rename"}}
+
+            local buttons = {}
+            local buttonContainer = display.newContainer(display.contentWidth/1.8, display.contentWidth/7)
+            buttonContainer.anchorX, buttonContainer.anchorY = 1, 0
+            groupMenu:insert(buttonContainer)
+            local buttonCircle = display.newCircle(0,0,buttonContainer.width/2)
+            buttonCircle:setFillColor(1,1,1,0.25)
+            buttonCircle.xScale, buttonCircle.yScale, buttonCircle.alpha = 0.25, 0.25, 0
+            buttonContainer:insert(buttonCircle)
+
+            local eventTargetMenu = event.target
+            local function touchTypeFunction(event)
+                if (event.phase=="began") then
+                    buttonContainer:toFront()
+                    buttonContainer.y = event.target.y
+                    transition.to(buttonCircle, {time=150, xScale=1.1, yScale=1.1, alpha=1})
+                elseif (event.phase=="moved") then
+                    transition.to(buttonCircle, {time=150, xScale=0.25, yScale=0.25, alpha=0})
+                else
+
+                    isBackScene="back"
+
+                    if (event.target.typeFunction == "delete") then
+                        local idSlot = eventTargetMenu.slot.idSlot
+                        os.remove(system.pathForFile(app.idObject.."/video_"..videos[idSlot][2]..".MP4", system.DocumentsDirectory))
+                        table.remove(videos, idSlot)
+                        table.remove(arraySlots, idSlot)
+                        display.remove(eventTargetMenu.slot.myGroup)
+                        for i=1, #videos do
+                            local slot = arraySlots[i]
+                            slot.yGoalPos = display.contentWidth/3.75*(i-0.5)
+                            slot.myGroup.y = slot.yGoalPos
+                            slot.idSlot = i
+                        end
+                        funsP["записать сохранение"](app.idObject.."/videos", plugins.json.encode(videos))
+                    elseif (event.target.typeFunction == "rename") then
+                        local function isCorrectValue(value)
+                            if (string.len(value)==0) then
+                                return(app.words[18])
+                            else
+                                local isCorrect = true
+                                for i=1, #videos do
+                                    if (videos[i][1]==value) then
+                                        isCorrect=false
+                                        break
+                                    end
+                                end
+                                return(isCorrect and "" or app.words[15])
+                            end
+                        end
+                        local slot = eventTargetMenu.slot
+                        for i=1, #arraySlots do
+                            arraySlots[i].imageIcon.isVisible = false
+                        end
+                        app.cerberus.newInputLine(app.words[628], app.words[629], isCorrectValue, videos[slot.idSlot][1], function(answer)
+                            if (answer.isOk) then
+                                answer.value = string.gsub(answer.value, (utils.isWin and '\r\n' or '\n'), " ")
+                                slot.nameProject.text = answer.value
+                                videos[slot.idSlot][1] = answer.value
+                                funsP["записать сохранение"](app.idObject.."/videos", plugins.json.encode(videos))
+                            end
+                            for i=1, #arraySlots do
+                                arraySlots[i].imageIcon.isVisible = true
+                            end
+                        end)
+                    end
+
+                    for i=1, #buttons do
+                        buttons[i]:removeEventListener("touch", touchTypeFunction)
+                    end
+                    display.remove(notVisibleRect)
+                    transition.to(groupMenu, {time=200, alpha=0, onComplete=function ()
+                        display.remove(groupMenu)
+                    end})
+                end
+                return(true)
+            end
+
+            for i=1, #arrayButtonsFunctions do
+                buttons[i] = display.newRect(0, display.contentWidth/7*(i-1), display.contentWidth/1.8, display.contentWidth/7)
+                buttons[i].anchorX, buttons[i].anchorY = 1, 0
+                buttons[i]:setFillColor(48/255, 48/255, 48/255)
+                groupMenu:insert(buttons[i])
+                buttons[i].typeFunction = arrayButtonsFunctions[i][2]
+                buttons[i]:addEventListener("touch",touchTypeFunction)
+
+                buttons[i].header = display.newText(app.words[arrayButtonsFunctions[i][1]], -buttons[i].width/1.1, buttons[i].y+buttons[i].height/2, nil, app.fontSize1)
+                buttons[i].header.anchorX=0
+                groupMenu:insert(buttons[i].header)
+
+            end
+
+            transition.to(groupMenu, {time=150, xScale=1, yScale=1, alpha=1, transition=easing.outQuad})
+
+            notVisibleRect:addEventListener("touch", function (event)
+                if (event.phase=="ended") then
+                    isBackScene="back"
+                    display.remove(notVisibleRect)
+                    for i=1, #buttons do
+                        buttons[i]:removeEventListener("touch", touchTypeFunction)
+                    end
+                    transition.to(groupMenu, {time=200, alpha=0, onComplete=function ()
+                        display.remove(groupMenu)
+                    end})
+                end
+                return(true)
+            end)
+
+
+        end
+        return(true)
+    end
+
+
+    local timerMoveSlot = nil
+    local isTimerMoveSlot = false
+    local isMoveSlot = false
+    local objectPlay
+    local function touchVideo(event)
+        if (event.phase == "began") then
+            event.target:setFillColor(23/255,91/255,114/255)
+            display.getCurrentStage():setFocus(event.target, event.id)
+            isTimerMoveSlot = true
+            timerMoveSlot = timer.performWithDelay(250, function ()
+                isTimerMoveSlot = false
+                isMoveSlot = true
+                event.target.myGroup:toFront()
+            end)
+        elseif (event.phase=="moved" and (math.abs(event.xStart-event.x)>20 or math.abs(event.yStart-event.y)>20)) then
+            if (isTimerMoveSlot) then
+                isTimerMoveSlot = false
+                timer.cancel(timerMoveSlot)
+                event.target:setFillColor(0, 71/255, 93/255)
+                scrollProjects:takeFocus(event)
+            end
+            if (isMoveSlot) then
+                local xS, yS = scrollProjects:getContentPosition()
+                local group = event.target.myGroup
+                local button = event.target
+                group.y = event.y-scrollProjects.y-yS
+                local newId = nil
+                if (group.y>button.yGoalPos+button.height/2 and button.idSlot<#videos) then
+                    newId = 1
+                elseif (group.y<button.yGoalPos-button.height/2 and button.idSlot>1) then
+                    newId = -1
+                end
+                if (newId~=nil) then
+                    local tableVideo = videos[button.idSlot]
+                    local transitionVideo = arraySlots[button.idSlot+newId]
+                    table.remove(videos, button.idSlot)
+                    table.remove(arraySlots, button.idSlot)
+                    table.insert(videos, button.idSlot+newId, tableVideo)
+                    table.insert(arraySlots, button.idSlot+newId, button)
+                    transitionVideo.yGoalPos = transitionVideo.yGoalPos-transitionVideo.height*newId
+                    transitionVideo.idSlot = transitionVideo.idSlot-newId
+                    transition.to(transitionVideo.myGroup, {y=transitionVideo.yGoalPos, time=200, transition=easing.outQuad})
+                    button.idSlot = button.idSlot+newId
+                    button.yGoalPos = button.yGoalPos+button.height*newId
+                end
+            end
+        elseif (event.phase~="moved") then
+            event.target:setFillColor(0, 71/255, 93/255)
+            display.getCurrentStage():setFocus(event.target, nil)
+            if (isTimerMoveSlot) then
+                isTimerMoveSlot = false
+                timer.cancel(timerMoveSlot)
+
+                --
+                if (objectPlay~=nil and objectPlay~=event.target.imageIcon) then
+                    objectPlay:pause()
+                    --event.target.imageIcon:play()
+                    --objectPlay = event.target.imageIcon
+                end
+                if (objectPlay == event.target.imageIcon) then
+                    objectPlay = nil
+                    event.target.imageIcon:pause()
+                else
+                    objectPlay = event.target.imageIcon
+                    event.target.imageIcon:play()
+                end
+            
+            -- на объект нажали
+            end
+            if (isMoveSlot) then
+                isMoveSlot=false
+                event.target.myGroup.y = event.target.yGoalPos
+                funsP["записать сохранение"](app.idObject.."/videos", plugins.json.encode(videos))
+            end
+        end
+        return(true)
+    end
+    
+
+    for i=1, #videos do
+        local group = display.newGroup()
+        group.y = display.contentWidth/3.75*(i-0.5)
+        groupSceneScroll:insert(group)
+        local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
+        arraySlots[i] = buttonRect
+        buttonRect.idSlot = i
+        buttonRect.yGoalPos = group.y
+        buttonRect.anchorX = 0
+        buttonRect:setFillColor(0, 71/255, 93/255)
+        group:insert(buttonRect)
+        local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.55, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
+        strokeIcon.strokeWidth = 3
+        strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
+        strokeIcon:setFillColor(0,0,0,0)
+        group:insert(strokeIcon)
+        local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
+        group:insert(containerIcon)
+        containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
+        local imageIcon = native.newVideo(0, 0, strokeIcon.width, strokeIcon.height)
+        imageIcon.pathVideo = app.idObject.."/video_"..videos[i][2]..".mp4"
+        imageIcon:load(imageIcon.pathVideo, system.DocumentsDirectory)
+        containerIcon:insert(imageIcon)
+        strokeIcon:toFront()
+        local textLenghtVideo = display.newText(group, "0:00", strokeIcon.x+strokeIcon.width/1.5, containerIcon.y+containerIcon.height/2-strokeIcon.strokeWidth*2, nil, app.fontSize2)
+        textLenghtVideo.anchorX, textLenghtVideo.anchorY, textLenghtVideo.alpha = 0, 1, 0.75
+        local isT = true
+        imageIcon:addEventListener("video", function(event)
+            if (event.phase=="ready" and isT) then
+            isT = nil
+            local hours = math.floor(imageIcon.totalTime/3600)
+            local minutes = math.floor(imageIcon.totalTime/60) - hours*60
+            local seconds = imageIcon.totalTime - hours*3600 - minutes*60
+            textLenghtVideo.text = (hours == 0 and "" or tostring(hours)..":")..((string.len(minutes)==1 and "0" or "")..(minutes==0 and "" or minutes))..":"..((string.len(seconds)==1 and "0" or "")..seconds)
+            elseif (event.phase=="ended") then
+                event.target:play()
+            end
+        end)
+        imageIcon:load()
+        imageIcon:seek(1)
+        -- imageIcon:addEventListener("touch", touchPlayVideo)
+        imageIcon.slot = buttonRect
+
+        local sizeIconProject = containerIcon.height/imageIcon.height
+        if (imageIcon.width*sizeIconProject<containerIcon.width) then
+            sizeIconProject = containerIcon.width/imageIcon.width
+        end
+        imageIcon.xScale, imageIcon.yScale = sizeIconProject, sizeIconProject
+
+        local nameProject = display.newText({
+            text = videos[i][1],
+            x = strokeIcon.x+strokeIcon.width/1.5,
+            y = strokeIcon.y,
+            width = display.contentWidth/1.75,
+            height = app.fontSize0*1.15,
+            fontSize = app.fontSize0
+        })
+        nameProject.anchorX = 0
+        nameProject:setFillColor(171/255, 219/255, 241/255)
+        group:insert(nameProject)
+
+        local menuProject = display.newImage("images/menu.png")
+        menuProject:addEventListener("touch", touchMenuSlot)
+        menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
+        menuProject:setFillColor(171/255, 219/255, 241/255)
+        group:insert(menuProject)
+        buttonRect.myGroup = group
+        menuProject.slot = buttonRect
+        buttonRect.nameProject = nameProject
+        buttonRect.imageIcon = imageIcon
+
+
+        buttonRect:addEventListener("touch", touchVideo)
+    end
+    scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
+
+    funAddVideo = function (event)
+        if (event.done=="ok") then
+            local function isCorrectName(value)
+                local isCorrect = true
+                for i=1, #videos do
+                    if (value==videos[i][1]) then
+                        isCorrect = false
+                        break
+                    end
+                end
+                return(isCorrect)
+            end
+            local function correctName(value)
+                if (isCorrectName(value)) then
+                    return (value)
+                else
+                    local i = 1
+                    while (not isCorrectName(value.." ("..i..")")) do
+                        i = i+1
+                    end
+                    return(value.." ("..i..")")
+                end
+            end
+
+            local videoName = event.origFileName:match("(.+)%.") or event.origFileName
+            local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
+            counter[5] = (counter[5]==nil) and 1 or counter[5]+1
+            funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter))
+            videos[#videos+1] = {correctName(videoName), counter[5]}
+            funsP["записать сохранение"](app.idObject.."/videos", plugins.json.encode(videos))
+            funsP["добавить видео в объект"](app.idObject.."/video_"..counter[5]..".mp4")
+
+            local i = #videos
+            local group = display.newGroup()
+            group.y = display.contentWidth/3.75*(i-0.5)
+            groupSceneScroll:insert(group)
+            local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
+            arraySlots[i] = buttonRect
+            buttonRect.idSlot = i
+            buttonRect.yGoalPos = group.y
+            buttonRect.anchorX = 0
+            buttonRect:setFillColor(0, 71/255, 93/255)
+            group:insert(buttonRect)
+            local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.55, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
+            strokeIcon.strokeWidth = 3
+            strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
+            strokeIcon:setFillColor(0,0,0,0)
+            group:insert(strokeIcon)
+            local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
+            group:insert(containerIcon)
+            containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
+            local imageIcon = native.newVideo(0, 0, strokeIcon.width, strokeIcon.height)
+             imageIcon.pathVideo = app.idObject.."/video_"..videos[i][2]..".mp4"
+            imageIcon:load(imageIcon.pathVideo, system.DocumentsDirectory)
+            containerIcon:insert(imageIcon)
+            strokeIcon:toFront()
+            local textLenghtVideo = display.newText(group, "0:00", strokeIcon.x+strokeIcon.width/1.5, containerIcon.y+containerIcon.height/2-strokeIcon.strokeWidth*2, nil, app.fontSize2)
+            textLenghtVideo.anchorX, textLenghtVideo.anchorY, textLenghtVideo.alpha = 0, 1, 0.75
+            local isT = true
+            imageIcon:addEventListener("video", function(event)
+                if (event.phase=="ready" and isT) then
+                isT = nil
+                local hours = math.floor(imageIcon.totalTime/3600)
+                local minutes = math.floor(imageIcon.totalTime/60) - hours*60
+                local seconds = imageIcon.totalTime - hours*3600 - minutes*60
+                textLenghtVideo.text = (hours == 0 and "" or tostring(hours)..":")..((string.len(minutes)==1 and "0" or "")..(minutes==0 and "" or minutes))..":"..((string.len(seconds)==1 and "0" or "")..seconds)
+                elseif (event.phase=="ended") then
+                    event.target:play()
+                end
+            end)
+            imageIcon:load()
+            imageIcon:seek(1)
+            
+            -- imageIcon:addEventListener("touch", touchPlaySound)
+            imageIcon.slot = buttonRect
+
+            local sizeIconProject = containerIcon.height/imageIcon.height
+            if (imageIcon.width*sizeIconProject<containerIcon.width) then
+                sizeIconProject = containerIcon.width/imageIcon.width
+            end
+            imageIcon.xScale, imageIcon.yScale = sizeIconProject, sizeIconProject
+
+            local nameProject = display.newText({
+                text = videos[i][1],
+                x = strokeIcon.x+strokeIcon.width/1.5,
+                y = strokeIcon.y,
+                width = display.contentWidth/1.75,
+                height = app.fontSize0*1.15,
+                fontSize = app.fontSize0
+            })
+            nameProject.anchorX = 0
+            nameProject:setFillColor(171/255, 219/255, 241/255)
+            group:insert(nameProject)
+
+            local menuProject = display.newImage("images/menu.png")
+            menuProject:addEventListener("touch", touchMenuSlot)
+            menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
+            menuProject:setFillColor(171/255, 219/255, 241/255)
+            group:insert(menuProject)
+            buttonRect.myGroup = group
+            menuProject.slot = buttonRect
+            buttonRect.nameProject = nameProject
+            buttonRect.imageIcon = imageIcon
+
+
+            -- buttonRect:addEventListener("touch", touchOpenImage)
+            scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
+        end
+    end
+
+end
+
 --AAAAAAAAAAAAAAAAAAAAA
 --AAAAAAAAAAAAAAAAAAAAA
 --AAAAAAAAAAAAAAAAAAAAA
 --AAAAAAAAAAAAAAAAAAAAA
 --AAAAAAAAAAAAAAAAAAAAA
-local tableFunctionsCompartments = {compartmentScripts, compartmentImages, compartmentSounds}
+local tableFunctionsCompartments = {compartmentScripts, compartmentImages, compartmentSounds, compartmentVideos}
 local typeFunctionCompartment = 0
 switchBarRect.xGoalPos = switchBarRect.x
 switchBar:addEventListener("touch", function (event)
@@ -2879,11 +3286,12 @@ switchBar:addEventListener("touch", function (event)
         if (event.phase=="began") then
             display.getCurrentStage():setFocus(event.target, event.id)
         elseif (event.phase~="moved") then
-            local oldIdCategory = math.round((switchBarRect.xGoalPos-CENTER_X)/(display.contentWidth/3))+1
-            local idCategory = math.round((event.x-CENTER_X)/(display.contentWidth/3))+1
+            local oldIdCategory = math.round((switchBarRect.xGoalPos-CENTER_X-display.contentWidth/8)/(display.contentWidth/4))+2
+            local idCategory = math.round((event.x-CENTER_X-display.contentWidth/8)/(display.contentWidth/4))+2
             typeFunctionCompartment = idCategory
+            print(idCategory)
             if (oldIdCategory~=idCategory) then
-                if (idCategory~=2) then
+                if (idCategory~=2 and idCategory~=3) then
                     topBarArray[4].alpha = 1
                 else
                     topBarArray[4].alpha = 0
@@ -2892,7 +3300,7 @@ switchBar:addEventListener("touch", function (event)
                     audio.stop(playSound)
                     local objectPlay = nil
                 end
-                switchBarRect.xGoalPos = CENTER_X+((idCategory-1)*display.contentWidth/3)
+                switchBarRect.xGoalPos = CENTER_X+((idCategory-1.5)*display.contentWidth/4)
                 transition.to(switchBarRect, {x=switchBarRect.xGoalPos, time=200, transition=easing.outQuad})
                 display.remove(app.scenes[app.scene][2])
                 if (tableFunctionsCompartments[idCategory+1]~=nil) then
@@ -2948,6 +3356,8 @@ local function touchCirclePlus(event)
                     funsP["импортировать изображение"](funAddImage)
                 elseif (typeFunctionCompartment==2) then
                     funsP["импортировать звук"](funAddSound)
+                elseif (typeFunctionCompartment==3) then
+                    funsP["импортировать видео"](funAddVideo)
                 end
             end
         end

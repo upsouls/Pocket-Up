@@ -3,6 +3,18 @@
 local function f(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage)
 	local myTable = {
 		["used"]={
+			{"createVideo", { {{"videos", nameVideo}}, {{"number", 200}}, {{"number", 300}}, {{"number", 100}}, {{"number", 200}} }},
+			{"setPositionVideo", {{{"videos", nameVideo}},{{"number", 100}}, {{"number", 200}} }},
+			{"setPositionXVideo", {{{"number", 100}},{{"videos", nameVideo}}}},
+			{"setPositionYVideo", {{{"number", 200}},{{"videos", nameVideo}}}},
+			{"editPositionXVideo", {{{"number", 10}},{{"videos", nameVideo}}}},
+			{"editPositionYVideo", {{{"number", 20}},{{"videos", nameVideo}}}},
+			{"playVideo", {{{"videos", nameVideo}}}},
+			{"pauseVideo", {{{"videos", nameVideo}}}},
+			{"seekVideo", {{{"videos", nameVideo}}, {{"number", 16}}}},
+			{"deleteVideo", {{{"videos", nameVideo}}}},
+			{"continueScene",{ {"scenes", nameScene} }},
+			{"deleteScene",{ {"scenes", nameScene} }},
 			{"runLua",{ {{"text", 'local a = display.newRect(100, 100, 50, 50)'}} }},
 			{"removeCameraTextField", {{{"text", app.words[493]}}}},
 			{"insertCameraTextField", {{{"text", app.words[493]}}}},
@@ -18,7 +30,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"setSelectionTextField", {{{"text", app.words[493]}}, {{"number", 2}}, {{"number", 4}}}},
 			{"getSelectionTextField", {{{"text", app.words[493]}}, {{"globalVariable"}}, {{"globalVariable"}}}},
 			{"setKeyboardToTextField", {{{"text", app.words[493]}}}},
-			{"removeKeyboardToTextField", {{{"text", app.words[493]}}}}
+			{"removeKeyboardToTextField", {{{"text", app.words[493]}}}},
 		},
 		["event"]={
 			{"keypressed",{{localityVariable, nameVariable}}},
@@ -121,6 +133,17 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"stopAllSounds"},
 			{"setVolumeSound",{{{"number",60}}}},
 			{"editVolumeSound", {{{"function","-"},{"number",10}}}},
+
+			{"createVideo", { {{"videos", nameVideo}}, {{"number", 200}}, {{"number", 300}}, {{"number", 100}}, {{"number", 200}} }},
+			{"setPositionVideo", {{{"videos", nameVideo}},{{"number", 100}}, {{"number", 200}} }},
+			{"setPositionXVideo", {{{"number", 100}},{{"videos", nameVideo}}}},
+			{"setPositionYVideo", {{{"number", 200}},{{"videos", nameVideo}}}},
+			{"editPositionXVideo", {{{"number", 10}},{{"videos", nameVideo}}}},
+			{"editPositionYVideo", {{{"number", 20}},{{"videos", nameVideo}}}},
+			{"playVideo", {{{"videos", nameVideo}}}},
+			{"pauseVideo", {{{"videos", nameVideo}}}},
+			{"seekVideo", {{{"videos", nameVideo}}, {{"number", 16}}}},
+			{"deleteVideo", {{{"videos", nameVideo}}}},
 		},
 		["images"]={
 			{"setImageToName",{{"images",nameImage}}},

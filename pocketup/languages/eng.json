@@ -625,5 +625,19 @@
     "Key released and save its name in",
     "mouse X",
     "mouse Y",
-    "removeScene"
+    "remove scene"
+    "Rename the video",
+    "Video title",
+    "Create a video",
+    "Create a video",
+    "Place video in",
+    "Place video in X", 
+    "Place video in Y",
+    "Play video",
+    "Pause video",
+    "Rewind video",
+    "Timestamp(in seconds)",
+    "Delete video",
+    "Change the X position of the video to",
+    "Change the Y position of the video to"
 ]
