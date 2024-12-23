@@ -4,6 +4,8 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 	print(nameVideo , "dbfdf")
 	local myTable = {
 		["used"]={
+			{"whenTheTruth",{ {{"number", 1},{"function", "<"},{"number", 2}} }},
+
 			{"createVideo", { {"videos", nameVideo}, {{"number", 200}}, {{"number", 300}}, {{"number", 100}}, {{"number", 200}} }},
 			{"setPositionVideo", {{"videos", nameVideo},{{"number", 100}}, {{"number", 200}} }},
 			{"setPositionXVideo", {{{"number", 100}},{"videos", nameVideo}}},
@@ -17,9 +19,13 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"insertVideoToCamera", {{"videos", nameVideo}}},
 			{"removeVideoToCamera", {{"videos", nameVideo}}},
 			{"insertVideoToMiniScene", {{"videos", nameVideo}, {{"text", app.words[530]}}}},
+			{"eventListenerVideo", {{"videos", nameVideo}, {localityVariable, nameVariable}}},
+			
 			{"continueScene",{ {"scenes", nameScene} }},
 			{"deleteScene",{ {"scenes", nameScene} }},
+			
 			{"runLua",{ {{"text", 'local a = display.newRect(100, 100, 50, 50)'}} }},
+			
 			{"removeCameraTextField", {{{"text", app.words[493]}}}},
 			{"insertCameraTextField", {{{"text", app.words[493]}}}},
 			{"setPositionTextField", {{{"text", app.words[493]}}, {{"number", 100}}, {{"number", 200}}}},
@@ -57,7 +63,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"broadcastFun>clones",{{"objects",nil},{"function",nameFunction}}},
 			{"addNameClone", { {{"text",app.words[444]}} }},
 			{"broadcastFun>nameClone",{{{"text",app.words[444]}},{"function",nameFunction}}},
-			--{"whenTheTruth",{ {{"number", 1},{"function", "<"},{"number", 2}},  }},
+			{"whenTheTruth",{ {{"number", 1},{"function", "<"},{"number", 2}} }},
 			{"collision",{ {{"objects", nil}} }},
 			{"endedCollision", { {{"objects", nil}} }},
 			{"changeBackground",{ {"backgrounds", nameBackground} }},
@@ -151,6 +157,7 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"insertVideoToCamera", {{"videos", nameVideo}}},
 			{"removeVideoToCamera", {{"videos", nameVideo}}},
 			{"insertVideoToMiniScene", {{"videos", nameVideo}, {{"text", app.words[530]}}}},
+			{"eventListenerVideo", {{"videos", nameVideo}, {localityVariable, nameVariable}}},
 		},
 		["images"]={
 			{"setImageToName",{{"images",nameImage}}},

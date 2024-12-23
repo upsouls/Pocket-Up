@@ -395,4 +395,13 @@ return {
             return lua.."\nend)"
         end
     end,
+    
+    ["whenTheTruth"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, mainGroup, videos)
+        local lua = "pcall(function()\n"
+        return lua.."\nend)"
+    end,
+    ["endWhenTheTruth"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, mainGroup, videos)
+        local lua = "pcall(function()\n"
+        return lua.."\nend)"
+    end,
 }

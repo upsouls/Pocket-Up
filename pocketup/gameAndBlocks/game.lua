@@ -64,7 +64,7 @@ local function make_all_formulas(formulas, object)
 end
 
 local isEvent = {
-    start=true, touchObject=true, touchScreen=true, ["function"]=true, whenTheTruth=true, collision=true, changeBackground=true, startClone=true,
+    start=true, touchObject=true, touchScreen=true, ["function"]=true, collision=true, changeBackground=true, startClone=true,
     movedObject=true, onTouchObject=true, movedScreen=true, onTouchScreen=true, touchBack=true, endedCollision=true,
     keypressed=true, endKeypressed = true
 }
@@ -526,6 +526,7 @@ function scene_]]..scene_id..[[()
 
             tableFeathers = {}
             local listVideos = {}
+            local listEventsVideos = {}
             tableFeathersOptions = {3.5, 0, 0, 255}
             ]==]
 

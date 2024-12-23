@@ -20,7 +20,7 @@ allBlocks = {
 	["function"]={"event","blocks/event_brown_2.png",{ {{"text",app.words[78]}}, {{"function",nil}} }, 411, 206, false},
 	["broadcastFunction"]={"block","blocks/block_orange_2.png",{ {{"text",app.words[80]}}, {{"function",nil}} }, 109, 142, false},
 	["broadcastFunctionAndWait"]={"block","blocks/block_orange_2.png",{ {{"text",app.words[81]}}, {{"function",nil}} }, 109, 142, false},
-	--["whenTheTruth"]={"event","blocks/event_brown_1.png",{ {{"text",app.words[82]}, {"cell",nil, 1.5}, {"text", app.words[83]}} }, 412,154, false},
+	["whenTheTruth"]={"event","blocks/event_brown_1.png",{ {{"text",app.words[82]}, {"cell",nil, 1.5}, {"text", app.words[83]}} }, 412,154, false},
 	["collision"]={"event","blocks/event_blue_2.png",{ {{"text",app.words[84]}}, {{"objects",nil}} }, 411, 206, false},
 	["changeBackground"]={"event","blocks/event_brown_2.png",{ {{"text",app.words[86]}}, {{"backgrounds",nil}} }, 411, 206, false},
 	["startClone"]={"event","blocks/event_brown_1.png",{ {{"text",app.words[88]}} }, 412,154, false},
@@ -262,6 +262,8 @@ allBlocks = {
 	["insertVideoToCamera"] = {"block", "blocks/block_green_1.png", {{{"text", app.words[642]}}, {{"videos", nil, 1.5}}}, 109, 88, false},
 	["removeVideoToCamera"] = {"block", "blocks/block_green_1.png", {{{"text", app.words[641]}}, {{"videos", nil, 1.5}}}, 109, 88, false},
 	["insertVideoToMiniScene"] = {"block", "blocks/block_yellow_2.png", {{{"text", app.words[643]}}, {{"videos", nil, 1.5}}, {{"text", app.words[529]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
+	["eventListenerVideo"] = {"block", "blocks/block_violet_3.png", {{{"text", app.words[644]}}, {{"videos", nil, 1.5}},{{"text", app.words[241]}}, {{"variables"}}}, 109, 188, true},
+	["endEventListenerVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[645]}}}, 109, 88, "end"},
 }
 
 
@@ -279,4 +281,5 @@ additionallyBlocks = {
     ["repeat2"]={ {"endRepeat",{},"on"} },
     ["repeatIsTrue2"]={ {"endRepeat",{},"on"} },
 	["timer3"]={ {"endTimer2",{},"on"} },
+	["eventListenerVideo2"] = {{"endEventListenerVideo", {}, "on"}},
 }
