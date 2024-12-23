@@ -66,7 +66,7 @@ end
 local isEvent = {
     start=true, touchObject=true, touchScreen=true, ["function"]=true, collision=true, changeBackground=true, startClone=true,
     movedObject=true, onTouchObject=true, movedScreen=true, onTouchScreen=true, touchBack=true, endedCollision=true,
-    keypressed=true, endKeypressed = true
+    keypressed=true, endKeypressed = true, whenTheTruth = true
 }
 
 function noremoveAllObjects()
@@ -409,6 +409,7 @@ function scene_]]..scene_id..[[()
     objects = {}
     local events_changeBackground = {}
     local events_function = {}
+    local events_whenTheTruth = {}
     
     local function broadcastFunction(nameFunction)
         for key, value in pairs(objects) do
@@ -440,6 +441,7 @@ function scene_]]..scene_id..[[()
         events_touchScreen = events_touchScreen,
         events_movedScreen = events_movedScreen,
         events_onTouchScreen = events_onTouchScreen,
+        events_whenTheTruth = events_whenTheTruth,
 
         mainGroup = mainGroup,
         WebViews = WebViews,
@@ -643,10 +645,18 @@ function scene_]]..scene_id..[[()
             -- Блоки
             local blocks = plugins.json.decode(funsP['получить сохранение'](obj_path.."/scripts"))
             local oldEventName = nil
+            local oldEvent = nil
             for b=1, #blocks do
                 local block = blocks[b]
                 if (isEvent[block[1]]) then
                     if (b>1) then
+                        if oldEventName == "whenTheTruth" then
+                            lua = lua ..
+                            "while "..make_all_formulas(oldEvent[2][1], "target").." do coroutine.yield() end\
+                            end\
+                            coroutine.yield()\
+                            end\n"
+                        end
                             lua = lua..
                             "removeTheard()\
                             end)\
@@ -723,6 +733,20 @@ function scene_]]..scene_id..[[()
                                 local p\
                                 p = coroutine.create(function()\
                                     local threadFun = require('plugins.threadFun')\n"
+                    elseif block[1] == "whenTheTruth" then
+                        local condition = make_all_formulas(block[2][1], "target")
+                        lua = lua.."\nevents_"..block[1].."[ #events_"..block[1].." + 1] = function (target)\
+                            Timers_max = Timers_max+1\
+                            local tTheard\
+                            local removeTheard = function()\
+                                thread.cancel(tTheard)\
+                            end\
+                            local p\
+                            p = coroutine.create(function()\
+                                local threadFun = require('plugins.threadFun')\
+                                while true do\
+                                    if "..condition.." then\n"
+                        oldEvent = block
                     else
                         lua = lua.."\nevents_"..block[1].."[ #events_"..block[1].." + 1] = function (target)\
                             Timers_max = Timers_max+1\
@@ -770,8 +794,14 @@ function scene_]]..scene_id..[[()
                     pStart, tTheard = thread.start(p)\
                     table.insert(thread.timers, tTheard)"
                     lua = lua..'\nend\nend\n\n'
-                
                 else
+                    if oldEventName == "whenTheTruth" then
+                    lua = lua ..
+                    "while "..make_all_formulas(oldEvent[2][1], "target").." do coroutine.yield() end\
+                    end\
+                    coroutine.yield()\
+                    end\n"
+                    end
                     lua = lua..
                     "removeTheard()\
                     end)\
@@ -782,6 +812,7 @@ function scene_]]..scene_id..[[()
                 end
             end
             lua = lua.."\nfor i=1, #events_start do\n    events_start[i](object_"..obj_id..")\nend\n"
+            lua = lua.."\nfor i=1, #events_whenTheTruth do\n    events_whenTheTruth[i](object_"..obj_id..")\nend\n"
             lua = lua.."\nend)\n"
             end
         end
@@ -931,6 +962,7 @@ end"
     events_touchScreen = {}\
     events_movedScreen = {}\
     events_onTouchScreen = {}\
+    events_whenTheTruth = {}\
     playSounds = {}\
     playingSounds = {}\
 \

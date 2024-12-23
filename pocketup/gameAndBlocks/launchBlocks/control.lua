@@ -157,6 +157,7 @@ return {
         events_touchScreen = scene.events_touchScreen\
         events_movedScreen = scene.events_movedScreen\
         events_onTouchScreen = scene.events_onTouchScreen\
+        events_whenTheTruth = scene.events_whenTheTruth\
         playSounds = scene.playSounds\
         playingSounds = scene.playingSounds\
         \
