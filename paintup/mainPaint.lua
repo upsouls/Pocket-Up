@@ -48,7 +48,7 @@ function scene_paint( orientation, pathImage )
 				circleScrollSizeBrush.x = rectBackScrollSizeBrush.x
 				rectScrollSizeBrush.width = 0
 			else
-				circleScrollSizeBrush.x = rectBackScrollSizeBrush.x+rectBackScrollSizeBrush.width/100*textFieldSizeBrush.text
+				circleScrollSizeBrush.x = rectBackScrollSizeBrush.x+rectBackScrollSizeBrush.width/100*tostring(textFieldSizeBrush.text)
 				rectScrollSizeBrush.width = circleScrollSizeBrush.x - rectBackScrollSizeBrush.x
 			end
 		end
@@ -62,7 +62,7 @@ function scene_paint( orientation, pathImage )
 	rectBackScrollSizeBrush.anchorX = 0
 	rectBackScrollSizeBrush:setFillColor(163/255, 163/255, 163/255)
 	rectBackScrollSizeBrush.alpha = 0.5
-	circleScrollSizeBrush = display.newCircle(groupScene, rectBackScrollSizeBrush.x+rectBackScrollSizeBrush.width/100*textFieldSizeBrush.text, rectBackScrollSizeBrush.y, rectBackScrollSizeBrush.height*2)
+	circleScrollSizeBrush = display.newCircle(groupScene, rectBackScrollSizeBrush.x+rectBackScrollSizeBrush.width/100*tonumber(textFieldSizeBrush.text), rectBackScrollSizeBrush.y, rectBackScrollSizeBrush.height*2)
 	circleScrollSizeBrush:setFillColor(21/255, 125/255, 162/255)
 	rectScrollSizeBrush = display.newRect(groupScene, rectBackScrollSizeBrush.x, rectBackScrollSizeBrush.y, circleScrollSizeBrush.x - rectBackScrollSizeBrush.x, rectBackScrollSizeBrush.height)
 	rectScrollSizeBrush.anchorX = 0
