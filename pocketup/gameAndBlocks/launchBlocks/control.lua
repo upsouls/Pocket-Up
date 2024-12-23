@@ -230,6 +230,11 @@ return {
         lua = lua.."\nend"
         lua = lua.."\ntarget.group:insert(myClone)\
         myClone.group = target.group"
+        lua = lua.."\
+        myClone.events_whenTheTruth = target.events_whenTheTruth\
+        for i=1, #myClone.events_whenTheTruth do\
+            myClone.events_whenTheTruth[i](myClone)\
+        end\n"
         lua = lua.."\nmyClone:addEventListener('touch', function(event)\
         if (event.phase=='began') then\
             local newIdTouch=globalConstants.touchId+1\

@@ -478,7 +478,8 @@ function scene_]]..scene_id..[[()
         "\nevents_onTouchScreen['object_"..objects[i][2].."'] = {}"..
         "\nevents_changeBackground['object_"..objects[i][2].."'] = {}"..
         "\nevents_keypressed['object_"..objects[i][2].."'] = {}"..
-        "\nevents_endKeypressed['object_"..objects[i][2].."'] = {}"
+        "\nevents_endKeypressed['object_"..objects[i][2].."'] = {}"..
+        "\nevents_whenTheTruth['object_"..objects[i][2].."'] = {}"
     end
 
     lua = lua..
@@ -735,7 +736,7 @@ function scene_]]..scene_id..[[()
                                     local threadFun = require('plugins.threadFun')\n"
                     elseif block[1] == "whenTheTruth" then
                         local condition = make_all_formulas(block[2][1], "target")
-                        lua = lua.."\nevents_"..block[1].."[ #events_"..block[1].." + 1] = function (target)\
+                        lua = lua.."\nevents_"..block[1].."['object_"..obj_id.."'][ #events_"..block[1].."['object_"..obj_id.."'] + 1] = function (target)\n\
                             Timers_max = Timers_max+1\
                             local tTheard\
                             local removeTheard = function()\
@@ -812,7 +813,11 @@ function scene_]]..scene_id..[[()
                 end
             end
             lua = lua.."\nfor i=1, #events_start do\n    events_start[i](object_"..obj_id..")\nend\n"
-            lua = lua.."\nfor i=1, #events_whenTheTruth do\n    events_whenTheTruth[i](object_"..obj_id..")\nend\n"
+            lua = lua.."\
+            object_"..obj_id.."['events_whenTheTruth'] = events_whenTheTruth['object_"..obj_id.."'] or {}\
+            for i=1, #events_whenTheTruth['object_"..obj_id.."'] do\
+                events_whenTheTruth['object_"..obj_id.."'][i](object_"..obj_id..")\
+            end\n"
             lua = lua.."\nend)\n"
             end
         end
