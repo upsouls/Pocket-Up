@@ -20,12 +20,10 @@ local launch = function ()
     scene_run_game('scripts', {nil, nil,nil})
 end
 
+local appVersion = utils.isSim and "1.0" or system.getInfo("appVersionString")
 
--- if funsP["прочитать сс сохранение"]('counter_projects') >= 2 then
---     launch()
---     return true
--- end
-
+local function import()
+funsP["записать сс сохранение"]("appVersion", appVersion)
 local counterProjects = 2
 funsP["записать сс сохранение"]('counter_projects', counterProjects)
 
@@ -61,3 +59,15 @@ else
         --password=''
     }
 end
+end
+
+if funsP["прочитать сс сохранение"]('counter_projects') >= 2 then
+    if appVersion ~= funsP["прочитать сс сохранение"]("appVersion") then
+        import()
+        return true
+    end
+    launch()
+    return true
+end
+
+import()
