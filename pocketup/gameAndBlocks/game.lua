@@ -909,6 +909,12 @@ end"
                 display.remove(value.mainGroup)\
             end\
         end\
+        audio.stop()\
+        audio.dispose()\
+        for key, value in pairs(playingSounds) do\
+            audio.stop(playingSounds[key])\
+            audio.dispose(playSounds[key])\
+        end\
         removeAllObjects()\
         transition.cancelAll()\
         plugins.physics.setDrawMode('normal')\
