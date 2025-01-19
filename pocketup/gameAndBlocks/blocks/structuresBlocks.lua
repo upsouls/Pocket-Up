@@ -264,6 +264,9 @@ allBlocks = {
 	["insertVideoToMiniScene"] = {"block", "blocks/block_yellow_2.png", {{{"text", app.words[643]}}, {{"videos", nil, 1.5}}, {{"text", app.words[529]..":"}, {"cell", nil, 1.5}}}, 109, 142, false},
 	["eventListenerVideo"] = {"block", "blocks/block_violet_3.png", {{{"text", app.words[644]}}, {{"videos", nil, 1.5}},{{"text", app.words[241]}}, {{"variables"}}}, 109, 188, true},
 	["endEventListenerVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[645]}}}, 109, 88, "end"},
+	["fbGetValue"] = {"block", "blocks/block_red_3_5.png", {{{"text", app.words[646]}, {"cell", nil, 3}}, {{"text", app.words[647]}, {"cell", nil, 3.5}}, {{"text", app.words[648]}}, {{"variables"}}}, 109, 250, false},
+	["fbSetValue"] = {"block", "blocks/block_red_3.png", {{{"text", app.words[649]}, {"cell", nil, 3}}, {{"text", app.words[650]}, {"cell", nil, 5.8}}, {{"text", app.words[655]}, {"cell", nil, 3.9}}}, 109, 188, false},
+	["fbDelValue"] = {"block", "blocks/block_red_2.png", {{{"text", app.words[656]}, {"cell", nil, 4}}, {{"text", app.words[647]}, {"cell", nil, 3.5}}}, 109, 142, false}
 }
 
 
