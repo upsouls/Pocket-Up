@@ -56,8 +56,7 @@ return {
             newproxy = newproxy, metatable = metatable, rawset = rawset, coronabaselib = coronabaselib, type = type,\
             audio = audio, pairs = pairs, select = select, rawget = rawget, Runtime = Runtime, error = error,\
             utf8 = require("plugin.utf8"), pasteboard = require("plugin.pasteboard"), androidFilePicker = require("plugin.androidFilePicker"),\
-            tinyfiledialogs = require("plugin.tinyfiledialogs"), exportFile = require("plugin.exportFile"), zip = require("plugin.zip"),\
-            orientation = require("plugin.orientation"), app = app, utils = utils, object = target\
+            exportFile = require("plugin.exportFile"), orientation = require("plugin.orientation"), app = app, utils = utils, object = target\
             \
             }\
         end\
