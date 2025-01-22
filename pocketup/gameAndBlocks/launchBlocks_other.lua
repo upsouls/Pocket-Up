@@ -70,18 +70,23 @@ local function make_block(infoBlock, object, images, sounds, make_all_formulas, 
         local idBase = make_all_formulas(infoBlock[2][2], object)
         local idKey = make_all_formulas(infoBlock[2][1], object)
         local targVar = ''
+        local parentShownVar = ''
         if infoBlock[2][3][1] == 'localVariable' then
             targVar = 'target.var_'..infoBlock[2][3][2]
+            parentShownVar = 'target.varText_'..infoBlock[2][3][2]
         else
             targVar = 'var_'..infoBlock[2][3][2]
+            parentShownVar = 'varText_'..infoBlock[2][3][2]
         end
     
         lua = lua..[[
             local function _listener(event)
                 if event.isError then
-                    ]]..targVar..[[ = 'err'
+                    ]]..targVar..[[ = 'ERROR'
+                    ]]..parentShownVar..[[.text = ]]..targVar..[[
                 else
                     ]]..targVar..[[ = require 'json'.decode(event.response)
+                    ]]..parentShownVar..[[.text = require 'json'.decode(event.response)
                 end
             end
             network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "GET", _listener)]].."\n"
