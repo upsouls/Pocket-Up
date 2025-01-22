@@ -85,8 +85,7 @@ return {
     end,
 
     ["endFor"] = function ()
-        return "coroutine.yield()\
-        end"
+        return "end"
     end,
 
     ["foreach"] = function (infoBlock, object, images, sounds, make_all_formulas)

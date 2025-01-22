@@ -75,7 +75,6 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
             text:toFront()
         end)
     end
-
 end)
 
 _G.funsP = {}

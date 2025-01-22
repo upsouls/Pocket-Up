@@ -228,4 +228,66 @@ return {
             return lua.."\nend)"
         end
     end,
+
+    fbGetValue = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        local lua = "pcall(function()\n"
+        local idBase = make_all_formulas(infoBlock[2][2], object)
+        local idKey = make_all_formulas(infoBlock[2][1], object)
+        local targVar = ''
+        local parentShownVar = ''
+        if infoBlock[2][3][1] == 'localVariable' then
+            targVar = 'target.var_'..infoBlock[2][3][2]
+            parentShownVar = 'target.varText_'..infoBlock[2][3][2]
+        else
+            targVar = 'var_'..infoBlock[2][3][2]
+            parentShownVar = 'varText_'..infoBlock[2][3][2]
+        end
+
+        lua = lua..[[
+            local function _listener(event)
+                if event.isError then
+                    ]]..targVar..[[ = 'ERROR'
+                    ]]..parentShownVar..[[.text = ]]..targVar..[[
+                else
+                    ]]..targVar..[[ = require 'json'.decode(event.response)
+                    ]]..parentShownVar..[[.text = require 'json'.decode(event.response)
+                end
+            end
+            network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "GET", _listener)]].."\n"
+        return lua.."\nend)"
+    end,
+
+    fbSetValue = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        local lua = "pcall(function()\n"
+        local idBase = make_all_formulas(infoBlock[2][3], object)
+        local idKey = make_all_formulas(infoBlock[2][2], object)
+        local value = make_all_formulas(infoBlock[2][1], object)
+
+        lua = lua..[[
+        local headers = {
+            ["Content-Type"] = "application/json"
+        }
+
+        local params = {
+        headers = headers,
+        body = require "json".encode(]]..value..[[)
+        }
+        local function _listener(event)
+        print(require "json".encode(event))
+        end
+        network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "PUT", _listener, params)
+        ]]
+        return lua.."\nend)"
+    end,
+
+    fbDelValue = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        local lua = "pcall(function()\n"
+        local idBase = make_all_formulas(infoBlock[2][2], object)
+        local idKey = make_all_formulas(infoBlock[2][1], object)
+        lua = lua..[[
+        network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "DELETE", nil)
+                
+        ]]
+        return lua.."\nend)"
+    end,
 }

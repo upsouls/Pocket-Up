@@ -65,58 +65,6 @@ local function make_block(infoBlock, object, images, sounds, make_all_formulas, 
         threadFun.wait(type("..time..") == 'number' and ("..time.."*1000) or 0)"
     elseif nameBlock == 'endTimer' then
         lua = lua.."coroutine.yield()\nend"
-    elseif nameBlock == 'fbGetValue' then
-        add_pcall()
-        local idBase = make_all_formulas(infoBlock[2][2], object)
-        local idKey = make_all_formulas(infoBlock[2][1], object)
-        local targVar = ''
-        local parentShownVar = ''
-        if infoBlock[2][3][1] == 'localVariable' then
-            targVar = 'target.var_'..infoBlock[2][3][2]
-            parentShownVar = 'target.varText_'..infoBlock[2][3][2]
-        else
-            targVar = 'var_'..infoBlock[2][3][2]
-            parentShownVar = 'varText_'..infoBlock[2][3][2]
-        end
-    
-        lua = lua..[[
-            local function _listener(event)
-                if event.isError then
-                    ]]..targVar..[[ = 'ERROR'
-                    ]]..parentShownVar..[[.text = ]]..targVar..[[
-                else
-                    ]]..targVar..[[ = require 'json'.decode(event.response)
-                    ]]..parentShownVar..[[.text = require 'json'.decode(event.response)
-                end
-            end
-            network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "GET", _listener)]].."\n"
-        end_pcall()
-    elseif nameBlock == 'fbSetValue' then
-        local idBase = make_all_formulas(infoBlock[2][3], object)
-        local idKey = make_all_formulas(infoBlock[2][2], object)
-        local value = make_all_formulas(infoBlock[2][1], object)
-        
-        lua = lua..[[
-local headers = {
-    ["Content-Type"] = "application/json"
-}
-            
-local params = {
-headers = headers,
-body = require "json".encode(]]..value..[[)
-}
-local function _listener(event)
-print(require "json".encode(event))
-end
-network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "PUT", _listener, params)
-]]
-    elseif nameBlock == 'fbDelValue' then
-        local idBase = make_all_formulas(infoBlock[2][2], object)
-        local idKey = make_all_formulas(infoBlock[2][1], object)
-        lua = lua..[[
-network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "DELETE", nil)
-        
-]]
     end
     return lua
 end

@@ -118,7 +118,45 @@ return {
                     events_function[key]['fun_"..infoBlock[2][3][2].."'][i](value)\
                 end\
             end\
-            app.cerberus.newInputLine(("..make_all_formulas(infoBlock[2][1], object).."), '', nil, '', funEditingEnd)"
+            local background = display.newRect(mainGroup, 0, 0, 4000, 2000)\
+            background:setFillColor(0,0,0,0.6)\
+            \
+            local textField = native.newTextBox(0, -50, 400,80)\
+            textField.text = ''\
+            textField:setTextColor(0,0,0,1)\
+            textField.size = 30\
+            textField.isEditable = true\
+            mainGroup:insert(textField)\
+            \
+            local ok = display.newRect(mainGroup, 120, 50, 200, 70)\
+            ok:setFillColor(0,0,0,0.8)\
+            local okText = display.newText(mainGroup, 'Принять', ok.x, ok.y, nil, app.fontSize1)\
+            local back = display.newRect(mainGroup, -120, 50, 200, 70)\
+            back:setFillColor(0,0,0,0.8)\
+            local backText = display.newText(mainGroup, 'Отмена', back.x, back.y, nil, app.fontSize1)\
+            local headerText = display.newText(mainGroup, "..make_all_formulas(infoBlock[2][1], object)..", 0, -200, nil, app.fontSize1)\
+            local remove = function()\
+                display.remove(background)\
+                display.remove(textField)\
+                display.remove(ok)\
+                display.remove(okText)\
+                display.remove(back)\
+                display.remove(backText)\
+                display.remove(headerText)\
+            end\
+            back:addEventListener('tap', function()\
+                remove()\
+            end)\
+            ok:addEventListener('tap', function()\
+                funEditingEnd(\
+                {\
+                ['isOk']=true,\
+                ['value']=textField.text,\
+                }\
+            )\
+                remove()\
+            end)\
+            --app.cerberus.newInputLine("..make_all_formulas(infoBlock[2][1], object)..", '', nil, '', funEditingEnd)"
             return lua.."\nend)"
         end
     end,
