@@ -343,13 +343,13 @@ funsP["создать объект"] = function(idProject, pathObject, nameImage
 	local file = io.open(pathObjectD.."/image_"..counter[3]..".png", "wb")
 	file:write(contents)
 	io.close(file)
-	if utils.isSim or utils.isWin then
-		local table = plugins.utf8.split(nameImage,'\\\\')
-		nameImage = table[#table]
-	else
 
+
+	if nameImage then
+		funsP["записать сохранение"](pathObject.."/images", "[[\""..nameImage.."\","..counter[3].."]]")
+	else
+		funsP["записать сохранение"](pathObject.."/images", "[]")
 	end
-	funsP["записать сохранение"](pathObject.."/images", "[[\""..nameImage.."\","..counter[3].."]]")
 	funsP["записать сохранение"](pathObject.."/scripts", "[]")
 	funsP["записать сохранение"](pathObject.."/sounds", "[]")
 	funsP["записать сохранение"](pathObject.."/variables", "[]")

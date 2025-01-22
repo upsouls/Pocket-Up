@@ -625,7 +625,7 @@
     "Key released and save its name in",
     "mouse X",
     "mouse Y",
-    "remove scene"
+    "remove scene",
     "Rename the video",
     "Video title",
     "Create a video",
@@ -639,5 +639,8 @@
     "Timestamp(in seconds)",
     "Delete video",
     "Change the X position of the video to",
-    "Change the Y position of the video to"
+    "Change the Y position of the video to",
+    "Отвязать видео от камеры","Привязать видео к камере","Добавить видео в мини сцену","Когда состояние видео изменится",
+"Конец состояния видео", "Получить значение", "из базы FireBase", "и сохранить в", "Записать значение", "в ключ", "Айди базы", "Путь к ключу",
+"В базу FireBase", "Значение", "в базу FireBase", "Удалить ключ","Импортировать","Без спрайта"
 ]

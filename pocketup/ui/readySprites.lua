@@ -13,7 +13,9 @@ end
 local function onBack()
     display.remove(objs.sceneGroup)
     objs.gen = false
-    app.scenes["scripts"][1].alpha = 1
+    if app.scene == "scripts" then
+        app.scenes["scripts"][1].alpha = 1
+    end
     funBack = objs.oldFunBack
 end
 
@@ -172,7 +174,7 @@ function scene_readySprites( funAddImage )
             circleFrontAlpha.xScale, circleFrontAlpha.yScale, circleFrontAlpha.alpha = 0.5, 0.5, 0
             sceneGroup:insert(circleFrontAlpha)
             circleFront.circleAlpha = circleFrontAlpha
-            local circleFrontText = display.newImage("images/triangle.png", circleFront.x+display.contentWidth/100, circleFront.y)
+            local circleFrontText = display.newImage("images/triangle.png", circleFront.x+5, circleFront.y)
             circleFrontText.xScale, circleFrontText.yScale = -display.contentWidth/2500, display.contentWidth/2500
             circleFrontText.rotation = 90
             sceneGroup:insert(circleFrontText)
@@ -184,7 +186,7 @@ function scene_readySprites( funAddImage )
             circleBackAlpha.xScale, circleBackAlpha.yScale, circleBackAlpha.alpha = 0.5, 0.5, 0
             sceneGroup:insert(circleBackAlpha)
             circleBack.circleAlpha = circleBackAlpha
-            local circleBackText =  display.newImage("images/triangle.png", circleBack.x+display.contentWidth/100, circleBack.y)
+            local circleBackText =  display.newImage("images/triangle.png", circleBack.x, circleBack.y)
             circleBackText.xScale, circleBackText.yScale = display.contentWidth/2500, display.contentWidth/2500
             circleBackText.rotation = -90
             sceneGroup:insert(circleBackText)
@@ -216,8 +218,8 @@ function scene_readySprites( funAddImage )
                                     circleBackText.alpha = 0.5
                                 end
                             end
-                            scroll:scrollToPosition({
-                                y=0, time=0
+                            scroll:scrollTo("top", {
+                                time=100
                             })
                             loadList((listId-1)*10+1, (listId-1)*10+11)
                         end
