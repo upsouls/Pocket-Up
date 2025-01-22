@@ -734,110 +734,111 @@ local function touchCirclePlus(event)
 						app.cerberus.newInputLine(app.words[29],app.words[14], isCorrectValue,correctNameSlot(event.origFileName:match("(.+)%.")), onCompleteObject)
 					end
 				end
-				local groupSelect = display.newGroup()
-				app.scenes[app.scene][#app.scenes[app.scene]]:insert(groupSelect)
-				local background = display.newRect(groupSelect, 0, 0, 4000, 4000)
-				background:setFillColor(0,0,0,0.6)
-				local image = display.newRoundedRect(groupSelect, CENTER_X, CENTER_Y, 300, 100, app.roundedRect)
-				image:setFillColor(0, 0.2, 0.2, 1)
-				local imageText = display.newText(groupSelect, app.words[657], image.x, image.y, nil, app.fontSize1)
-				image:addEventListener("tap", function ()
-					funsP['импортировать изображение'](myFunImport)
-					display.remove(groupSelect)
-					groupSelect = nil
-				end)
-				local mediateka = display.newRoundedRect(groupSelect, CENTER_X, CENTER_Y + 120, 300, 100, app.roundedRect)
-				mediateka:setFillColor(0, 0.2, 0.2, 1)
-				local mediatekaText = display.newText(groupSelect, app.words[658], mediateka.x, mediateka.y, nil, app.fontSize1)
-				mediateka:addEventListener("tap", function ()
-					local event = {
-						value = "My object"
-					}
-					local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
-					counter[2] = counter[2]+1
-					event.value = event.value .. counter[2]
-					funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter))
-					funsP["создать объект"](app.idProject, pathObject.."_"..counter[2], nil)
-					scenes[#scenes+1] = {event.value, counter[2]}
-					funsP["записать сохранение"](pathScene, plugins.json.encode(scenes))
+				funsP['импортировать изображение'](myFunImport)
+				-- local groupSelect = display.newGroup()
+				-- app.scenes[app.scene][#app.scenes[app.scene]]:insert(groupSelect)
+				-- local background = display.newRect(groupSelect, 0, 0, 4000, 4000)
+				-- background:setFillColor(0,0,0,0.6)
+				-- local image = display.newRoundedRect(groupSelect, CENTER_X, CENTER_Y, 300, 100, app.roundedRect)
+				-- image:setFillColor(0, 0.2, 0.2, 1)
+				-- local imageText = display.newText(groupSelect, app.words[657], image.x, image.y, nil, app.fontSize1)
+				-- image:addEventListener("tap", function ()
+				-- 	funsP['импортировать изображение'](myFunImport)
+				-- 	display.remove(groupSelect)
+				-- 	groupSelect = nil
+				-- end)
+				-- local mediateka = display.newRoundedRect(groupSelect, CENTER_X, CENTER_Y + 120, 300, 100, app.roundedRect)
+				-- mediateka:setFillColor(0, 0.2, 0.2, 1)
+				-- local mediatekaText = display.newText(groupSelect, app.words[658], mediateka.x, mediateka.y, nil, app.fontSize1)
+				-- mediateka:addEventListener("tap", function ()
+				-- 	local event = {
+				-- 		value = "My object"
+				-- 	}
+				-- 	local counter = plugins.json.decode(funsP["получить сохранение"](app.idProject.."/counter"))
+				-- 	counter[2] = counter[2]+1
+				-- 	event.value = event.value .. counter[2]
+				-- 	funsP["записать сохранение"](app.idProject.."/counter", plugins.json.encode(counter))
+				-- 	funsP["создать объект"](app.idProject, pathObject.."_"..counter[2], nil)
+				-- 	scenes[#scenes+1] = {event.value, counter[2]}
+				-- 	funsP["записать сохранение"](pathScene, plugins.json.encode(scenes))
 
-					local function funAddImage()
+				-- 	local function funAddImage()
 						
-						local iEndSlot = #arraySlots
-						local i = iEndSlot+1
-						while (arraySlots[iEndSlot].myGroup.alpha<0.5) do
-							iEndSlot = iEndSlot-1
-						end
+				-- 		local iEndSlot = #arraySlots
+				-- 		local i = iEndSlot+1
+				-- 		while (arraySlots[iEndSlot].myGroup.alpha<0.5) do
+				-- 			iEndSlot = iEndSlot-1
+				-- 		end
 	
-						local groupScene = display.newGroup()
-						local ySlotPosition = iEndSlot==1 and display.contentWidth/3.75*2 or arraySlots[iEndSlot].myGroup.y+arraySlots[iEndSlot].height*(type(arraySlots[iEndSlot].infoScene[2])=="string" and 1.5 or 1)
+				-- 		local groupScene = display.newGroup()
+				-- 		local ySlotPosition = iEndSlot==1 and display.contentWidth/3.75*2 or arraySlots[iEndSlot].myGroup.y+arraySlots[iEndSlot].height*(type(arraySlots[iEndSlot].infoScene[2])=="string" and 1.5 or 1)
 	
-						groupScene.y = ySlotPosition
-						groupSceneScroll:insert(groupScene)
-						local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
-						buttonRect.aimPosY = groupScene.y
-						buttonRect.myGroup = groupScene
-						buttonRect.infoScene = scenes[i]
-						buttonRect.idSlot = i
-						arraySlots[i] = buttonRect
-						buttonRect.anchorX = 0
-						buttonRect:setFillColor(0, 71/255, 93/255)
-						buttonRect:addEventListener("touch", touchMoveSlot)
-						groupScene:insert(buttonRect)
-						local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.9, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
-						strokeIcon.strokeWidth = 3
-						strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
-						strokeIcon:setFillColor(0,0,0,0)
-						groupScene:insert(strokeIcon)
-						local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
-						groupScene:insert(containerIcon)
-						containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
+				-- 		groupScene.y = ySlotPosition
+				-- 		groupSceneScroll:insert(groupScene)
+				-- 		local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
+				-- 		buttonRect.aimPosY = groupScene.y
+				-- 		buttonRect.myGroup = groupScene
+				-- 		buttonRect.infoScene = scenes[i]
+				-- 		buttonRect.idSlot = i
+				-- 		arraySlots[i] = buttonRect
+				-- 		buttonRect.anchorX = 0
+				-- 		buttonRect:setFillColor(0, 71/255, 93/255)
+				-- 		buttonRect:addEventListener("touch", touchMoveSlot)
+				-- 		groupScene:insert(buttonRect)
+				-- 		local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.9, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
+				-- 		strokeIcon.strokeWidth = 3
+				-- 		strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
+				-- 		strokeIcon:setFillColor(0,0,0,0)
+				-- 		groupScene:insert(strokeIcon)
+				-- 		local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
+				-- 		groupScene:insert(containerIcon)
+				-- 		containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
 	
-						strokeIcon:toFront()
+				-- 		strokeIcon:toFront()
 	
-						local nameProject = display.newText({
-							text = scenes[i][1],
-							x = strokeIcon.x+strokeIcon.width/1.5,
-							y = strokeIcon.y,
-							width = display.contentWidth/2.12,
-							height = app.fontSize0*1.15,
-							fontSize = app.fontSize0
-						})
-						nameProject.anchorX = 0
-						nameProject:setFillColor(171/255, 219/255, 241/255)
-						groupScene:insert(nameProject)
+				-- 		local nameProject = display.newText({
+				-- 			text = scenes[i][1],
+				-- 			x = strokeIcon.x+strokeIcon.width/1.5,
+				-- 			y = strokeIcon.y,
+				-- 			width = display.contentWidth/2.12,
+				-- 			height = app.fontSize0*1.15,
+				-- 			fontSize = app.fontSize0
+				-- 		})
+				-- 		nameProject.anchorX = 0
+				-- 		nameProject:setFillColor(171/255, 219/255, 241/255)
+				-- 		groupScene:insert(nameProject)
 	
-						local menuProject = display.newImage("images/menu.png")
-						menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
-						menuProject:setFillColor(171/255, 219/255, 241/255)
-						menuProject.slot = buttonRect
-						menuProject:addEventListener("touch", touchMenuSlot)
-						groupScene:insert(menuProject)
+				-- 		local menuProject = display.newImage("images/menu.png")
+				-- 		menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
+				-- 		menuProject:setFillColor(171/255, 219/255, 241/255)
+				-- 		menuProject.slot = buttonRect
+				-- 		menuProject:addEventListener("touch", touchMenuSlot)
+				-- 		groupScene:insert(menuProject)
 	
-						local menu2Project = display.newImage("images/menu2.png")
-						buttonRect.menu2 = menu2Project
-						menu2Project.x, menu2Project.y, menu2Project.width, menu2Project.height = buttonRect.width-buttonRect.width/1.075, buttonRect.y, menuProject.width, menuProject.height
-						menu2Project:setFillColor(0,0,0,0.5)
-						groupScene:insert(menu2Project)
+				-- 		local menu2Project = display.newImage("images/menu2.png")
+				-- 		buttonRect.menu2 = menu2Project
+				-- 		menu2Project.x, menu2Project.y, menu2Project.width, menu2Project.height = buttonRect.width-buttonRect.width/1.075, buttonRect.y, menuProject.width, menuProject.height
+				-- 		menu2Project:setFillColor(0,0,0,0.5)
+				-- 		groupScene:insert(menu2Project)
 	
-						buttonRect.strokeIcon = strokeIcon
-						buttonRect.containerIcon = containerIcon
-						buttonRect.nameProject = nameProject
-						buttonRect.menu = menuProject
-						buttonRect.menu2 = menu2Project
-						if (headerNoObjects.alpha>0.5) then
-							headerNoObjects.alpha=0
-						end 
-						--DDDDDDDDDDDDDDDDDDDD
+				-- 		buttonRect.strokeIcon = strokeIcon
+				-- 		buttonRect.containerIcon = containerIcon
+				-- 		buttonRect.nameProject = nameProject
+				-- 		buttonRect.menu = menuProject
+				-- 		buttonRect.menu2 = menu2Project
+				-- 		if (headerNoObjects.alpha>0.5) then
+				-- 			headerNoObjects.alpha=0
+				-- 		end 
+				-- 		--DDDDDDDDDDDDDDDDDDDD
 	
-						scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
-					end
-					funAddImage()
-					-- app.idObject = counter[2]
-					-- scene_readySprites(funAddImage)
-					display.remove(groupSelect)
-					groupSelect = nil
-				end)
+				-- 		scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
+				-- 	end
+				-- 	funAddImage()
+				-- 	-- app.idObject = counter[2]
+				-- 	-- scene_readySprites(funAddImage)
+				-- 	display.remove(groupSelect)
+				-- 	groupSelect = nil
+				-- end)
 			else
 				if isBackScene == 'back' then
 					app.scenes[app.scene][2].alpha = 0
