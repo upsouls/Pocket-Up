@@ -58,6 +58,11 @@ local function touchOpenProject(event)
 				display.remove(app.scenes[app.scene][1])
 				display.remove(app.scenes[app.scene][2])
 				local scenesToProject = plugins.json.decode(funsP["получить сохранение"](event.target.idProject.."/scenes"))
+				local t = {}
+				t.id = event.target.idProject
+				t.name = event.target.nameProject
+				funsP["записать сохранение"]("lastProject", require 'json'.encode(t))
+				print('Last project updated')
 				if (#scenesToProject==1) then
 					app.idProject = event.target.idProject
 					app.nmProject = event.target.nameProject
@@ -247,6 +252,7 @@ elseif (event.target.typeFunction=="delete") then
 	local idDelSave = idsProjects[i]
 	table.remove(idsProjects, i)
 	display.remove(slot.myGroup)
+	funsP["записать сохранение"]('lastProject', '[]')
 
 	local idsProjectsCreated = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата создания"))
 	local idsProjectsOpen = plugins.json.decode(funsP["прочитать сс сохранение"]("сортировка проектов - дата открытия"))
@@ -404,7 +410,11 @@ for iSort=1, #idsProjects do
 	local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
 	groupScene:insert(containerIcon)
 	containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
-	local imageIcon = display.newImage(projects[i][2].."/icon.png", system.DocumentsDirectory)
+	local imageIcon = nil
+	local imageIcon = display.newImage(projects[i][2].."/scene_1/icon.png", system.DocumentsDirectory)
+	if imageIcon == nil then
+		imageIcon = display.newImage(projects[i][2].."/icon.png", system.DocumentsDirectory)
+	end
 	pcall(function ()
 		containerIcon:insert(imageIcon)
 	end)
@@ -469,6 +479,7 @@ circleTelegram.fill = {
 }
 groupScene:insert(circleTelegram)
 local circleTelegramAlpha = display.newCircle(circleTelegram.x, circleTelegram.y, display.contentWidth/11.5)
+circleTelegram.isVisible = false
 circleTelegramAlpha:setFillColor(1,1,1,0.25)
 circleTelegramAlpha.xScale, circleTelegramAlpha.yScale, circleTelegramAlpha.alpha = 0.75, 0.75, 0
 groupScene:insert(circleTelegramAlpha)
@@ -479,6 +490,7 @@ circleDiscord.fill = {
 	type="image",
 	filename="images/icon_discord.png",
 }
+circleDiscord.isVisible = false
 groupScene:insert(circleDiscord)
 local circleDiscordAlpha = display.newCircle(circleDiscord.x, circleDiscord.y, display.contentWidth/11.5)
 circleDiscordAlpha:setFillColor(1,1,1,0.25)
@@ -823,7 +835,11 @@ local function touchCirclePlus(event)
 					app.idProject = "project_"..counter
 					app.nmProject = tableAnswer.value
 					scene_objects(app.idProject.."/scene_1/objects", app.nmProject, {"Сцена",1})
-
+					local t = {}
+					t.id = app.idProject
+					t.name = app.nmProject
+					funsP["записать сохранение"]("lastProject", require 'json'.encode(t))
+					print('Last project updated')
 
 				end
 			end

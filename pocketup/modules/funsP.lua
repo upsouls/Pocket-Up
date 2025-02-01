@@ -541,6 +541,79 @@ funsP["экспортировать проект"] = function (id , name , liste
 	end
 end
 
+funsP["экспортировать проект апк"] = function (id , name , listener)
+
+	local options = plugins.json.decode(os.read(id..'/options.txt' , '*a' , system.DocumentsDirectory))
+	options.name = name
+	os.write(plugins.json.encode(options) ,id..'/options.txt' , system.DocumentsDirectory )
+	if utils.isSim or utils.isWin then
+		local zip = require( "plugin.zip" )
+ 
+		local function zipListener( event )
+ 
+    		if ( event.isError ) then
+        		error('Error')
+    		else
+				timer.performWithDelay(20 , function ()
+					export.export {
+						path = system.pathForFile('export.zip', system.DocumentsDirectory),
+						name = name..".up",
+						listener = listener
+					}
+				end)
+    		end
+		end
+
+		pcall(function ()
+			os.removeFolder(system.pathForFile('', system.TemporaryDirectory), true)
+		end)
+
+		os.copy_folder(system.pathForFile(id, system.DocumentsDirectory), system.pathForFile('', system.TemporaryDirectory))
+		timer.performWithDelay(100, function ()
+			local files = {}
+			local insert_files
+	
+			function insert_files(path, origPath)
+			  for file in plugins.lfs.dir(path) do
+				if file ~= "." and file ~= ".." then
+				  local filePath = path .. "/" .. file
+				  local attr = plugins.lfs.attributes(filePath)
+				  if attr.mode == "directory" then
+					insert_files(filePath, origPath == '' and file or origPath .. '/' .. file)
+				  else
+					files[#files + 1] = origPath == '' and file or origPath .. '/' .. file
+				  end
+				end
+			  end
+			end
+	
+			insert_files(system.pathForFile('', system.TemporaryDirectory), '')
+			--print(plugins.json.encode(files))
+	
+			--insert_files(system.pathForFile(id, system.DocumentsDirectory), id)
+			pcall(function ()
+				os.remove(system.pathForFile('export.zip', system.TemporaryDirectory))
+			end)
+			local zipOptions = { 
+				zipFile = "export.zip",
+				zipBaseDir = system.TemporaryDirectory,
+				srcBaseDir = system.TemporaryDirectory,
+				srcFiles = files,
+				listener = zipListener
+			}
+			zip.compress( zipOptions )
+		end)
+	else
+		zipAndroid.compress {
+			level = 0,
+			path = system.pathForFile('export.zip', system.DocumentsDirectory),
+			folder = system.pathForFile(id, system.DocumentsDirectory),
+			listener = function(e)
+				
+			end
+		}
+	end
+end
 
 funsP["закрыть проект"] = function()
 	os.exit()

@@ -22,12 +22,13 @@ timer.performWithDelay(system.getInfo 'environment' == 'simulator' and 0 or 100,
 
     local file = io.open(system.pathForFile("acces.txt", system.DocumentsDirectory), "r")
     if (file ~= nil or utils.isSim or utils.isWin or IsBuild) then 
+        
         if (file ~= nil) then
             io.close(file)
         end
         collectgarbage('collect')
         timer.performWithDelay(1, function ()
-            scene_projects()
+            scene_main()
             if IsBuild then
                 require('ApkLogic')
             end
@@ -124,7 +125,7 @@ end
 
 -- интерфейс покет апа
 listFiles = {
-    "projects","objects","scenes","mainScene","optionsProject",
+    "projects","objects","scenes","menuMain","mainScene","optionsProject",
     "scripts","categoriesScripts","categoryScripts","redactorFormulas",
     "redactorArrayFormulas", "spriteViewer", "readySprites","sceneRedactorHitbox",
     "visualPosition","buildApk","userAgreement"
