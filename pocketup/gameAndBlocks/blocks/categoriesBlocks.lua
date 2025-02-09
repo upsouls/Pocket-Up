@@ -251,6 +251,8 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			--{"touchAndSwipe",{{{"function","-"},{"number",1},{"number",0},{"number",0}},{{"function","-"},{"number",2},{"number",0},{"number",0}},{{"number",1},{"number",0},{"number",0}},{{"number",2},{"number",0},{"number",0}}, {{"number",0},{"number","."},{"number",3}}}},
 			{"showToast", {{{"text", app.words[164]}}}},
 			{"runLua",{ {{"text", 'local a = display.newRect(100, 100, 50, 50); a:setFillColor(1, 0, 0)'}} }},
+			{"hideSysPanels"},
+			{"showSysPanels"},
 			--{"lua", {{{"text", "native.showAlert(\""..app.words[388].."\", \""..app.words[389].."\", {\"OK\"})"}}}},
 			{"setHorizontalOrientation"},
 			{"setVerticalOrientation"},
@@ -296,6 +298,47 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"insertVideoToMiniScene", {{"videos", nameVideo}, {{"text", app.words[530]}}}},
 		},
 		["elementInterface"] = {
+			{"createJoystick", {
+				{{"text", app.words[670]}},
+				{{"text", app.words[589]}},
+				{{"text", app.words[589]}},
+				{{"text", app.words[589]}},
+				{{"text", app.words[589]}},
+				{{"text", app.words[589]}}
+			}},
+			
+			{"setPositionJoystick", {
+				{{"text", app.words[670]}},
+				{{"number", 100}},
+				{{"number", 200}}
+			}},
+			
+			{"setSizeJoystick", {
+				{{"text", app.words[670]}},
+				{{"number", 60}}
+			}},
+			
+			{"setSizeJoystick1", {
+				{{"text", app.words[670]}},
+				{{"number", 60}}
+			}},
+			
+			{"setSizeJoystick2", {
+				{{"text", app.words[670]}},
+				{{"number", 60}}
+			}},
+			
+			{"cameraInsertJoystick", {
+				{{"text", app.words[670]}},
+				{{"text", app.words[589]}}
+			}},
+			
+			{"cameraRemoveJoystick", {
+				{{"text", app.words[670]}},
+				{{"text", app.words[589]}}
+			}},
+			
+			--{"setShapeHitbox"},
 			{"newWebView", {{{"text", app.words[589]}}, {{"text", "https://example.com"}}, {{"number", 100}}, {{"number", 200}}, {{"number", 400}}, {{"number", 800}}}},
 			{"deleteWebView", {{{"text", app.words[589]}}}},
 			{"setWebViewX", {{{"text", app.words[589]}}, {{"number", -100}}}},

@@ -201,7 +201,7 @@ return {
 
     ["exitGame"] = function ()
         local lua = "pcall(function()\n"
-        lua = lua.."timer.new(0, function()\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nfunBackListener2({keyName='deleteBack', phase='up'})\nend)"
+        lua = lua.."native.setProperty( \"androidSystemUiVisibility\", \"default\" )\ntimer.new(0, function()\ndisplay.save(mainGroup,{ filename=myScene..'/icon.png', baseDir=system.DocumentsDirectory, backgroundColor={1,1,1,1}})\nfunBackListener2({keyName='deleteBack', phase='up'})\nend)"
         return lua.."\nend)"
     end,
 

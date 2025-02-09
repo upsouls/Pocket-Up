@@ -266,7 +266,58 @@ allBlocks = {
 	["endEventListenerVideo"] = {"block", "blocks/block_violet_1.png", {{{"text", app.words[645]}}}, 109, 88, "end"},
 	["fbGetValue"] = {"block", "blocks/block_red_3_5.png", {{{"text", app.words[646]}, {"cell", nil, 3}}, {{"text", app.words[647]}, {"cell", nil, 3.5}}, {{"text", app.words[648]}}, {{"variables"}}}, 109, 250, false},
 	["fbSetValue"] = {"block", "blocks/block_red_3.png", {{{"text", app.words[649]}, {"cell", nil, 3}}, {{"text", app.words[650]}, {"cell", nil, 5.8}}, {{"text", app.words[655]}, {"cell", nil, 3.9}}}, 109, 188, false},
-	["fbDelValue"] = {"block", "blocks/block_red_2.png", {{{"text", app.words[656]}, {"cell", nil, 4}}, {{"text", app.words[647]}, {"cell", nil, 3.5}}}, 109, 142, false}
+	["fbDelValue"] = {"block", "blocks/block_red_2.png", {{{"text", app.words[656]}, {"cell", nil, 4}}, {{"text", app.words[647]}, {"cell", nil, 3.5}}}, 109, 142, false},
+	["hideSysPanels"] = {"block", "blocks/block_gold_1.png", {{{"text", app.words[668]}}}, 109, 88, false},
+	["showSysPanels"] = {"block", "blocks/block_gold_1.png", {{{"text", app.words[669]}}}, 109, 88, false},
+	["createJoystick"] = {"block", "blocks/block_pink_4.png", {
+		{{"text", app.words[575]}, {"cell", nil, 2}},
+		{{"text", app.words[576]}},
+		{{"images"}},
+		{{"text", app.words[577]}},
+		{{"images"}},
+		{{"text", app.words[578]}},
+		{{"variables"}},
+		{{"text", app.words[579]}},
+		{{"variables"}},
+		{{"text", app.words[580]}},
+		{{"function"}}
+	}, 109, 450, false},
+	
+	["setPositionJoystick"] = {"block", "blocks/block_pink_3.png", {
+		{{"text", app.words[604]}},
+		{{"text", app.words[583]}, {"cell", nil, 1.4}},
+		{{"text", app.words[59]}, {"cell", nil, 1.4}, {"text", app.words[60]}, {"cell", nil, 1.4}}
+	}, 109, 188, false},
+	
+	["setSizeJoystick"] = {"block", "blocks/block_pink_2.png", {
+		{{"text", app.words[584]}},
+		{{"text", app.words[583]}, {"cell", nil, 2}, {"text", app.words[207]}, {"cell", nil, 1.5}, {"text", "%"}}
+	}, 109, 142, false},
+	
+	["setSizeJoystick1"] = {"block", "blocks/block_pink_2.png", {
+		{{"text", app.words[585]}},
+		{{"text", app.words[583]}, {"cell", nil, 1.5}, {"text", app.words[207]}, {"cell", nil, 1.5}, {"text", "%"}}
+	}, 109, 142, false},
+	
+	["setSizeJoystick2"] = {"block", "blocks/block_pink_2.png", {
+		{{"text", app.words[586]}},
+		{{"text", app.words[583]}, {"cell", nil, 1.5}, {"text", app.words[207]}, {"cell", nil, 1.5}, {"text", "%"}}
+	}, 109, 142, false},
+	
+	["cameraInsertJoystick"] = {"block", "blocks/block_pink_2.png", {
+		{{"text", app.words[603]}},
+		{{"text", app.words[583]}, {"cell", nil, 1.5}}
+	}, 109, 142, false},
+	
+	["cameraRemoveJoystick"] = {"block", "blocks/block_pink_2.png", {
+		{{"text", app.words[602]}},
+		{{"text", app.words[583]}, {"cell", nil, 1.5}}
+	}, 109, 142, false},
+	
+	["setShapeHitbox"] = {"block", "blocks/block_blue_2.png", {
+		{{"text", app.words[522]}},
+		{{"shapeHitbox"}}
+	}, 109, 142, false},
 }
 
 

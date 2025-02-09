@@ -247,10 +247,14 @@ return {
             local function _listener(event)
                 if event.isError then
                     ]]..targVar..[[ = 'ERROR'
+                    if ]]..parentShownVar..[[ ~= nil then
                     ]]..parentShownVar..[[.text = ]]..targVar..[[
+                    end
                 else
                     ]]..targVar..[[ = require 'json'.decode(event.response)
+                    if ]]..parentShownVar..[[ ~= nil then
                     ]]..parentShownVar..[[.text = require 'json'.decode(event.response)
+                    end
                 end
             end
             network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "GET", _listener)]].."\n"

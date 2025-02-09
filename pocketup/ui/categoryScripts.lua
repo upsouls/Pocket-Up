@@ -120,11 +120,6 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 	end
 
 	local function loadBlocksCategory(blocksCategory)
-		if (paidBlocks[category]~=nil) then
-			for i=1, #paidBlocks[category] do
-				table.insert(blocksCategory, 1, paidBlocks[category][i])
-			end
-		end
 		if (blocksCategory~=nil) then
 			local yTargetPos = 0
 			for i=1, #blocksCategory do
@@ -162,51 +157,7 @@ function scene_categoryScripts(category, nameCategory, funAddBlock)
 		scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/2)
 	end
 
-
-	if (553~=nameCategory) then
-		local allBlocksCategories = getCategoriesBlocks(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage, nameVideo )
-		local blocksCategory = allBlocksCategories[category]
-		loadBlocksCategory(allBlocksCategories[category])
-	else
-		funsP["в буфер обмена"](system.getInfo("deviceID"))
-		local function networkListener(event)
-			if (event.isError) then
-				app.cerberus.newBannerQuestion(app.words[557], function(event)
-					--if (not event.isOk) then
-						touchBackMenu[1]()
-					--end
-				end, "", app.words[16])
-			elseif (event.response=="false") then
-				app.cerberus.newBannerQuestion(app.words[558], function(event)
-					touchBackMenu[1]()
-				end, "", app.words[16])
-			else
-				if (funsP["прочитать сс сохранение"]("isHideBannerPurchased")==nil) then
-					timer.performWithDelay(0, function()
-						app.cerberus.newBannerQuestion(app.words[554], function(event)
-							if (not event.isOk) then
-								funsP["записать сс сохранение"]("isHideBannerPurchased", true)
-							end
-						end, app.words[556], app.words[16])
-					end)
-				end
-				local dec = (decryptor(event.response):gsub("\\", ""))
-				local paidBlocks = plugins.json.decode(dec)
-				local categoryPaidBlocks = {}
-				for i=1, #paidBlocks do
-					paidBlocks[i][3] = {{{"text", app.words[paidBlocks[i][3][1][2]]}}}
-					allBlocks["paidBlock_"..i] = paidBlocks[i]
-					categoryPaidBlocks[i] = {"paidBlock_"..i, {}, "on"}
-				end
-				loadBlocksCategory(categoryPaidBlocks)
-				print(plugins.json.encode(paidBlocks))
-			end
-			app.scenes[app.scene][1].alpha = 1
-			isBackScene = "back"
-		end
-		local params = {params={["Content-Type"]="application/json", ["X-API-Key"]="13b6ac91a2"}, body="{\"id\":\""..system.getInfo('deviceID').."\"}"}
-		network.request( "http://x95328ik.beget.tech/pocketup/purchase/allPaidBlocks.php", "post", networkListener, params )
-		app.scenes[app.scene][1].alpha = 0
-		isBackScene = "block"
-	end
+	local allBlocksCategories = getCategoriesBlocks(localityVariable, nameVariable, localityArray, nameArray, nameFunction, nameBackground, nameScene, nameSound, nameImage, nameVideo )
+	local blocksCategory = allBlocksCategories[category]
+	loadBlocksCategory(allBlocksCategories[category])
 end

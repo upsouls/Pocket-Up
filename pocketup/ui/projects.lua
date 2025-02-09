@@ -389,78 +389,91 @@ return(true)
 end
 
 
-for iSort=1, #idsProjects do
-	local i = idsProjects[iSort]
-	local groupScene = display.newGroup()
-	groupScene.y = display.contentWidth/3.75*(iSort-0.5)
-	groupSceneScroll:insert(groupScene)
-	local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth/3.75)
-	arraySlots[iSort] = buttonRect
-	buttonRect.idProject= projects[i][2]
-	buttonRect.idSlot = iSort
-	buttonRect.nameProject = projects[i][1]
-	buttonRect.anchorX = 0
-	buttonRect:setFillColor(0, 71/255, 93/255)
-	groupScene:insert(buttonRect)
-	local strokeIcon = display.newRect(buttonRect.x+buttonRect.height*0.55, buttonRect.y, buttonRect.height/1.3, buttonRect.height/1.4)
-	strokeIcon.strokeWidth = 3
-	strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
-	strokeIcon:setFillColor(0,0,0,0)
-	groupScene:insert(strokeIcon)
-	local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
-	groupScene:insert(containerIcon)
-	containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
-	local imageIcon = nil
-	local imageIcon = display.newImage(projects[i][2].."/scene_1/icon.png", system.DocumentsDirectory)
-	if imageIcon == nil then
-		imageIcon = display.newImage(projects[i][2].."/icon.png", system.DocumentsDirectory)
-	end
-	pcall(function ()
-		containerIcon:insert(imageIcon)
-	end)
-	strokeIcon:toFront()
-
-	local sizeIconProject = containerIcon.height/imageIcon.height
-	if (imageIcon.width*sizeIconProject<containerIcon.width) then
-		sizeIconProject = containerIcon.width/imageIcon.width
-	end
-	imageIcon.xScale, imageIcon.yScale = sizeIconProject, sizeIconProject
-
-	local nameProject = display.newText({
-		text = projects[i][1],
-		x = strokeIcon.x+strokeIcon.width/1.5,
-		y = strokeIcon.y,
-		width = display.contentWidth/1.75,
-		height = app.fontSize0*1.15,
-		fontSize = app.fontSize0
-	})
-	nameProject.anchorX = 0
-	nameProject:setFillColor(171/255, 219/255, 241/255)
-	groupScene:insert(nameProject)
-
-	local menuProject = display.newImage("images/menu.png")
-	menuProject:addEventListener("touch", touchMenuSlot)
-	menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x+buttonRect.width/1.11, buttonRect.y, buttonRect.height/4.5, buttonRect.height/4.5
-	menuProject:setFillColor(171/255, 219/255, 241/255)
-	groupScene:insert(menuProject)
-	local menu2Project = display.newImage("images/checkbox_1.png")
-	menu2Project.x, menu2Project.y, menu2Project.width, menu2Project.height = buttonRect.width-buttonRect.width/1.075, buttonRect.y, menuProject.width, menuProject.height
-	menu2Project.alpha = 0
-	groupScene:insert(menu2Project)
-
-	buttonRect.myGroup = groupScene
-	buttonRect.strokeIcon = strokeIcon
-	buttonRect.containerIcon = containerIcon
-	buttonRect.textNameProject = nameProject
-	buttonRect.menu = menuProject
-	buttonRect.menu2 = menu2Project
-	menu2Project.slot = buttonRect
-	menuProject.slot = buttonRect
-
-
-	buttonRect:addEventListener("touch", touchOpenProject)
-
+local iSort = 1
+local function createProjectSlot()
+    if iSort > #idsProjects then return end -- Останавливаем таймер, когда все элементы созданы
+    
+    local i = idsProjects[iSort]
+    local groupScene = display.newGroup()
+    groupScene.y = display.contentWidth / 3.75 * (iSort - 0.5)
+    groupSceneScroll:insert(groupScene)
+    
+    local buttonRect = display.newRect(0, 0, display.contentWidth, display.contentWidth / 3.75)
+    arraySlots[iSort] = buttonRect
+    buttonRect.idProject = projects[i][2]
+    buttonRect.idSlot = iSort
+    buttonRect.nameProject = projects[i][1]
+    buttonRect.anchorX = 0
+    buttonRect:setFillColor(0, 71/255, 93/255)
+    groupScene:insert(buttonRect)
+    
+    local strokeIcon = display.newRect(buttonRect.x + buttonRect.height * 0.55, buttonRect.y, buttonRect.height / 1.3, buttonRect.height / 1.4)
+    strokeIcon.strokeWidth = 3
+    strokeIcon:setStrokeColor(171/255, 219/255, 241/255)
+    strokeIcon:setFillColor(0, 0, 0, 0)
+    groupScene:insert(strokeIcon)
+    
+    local containerIcon = display.newContainer(strokeIcon.width, strokeIcon.height)
+    groupScene:insert(containerIcon)
+    containerIcon.x, containerIcon.y = strokeIcon.x, strokeIcon.y
+    
+    local imageIcon = display.newImage(projects[i][2].."/scene_1/icon.png", system.DocumentsDirectory)
+    if not imageIcon then
+        imageIcon = display.newImage(projects[i][2].."/icon.png", system.DocumentsDirectory)
+    end
+    
+    pcall(function ()
+        containerIcon:insert(imageIcon)
+    end)
+    strokeIcon:toFront()
+    
+    if imageIcon then
+        local sizeIconProject = containerIcon.height / imageIcon.height
+        if (imageIcon.width * sizeIconProject < containerIcon.width) then
+            sizeIconProject = containerIcon.width / imageIcon.width
+        end
+        imageIcon.xScale, imageIcon.yScale = sizeIconProject, sizeIconProject
+    end
+    
+    local nameProject = display.newText({
+        text = projects[i][1],
+        x = strokeIcon.x + strokeIcon.width / 1.5,
+        y = strokeIcon.y,
+        width = display.contentWidth / 1.75,
+        height = app.fontSize0 * 1.15,
+        fontSize = app.fontSize0
+    })
+    nameProject.anchorX = 0
+    nameProject:setFillColor(171/255, 219/255, 241/255)
+    groupScene:insert(nameProject)
+    
+    local menuProject = display.newImage("images/menu.png")
+    menuProject:addEventListener("touch", touchMenuSlot)
+    menuProject.x, menuProject.y, menuProject.width, menuProject.height = buttonRect.x + buttonRect.width / 1.11, buttonRect.y, buttonRect.height / 4.5, buttonRect.height / 4.5
+    menuProject:setFillColor(171/255, 219/255, 241/255)
+    groupScene:insert(menuProject)
+    
+    local menu2Project = display.newImage("images/checkbox_1.png")
+    menu2Project.x, menu2Project.y, menu2Project.width, menu2Project.height = buttonRect.width - buttonRect.width / 1.075, buttonRect.y, menuProject.width, menuProject.height
+    menu2Project.alpha = 0
+    groupScene:insert(menu2Project)
+    
+    buttonRect.myGroup = groupScene
+    buttonRect.strokeIcon = strokeIcon
+    buttonRect.containerIcon = containerIcon
+    buttonRect.textNameProject = nameProject
+    buttonRect.menu = menuProject
+    buttonRect.menu2 = menu2Project
+    menu2Project.slot = buttonRect
+    menuProject.slot = buttonRect
+    
+    buttonRect:addEventListener("touch", touchOpenProject)
+    
+    iSort = iSort + 1
+    timer.performWithDelay(5, createProjectSlot)
 end
+
+timer.performWithDelay(5, createProjectSlot)
 scrollProjects:setScrollHeight(groupSceneScroll.height+display.contentWidth/1.5)
 
 
@@ -1547,44 +1560,44 @@ end
 
 end
 
-if (isStart) and not IsBuild then
-	local function networkListener(event)
-		if (event.isError) then
-		else
-			if (event.response~="false") then
-				local tableBlocks = plugins.json.decode(decryptor(event.response))
-				for i=1, #tableBlocks do
-					for i2=1, #tableBlocks[i][3][3] do
-						for i3=1, #tableBlocks[i][3][3][i2] do
-							if (tableBlocks[i][3][3][i2][i3][1] == "text" and type(tableBlocks[i][3][3][i2][i3][2])=="number") then
-								tableBlocks[i][3][3][i2][i3][2] = app.words[tableBlocks[i][3][3][i2][i3][2]]
-							end
-						end
-					end
-					for i2=1, #tableBlocks[i][4][2] do
-						for i3=1, #tableBlocks[i][4][2][i2] do
-							if (type(tableBlocks[i][4][2][i2][i3])=="table") then
-								if (tableBlocks[i][4][2][i2][i3][1]=="text" and type(tableBlocks[i][4][2][i2][i3][2])=="number") then
-									tableBlocks[i][4][2][i2][i3][2] = app.words[tableBlocks[i][4][2][i2][i3][2]]
-								end
-							end
-						end
-					end
+-- if (isStart) and not IsBuild then
+-- 	local function networkListener(event)
+-- 		if (event.isError) then
+-- 		else
+-- 			if (event.response~="false") then
+-- 				local tableBlocks = plugins.json.decode(decryptor(event.response))
+-- 				for i=1, #tableBlocks do
+-- 					for i2=1, #tableBlocks[i][3][3] do
+-- 						for i3=1, #tableBlocks[i][3][3][i2] do
+-- 							if (tableBlocks[i][3][3][i2][i3][1] == "text" and type(tableBlocks[i][3][3][i2][i3][2])=="number") then
+-- 								tableBlocks[i][3][3][i2][i3][2] = app.words[tableBlocks[i][3][3][i2][i3][2]]
+-- 							end
+-- 						end
+-- 					end
+-- 					for i2=1, #tableBlocks[i][4][2] do
+-- 						for i3=1, #tableBlocks[i][4][2][i2] do
+-- 							if (type(tableBlocks[i][4][2][i2][i3])=="table") then
+-- 								if (tableBlocks[i][4][2][i2][i3][1]=="text" and type(tableBlocks[i][4][2][i2][i3][2])=="number") then
+-- 									tableBlocks[i][4][2][i2][i3][2] = app.words[tableBlocks[i][4][2][i2][i3][2]]
+-- 								end
+-- 							end
+-- 						end
+-- 					end
 
-					allBlocks[tableBlocks[i][2]] = tableBlocks[i][3]
-					if (paidBlocks[tableBlocks[i][1]]==nil) then
-						paidBlocks[tableBlocks[i][1]]={}
-					end
-					paidBlocks[tableBlocks[i][1]][#paidBlocks[tableBlocks[i][1]]+1] = tableBlocks[i][4]
-				end
-			end
-		end
-		app.scenes[app.scene][2].alpha = 1
-		isBackScene = "back"
-	end
-	local params = {params={["Content-Type"]="application/json", ["X-API-Key"]="13b6ac91a2"}, body="{\"id\":\""..system.getInfo('deviceID').."\"}"}
-	network.request( "http://x95328ik.beget.tech/pocketup/purchase/purchasedBlocks.php", "post", networkListener, params )
-	app.scenes[app.scene][2].alpha = 0
-	isBackScene = "block"
-end
+-- 					allBlocks[tableBlocks[i][2]] = tableBlocks[i][3]
+-- 					if (paidBlocks[tableBlocks[i][1]]==nil) then
+-- 						paidBlocks[tableBlocks[i][1]]={}
+-- 					end
+-- 					paidBlocks[tableBlocks[i][1]][#paidBlocks[tableBlocks[i][1]]+1] = tableBlocks[i][4]
+-- 				end
+-- 			end
+-- 		end
+-- 		app.scenes[app.scene][2].alpha = 1
+-- 		isBackScene = "back"
+-- 	end
+-- 	local params = {params={["Content-Type"]="application/json", ["X-API-Key"]="13b6ac91a2"}, body="{\"id\":\""..system.getInfo('deviceID').."\"}"}
+-- 	network.request( "http://x95328ik.beget.tech/pocketup/purchase/purchasedBlocks.php", "post", networkListener, params )
+-- 	app.scenes[app.scene][2].alpha = 0
+-- 	isBackScene = "block"
+-- end
 end

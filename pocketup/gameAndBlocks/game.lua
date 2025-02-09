@@ -877,6 +877,7 @@ Runtime:addEventListener('key', funKeyListener)\n"
     Runtime:removeEventListener('key', funKeyListener)\
     plugins.physics.setDrawMode('normal')\
     system.deactivate('multitouch')\
+    native.setProperty( 'androidSystemUiVisibility', 'default' )\
     plugins.physics.stop()\
     Runtime:removeEventListener('touch', touchScreenGame)\
     showOldScene()\

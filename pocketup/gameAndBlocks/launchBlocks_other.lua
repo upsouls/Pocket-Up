@@ -65,55 +65,49 @@ local function make_block(infoBlock, object, images, sounds, make_all_formulas, 
         threadFun.wait(type("..time..") == 'number' and ("..time.."*1000) or 0)"
     elseif nameBlock == 'endTimer' then
         lua = lua.."coroutine.yield()\nend"
-    elseif nameBlock == 'fbGetValue' then
+    elseif nameBlock == 'hideSysPanels' then
+        lua = lua..'native.setProperty( "androidSystemUiVisibility", "immersiveSticky" )\n'
+    elseif nameBlock == 'showSysPanels' then
+        lua = lua..'native.setProperty( "androidSystemUiVisibility", "default" )\n'
+    elseif (nameBlock=='createJoystick') then
         add_pcall()
-        local idBase = make_all_formulas(infoBlock[2][2], object)
-        local idKey = make_all_formulas(infoBlock[2][1], object)
-        local targVar = ''
-        if infoBlock[2][3][1] == 'localVariable' then
-            targVar = 'target.var_'..infoBlock[2][3][2]
-        else
-            targVar = 'var_'..infoBlock[2][3][2]
-        end
+        print(require 'json'.encode(infoBlock[2][6]))
+        pcall(function ()
+            lua = lua..'\nif (joysticks['..make_all_formulas(infoBlock[2][1], object)..']~=nil) then\ndisplay.remove(joysticks['..make_all_formulas(infoBlock[2][1], object)..'])\nend\nlocal myJoystick = display.newGroup()\njoysticks['..make_all_formulas(infoBlock[2][1], object)..'] = myJoystick\ncameraGroup:insert(myJoystick)'
+                lua = lua..'\nmyJoystick.joystick1 = display.newImage("'..obj_path..'/image_'..infoBlock[2][2][2]..'.png", system.DocumentsDirectory)\nmyJoystick:insert(myJoystick.joystick1)'
+                lua = lua..'\nmyJoystick.joystick2 = display.newImage("'..obj_path..'/image_'..infoBlock[2][3][2]..'.png", system.DocumentsDirectory)\nmyJoystick:insert(myJoystick.joystick2)'
+                lua = lua..'\nmyJoystick:addEventListener("touch", function(event)\nif (event.phase=="began") then\ndisplay.getCurrentStage():setFocus(event.target, event.id)\nelseif (event.phase=="ended") then\ndisplay.getCurrentStage():setFocus(event.target, nil)\nend\nlocal joystick = event.target.joystick2\nif (event.phase=="ended" or event.phase=="cancelled") then\njoystick.x, joystick.y = 0, 0\nelse\nlocal width = event.target.joystick1.width*event.target.joystick1.xScale/2\nlocal height = event.target.joystick1.height*event.target.joystick1.yScale/2\nlocal direction = math.atan2(event.x-event.target.x-mainGroup.x, (event.y-event.target.y-mainGroup.y))local radius = math.sqrt(math.pow(event.x-event.target.x-mainGroup.x, 2)+math.pow(event.y-event.target.y-mainGroup.y, 2))\njoystick.x, joystick.y = math.sin(direction)*math.min(radius, width*event.target.xScale)/event.target.xScale*mainGroup.xScale, math.cos(direction)*math.min(radius, height*event.target.yScale)/event.target.yScale/mainGroup.yScale\nend\n'..(infoBlock[2][4][1]=="globalVariable" and "" or "target.")..'var_'..infoBlock[2][4][2]..', '..(infoBlock[2][5][1]=="globalVariable" and "" or "target.")..'var_'..infoBlock[2][5][2]..' = joystick.x, -joystick.y\nif ('..(infoBlock[2][4][1]=="globalVariable" and "" or "target.")..'varText_'..infoBlock[2][4][2]..'~=nil) then\n'..(infoBlock[2][4][1]=="globalVariable" and "" or "target.")..'varText_'..infoBlock[2][4][2]..'.text = joystick.x\nend\nif ('..(infoBlock[2][5][1]=="globalVariable" and "" or "target.")..'varText_'..infoBlock[2][5][2]..'~=nil) then\n'..(infoBlock[2][5][1]=="globalVariable" and "" or "target.")..'varText_'..infoBlock[2][5][2]..'.text = -joystick.y\nend\nlocal key = target.parent_obj.nameObject\nfor i=1, #events_function[key]["fun_'..infoBlock[2][6][2]..'"] do\n\
+                events_function[key]["fun_'..infoBlock[2][6][2]..'"][i](target)\nend\nreturn(true)\nend)'
+        end)
     
-        lua = lua..[[
-            local function _listener(event)
-                if event.isError then
-                    ]]..targVar..[[ = 'err'
-                else
-                    ]]..targVar..[[ = require 'json'.decode(event.response)
-                end
-            end
-            network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "GET", _listener)]].."\n"
         end_pcall()
-    elseif nameBlock == 'fbSetValue' then
-        local idBase = make_all_formulas(infoBlock[2][3], object)
-        local idKey = make_all_formulas(infoBlock[2][2], object)
-        local value = make_all_formulas(infoBlock[2][1], object)
-        
-        lua = lua..[[
-local headers = {
-    ["Content-Type"] = "application/json"
-}
-            
-local params = {
-headers = headers,
-body = require "json".encode(]]..value..[[)
-}
-local function _listener(event)
-print(require "json".encode(event))
-end
-network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "PUT", _listener, params)
-]]
-    elseif nameBlock == 'fbDelValue' then
-        local idBase = make_all_formulas(infoBlock[2][2], object)
-        local idKey = make_all_formulas(infoBlock[2][1], object)
-        lua = lua..[[
-network.request(]]..idBase..'..\'/\'..'..idKey..'..\'.json\''..[[, "DELETE", nil)
-        
-]]
+    elseif (nameBlock=='setPositionJoystick') then
+        add_pcall()
+        lua = lua..'\nlocal joystick = joysticks['..make_all_formulas(infoBlock[2][1], object)..']\njoystick.x, joystick.y = '..make_all_formulas(infoBlock[2][2], object)..', -'..make_all_formulas(infoBlock[2][3], object)
+        end_pcall()
+    elseif (nameBlock=='setSizeJoystick') then
+        add_pcall()
+        lua = lua..'\nlocal joystick = joysticks['..make_all_formulas(infoBlock[2][1], object)..']\njoystick.xScale = '..make_all_formulas(infoBlock[2][2], object)..'/100\njoystick.yScale = joystick.xScale'
+        end_pcall()
+    elseif (nameBlock=='setSizeJoystick1') then
+        add_pcall()
+        lua = lua..'\nlocal joystick = joysticks['..make_all_formulas(infoBlock[2][1], object)..'].joystick1\njoystick.xScale = '..make_all_formulas(infoBlock[2][2], object)..'/100\njoystick.yScale = joystick.xScale'
+        end_pcall()
+    elseif (nameBlock=='setSizeJoystick2') then
+        add_pcall()
+        lua = lua..'\nlocal joystick = joysticks['..make_all_formulas(infoBlock[2][1], object)..'].joystick2\njoystick.xScale = '..make_all_formulas(infoBlock[2][2], object)..'/100\njoystick.yScale = joystick.xScale'
+        end_pcall()
+    elseif (nameBlock=='cameraInsertJoystick') then
+        add_pcall()
+        lua = lua..'\ncameraGroup:insert(joysticks['..make_all_formulas(infoBlock[2][1], object)..'])'
+        end_pcall()
+    elseif (nameBlock=='cameraRemoveJoystick') then
+        add_pcall()
+        lua = lua..'\nnotCameraGroup:insert(joysticks['..make_all_formulas(infoBlock[2][1], object)..'])'
+        end_pcall()
     end
     return lua
+
 end
 
 return(make_block)
