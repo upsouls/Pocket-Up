@@ -14,11 +14,18 @@ m.cancel = function (t)
     t = nil
 end
 
-m.start = function (p)
-    local listener = function ()
-        coroutine.resume(p)
+m.start = function (p, object)
+    local t
+    local listener
+    listener = function ()
+        if object and object.x then
+            coroutine.resume(p)
+        else
+            timer.cancel(t)
+        end
     end
-    local t = timer.performWithDelay(0, listener, 0)
+    t = timer.performWithDelay(1000/60, listener, 0)
+    table.insert(m.timers, t)
     return listener, t
 end
 

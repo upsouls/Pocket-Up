@@ -107,6 +107,9 @@ function scene_run_game(typeBack, paramsBack)
     app.scene="game"
     app.words = {}
 
+    local isScriptsBack = false
+    local dW, dH, dCX, dCY, sOX, sOY = display.actualContentWidth, display.contentHeight, CENTER_X, CENTER_Y, display.screenOriginX, display.screenOriginY
+
     native.setProperty("windowMode", "fullscreen")
     display.setDefault('background', 1, 1, 1)
 
@@ -120,13 +123,11 @@ function scene_run_game(typeBack, paramsBack)
     renameFormulas.displayActualWidth = "("..tostring(options.orientation == "vertical" and display.actualContentWidth or display.actualContentHeight)..")"
     renameFormulas.displayActualHeight = "("..tostring(options.orientation == "vertical" and display.actualContentHeight or display.actualContentWidth)..")"
 
-    local isScriptsBack = false
-    local dW, dH, dCX, dCY, sOX, sOY = display.actualContentWidth, display.contentHeight, CENTER_X, CENTER_Y, display.screenOriginX, display.screenOriginY
-
 
     function showOldScene()
         app.words = require("pocketup.modules.loadLanguage")
         native.setProperty("windowMode", "normal")
+        display.setDrawMode( 'default' )
         display.setDefault("background", 4/255, 34/255, 44/255)
 
         plugins.orientation.lock('portrait')
@@ -200,6 +201,9 @@ lua = lua..
 [==[
 -- Функции покет апа
 local pocketupFuns = {}
+pocketupFuns.perlinNoise = function(x, y, seed)
+    return plugins.perlin.new(x, y, seed)
+end
 pocketupFuns.sin = function(v)
     return(math.sin(math.rad(v)))
 end
@@ -662,8 +666,7 @@ function scene_]]..scene_id..[[()
                             "removeTheard()\
                             end)\
                             local pStart\
-                            pStart, tTheard = thread.start(p)\
-                            table.insert(thread.timers, tTheard)\
+                            pStart, tTheard = thread.start(p, target)\
                             \n"
                         if (oldEventName=="changeBackground" or oldEventName=="collision" or oldEventName=="endedCollision") then
                             lua = lua.."\nend"
@@ -783,8 +786,7 @@ function scene_]]..scene_id..[[()
                     "removeTheard()\
                     end)\
                     local pStart\
-                    pStart, tTheard = thread.start(p)\
-                    table.insert(thread.timers, tTheard)\
+                    pStart, tTheard = thread.start(p, target)\
                 end\n\n"
                     -- lua = lua..'\nend)\nend\n\n'
                 elseif (oldEventName=="changeBackground" or oldEventName=="collision" or oldEventName=="endedCollision") then
@@ -792,8 +794,7 @@ function scene_]]..scene_id..[[()
                     "removeTheard()\
                     end)\
                     local pStart\
-                    pStart, tTheard = thread.start(p)\
-                    table.insert(thread.timers, tTheard)"
+                    pStart, tTheard = thread.start(p, target)"
                     lua = lua..'\nend\nend\n\n'
                 else
                     if oldEventName == "whenTheTruth" then
@@ -807,8 +808,7 @@ function scene_]]..scene_id..[[()
                     "removeTheard()\
                     end)\
                     local pStart\
-                    pStart, tTheard = thread.start(p)\
-                    table.insert(thread.timers, tTheard)"
+                    pStart, tTheard = thread.start(p, target)"
                     lua = lua..'\nend\n\n'
                 end
             end

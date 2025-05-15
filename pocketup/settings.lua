@@ -15,6 +15,7 @@ plugins.widget = require("widget")
 plugins.lfs = require("lfs")
 plugins.physics = require("physics")
 plugins.orientation = require('plugin.orientation')
+plugins.perlin = require("plugins.noise")
 
 display.contentWidth = display.actualContentWidth
 --display.contentHeight = display.safeActualContentHeight

@@ -90,11 +90,13 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"runScene",{ {"scenes", nameScene} }},
 			{"exitGame"},
 			{"stopScript"},
+			{"drawMode",{{{"onOrOff", "on"}}}},
 			--{"waitStopScripts"},
 			-- {"cancelAllTimers"},
 			{"startClone"},
 			{"clone",{{"objects",nil}}},
 			{"deleteClone"},
+			{"deleteAllClones",{{"objects",nil}}},
 		},
 		["physic"]={
 			{"setPosition",{ {{"number", 100}}, {{"number", 200}} }},
@@ -257,6 +259,8 @@ local function f(localityVariable, nameVariable, localityArray, nameArray, nameF
 			{"setHorizontalOrientation"},
 			{"setVerticalOrientation"},
 			{"removeAdaptiveSizeDevice"},
+			{"sleepScreenMode",{{{"onOrOff", "on"}}}},
+			{"setTapDelay", {{{"number", 1}}}},
 		},
 		["textFields"]={
 			{"ask",{{{"text",app.words[161]}}, {localityVariable, nameVariable}, {"function",nameFunction} }},

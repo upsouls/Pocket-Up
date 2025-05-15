@@ -53,7 +53,8 @@ allCategotiesAndFormulas = {
 		{"number",7},{"function",","},{"number",2},{"function",")"}},
 		{{"function","ternaryExpression"},{"function","("},
 		{"function","false"},{"function",","},{"number",2},{"function",","},
-		{"number",3},{"function",")"}} 
+		{"number",3},{"function",")"}},
+		{{"function","perlinNoise"},{"function","("},{"number",0},{"function",","},{"number",0},{"function",","},{"number",0},{"function",")"}}
 	}},
 	{app.words[315],{ 
 		{{"function","length"},{"function","("},{"text","hello world"},{"function",")"}},
@@ -111,6 +112,7 @@ nameFormulas = {
 	["and"]=app.words[370],["or"]=app.words[371],["not"]=app.words[372],["true"]=app.words[373],
 	["false"]=app.words[374],["-"]="-",["+"]="+",["÷"]="÷",["×"]="×",["("]="(",
 	[")"]=")",["="]="=",["≠"]="≠",["<"]="<",["≤"]="≤",[">"]=">",["≥"]="≥",
+		perlinNoise = app.words[675],
 	[","]=",",sinus=app.words[293],cosine=app.words[294],tangent=app.words[295],naturalLogarithm=app.words[296]
 	,decimalLogarithm=app.words[297],pi=app.words[298],root=app.words[299],random=app.words[300],
 	absoluteValue=app.words[301],round=app.words[302],modulo=app.words[303],arcsine=app.words[304],
@@ -160,6 +162,7 @@ allFunsRedRorms.connect = function(value,value2,value3) local answerValue = valu
 allFunsRedRorms.ternaryExpression = function(condition, answer1, answer2) return(condition and answer1 or answer2) end
 allFunsRedRorms.regularExpression = function(regular, expression) return(string.match(expression, regular)) end
 allFunsRedRorms.characterFromText = function(pos, value) return(plugins.utf8.sub(value,pos,pos)) end
+allFunsRedRorms.perlinNoise = function(x, y, seed) return plugins.perlin.new(x, y, seed) end
 
 calculateRedactorFormulas = {
 	["+"]="+",["-"]="-",["÷"]="/",["×"]="*",["("]="(",[")"]=")",
@@ -184,7 +187,8 @@ calculateRedactorFormulas = {
 	touchDisplayId="allFunsRedRorms.getFalse",
 	displayWidth="(720)",displayHeight="(1280)",displayActualWidth="("..tostring(display.actualContentWidth)..")",
 	displayActualHeight="("..tostring(display.actualContentHeight)..")",array2json="allFunsRedRorms.getJson",json2array="allFunsRedRorms.getNil",
-	touchesObject2="false",myName='"'..app.words[444]..'"',mouseX="(0)",mouseY="(0)"
+	touchesObject2="false",myName='"'..app.words[444]..'"',mouseX="(0)",mouseY="(0)",
+		perlinNoise = "allFunsRedRorms.perlinNoise"
 }
 
 
@@ -214,5 +218,5 @@ calculateGameFormulas = {
         dayWeek="tonumber(os.date('%w', os.time()))",day="tonumber(os.date('%d', os.time()))",hour="tonumber(os.date('%H', os.time()))",
         minute="tonumber(os.date('%M', os.time()))",second="tonumber(os.date('%S', os.time()))",
         json2array="pocketupFuns.jsonEncode", array2json="plugins.json.encode",positionCameraX="(cameraGroup.x)",
-        positionCameraY="(-cameraGroup.x)",myName="(target.myName==nil and 0 or target.myName)",mouseX="mouseX",mouseY="mouseY"
+        positionCameraY="(-cameraGroup.x)",myName="(target.myName==nil and 0 or target.myName)",mouseX="mouseX",mouseY="mouseY", perlinNoise = "pocketupFuns.perlinNoise",
 }

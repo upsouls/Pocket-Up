@@ -299,9 +299,9 @@ return {
         lua = lua.."\ntarget.parent_obj.clones[#target.parent_obj.clones+1] = myClone\nmyClone.idClone, myClone.tableVarShow, myClone.origWidth, myClone.origHeight, myClone.width, myClone.height, myClone.property_size = #target.parent_obj, {}, target.origWidth, target.origHeight, target.width, target.height, target.property_size"
         lua = lua.."\nmyClone.isVisible = target.isVisible\nmyClone.physicsReload, myClone.physicsType , myClone.physicsTable = target.physicsReload or function(ob) end, target.physicsType or 'static' , plugins.json.decode(plugins.json.encode(target.physicsTable)) or {}\nmyClone:physicsReload()"
         lua = lua.."\nmyClone.property_color = target.property_color\nlocal r = pocketupFuns.sin(target.property_color-22+56)/2+0.724\nlocal g = pocketupFuns.cos(target.property_color+56)/2+0.724\nlocal b = pocketupFuns.sin(target.property_color+22+56)/2+0.724\nmyClone:setFillColor(r,g,b)\nmyClone.touchesObjects = {}"
-        lua = lua.."\ntimer.new(0, function()\nmyClone:addEventListener('collision', function(event)\nif (event.phase=='began') then\nevent.target.touchesObjects['obj_'..event.other.parent_obj.idObject] = true\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_collision do\nmyClone.parent_obj.events_collision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nelseif (event.phase=='ended') then\nevent.target.touchesObjects['obj_'..event.other.parent_obj.idObject] = nil\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_endedCollision do\nmyClone.parent_obj.events_endedCollision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nend\nend)"
+         lua = lua.."\ntimer.new(0, function()\nif not myClone or not myClone.x or not myClone.addEventListener then return 0 end\nmyClone:addEventListener('collision', function(event)\nif (event.phase=='began') then\nevent.target.touchesObjects['obj_'..event.other.parent_obj.idObject] = true\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_collision do\nmyClone.parent_obj.events_collision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nelseif (event.phase=='ended') then\nevent.target.touchesObjects['obj_'..event.other.parent_obj.idObject] = nil\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_endedCollision do\nmyClone.parent_obj.events_endedCollision[i](event.target, event.other.parent_obj.nameObject)\nend\nend)\nend\nend)"
         lua = lua.."\nmyClone.gravityScale, myClone.isSensor = target.gravityScale, target.isSensor\n myClone.parent_obj.events_startClone = myClone.parent_obj.events_startClone or (events_startClone or {})"
-        lua = lua.."\ntimer.new(0, function()\nfor i=1, #myClone.parent_obj.events_startClone do\nmyClone.parent_obj.events_startClone[i](myClone)\nend\n"
+        lua = lua.."\ntimer.new(0, function()\nif not myClone or not myClone.x then return 0 end\nfor i=1, #myClone.parent_obj.events_startClone do\nmyClone.parent_obj.events_startClone[i](myClone)\nend\n"
         lua = lua.."\nend) end)"
         return lua.."\nend)"
     end,
@@ -316,10 +316,7 @@ return {
             end\
             display.remove(target)\
         end"
-        lua = lua.."\nend)\n"
-        lua = lua.."pcall(function()\n"
-        lua = lua.."if true then pcall(function() timer.cancel(_repeat) end) return true end"
-        lua = lua.."\nend)"
+        lua = lua.."\nend)\nremoveTheard()\ncoroutine.yield()"
         return lua
     end,
 
@@ -395,6 +392,8 @@ return {
                 for i=1, #events_function[key][nameFunction] do\
                     events_function[key][nameFunction][i](value)\
                 end\
+                value = nil\
+                key = nil\
             end\
             broadcastFunction('fun_"..infoBlock[2][2][2].."')"
             return lua.."\nend)"
@@ -407,6 +406,28 @@ return {
     end,
     ["endWhenTheTruth"] = function (infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o, mainGroup, videos)
         local lua = "pcall(function()\n"
+        return lua.."\nend)"
+    end,
+
+    ["deleteAllClones"] = function(infoBlock, object, images, sounds, make_all_formulas)
+        local lua = "pcall(function()\n"
+        if (infoBlock[2][1][2]~=nil) then
+            lua = lua.."\nlocal target = objects['object_"..infoBlock[2][1][2].."']"
+        end
+        lua = lua.."if target and target.parent_obj and target.parent_obj.clones then\n"
+        lua = lua.."    for i = #target.parent_obj.clones, 1, -1 do\n"
+        lua = lua.."        local clone = target.parent_obj.clones[i]\n"
+        lua = lua.."        display.remove(clone)\nif clone.myName then if tableNamesClones[clone.myName] then tableNamesClones[clone.myName] = nil end end\nclone.x = nil\nclone = nil\n"
+        lua = lua.."        table.remove(target.parent_obj.clones, i)\n"
+        lua = lua.."    end\n"
+        lua = lua.."end\n"
+        return lua.."end)"
+    end,
+
+    ["drawMode"] = function (infoBlock)
+        local lua = "pcall(function()\n"
+        lua = lua.."display.setDrawMode( 'wireframe', "..(infoBlock[2][1][2]=="on" and "true" or "false").." )"
+        lua = lua.."\ndisplay.setDefault( 'background', "..(infoBlock[2][1][2]=="on" and "true" or "false").." and 0 or 1, "..(infoBlock[2][1][2]=="on" and "true" or "false").." and 0 or 1, "..(infoBlock[2][1][2]=="on" and "true" or "false").." and 0 or 1)\n"
         return lua.."\nend)"
     end,
 }

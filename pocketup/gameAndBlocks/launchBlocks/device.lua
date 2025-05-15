@@ -64,4 +64,16 @@ return {
         lua = lua.."mainGroup.xScale, mainGroup.yScale = 1, 1"
         return lua
     end,
+
+    sleepScreenMode =  function(infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        local lua = "pcall(function()\n"
+        lua = lua .. "system.setIdleTimer("..(infoBlock[2][1][2]=="on" and "true" or "false")..")"
+        return lua.."\nend)"
+    end,
+
+    setTapDelay = function(infoBlock, object, images, sounds, make_all_formulas, obj_id, obj_path, scene_id, scene_path, options, o)
+        local lua = "pcall(function()\n"
+        lua = lua .. "system.setTapDelay("..make_all_formulas(infoBlock[2][1], object)..")"
+        return lua.."\nend)"
+    end,
 }

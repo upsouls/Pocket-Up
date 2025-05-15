@@ -2,7 +2,7 @@ local rseed = math.randomseed
 local rand = math.random
 local floor = math.floor
 local max = math.max
-local SEED = math.randomseed(os.clock())
+local SEED = os.clock()
 
 local MT = {
 	__index = function(t, i)

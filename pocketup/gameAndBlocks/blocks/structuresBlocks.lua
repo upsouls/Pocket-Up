@@ -318,6 +318,11 @@ allBlocks = {
 		{{"text", app.words[522]}},
 		{{"shapeHitbox"}}
 	}, 109, 142, false},
+
+	["sleepScreenMode"]={"block", "blocks/block_gold_2.png", { {{"text", app.words[676]}}, {{"onOrOff"}}}, 109, 142, false},
+	["setTapDelay"]={"block", "blocks/block_gold_2.png", { {{"text", app.words[677]}}, {{"cell", nil, 5}}}, 109, 142, false},
+	["deleteAllClones"]={"block","blocks/block_orange_2.png",{ {{"text",app.words[678]}},{{"objects",nil}} }, 109,142, false},
+	["drawMode"]={"block", "blocks/block_orange_2.png", { {{"text", app.words[679]}}, {{"onOrOff"}}}, 109, 142, false},
 }
 
 
